@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "project_number": "638833786141",
+    "firebase_url": "https://wtf-member-default-rtdb.firebaseio.com",
+    "project_id": "wtf-member",
+    "storage_bucket": "wtf-member.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638833786141:android:febad02e409161e89ef5f4",
+        "android_client_info": {
+          "package_name": "com.technogripper.wtf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638833786141-6orpll2fhed94drhiug5g4100ar94mhi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.technogripper.wtf",
+            "certificate_hash": "8b95a1d3bcd604742246c8236120a9d0c013845c"
+          }
+        },
+        {
+          "client_id": "638833786141-btqg71o9hblip066olhb673ailvefd74.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.technogripper.wtf",
+            "certificate_hash": "4fbbbbdbeb69a410f6503253bcc89a5b0f1d29c0"
+          }
+        },
+        {
+          "client_id": "638833786141-igg2fcjmeb4k1fa3986f1j0s876br1q6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClVRBwUL6YR9NePfQcfAbXD3T6y9AKL0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638833786141-igg2fcjmeb4k1fa3986f1j0s876br1q6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638833786141-hsl80if657vpa7i2jcrpp8ur8v8vc9s9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wtf.member"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638833786141:android:aa698539fa2d46429ef5f4",
+        "android_client_info": {
+          "package_name": "com.wtf.member"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638833786141-jndgtjh8e62nddprmkkimgcgko250nat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wtf.member",
+            "certificate_hash": "8b95a1d3bcd604742246c8236120a9d0c013845c"
+          }
+        },
+        {
+          "client_id": "638833786141-tghjoon7c1uqevv4tkh9mt93uip9ehmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wtf.member",
+            "certificate_hash": "4fbbbbdbeb69a410f6503253bcc89a5b0f1d29c0"
+          }
+        },
+        {
+          "client_id": "638833786141-igg2fcjmeb4k1fa3986f1j0s876br1q6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClVRBwUL6YR9NePfQcfAbXD3T6y9AKL0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638833786141-igg2fcjmeb4k1fa3986f1j0s876br1q6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638833786141-hsl80if657vpa7i2jcrpp8ur8v8vc9s9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wtf.member"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

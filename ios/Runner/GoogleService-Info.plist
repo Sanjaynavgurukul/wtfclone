@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CLIENT_ID</key>
+    <string>638833786141-hsl80if657vpa7i2jcrpp8ur8v8vc9s9.apps.googleusercontent.com</string>
+    <key>REVERSED_CLIENT_ID</key>
+    <string>com.googleusercontent.apps.638833786141-hsl80if657vpa7i2jcrpp8ur8v8vc9s9</string>
+    <key>ANDROID_CLIENT_ID</key>
+    <string>638833786141-6orpll2fhed94drhiug5g4100ar94mhi.apps.googleusercontent.com</string>
+    <key>API_KEY</key>
+    <string>AIzaSyCtn6XcY6HfqXiW04AuO4l3nEuPD3dzEhQ</string>
+    <key>GCM_SENDER_ID</key>
+    <string>638833786141</string>
+    <key>PLIST_VERSION</key>
+    <string>1</string>
+    <key>BUNDLE_ID</key>
+    <string>com.wtf.member</string>
+    <key>PROJECT_ID</key>
+    <string>wtf-member</string>
+    <key>STORAGE_BUCKET</key>
+    <string>wtf-member.appspot.com</string>
+    <key>IS_ADS_ENABLED</key>
+    <false></false>
+    <key>IS_ANALYTICS_ENABLED</key>
+    <false></false>
+    <key>IS_APPINVITE_ENABLED</key>
+    <true></true>
+    <key>IS_GCM_ENABLED</key>
+    <true></true>
+    <key>IS_SIGNIN_ENABLED</key>
+    <true></true>
+    <key>GOOGLE_APP_ID</key>
+    <string>1:638833786141:ios:6550355f61420e039ef5f4</string>
+    <key>DATABASE_URL</key>
+    <string>https://wtf-member-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

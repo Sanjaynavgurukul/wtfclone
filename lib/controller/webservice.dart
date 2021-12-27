@@ -1,0 +1,1112 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:async/async.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:http/http.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Local_values.dart';
+import 'package:wtf/helper/api_constants.dart';
+import 'package:wtf/helper/api_helper.dart';
+import 'package:wtf/helper/network_utils.dart';
+import 'package:wtf/model/ActiveSubscriptions.dart';
+import 'package:wtf/model/AllSessions.dart';
+import 'package:wtf/model/AttendanceDetails.dart';
+import 'package:wtf/model/GymOffers.dart';
+import 'package:wtf/model/MemberSubscriptions.dart';
+import 'package:wtf/model/Stats.dart';
+import 'package:wtf/model/UpcomingEvents.dart';
+import 'package:wtf/model/User.dart';
+import 'package:wtf/model/VerifyPayment.dart';
+import 'package:wtf/model/WhyChooseWtf.dart';
+import 'package:wtf/model/WorkoutComplete.dart';
+import 'package:wtf/model/WorkoutDetailModel.dart';
+import 'package:wtf/model/add_on_slot_details.dart';
+import 'package:wtf/model/all_diets.dart';
+import 'package:wtf/model/all_events.dart';
+import 'package:wtf/model/all_notifications.dart';
+import 'package:wtf/model/check_event_participation.dart';
+import 'package:wtf/model/common_model.dart';
+import 'package:wtf/model/current_trainer.dart';
+import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/model/gym_details_model.dart';
+import 'package:wtf/model/gym_model.dart';
+import 'package:wtf/model/gym_plan_model.dart';
+import 'package:wtf/model/gym_search_model.dart';
+import 'package:wtf/model/gym_slot_model.dart';
+import 'package:wtf/model/member_detils.dart';
+import 'package:wtf/model/my_schedule_model.dart';
+import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/model/new_trainers_model.dart';
+
+import '../main.dart';
+
+class RestDatasource {
+  NetworkUtil _netUtil = new NetworkUtil();
+
+  static const String BASE_URL = 'https://api.wtfup.me/';
+  // static const String BASE_URL = 'http://13.232.102.139:9000/';
+
+  static Map<String, String> header = {
+    "Authorization": "Bearer ${locator<AppPrefs>().token.getValue()}"
+  };
+
+  //get Gym Details
+  ///@Gaurav
+  Future<GymModel> getGym({String lat, String lng}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+
+    mapHeader["Authorization"] = "Bearer " + token;
+    String url = BASE_URL + Api.getGyms(lat, lng);
+    log('URL: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      print("response getGym : " + res.toString());
+      GymModel model = res != null
+          ? GymModel.fromJson(res)
+          : GymModel(
+              data: [],
+              status: false,
+            );
+      return model;
+    });
+  }
+
+  Future<NewTrainersModel> getNewTrainers({gymId}) async {
+    print("shift trainer");
+    String url = BASE_URL + Api.newTrainers(gymId);
+    log(url);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    // mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((value) {
+      print(value);
+      return NewTrainersModel.fromJson(value);
+    });
+  }
+
+  Future<AllSessions> getAllSessionsForAddOn(
+      {BuildContext context, String addOnId}) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      String url = APIHelper.allSessionForAddOn(addOnId);
+      log('url: $url');
+      var res = await _netUtil.get(
+        url,
+        headers: mapHeader,
+      );
+      print("response getAllSessionsForAddOn : " + res.toString());
+      AllSessions data;
+      if (res != null) data = AllSessions.fromJson(res);
+      return data;
+    } catch (e) {
+      print('add member error: $e');
+      return AllSessions(data: []);
+    }
+  }
+
+  Future<AttendanceDetails> getCurrentAttendance({BuildContext context}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL +
+        Api.getCurrentAttendance(locator<AppPrefs>().memberId.getValue());
+    log('url: $url');
+    var response = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    AttendanceDetails res;
+    if (response != null) res = AttendanceDetails.fromJson(response);
+    return Future.value(res);
+  }
+
+  Future<bool> markAttendance(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.markAttendance();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<bool> saveCalorieProgress({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.saveCalorieProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<bool> saveBmrProgress({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.saveBmrProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<bool> saveBodyFatProgress({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.saveBodyFatProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<String> workoutVerification({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.workoutVerification();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    String isAdded = '';
+    if (res != null && res.containsKey('uid')) {
+      isAdded = res['uid'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<String> getWorkoutVerification({String date}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.getWorkoutVerification(date);
+    log('url: $url');
+    var res = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    log('resp: $url -> $res');
+    String isAdded = '';
+    if (res != null && res['date'] != []) {
+      isAdded = res['date']['uid'];
+    }
+    return await Future.value(isAdded);
+  }
+
+  Future<bool> workoutOtpVerification({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.workoutOtpVerification();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<bool> getTrailInfo({BuildContext context}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.getTrailInfo();
+    log('url: $url');
+    var res = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<UpcomingEvents> getUpcomingEvents({BuildContext context}) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      String url = BASE_URL + Api.getUpcomingEvents();
+      log('url: $url');
+      var res = await _netUtil.get(
+        url,
+        headers: mapHeader,
+      );
+      print("response of Get upcoming events : " + res.toString());
+      UpcomingEvents data;
+      if (res != null)
+        data = UpcomingEvents.fromJson(res);
+      else
+        data = UpcomingEvents(data: []);
+      return data;
+    } catch (e) {
+      print('add member error: $e');
+      return UpcomingEvents(data: []);
+    }
+  }
+
+  Future<User> getUserById({BuildContext context, String id}) async {
+    Map<String, String> mapHeader = Map();
+    String url = BASE_URL + Api.getUserById(id);
+    String token = locator<AppPrefs>().token.getValue();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var response = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    User res;
+    if (response != null) {
+      res = User.fromJson(response);
+    }
+    return Future.value(res);
+  }
+
+  Future<MemberDetails> getMemberById({BuildContext context, String id}) async {
+    Map<String, String> mapHeader = Map();
+    String url = BASE_URL + Api.getMemberById(id);
+    String token = locator<AppPrefs>().token.getValue();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var response = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    MemberDetails res;
+    if (response != null) {
+      res = MemberDetails.fromJson(response);
+    }
+    return Future.value(res);
+  }
+
+  Future<bool> shiftTrainer(
+      {String gymId, String memberId, String newTrainer, String reason}) async {
+    String url = BASE_URL + Api.shiftTrainer;
+    String token = locator<AppPrefs>().token.getValue();
+    log(url);
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil.post(url, headers: mapHeader, body: {
+      "gym_id": "bXRnTjVCpJEZG",
+      "member_id": "NKrzEMSfoevr4",
+      "requested_trainer": newTrainer,
+      "reason": reason
+    }).then((value) {
+      print(value);
+      return value["status"];
+    });
+  }
+
+  Future<bool> markDietAsConsumed({String dietId}) async {
+    String url = BASE_URL + Api.markDietConsumed(dietId);
+    String token = locator<AppPrefs>().token.getValue();
+    log(url);
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    return res != null ? Future.value(res["status"]) : false;
+  }
+
+  Future<bool> addEventParticipation(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String url = BASE_URL + Api.addEventParticipation;
+    String token = locator<AppPrefs>().token.getValue();
+    log(url);
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .post(
+      url,
+      headers: mapHeader,
+      body: body,
+    )
+        .then((value) {
+      print(value);
+      return value["status"];
+    });
+  }
+
+  Future<Map<String, dynamic>> addMember(Map<String, dynamic> body) async {
+    print('adding member : $body');
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.post(
+        APIHelper.ADD_MEMBER,
+        body: body,
+        headers: mapHeader,
+      );
+      print("response addMember : " + res.toString());
+      return res;
+    } catch (e) {
+      print('add member error: $e');
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateMember(Map<String, dynamic> body) async {
+    String url = APIHelper.updateMember;
+    print('adding member : $body');
+    print('adding member : $url');
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.put(
+        url,
+        body: body,
+        headers: mapHeader,
+      );
+      print("response updateMember : " + res.toString());
+      return res;
+    } catch (e) {
+      print('update member error: $e');
+      return {};
+    }
+  }
+
+  Future<WhyChooseWtf> whyChooseWtf() async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+        APIHelper.whyChooseWtf,
+        headers: mapHeader,
+      );
+      print("response whyChooseWtf : " + res.toString());
+      WhyChooseWtf data;
+      if (res != null) data = WhyChooseWtf.fromJson(res);
+      return data;
+    } catch (e) {
+      print('add member error: $e');
+      return WhyChooseWtf(data: []);
+    }
+  }
+
+  Future<MemberSubscriptions> memberSubscription(String memberId) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      print('All Subscription url: ${APIHelper.memberSubscriptions(memberId)}');
+      var res = await _netUtil.get(
+        APIHelper.memberSubscriptions(memberId),
+        headers: mapHeader,
+      );
+      print("response of Get Member Subscription : " + res.toString());
+      MemberSubscriptions model;
+      if (res != null) model = MemberSubscriptions.fromJson(res);
+      return model;
+    } catch (e) {
+      print('Member Subscription error: $e');
+      return MemberSubscriptions(data: [], status: false);
+    }
+  }
+
+  Future<Response> updateProfile(
+      {BuildContext context, File file, Map<String, String> body}) async {
+    var streamedResponse;
+    var multipartFile;
+    MultipartRequest request;
+    if (file != null) {
+      var stream = ByteStream(DelegatingStream.typed(file.openRead()));
+      var length = await file.length();
+      var uri = Uri.parse(APIHelper.UPDATE_PROFILE);
+      request = MultipartRequest("PUT", uri);
+      File result;
+      try {
+        result = await FlutterNativeImage.compressImage(
+          file.absolute.path,
+          quality: 90,
+        );
+      } catch (e) {
+        print('IMAGE COMPRESS EXCEPTION: $e');
+        result = file;
+      }
+      multipartFile =
+          MultipartFile('profile', stream, length, filename: result.path);
+    } else {
+      var uri = Uri.parse(APIHelper.UPDATE_PROFILE);
+      request = MultipartRequest("PUT", uri);
+    }
+    //contentType: new MediaType('image', 'png'));
+    if (file != null) request.files.add(multipartFile);
+
+    if (body != null) request.fields.addAll(body);
+
+    request.headers['Authorization'] =
+        'Bearer ${locator<AppPrefs>().token.getValue()}';
+    request.headers['Content-Type'] = 'application/json';
+
+    streamedResponse = await request
+        .send()
+        .catchError((error) => print('upload Media Api Error: $error'));
+    if (streamedResponse == null) {
+      return null;
+    }
+    print('MEDIA RESPONSEEEE: ${await streamedResponse}');
+    return await Response.fromStream(streamedResponse);
+  }
+
+  Future<bool> giveGymFeedback(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      APIHelper.giveFeedback,
+      headers: mapHeader,
+      body: body,
+    );
+    print("response giveGymFeedback : " + res.toString());
+    return res['status'];
+  }
+
+  Future<dynamic> checkOffer({String offerId}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(
+      APIHelper.checkOffer(offerId),
+      headers: mapHeader,
+    );
+    print("response checkOffer : " + res.toString());
+    return res;
+  }
+
+  Future<ActiveSubscriptions> activeSubscription(String memberId) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+        APIHelper.activeSubscriptions(memberId),
+        headers: mapHeader,
+      );
+      print("response of Get Active Subscription : " + res.toString());
+      ActiveSubscriptions model;
+      if (res != null) model = ActiveSubscriptions.fromJson(res);
+      return model;
+    } catch (e) {
+      print('Active Subscription error: $e');
+      return ActiveSubscriptions(data: null, status: false);
+    }
+  }
+
+  Future<GymOffers> getAllGymOffers(
+      {BuildContext context, String gymId}) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+        APIHelper.allGymOffers(gymId),
+        headers: mapHeader,
+      );
+      print("response getAllGymOffers : " + res.toString());
+      GymOffers offers;
+      if (res != null) offers = GymOffers.fromJson(res);
+      return Future.value(offers);
+    } catch (e) {
+      print('Update Profile error: $e');
+      return GymOffers(
+        status: false,
+        data: [],
+      );
+    }
+  }
+
+  //get Gym Details
+  ///@Gaurav
+  Future<GymDetailsModel> getGymDetails(String gymID) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(BASE_URL + Api.GYM_DETAILS + gymID,
+        headers: mapHeader);
+    print("response of Get GYM DETAILS : " + res.toString());
+    // print('ben---- ${res['gallery']}');
+    GymDetailsModel model;
+    if (res != null) model = GymDetailsModel.fromJson(res);
+    return model;
+  }
+
+  ///Manmohan
+  Future<AllEvents> getAllEvents() async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.EVENTS, headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Get ALL Events : " + res.toString());
+      AllEvents model = res != null
+          ? AllEvents.fromJson(res)
+          : AllEvents(
+              data: [],
+            );
+      return model;
+    });
+  }
+
+  ///By bensal
+  Future<MyWorkoutSchedule> getMyWorkoutSchedule(
+      {String date, String addonId, String subscriptionId}) async {
+    // print(locator<AppPrefs>().token.getValue());
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    mapHeader["Authorization"] = "Bearer " + token;
+    String url =
+        BASE_URL + Api.myWorkoutSchedule(date, addonId, subscriptionId);
+    var res = await _netUtil.get(url, headers: mapHeader);
+    print('resp getMyWorkoutSchedule: $res');
+    return MyWorkoutSchedule.fromJson(res);
+  }
+
+  Future<MySchedule> getMySchedule({date}) async {
+    // print(locator<AppPrefs>().token.getValue());
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    mapHeader["Authorization"] = "Bearer " + token;
+    String url = BASE_URL +
+        Api.mySchedule(
+          locator<AppPrefs>().memberId.getValue(),
+          date,
+        );
+    var res = await _netUtil.get(url, headers: mapHeader);
+    print('resp my schedule: $res');
+    return res != null && res['status']
+        ? MySchedule.fromJson(res)
+        : MySchedule(
+            data: ScheduleData(
+              addon: [],
+              addonPt: [],
+              allData: {},
+              event: [],
+              regular: [],
+            ),
+          );
+  }
+
+  Future<AllDiets> getMyDietSchedule({userId, date}) async {
+    // print(locator<AppPrefs>().token.getValue());
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    mapHeader["Authorization"] = "Bearer " + token;
+    String url = BASE_URL +
+        Api.dietSchedule(
+          userId,
+          date,
+        );
+    var res = await _netUtil.get(url, headers: mapHeader);
+    print('resp getMyDietSchedule: $res');
+    return Future.value(
+      res != null && res['status']
+          ? AllDiets.fromJson(res)
+          : AllDiets(
+              data: [],
+            ),
+    );
+  }
+
+  Future<WorkoutDetailModel> getWorkoutDetail({id}) async {
+    String url = BASE_URL + Api.workoutDetail(id);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    mapHeader["Authorization"] = "Bearer " + token;
+    return _netUtil.get(url, headers: mapHeader).then((value) {
+      print(value);
+      return WorkoutDetailModel.fromJson(value);
+    });
+  }
+
+  Future<bool> updateTime({id, time}) async {
+    String url = BASE_URL + Api.updateTime;
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    mapHeader["Authorization"] = "Bearer " + token;
+    Map<dynamic, dynamic> body = {
+      "uid": id,
+      "status": "done",
+      "e_duration": time
+    };
+    print('body: $body');
+    return _netUtil
+        .put(
+      url,
+      headers: mapHeader,
+      body: body,
+    )
+        .then((value) {
+      print(value);
+      return value["status"];
+    });
+  }
+
+  Future<EventsData> getEventById(String eventId) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getEventById(eventId), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Get Events by id : " + res.toString());
+      EventsData model = res.containsKey('data')
+          ? EventsData.fromJson(res['data'])
+          : EventsData.fromJson(res['message']);
+      return model;
+    });
+  }
+
+  Future<WorkoutComplete> getWorkoutCalculation(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      BASE_URL + Api.getWorkoutCalculations,
+      headers: mapHeader,
+      body: body,
+    );
+    print("response getWorkoutCalculation : " + res.toString());
+    WorkoutComplete complete = WorkoutComplete.fromJson(res);
+    return complete;
+  }
+
+  Future<GymTypes> getDiscoverNow({String type, String lat, String lng}) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    print("get Gym types by id 4");
+    return _netUtil
+        .get(BASE_URL + Api.getGymTypes(type, lat, lng), headers: mapHeader)
+        .then((dynamic res) {
+      print("response getDiscoverNow : " + res.toString());
+      GymTypes model = res != null && res['status']
+          ? GymTypes.fromJson(res)
+          : GymTypes(
+              data: [],
+            );
+      return model;
+    });
+  }
+
+  Future<AddOnSlotDetails> getSlotDetails({
+    BuildContext context,
+    String addOnId,
+    String date,
+    String trainerId,
+    String gymId,
+  }) async {
+    String token = locator<AppPrefs>().token.getValue();
+    print("get Gym Slot details 3");
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    print("get Gym Slot details 4");
+    String url = trainerId != null && trainerId.isNotEmpty
+        ? BASE_URL + Api.slotDetails(date, trainerId, gymId)
+        : BASE_URL + Api.slotDetails2(date, gymId);
+    print('url: $url');
+    var res =
+        await _netUtil.post(url, headers: mapHeader, body: {'uid': addOnId});
+    print("get Gym Slot details 5");
+    print("response of Get Gym Slot details : " + res.toString());
+    print("get Gym Slot details 6");
+    AddOnSlotDetails model;
+    if (res != null) model = AddOnSlotDetails.fromJson(res);
+    return Future.value(model);
+  }
+
+  ///Manmohan
+  Future<int> checkGymSubscription(
+      {BuildContext context, String userId, String gymId}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.checkSubscription(userId, gymId);
+    print('url: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      return Future.value(res['status'] == true ? 1 : 0);
+    });
+  }
+
+  Future<CheckEventParticipation> checkEventSubscription(
+      {BuildContext context, String eventId}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.checkParticipation(eventId);
+    print('url: $url');
+    var res = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    CheckEventParticipation val;
+    if (res != null && res.containsKey('data')) {
+      val = CheckEventParticipation.fromJson(res);
+    } else {
+      val = CheckEventParticipation(status: false);
+    }
+    return Future.value(val);
+  }
+
+  Future<dynamic> checkSlotAvailability(
+      {BuildContext context, String slotId}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.checkSlotAvailability(slotId);
+    print('url: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log('checkSlotAvailability resp:   ' + res.toString());
+      return Future.value(res);
+    });
+  }
+
+  Future<bool> eventCheckIn(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.eventCheckIn();
+    print('url: $url');
+    print('body: $body');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    log(res.toString());
+
+    return Future.value(res['status'] ?? false);
+  }
+
+  Future<String> generateRazorPayId(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    print("get generateRazorPayId 4");
+    String url = BASE_URL + Api.generateRazorpayId();
+    print('url: $url');
+    print('body: $body');
+    return _netUtil
+        .post(
+      url,
+      body: body,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      print("response of generateRazorPayId : " + res.toString());
+      return Future.value(res['data']['order_id'] ?? '');
+    });
+  }
+
+  Future<VerifyPayment> verifyRazorPayPayment(
+      {Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.verifyRazorPayPayment();
+    print('url: $url');
+    print('body: $body');
+    return _netUtil
+        .post(
+      url,
+      body: body,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      print("response of verifyRazorPayPayment : " + res.toString());
+      VerifyPayment model = VerifyPayment.fromJson(res);
+      return Future.value(
+        model ??
+            VerifyPayment(
+              data: null,
+              status: false,
+            ),
+      );
+    });
+  }
+
+  Future<AllNotifications> getNotifications(
+      {BuildContext context, String type}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.notification(type);
+    print('url: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      print("response of Get ALL Notifications : " + res.toString());
+      AllNotifications model = AllNotifications.fromJson(res);
+      return model;
+    });
+  }
+
+  Future<Stats> getStats({BuildContext context}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    print("get getBodyStats 4");
+    String url = BASE_URL + Api.getStats();
+    print('url: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      print("response of getBodyStats : " + res.toString());
+      Stats model = Stats.fromJson(res);
+
+      return model;
+    });
+  }
+
+  ///Manmohan
+  Future<GymAddOn> getAddOnForGym(String gymId) async {
+    String token = locator<AppPrefs>().token.getValue();
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    print("get Gym AdsOns 3 $gymId");
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.gymAddOn(gymId), headers: mapHeader)
+        .then((dynamic res) {
+      print("response getAddOnForGym : " + res.toString());
+      GymAddOn model = res != null && res['status']
+          ? GymAddOn.fromJson(res)
+          : GymAddOn(
+              data: [],
+            );
+
+      return model;
+    });
+  }
+
+  Future<CurrentTrainer> getCurrentTrainer() async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getCurrentTrainer(), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Get CURRENT TRAINER : " + res.toString());
+      CurrentTrainer model = CurrentTrainer.fromJson(res);
+
+      return model;
+    });
+  }
+
+  // Search Gym
+  Future<GymSearchModel> searchGym(String name) async {
+    String token = locator<AppPrefs>().token.getValue();
+    print('URL : $BASE_URL${Api.SEARCH_GYM} \n body: ${{'name': name}}');
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil.post(BASE_URL + Api.SEARCH_GYM, headers: mapHeader, body: {
+      "name": name,
+    }).then((dynamic res) {
+      print(res.toString());
+
+      return GymSearchModel.fromJson(res);
+    });
+  }
+
+  //get Gym Plans
+  ///@Gaurav
+  Future<GymPlanModel> getGymPlans() async {
+    print("get Gym Plans 2");
+    String token = locator<AppPrefs>().token.getValue();
+    String gymId = LocalValue.GYM_ID;
+    print("get Gym Plans 3");
+    String url = BASE_URL + Api.GET_GYM_PLAN;
+    var headers = {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    var body = jsonEncode({"gym_id": "$gymId"});
+    return _netUtil
+        .postJsonBody(url, headers: headers, body: body)
+        .then((dynamic res) {
+      print("response of Get gym Plan : " + res.toString());
+      GymPlanModel model = GymPlanModel.fromJson(res);
+      return model;
+    });
+  }
+
+  //get Gym Slots
+  ///@Gaurav
+  Future<GymSlotModel> getGymSlot(String gymId) async {
+    print("get Gym Slot 2");
+    String token = locator<AppPrefs>().token.getValue();
+    print("get Gym Slot 3");
+    String url = BASE_URL + Api.GET_GYM_SLOT + "1ycRrOm5RCI3p";
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    return _netUtil.get(url, headers: mapHeader).then((dynamic res) {
+      print("response of Get gym Slot : " + res.toString());
+      GymSlotModel model = GymSlotModel.fromJson(res);
+      return model;
+    });
+  }
+
+  // Search Gym
+  Future<CommonModel> addSubscritpion(Map<String, dynamic> body) async {
+    String token = locator<AppPrefs>().token.getValue();
+    String userId = locator<AppPrefs>().memberId.getValue();
+    var headers = {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    print(BASE_URL + Api.ADD_SUBSCRIPTION);
+
+    var res = await _netUtil.postJsonBody(
+      BASE_URL + Api.ADD_SUBSCRIPTION,
+      headers: headers,
+      body: json.encode(body),
+    );
+    CommonModel model = CommonModel.fromJson(res);
+    return model;
+  }
+}
