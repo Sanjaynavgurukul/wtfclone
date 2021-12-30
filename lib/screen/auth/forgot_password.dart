@@ -130,18 +130,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                                 _radioValue == 0
                                     ? UnderlineTextField(
-<<<<<<< Updated upstream
-                                        // inputFormatters: [
-                                        //   Global.amountValidator,
-                                        //   LengthLimitingTextInputFormatter(10),
-                                        // ],
-=======
                                         inputFormatters: [
                                           Global.amountValidator,
                                           LengthLimitingTextInputFormatter(10),
                                         ],
                                         fontFamily: Fonts.ROBOTO,
->>>>>>> Stashed changes
                                         keyboardType: TextInputType.phone,
                                         maxLength: 10,
                                         hintText: 'Mobile Number',
