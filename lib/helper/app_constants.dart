@@ -18,6 +18,10 @@ class AppConstants {
   static const Color shopNowColor = Color(0xFFCCBBB6);
   static const Color walletYellow = Color(0xFFFFB92D);
   static const Color primaryColor = Color(0xff460909);
+  static const Color bgColor = Color(0xff771112);
+  static const Color boxBorderColor = Color(0xffF40608);
+  //static const Color stcoinbgColor = Color(0xffAD0F0E);
+  static const Color stcoinbgColor = Color(0xff790707);
   // static const Color accentColor = Color(0xFF0BB2B4);
   // static const Color accentGradient1 = Color(0xFF60797B);
   // static const Color accentGradient2 = Color(0xFF7E9EA1);

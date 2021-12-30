@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/body_calculator/bodyFat_state.dart';
 import 'package:wtf/widget/slide_button.dart';
@@ -58,12 +59,14 @@ class BodyFatCalResult extends StatelessWidget {
           SizedBox(
             height: 30.0,
           ),
-          Text(
-            'Your Body Fat Calculator Result',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white.withOpacity(0.8),
-              fontWeight: FontWeight.w700,
+          Center(
+            child: Text(
+              'Your Body Fat Calculator Result',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.white.withOpacity(0.8),
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           SizedBox(
@@ -76,22 +79,24 @@ class BodyFatCalResult extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Body Fat = ${data.bodyFat.toStringAsFixed(3)} %',
+                      'Body Fat = ${data.bodyFat.toStringAsFixed(2)} %',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
-                        fontWeight: FontWeight.w700,
+                        fontFamily: Fonts.ROBOTO,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                     UIHelper.verticalSpace(12.0),
                     Image.asset('assets/images/fat_scale.png'),
                     UIHelper.verticalSpace(20.0),
                     Text(
-                      'BMI = ${bodyState.bmiResult.toStringAsFixed(3)} Kg/m²',
+                      'BMI = ${bodyState.bmiResult.toStringAsFixed(2)} Kg/m²',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
-                        fontWeight: FontWeight.w700,
+                        fontFamily: Fonts.ROBOTO,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                     SizedBox(

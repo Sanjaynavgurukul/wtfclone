@@ -90,6 +90,8 @@ dependencies:
   restart_app: ^1.1.0
   in_app_update: ^2.0.0
 #  in_app_update: ^1.1.5
+  flutter_screenutil: ^5.0.2
+  
 
 dev_dependencies:
   

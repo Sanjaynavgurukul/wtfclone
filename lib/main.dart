@@ -7,6 +7,7 @@ import 'package:firebase_messaging_platform_interface/src/remote_notification.da
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -170,29 +171,32 @@ class _MyAppState extends State<MyApp>
           create: (context) => BodyState(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'WTF',
-        darkTheme: ThemeData(
-          scaffoldBackgroundColor: AppColors.BACK_GROUND_BG,
-          brightness: Brightness.dark,
-          dividerColor: Color(0xff1d1f20),
-          accentColor: AppConstants.primaryColor,
-          splashColor: AppConstants.primaryColor,
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              primary: AppColors.PRIMARY_COLOR,
+      child: ScreenUtilInit(
+        designSize: Size(480, 960),
+        builder: () => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'WTF',
+          darkTheme: ThemeData(
+            scaffoldBackgroundColor: AppColors.BACK_GROUND_BG,
+            brightness: Brightness.dark,
+            dividerColor: Color(0xff1d1f20),
+            accentColor: AppConstants.primaryColor,
+            splashColor: AppConstants.primaryColor,
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.PRIMARY_COLOR,
+              ),
             ),
+            primarySwatch:
+                AppColors.generateMaterialColor(AppConstants.primaryColor),
+            fontFamily: Fonts.RALEWAY,
           ),
-          primarySwatch:
-              AppColors.generateMaterialColor(AppConstants.primaryColor),
-          fontFamily: Fonts.RALEWAY,
+          themeMode: ThemeMode.dark,
+          initialRoute: Routes.loader,
+          // Routes.splash,
+          navigatorKey: NavigationService.navigatorKey,
+          onGenerateRoute: RouteGenerator.generateRoute,
         ),
-        themeMode: ThemeMode.dark,
-        initialRoute: Routes.loader,
-        // Routes.splash,
-        navigatorKey: NavigationService.navigatorKey,
-        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

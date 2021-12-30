@@ -8,6 +8,7 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Toast.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/text_field.dart';
@@ -214,9 +215,10 @@ class _ProfileState extends State<Profile> {
               UIHelper.verticalSpace(20.0),
               OutlineTextField(
                 controller: mobileController,
+                fontFamily: Fonts.ROBOTO,
                 labelText: 'Mobile Number',
                 hintText: 'Enter Mobile Number',
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.number,
               ),
             ],
           ),

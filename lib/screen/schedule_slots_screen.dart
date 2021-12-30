@@ -8,6 +8,7 @@ import 'package:wtf/helper/common_function.dart';
 import 'package:wtf/helper/global.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
@@ -373,6 +374,7 @@ class _ScheduleSlotScreenState extends State<ScheduleSlotScreen>
                                     decimal: true,
                                     signed: false,
                                   ),
+                                  fontFamily: Fonts.ROBOTO,
                                   hintText: 'Mobile No.',
                                   controller: mobile,
                                   preffixIcon: Icon(
@@ -518,6 +520,7 @@ class _ScheduleSlotScreenState extends State<ScheduleSlotScreen>
                                     decimal: true,
                                     signed: false,
                                   ),
+                                  fontFamily: Fonts.ROBOTO,
                                   hintText: 'Pincode',
                                   controller: pinCode,
                                   preffixIcon: Icon(

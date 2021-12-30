@@ -26,7 +26,7 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
       appBar: AppBar(
         backgroundColor: AppConstants.primaryColor,
         title: Text(
-          'Shift trainer',
+          'Shift Trainer',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -46,17 +46,38 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
                         newTrainer: newTrainer, reason: textController.text)
                     .then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Shift trainer requested'),
+                    content: Text(
+                      'Shift trainer requested',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ));
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 });
               else
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Reason should not be empty'),
+                  content: Text(
+                    'Reason should not be empty',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ));
             } else
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Select new trainer'),
+                content: Text(
+                  'Select new trainer',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ));
           },
           child: Row(
@@ -64,7 +85,7 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
             children: [
               Text(
                 'Submit Request',
-                style: TextStyle(fontSize: 22),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
               ),
               SizedBox(
                 width: 5,
@@ -73,7 +94,7 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
             ],
           ),
           style: ElevatedButton.styleFrom(
-              primary: newTrainer.isNotEmpty ? Color(0xffff0000) : null,
+              primary: newTrainer.isNotEmpty ? AppConstants.primaryColor : null,
               padding: EdgeInsets.all(10)),
         ),
       ),
@@ -100,16 +121,16 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
                   TextSpan(
                     text: 'Current Trainer: ',
                     style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white70,
-                    ),
+                        fontSize: 16.0,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: newTrainer.isNotEmpty ? newTrainer : "No Trainer",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 16,
                       color: Colors.white,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -123,7 +144,8 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
                 children: [
                   Text(
                     'Choose trainer',
-                    style: TextStyle(fontSize: 22),
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                   SizedBox(
                     width: 5,
@@ -132,17 +154,32 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                  primary: Color(0xffff0000), padding: EdgeInsets.all(10)),
+                padding: EdgeInsets.all(10),
+              ),
             ),
             UIHelper.verticalSpace(20.0),
             TextField(
               controller: textController,
               decoration: new InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 5.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 1, color: Colors.white),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 5.0),
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 1, color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 1, color: Colors.white),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 1, color: Colors.red),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(width: 1, color: Colors.red),
                 ),
                 labelStyle: TextStyle(color: Colors.white),
                 labelText: 'Reason for shifting trainer',

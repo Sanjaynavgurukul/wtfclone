@@ -267,10 +267,22 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ],
                                 ),
                               UnderlineTextField(
+<<<<<<< Updated upstream
                                 // inputFormatters: [
                                 //   Global.number,
                                 // ],
                                 keyboardType: TextInputType.number,
+=======
+                                inputFormatters: [
+                                  Global.amountValidator,
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true,
+                                  signed: false,
+                                ),
+                                fontFamily: Fonts.ROBOTO,
+>>>>>>> Stashed changes
                                 hintText: 'Mobile Number',
                                 controller: mobileNumber,
                                 maxLines: 1,
@@ -303,6 +315,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               SizedBox(height: 20),
                               isSend
                                   ? UnderlineTextField(
+                                      fontFamily: Fonts.ROBOTO,
                                       enable: true,
                                       inputFormatters: [Global.amountValidator],
                                       keyboardType:

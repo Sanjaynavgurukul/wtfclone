@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/explore_controller_presenter.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -10,6 +11,7 @@ import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';
 import 'package:wtf/widget/CustomBottomNavigation.dart';
 
+import 'coin/coin_screen.dart';
 import 'home/home.dart';
 import 'home/notifications/notifications.dart';
 
@@ -29,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
     DashboardScreen(),
     ExplorePage(),
     MyWtf(),
-    Notifications(),
+    CoinScreen(),
   ];
 
   @override
@@ -120,6 +122,10 @@ class _HomeScreenState extends State<HomeScreen>
                     case 2:
                       break;
                     case 3:
+                      context
+                          .read<GymStore>()
+                          .getWTFCoinBalance(context: context);
+                      context.read<GymStore>().getCoinHistory(context: context);
                       context.read<GymStore>().getNotifications(
                             context: context,
                             type: 'new',
@@ -150,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen>
                     activeTextColor: Colors.white,
                   ),
                   CustomBottomBarItem(
-                    icon: 'assets/images/notification.png',
-                    title: Text('Notifications'),
+                    icon: 'assets/images/coins.png',
+                    title: Text('Coin'),
                     activeTextColor: Colors.white,
                   ),
                 ],

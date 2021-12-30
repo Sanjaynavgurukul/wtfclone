@@ -71,6 +71,7 @@ class _OtpVerifySheetState extends State<OtpVerifySheet> {
                   EntryField(
                     // label: 'One Time Password',
                     hint: 'Enter OTP',
+
                     controller: otpController,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,

@@ -60,4 +60,8 @@ class UIHelper {
 
     return dateString;
   }
+
+  static String parse(String formattedString) {
+    return DateFormat("h:mm a MMMM d").format(DateTime.parse(formattedString));
+  }
 }

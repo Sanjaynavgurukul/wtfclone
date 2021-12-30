@@ -6,6 +6,7 @@ import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/global.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/screen/auth/reset_password.dart';
 import 'package:wtf/widget/app_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -129,10 +130,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                                 _radioValue == 0
                                     ? UnderlineTextField(
+<<<<<<< Updated upstream
                                         // inputFormatters: [
                                         //   Global.amountValidator,
                                         //   LengthLimitingTextInputFormatter(10),
                                         // ],
+=======
+                                        inputFormatters: [
+                                          Global.amountValidator,
+                                          LengthLimitingTextInputFormatter(10),
+                                        ],
+                                        fontFamily: Fonts.ROBOTO,
+>>>>>>> Stashed changes
                                         keyboardType: TextInputType.phone,
                                         maxLength: 10,
                                         hintText: 'Mobile Number',

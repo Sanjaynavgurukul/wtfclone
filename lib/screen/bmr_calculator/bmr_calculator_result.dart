@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/widget/slide_button.dart';
 
 import 'bmr_state.dart';
@@ -62,12 +63,14 @@ class BMRCalculatorResult extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Text(
-            'Your BMR Calculator results',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
+          Center(
+            child: Text(
+              'Your BMR Calculator results',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           SizedBox(
@@ -85,7 +88,8 @@ class BMRCalculatorResult extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
-                          fontWeight: FontWeight.w700),
+                          fontFamily: Fonts.ROBOTO,
+                          fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
                       height: 30,

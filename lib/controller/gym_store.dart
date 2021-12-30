@@ -43,6 +43,12 @@ import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/banner_model.dart';
 import 'package:wtf/model/check_event_participation.dart';
+
+import 'package:wtf/model/coin_balance.dart';
+
+import 'package:wtf/model/coin_balance.dart';
+import 'package:wtf/model/coin_history.dart';
+
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/geo_address.dart';
@@ -53,6 +59,9 @@ import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
+import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/redeem_history.dart';
+import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/test.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/processing_dialog.dart';
@@ -182,6 +191,14 @@ class GymStore extends ChangeNotifier {
 
   AllDiets allDiets;
 
+  CoinBalance coinBalance;
+  ShoppingCategories shoppingCategories;
+  Offers offers;
+  String offerCategory;
+
+  CoinHistory coinHistory;
+  RedeemHistory redeemHistory;
+
   String discoverType = '';
   LocationResult selectedNewLocation;
 
@@ -283,6 +300,12 @@ class GymStore extends ChangeNotifier {
     getAllEvents(context: context);
     getTerms();
     getAllGyms(context: context);
+
+    getWTFCoinBalance(context: context);
+    getShoppingCategories(context: context);
+    getCoinHistory(context: context);
+    getRedeemHistory(context: context);
+
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
   }
@@ -1618,6 +1641,70 @@ class GymStore extends ChangeNotifier {
         bannerList = data;
         notifyListeners();
       }
+    }
+  }
+
+  Future<void> getWTFCoinBalance({BuildContext context}) async {
+    CoinBalance res = await RestDatasource().getWTFCoinBalance();
+    if (res != null) {
+      coinBalance = res;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getShoppingCategories({BuildContext context}) async {
+    ShoppingCategories res = await RestDatasource().getShoppingCategories();
+    if (res != null) {
+      shoppingCategories = res;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getOffers({BuildContext context, String keywords}) async {
+    Offers res = await RestDatasource().getOffers(keywords);
+    if (res != null) {
+      offers = res;
+      offerCategory = keywords;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getCoinHistory({BuildContext context}) async {
+    CoinHistory res = await RestDatasource().getCoinHistory();
+    if (res != null) {
+      coinHistory = res;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getRedeemHistory({BuildContext context}) async {
+    RedeemHistory res = await RestDatasource().getRedeemHistory();
+    if (res != null) {
+      redeemHistory = res;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> saveRedeem(
+      {BuildContext context,
+      String offername,
+      String description,
+      String offercode}) async {
+    Map<String, dynamic> body = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "coins": "200",
+      "remarks": "Coins Redeem",
+      "offer_name": offername,
+      "offer_details": description,
+      "offer_code": offercode,
+    };
+    Map res = await RestDatasource().redeemCoin(context: context, body: body);
+    if (res['status'] == true) {
+      notifyListeners();
+      return true;
+    } else {
+      notifyListeners();
+      return false;
     }
   }
 }

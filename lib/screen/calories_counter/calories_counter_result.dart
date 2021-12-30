@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/calories_counter/calorie_state.dart';
 import 'package:wtf/widget/slide_button.dart';
@@ -62,12 +63,14 @@ class _CaloriesCounterResultState extends State<CaloriesCounterResult> {
             endIndent: 20,
             height: 20,
           ),
-          Text(
-            'Your Calorie Calculator results',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
+          Center(
+            child: Text(
+              'Your Calorie Calculator results',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
           SizedBox(
@@ -84,7 +87,8 @@ class _CaloriesCounterResultState extends State<CaloriesCounterResult> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
-                          fontWeight: FontWeight.w700),
+                          fontFamily: Fonts.ROBOTO,
+                          fontWeight: FontWeight.normal),
                     ),
                     // _text('Carbs'),
                     // _subText('${double.parse(result).round() * .60}', 'kcal'),

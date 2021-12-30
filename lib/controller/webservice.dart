@@ -29,6 +29,9 @@ import 'package:wtf/model/all_diets.dart';
 import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/check_event_participation.dart';
+import 'package:wtf/model/coin_balance.dart';
+import 'package:wtf/model/coin_history.dart';
+
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/gym_add_on.dart';
@@ -41,6 +44,9 @@ import 'package:wtf/model/member_detils.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
+import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/redeem_history.dart';
+import 'package:wtf/model/shopping_categories.dart';
 
 import '../main.dart';
 
@@ -1108,5 +1114,101 @@ class RestDatasource {
     );
     CommonModel model = CommonModel.fromJson(res);
     return model;
+  }
+
+  //get wtf coin balance
+
+  Future<CoinBalance> getWTFCoinBalance() async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getWTFCoinBalance(), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Get CURRENT WTF Balance : " + res.toString());
+      CoinBalance model = CoinBalance.fromJson(res);
+
+      return model;
+    });
+  }
+
+  //get wtf shopping Categories
+  Future<ShoppingCategories> getShoppingCategories() async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getShoppingCategories(), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Shopping Categories : " + res.toString());
+      ShoppingCategories model = ShoppingCategories.fromJson(res);
+      return model;
+    });
+  }
+
+  //get wtf shopping Categories
+  Future<Offers> getOffers(String keywords) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getOffers(keywords), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Shopping Offers : " + res.toString());
+      Offers model = Offers.fromJson(res);
+      return model;
+    });
+  }
+
+  //redeem coin
+  Future<dynamic> redeemCoin(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      BASE_URL + Api.saveRedeemCoin(),
+      headers: mapHeader,
+      body: body,
+    );
+    log(body.toString());
+
+    print("response getWorkoutCalculation : " + res.toString());
+    dynamic complete = res;
+    return complete;
+  }
+
+  //get coin History
+  Future<CoinHistory> getCoinHistory() async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getCoinHistory(), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Coin History : " + res.toString());
+      CoinHistory model = CoinHistory.fromJson(res);
+      return model;
+    });
+  }
+
+  //get redeem History
+  Future<RedeemHistory> getRedeemHistory() async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getRedeemHistory(), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of Redeem History : " + res.toString());
+      RedeemHistory model = RedeemHistory.fromJson(res);
+      return model;
+    });
   }
 }

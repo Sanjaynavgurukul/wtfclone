@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/strings.dart';
 
 class OutlineTextField extends StatelessWidget {
   final String labelText;
@@ -20,6 +22,7 @@ class OutlineTextField extends StatelessWidget {
   final bool autoValidate;
   final EdgeInsets contentPadding;
   final TextInputAction textInputAction;
+  final String fontFamily;
 
   const OutlineTextField({
     this.labelText,
@@ -39,6 +42,7 @@ class OutlineTextField extends StatelessWidget {
     this.autoValidate = true,
     this.contentPadding,
     this.textInputAction = TextInputAction.done,
+    this.fontFamily,
   });
 
   @override
@@ -52,10 +56,10 @@ class OutlineTextField extends StatelessWidget {
           controller: controller,
           textAlign: textAlign,
           style: TextStyle(
-            fontSize: 16,
-            letterSpacing: 0.8,
-            color: Colors.white,
-          ),
+              fontSize: 16,
+              letterSpacing: 0.8,
+              color: Colors.white,
+              fontFamily: fontFamily ?? Fonts.RALEWAY),
           decoration: InputDecoration(
               hintText: hintText,
               contentPadding: contentPadding ??
@@ -127,6 +131,7 @@ class UnderlineTextField extends StatelessWidget {
   final bool observe;
   final bool enable;
   final int maxLength;
+  final String fontFamily;
 
   const UnderlineTextField({
     this.keyboardType,
@@ -145,6 +150,7 @@ class UnderlineTextField extends StatelessWidget {
     this.observe = false,
     this.enable = true,
     this.maxLength,
+    this.fontFamily,
   });
 
   @override
@@ -164,6 +170,7 @@ class UnderlineTextField extends StatelessWidget {
             fontSize: 15,
             letterSpacing: 0.8,
             color: Colors.white,
+            fontFamily: fontFamily ?? Fonts.RALEWAY,
             fontWeight: FontWeight.normal,
           ),
           decoration: InputDecoration(

@@ -68,4 +68,15 @@ class Api {
       'participation/check?event_id=$eventId&user_id=${locator<AppPrefs>().memberId.getValue()}';
   static String getCurrentAttendance(String memberId) =>
       "attandance/member_check_in?user_id=$memberId&date='${Helper.formatDate2(DateTime.now().toIso8601String())}'&role=member";
+
+  static String getWTFCoinBalance() =>
+      "coins/?user_id=${locator<AppPrefs>().memberId.getValue()}";
+  static String getShoppingCategories() => "coins/getallcategories";
+  static String getOffers(String keywords) =>
+      "coins/getoffers?keyword=$keywords";
+  static String saveRedeemCoin() => "coins/redeemcoin";
+  static String getCoinHistory() =>
+      "coins/getcoinstatment/?user_id=${locator<AppPrefs>().memberId.getValue()}";
+  static String getRedeemHistory() =>
+      "coins/redeemhistory?user_id=${locator<AppPrefs>().memberId.getValue()}";
 }

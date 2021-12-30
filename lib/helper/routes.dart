@@ -27,6 +27,11 @@ import 'package:wtf/screen/buy_session.dart';
 import 'package:wtf/screen/buy_subscription_screen.dart';
 import 'package:wtf/screen/calories_counter/calories_counter.dart';
 import 'package:wtf/screen/calories_counter/calories_counter_result.dart';
+import 'package:wtf/screen/coin/allcoin_screen.dart';
+import 'package:wtf/screen/coin/coin_screen.dart';
+import 'package:wtf/screen/coin/point_history.dart';
+import 'package:wtf/screen/coin/redeem_history.dart';
+import 'package:wtf/screen/coin/shopping_screen.dart';
 import 'package:wtf/screen/diet_schedule.dart';
 import 'package:wtf/screen/exercise/exercise.dart';
 import 'package:wtf/screen/exercise/exercise_start/exercise_start.dart';
@@ -104,6 +109,11 @@ class Routes {
   static const String mainWorkoutScreen = '/workoutMainScreen';
   static const String ptIntro = '/ptIntro';
   static const String updateFitnessProfile = '/updateFitnessProfile';
+  static const String coin = '/coin';
+  static const String allcoin = '/allcoin';
+  static const String pointHistory = '/pointHistory';
+  static const String redeemHistory = '/redeemHistory';
+  static const String shoppingScreen = '/shoppingScreen';
 }
 
 class RouteGenerator {
@@ -538,6 +548,46 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => BodyFatCalResult(), settings: settings);
+      case Routes.coin:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: CoinScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => CoinScreen(), settings: settings);
+      case Routes.allcoin:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: AllCoinScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => AllCoinScreen(), settings: settings);
+      case Routes.pointHistory:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: PointHistory(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => PointHistory(), settings: settings);
+      case Routes.redeemHistory:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: RedeemHistory(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => RedeemHistory(), settings: settings);
+      case Routes.shoppingScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: ShoppingScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => ShoppingScreen(), settings: settings);
       default:
         return null;
     }
