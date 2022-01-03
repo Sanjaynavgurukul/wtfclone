@@ -90,6 +90,7 @@ class CustomButton extends StatelessWidget {
                   style: AppConstants.customStyle(
                     color: textColor,
                     size: textSize,
+                    weight: FontWeight.bold,
                   ),
                 ),
               ),

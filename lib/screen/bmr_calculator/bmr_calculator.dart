@@ -50,43 +50,36 @@ class _BMRCalculatorState extends State<BMRCalculator> {
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 20.0,
-            horizontal: 16.0,
-          ),
-          height: 80.0,
-          child: SlideButton(
-            'Calculate',
-            () {
-              if (ageController.text.isEmpty ||
-                  weightController.text.isEmpty ||
-                  heightController.text.isEmpty ||
-                  bmrState.gender.isEmpty) {
-                FlashHelper.informationBar(context,
-                    message: 'Please provide all details');
-                /* -------------------------------------------------------------------------- */
-                /*                                 show error                                 */
-                /* -------------------------------------------------------------------------- */
+        bottomNavigationBar: SlideButton(
+          'Calculate',
+          () {
+            if (ageController.text.isEmpty ||
+                weightController.text.isEmpty ||
+                heightController.text.isEmpty ||
+                bmrState.gender.isEmpty) {
+              FlashHelper.informationBar(context,
+                  message: 'Please provide all details');
+              /* -------------------------------------------------------------------------- */
+              /*                                 show error                                 */
+              /* -------------------------------------------------------------------------- */
+            } else {
+              if (gender == genders[0] || gender == genders[2]) {
+                Provider.of<BmrState>(context, listen: false).bmrForMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  context: context,
+                );
               } else {
-                if (gender == genders[0] || gender == genders[2]) {
-                  Provider.of<BmrState>(context, listen: false).bmrForMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    context: context,
-                  );
-                } else {
-                  Provider.of<BmrState>(context, listen: false).bmrForWoMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    context: context,
-                  );
-                }
+                Provider.of<BmrState>(context, listen: false).bmrForWoMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  context: context,
+                );
               }
-            },
-          ),
+            }
+          },
         ),
         body: ListView(
           children: [

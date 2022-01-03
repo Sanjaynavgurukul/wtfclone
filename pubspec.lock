@@ -702,6 +702,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+1"
+  otp_autofill:
+    dependency: "direct main"
+    description:
+      name: otp_autofill
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   outline_gradient_button:
     dependency: "direct main"
     description:

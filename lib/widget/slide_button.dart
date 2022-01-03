@@ -1,21 +1,19 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:wtf/helper/app_constants.dart';
 
-class SlideButton extends StatefulWidget {
+import 'custom_button.dart';
+
+class SlideButton extends StatelessWidget {
   final String text;
   final Function onTap;
 
-  const SlideButton(this.text, this.onTap);
+  SlideButton(this.text, this.onTap);
 
-  @override
-  _SlideButtonState createState() => _SlideButtonState();
-}
-
-class _SlideButtonState extends State<SlideButton> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    var old = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: SlideAction(
         height: 58,
@@ -23,12 +21,12 @@ class _SlideButtonState extends State<SlideButton> {
         // reversed: true,
         sliderButtonIconPadding: 11.5,
         animationDuration: const Duration(milliseconds: 100),
-        onSubmit: widget.onTap,
+        onSubmit: onTap,
         alignment: Alignment.centerRight,
         innerColor: Colors.red,
         outerColor: Colors.white,
         child: Text(
-          widget.text,
+          text,
           style: TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,
@@ -42,8 +40,20 @@ class _SlideButtonState extends State<SlideButton> {
       ),
     );
 
+    return CustomButton(
+      textColor: Colors.white,
+      bgColor: AppConstants.primaryColor,
+      text: text,
+      height: 40.0,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 8.0,
+      ),
+      onTap: onTap,
+      radius: 12.0,
+    );
     // InkWell(
-    //   onTap: widget.onTap,
+    //   onTap: onTap,
     //   child: Container(
     //     height: 50,
     //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 18),
@@ -68,7 +78,7 @@ class _SlideButtonState extends State<SlideButton> {
     //         ),
     //         Align(
     //           alignment: Alignment.center,
-    //           child: Text(widget.text,
+    //           child: Text(text,
     //               style: TextStyle(
     //                   color: Colors.red,
     //                   fontWeight: FontWeight.bold,

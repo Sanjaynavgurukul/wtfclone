@@ -91,7 +91,7 @@ class _EventDetailsState extends State<EventDetails> {
                               null
                           ? store.isEventParticipated
                               ? CustomButton(
-                                  height: 48.0,
+                                  height: 40.0,
                                   onTap: () {
                                     if (Helper.formatDate2(
                                             DateTime.now().toIso8601String()) ==

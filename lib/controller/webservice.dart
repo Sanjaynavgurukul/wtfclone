@@ -47,7 +47,7 @@ import '../main.dart';
 class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
-  static const String BASE_URL = 'https://api.wtfup.me/';
+  static const String BASE_URL = APIHelper.BASE_URL;
   // static const String BASE_URL = 'http://13.232.102.139:9000/';
 
   static Map<String, String> header = {

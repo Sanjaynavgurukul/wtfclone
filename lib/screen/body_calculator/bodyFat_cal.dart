@@ -59,56 +59,49 @@ class _BodyFatCalculatorState extends State<BodyFatCalculator> {
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 24.0,
-          ),
-          height: 80.0,
-          child: SlideButton(
-            'Calculate',
-            () {
-              if (ageController.text.isEmpty ||
-                  weightController.text.isEmpty ||
-                  heightController.text.isEmpty ||
-                  bodyState.gender.isEmpty) {
-                FlashHelper.informationBar(context,
-                    message: 'Please provide all details');
-                /* -------------------------------------------------------------------------- */
-                /*                                 show error                                 */
-                /* -------------------------------------------------------------------------- */
+        bottomNavigationBar: SlideButton(
+          'Calculate',
+          () {
+            if (ageController.text.isEmpty ||
+                weightController.text.isEmpty ||
+                heightController.text.isEmpty ||
+                bodyState.gender.isEmpty) {
+              FlashHelper.informationBar(context,
+                  message: 'Please provide all details');
+              /* -------------------------------------------------------------------------- */
+              /*                                 show error                                 */
+              /* -------------------------------------------------------------------------- */
+            } else {
+              if (gender == genders[0] || gender == genders[2]) {
+                Provider.of<BodyState>(context, listen: false).bmi(
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  context: context,
+                );
+                Provider.of<BodyState>(context, listen: false).bodyFatMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  context: context,
+                  neck: num.parse(neckController.text),
+                  waist: num.parse(waistController.text),
+                );
               } else {
-                if (gender == genders[0] || gender == genders[2]) {
-                  Provider.of<BodyState>(context, listen: false).bmi(
+                Provider.of<BodyState>(context, listen: false).bmi(
                     height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    context: context,
-                  );
-                  Provider.of<BodyState>(context, listen: false).bodyFatMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    context: context,
-                    neck: num.parse(neckController.text),
-                    waist: num.parse(waistController.text),
-                  );
-                } else {
-                  Provider.of<BodyState>(context, listen: false).bmi(
-                      height: num.parse(heightController.text),
-                      weight: num.parse(weightController.text));
-                  Provider.of<BodyState>(context, listen: false).bodyFatWoMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    neck: num.parse(neckController.text),
-                    waist: num.parse(waistController.text),
-                    hip: num.parse(hipController.text),
-                    context: context,
-                  );
-                }
+                    weight: num.parse(weightController.text));
+                Provider.of<BodyState>(context, listen: false).bodyFatWoMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  neck: num.parse(neckController.text),
+                  waist: num.parse(waistController.text),
+                  hip: num.parse(hipController.text),
+                  context: context,
+                );
               }
-            },
-          ),
+            }
+          },
         ),
         body: ListView(
           children: [

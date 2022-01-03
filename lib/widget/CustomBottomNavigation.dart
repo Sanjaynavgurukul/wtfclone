@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/ui_helpers.dart';
 
 /// A beautiful and animated bottom navigation that paints a rounded shape
 /// around its [items] to provide a wonderful look.
@@ -15,7 +16,7 @@ class CustomBottomNavigation extends StatelessWidget {
     this.iconSize = 24,
     this.backgroundColor,
     this.itemCornerRadius = 50,
-    this.containerHeight = 56,
+    this.containerHeight = 60,
     this.animationDuration = const Duration(milliseconds: 270),
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     @required this.items,
@@ -131,49 +132,46 @@ class _ItemWidget extends StatelessWidget {
       container: true,
       selected: isSelected,
       child: AnimatedContainer(
-        width: isSelected ? 136.0 : 60.0,
+        // width: 70.0,
+        // width: isSelected ? 136.0 : 60.0,
         height: double.maxFinite,
         duration: animationDuration,
         curve: curve,
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         decoration: BoxDecoration(
           color: isSelected ? item.activeBgColor : backgroundColor,
-          borderRadius: BorderRadius.circular(itemCornerRadius),
+          borderRadius: BorderRadius.circular(4.0),
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: NeverScrollableScrollPhysics(),
           child: Container(
-            width: isSelected ? 130 : 50,
-            child: Row(
+            // width: isSelected ? 130 : 50,
+            child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child: Image.asset(
-                    item.icon,
-                    color: isSelected
-                        ? item.activeTextColor
-                        : item.inactiveTextColor,
-                    width: 24.0,
-                    height: 24.0,
-                  ),
+                Image.asset(
+                  item.icon,
+                  color: isSelected
+                      ? item.activeTextColor
+                      : item.inactiveTextColor,
+                  width: 20.0,
+                  height: 20.0,
                 ),
-                // UIHelper.horizontalSpace(6.0),
-                if (isSelected)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: DefaultTextStyle.merge(
-                      style: TextStyle(
-                        color: item.activeTextColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      textAlign: item.textAlign,
-                      child: item.title,
-                    ),
+                UIHelper.verticalSpace(6.0),
+                // if (isSelected)
+                DefaultTextStyle.merge(
+                  style: TextStyle(
+                    color: item.activeTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
                   ),
+                  maxLines: 1,
+                  textAlign: item.textAlign,
+                  child: item.title,
+                ),
               ],
             ),
           ),

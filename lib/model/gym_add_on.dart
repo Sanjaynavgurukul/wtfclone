@@ -43,6 +43,9 @@ class AddOnData {
     this.dateAdded,
     this.lastUpdated,
     this.isPt,
+    this.isLive,
+    this.gymName,
+    this.freeSession,
   });
 
   String uid;
@@ -52,22 +55,27 @@ class AddOnData {
   String image;
   String isPt;
   String price;
+  String isLive;
+  String freeSession;
+  String gymName;
   String status;
   String dateAdded;
   dynamic lastUpdated;
 
   factory AddOnData.fromJson(Map<String, dynamic> json) => AddOnData(
-        uid: json["uid"],
-        name: json["name"],
-        gymId: json["gym_id"],
-        description: json["description"],
-        image: json["image"] == null ? null : json["image"],
-        price: json["price"],
-        status: json["status"],
-        dateAdded: json["date_added"],
-        lastUpdated: json["last_updated"],
-        isPt: json['is_pt'] != null ? json['is_pt'] : '0',
-      );
+      uid: json["uid"],
+      name: json["name"],
+      gymId: json["gym_id"],
+      description: json["description"],
+      image: json["image"] == null ? null : json["image"],
+      price: json["price"],
+      status: json["status"],
+      dateAdded: json["date_added"],
+      lastUpdated: json["last_updated"],
+      isPt: json['is_pt'] != null ? json['is_pt'] : '0',
+      gymName: json['gym_name'] ?? '',
+      freeSession: json['free_seesion'] ?? '',
+      isLive: json['is_live'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
@@ -80,5 +88,8 @@ class AddOnData {
         "date_added": dateAdded,
         "last_updated": lastUpdated,
         "is_pt": isPt,
+        "is_live": isLive,
+        'gym_name': gymName,
+        'free_seesion': freeSession,
       };
 }

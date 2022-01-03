@@ -66,13 +66,7 @@ class _LoaderPageState extends State<LoaderPage> {
     });
     if (_updateInfo != null &&
         _updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-      await InAppUpdate.startFlexibleUpdate().then((_) async {
-        await InAppUpdate.completeFlexibleUpdate().then((_) {
-          // showSnack("Success!");
-        }).catchError((e) {
-          // showSnack(e.toString());
-        });
-      }).catchError((e) {
+      await InAppUpdate.performImmediateUpdate().catchError((e) {
         // showSnack(e.toString());
       });
     } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -20,9 +21,11 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final formKey = GlobalKey<FormState>();
-  final otp = TextEditingController();
+  // final otp = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
+  OTPTextEditController otp;
+  OTPInteractor _otpInteractor;
 
   bool isMobileNumber = false;
   bool isEmail = false;
@@ -37,6 +40,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     // setState(() {
     //   otp.text = widget.otp;
     // });
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('signature - $value'));
+
+    otp = OTPTextEditController(
+      codeLength: 7,
+      //ignore: avoid_print
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{7})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        // strategies: [
+        //   SampleStrategy(),
+        // ],
+      );
     super.initState();
   }
 

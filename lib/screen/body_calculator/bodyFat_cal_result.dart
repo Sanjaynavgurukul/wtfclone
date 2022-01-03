@@ -25,19 +25,12 @@ class BodyFatCalResult extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: Container(
-        height: 80.0,
-        margin: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 24.0,
-        ),
-        child: SlideButton(
-          'Continue',
-          () async {
-            // await bodyState.saveProgress(context: context);
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-        ),
+      bottomNavigationBar: SlideButton(
+        'Continue',
+        () async {
+          // await bodyState.saveProgress(context: context);
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
       ),
       body: ListView(
         children: [

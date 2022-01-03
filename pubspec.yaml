@@ -89,6 +89,7 @@ dependencies:
   flutter_native_image: ^0.0.6+1
   restart_app: ^1.1.0
   in_app_update: ^2.0.0
+  otp_autofill: ^2.1.0
 #  in_app_update: ^1.1.5
 
 dev_dependencies:

@@ -224,10 +224,10 @@ class GymStore extends ChangeNotifier {
       ),
     );
     Map<String, dynamic> body = {
-      'session_rating': sessionRating.toStringAsFixed(2),
-      'trainer_rating': trainerRating.toStringAsFixed(2),
+      'session_rating': sessionRating.toInt(),
+      'trainer_rating': trainerRating.toInt(),
       'workout_mapping_id': workoutMappingId,
-      'trainer_id': currentTrainer.data.id,
+      'trainer_id': currentTrainer.data.userId,
       'type': 'workout_feedback',
       'user_id': locator<AppPrefs>().memberId.getValue(),
     };

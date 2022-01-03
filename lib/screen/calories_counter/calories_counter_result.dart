@@ -32,18 +32,11 @@ class _CaloriesCounterResultState extends State<CaloriesCounterResult> {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 20.0,
-          horizontal: 16.0,
-        ),
-        height: 80.0,
-        child: SlideButton(
-          'Continue',
-          () async {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-        ),
+      bottomNavigationBar: SlideButton(
+        'Continue',
+        () async {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        },
       ),
       body: ListView(
         children: [

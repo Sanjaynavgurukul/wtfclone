@@ -11,6 +11,7 @@ import 'AppPrefs.dart';
 
 class APIHelper {
   static const String BASE_URL = 'https://api.wtfup.me/';
+  // static const String DEV_BASE_URL = 'https://devapi.wtfup.me/';
   // static const String BASE_URL = 'http://13.232.102.139:9000/';
 
   static const String SEND_OTP = BASE_URL + 'user/mobile/otp';
