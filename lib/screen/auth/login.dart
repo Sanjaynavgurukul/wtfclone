@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
   final mobileNumber = TextEditingController();
-  final otp = TextEditingController();
+  // final otp = TextEditingController();
 
   bool isMobileNumber = false;
   bool isOtp = false;
@@ -40,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   bool isSend = false;
+  OTPTextEditController controller;
+  OTPInteractor _otpInteractor;
 
   @override
   void initState() {
@@ -49,6 +52,26 @@ class _LoginPageState extends State<LoginPage> {
       //   print("Credentials revoked");
       // });
     }
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('signature - $value'));
+
+    controller = OTPTextEditController(
+      codeLength: 7,
+      //ignore: avoid_print
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{7})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        // strategies: [
+        //   SampleStrategy(),
+        // ],
+      );
     super.initState();
   }
 
@@ -148,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               fontFamily: Fonts.ROBOTO,
                               hintText: 'OTP',
-                              controller: otp,
+                              controller: controller,
                               maxLines: 1,
                               suffix: Icon(
                                 Icons.check,
@@ -188,11 +211,11 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() {
                                     isSend = true;
                                   });
-                                  Future.delayed(Duration(seconds: 1), () {
-                                    setState(() {
-                                      otp.text = _otp;
-                                    });
-                                  });
+                                  // Future.delayed(Duration(seconds: 1), () {
+                                  //   setState(() {
+                                  //     otp.text = _otp;
+                                  //   });
+                                  // });
                                   _scaffoldKey.currentState.showSnackBar(
                                     new SnackBar(
                                       content: new Text(
@@ -224,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (formKey.currentState.validate()) {
                             if (isSend) {
                               Response response = await auth.userLogin(
-                                  context, mobileNumber.text, otp.text);
+                                  context, mobileNumber.text, controller.text);
                               var res = json.decode(response.body);
                               print('BODY:: ${res}');
                               if (res['status']) {

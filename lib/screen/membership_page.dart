@@ -1387,6 +1387,133 @@ class BookPTWidget extends StatelessWidget {
   }
 }
 
+class BookLiveWidget extends StatelessWidget {
+  const BookLiveWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    GymStore gymStore = context.watch<GymStore>();
+    return gymStore.addOnSubscriptions != null &&
+            gymStore.addOnSubscriptions.isNotEmpty &&
+            gymStore.addOnSubscriptions
+                    .where((e) =>
+                        gymStore.selectedGymDetail.data.userId == e.gymId &&
+                        e.type == 'addon' &&
+                        e.expireDate.isAfter(DateTime.now()) &&
+                        e.completedSession.toString() != e.nSession.toString())
+                    .toList()
+                    .length >
+                0
+        ? Container()
+        : Container(
+            width: MediaQuery.of(context).size.width,
+            padding: gymStore.selectedGymAddOns.data
+                        .where((element) =>
+                            element.isLive != null && element.isLive == 'true')
+                        .toList()
+                        .length >
+                    0
+                ? EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 2.0,
+                  )
+                : EdgeInsets.zero,
+            color: Colors.grey[800],
+            child: gymStore.selectedGymAddOns.data
+                        .where((element) =>
+                            element.isLive != null && element.isLive == 'true')
+                        .toList()
+                        .length >
+                    0
+                ? Column(
+                    children: [
+                      Text(
+                        gymStore.selectedGymAddOns.data
+                            .where((element) =>
+                                element.isLive != null &&
+                                element.isLive == 'true')
+                            .toList()[0]
+                            .name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      UIHelper.verticalSpace(8.0),
+                      Text(
+                        gymStore.selectedGymAddOns.data
+                            .where((element) =>
+                                element.isLive != null &&
+                                element.isLive == 'true')
+                            .toList()[0]
+                            .description,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (gymStore.activeSubscriptions != null &&
+                              gymStore.activeSubscriptions.data != null) {
+                            gymStore.setAddOnSlot(
+                              context: context,
+                              data: gymStore.selectedGymAddOns.data
+                                  .where((element) =>
+                                      element.isLive != null &&
+                                      element.isLive == 'true')
+                                  .toList()[0],
+                            );
+                            NavigationService.navigateTo(
+                              Routes.ptIntro,
+                            );
+                          } else {
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                                  'In order to buy Live Training sessions, First you need to Buy Membership of this gym first',
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppConstants.primaryColor,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Book Live Training',
+                                // '${gymStore.selectedGymAddOns.data .where((element) => element.isLive != null && element.isLive == 'true').toList()[0].name}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(),
+          );
+  }
+}
+
 class RenewMembership extends StatelessWidget {
   const RenewMembership({
     Key key,

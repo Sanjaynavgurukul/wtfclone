@@ -48,20 +48,17 @@ class WorkoutCompleteButtons extends StatelessWidget {
             //   ),
             // ),
             UIHelper.verticalSpace(12.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: SlideButton(
-                'Continue',
-                () {
-                  //TODO SAVE PROGRESS
-                  if (store.sessionRating > 0.0 && store.trainerRating > 0.0) {
-                    store.submitRating(context: context);
-                  } else {
-                    FlashHelper.informationBar(context,
-                        message: 'Please give rating first');
-                  }
-                },
-              ),
+            SlideButton(
+              'Continue',
+              () {
+                //TODO SAVE PROGRESS
+                if (store.sessionRating > 0.0 && store.trainerRating > 0.0) {
+                  store.submitRating(context: context);
+                } else {
+                  FlashHelper.informationBar(context,
+                      message: 'Please give rating first');
+                }
+              },
             ),
             UIHelper.verticalSpace(12.0),
           ],

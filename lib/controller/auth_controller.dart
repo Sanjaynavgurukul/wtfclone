@@ -253,7 +253,7 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<dynamic> createAccount(String name, String email, String mobile,
-      String otp, String password) async {
+      String otp, String password, String referralCode) async {
     loading = true;
     notifyListeners();
     FirebaseCloudMessagagingWapper().init();
@@ -264,14 +264,19 @@ class AuthController extends ChangeNotifier {
       'otp': otp,
       "account_type": "member",
       'password': password,
+      'referral_code': referralCode,
       'n_token': locator<AppPrefs>().fcmToken.getValue(),
     });
+    // if(referralCode != null && referralCode.isNotEmpty) {
+    //   body['referral_code'] = ;
+    // }
 
     return APIHelper.createAccount(body).then((res1) {
       loading = false;
       print('create account resp: $res1');
       var res;
-      if (res1 != null && res1.statusCode == 200) {
+      res = json.decode(res1.body);
+      if (res1 != null && res['status']) {
         res = json.decode(res1.body);
         locator<AppPrefs>().memberId.setValue(res['data']['user_id']);
         locator<AppPrefs>().userName.setValue(name);

@@ -103,6 +103,9 @@ class SlotData {
     String temp = json['start_time'];
     String temp2 = '';
     switch (temp.split(':')[0]) {
+      case '00':
+        temp2 = '12';
+        break;
       case '1':
         temp2 = '01';
         break;

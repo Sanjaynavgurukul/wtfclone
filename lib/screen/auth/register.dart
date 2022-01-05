@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/controller/auth_controller.dart';
@@ -36,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final mobileNumber = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
-  final otp = TextEditingController();
+  final referralCodeController = TextEditingController();
   bool isEmailValid = false;
   bool isNameValid = false;
   bool isNumberValid = false;
@@ -48,9 +49,37 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isSend = false;
   bool obscureText = true;
 
+  OTPTextEditController controller;
+  OTPInteractor _otpInteractor;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   GymStore gymstore;
+
+  @override
+  void initState() {
+    _otpInteractor = OTPInteractor();
+    _otpInteractor
+        .getAppSignature()
+        //ignore: avoid_print
+        .then((value) => print('signature - $value'));
+
+    controller = OTPTextEditController(
+      codeLength: 7,
+      //ignore: avoid_print
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+      otpInteractor: _otpInteractor,
+    )..startListenUserConsent(
+        (code) {
+          final exp = RegExp(r'(\d{7})');
+          return exp.stringMatch(code ?? '') ?? '';
+        },
+        // strategies: [
+        //   SampleStrategy(),
+        // ],
+      );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,11 +298,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ],
                                 ),
                               UnderlineTextField(
-                                keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true,
-                                  signed: false,
-                                ),
-                                fontFamily: Fonts.ROBOTO,
+                                // inputFormatters: [
+                                //   Global.number,
+                                // ],
+                                keyboardType: TextInputType.text,
+                                hintText: 'Referral Code',
+                                controller: referralCodeController,
+                                maxLines: 1,
+                              ),
+                              SizedBox(height: 20),
+                              UnderlineTextField(
+                                // inputFormatters: [
+                                //   Global.number,
+                                // ],
+                                keyboardType: TextInputType.number,
                                 hintText: 'Mobile Number',
                                 controller: mobileNumber,
                                 maxLines: 1,
@@ -315,7 +353,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         signed: false,
                                       ),
                                       hintText: 'OTP',
-                                      controller: otp,
+                                      controller: controller,
                                       maxLines: 1,
                                       suffix: Icon(
                                         Icons.check,
@@ -542,8 +580,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                             name.text,
                                             emailAddress.text,
                                             mobileNumber.text,
-                                            otp.text,
+                                            controller.text,
                                             password.text,
+                                            referralCodeController.text,
                                           );
                                           context
                                               .read<GymStore>()

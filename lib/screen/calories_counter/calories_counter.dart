@@ -26,9 +26,11 @@ class _CaloriesCounterState extends State<CaloriesCounter> {
       heightNode = FocusNode();
   Map<String, double> activity = {
     'Sedentary: little or no exercise': 1.2,
-    'Exercise 3-4 times/week': 0.2,
-    'Daily exercise or intense exercise 6-7 times/week': 0.6,
-    'Very intense exercise daily, or physical job': 1.1
+    'Light exercise or sports 1-2 days/week': 1.4,
+    'Moderate exercise or sports 2-3 days/week': 1.6,
+    'Hard exercise or sports 4-5 days/week': 1.75,
+    'very hard exercise, physical job or sports 6-7 days/week': 2.0,
+    'Professional athlete': 2.3,
   };
   CalorieState calorieState;
   double selectedVal;
@@ -54,44 +56,37 @@ class _CaloriesCounterState extends State<CaloriesCounter> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 20.0,
-          horizontal: 16.0,
-        ),
-        height: 80.0,
-        child: SlideButton(
-          'Calculate',
-          () {
-            if (ageController.text.isEmpty ||
-                weightController.text.isEmpty ||
-                heightController.text.isEmpty ||
-                calorieState.gender.isEmpty ||
-                selectedVal == null) {
-              FlashHelper.informationBar(context,
-                  message: 'Please provide all details');
-              /* -------------------------------------------------------------------------- */
-              /*                                 show error                                 */
-              /* -------------------------------------------------------------------------- */
+      bottomNavigationBar: SlideButton(
+        'Calculate',
+        () {
+          if (ageController.text.isEmpty ||
+              weightController.text.isEmpty ||
+              heightController.text.isEmpty ||
+              calorieState.gender.isEmpty ||
+              selectedVal == null) {
+            FlashHelper.informationBar(context,
+                message: 'Please provide all details');
+            /* -------------------------------------------------------------------------- */
+            /*                                 show error                                 */
+            /* -------------------------------------------------------------------------- */
+          } else {
+            if (calorieState.gender == genders[0]) {
+              Provider.of<CalorieState>(context, listen: false).bmrForMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  val: selectedVal,
+                  context: context);
             } else {
-              if (calorieState.gender == genders[0]) {
-                Provider.of<CalorieState>(context, listen: false).bmrForMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    val: selectedVal,
-                    context: context);
-              } else {
-                Provider.of<CalorieState>(context, listen: false).bmrForWoMen(
-                    age: num.parse(ageController.text),
-                    height: num.parse(heightController.text),
-                    weight: num.parse(weightController.text),
-                    val: selectedVal,
-                    context: context);
-              }
+              Provider.of<CalorieState>(context, listen: false).bmrForWoMen(
+                  age: num.parse(ageController.text),
+                  height: num.parse(heightController.text),
+                  weight: num.parse(weightController.text),
+                  val: selectedVal,
+                  context: context);
             }
-          },
-        ),
+          }
+        },
       ),
       body: ListView(
         children: [

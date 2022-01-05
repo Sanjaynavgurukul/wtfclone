@@ -33,7 +33,7 @@ class CalorieState extends ChangeNotifier {
     this.val = val;
     // (10 * weight / 1kg + 6.25 * height / 1cm - 5 * age / 1 year + 5) kcal / day
 
-    clrResult = (10 * weight + 6.25 * height - 5 * age + 5).toString();
+    clrResult = ((10 * weight + 6.25 * height - 5 * age + 5) * val).toString();
     log('calorie cal result: ${clrResult}');
     notifyListeners();
     saveProgress(context: context);
@@ -45,7 +45,8 @@ class CalorieState extends ChangeNotifier {
     this.height = height;
     this.age = age;
     this.val = val;
-    clrResult = (10 * weight + (6.25 * height) - 5 * age - 161).toString();
+    clrResult =
+        ((10 * weight + (6.25 * height) - 5 * age - 161) * val).toString();
     notifyListeners();
     saveProgress(context: context);
   }

@@ -164,7 +164,7 @@ class GymData {
     dateAdded = json['date_added'];
     coverImage = json['cover_image'];
     lateUpdated = json['late_updated'] != null ? json['late_updated'] : '';
-    rating = json['rating'] ?? 0;
+    rating = int.tryParse(json['rating'].toString()) ?? 0;
     type = json.containsKey('type') && json['type'].isNotEmpty
         ? json['type']
         : 'Gym';

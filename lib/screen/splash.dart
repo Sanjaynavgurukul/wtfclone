@@ -7,6 +7,7 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
@@ -47,12 +48,14 @@ class _SplashPageState extends State<SplashPage> {
       // showSnack(e.toString());
     });
     if (_updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-      await InAppUpdate.startFlexibleUpdate().then((_) async {
-        await InAppUpdate.completeFlexibleUpdate().then((_) {
-          // showSnack("Success!");
-        }).catchError((e) {
-          // showSnack(e.toString());
-        });
+      await InAppUpdate.performImmediateUpdate().then((_) async {
+        // await InAppUpdate.completeFlexibleUpdate().then((_) {
+        //   // showSnack("Success!");
+        // }).catchError((e) {
+        //   showSnack(e.toString());
+        // });
+        FlashHelper.informationBar(context,
+            message: 'App Updated Successfully');
       }).catchError((e) {
         // showSnack(e.toString());
       });

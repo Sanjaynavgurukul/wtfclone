@@ -33,21 +33,18 @@ class PurchaseDone extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: SizedBox(
-          height: 100.0,
-          child: SlideButton(
-            "Let\'s WTF",
-            () {
-              Navigator.of(NavigationService.navigatorKey.currentContext)
-                  .popUntil((route) => route.isFirst);
-              NavigationService.navigatorKey.currentContext
-                  .read<GymStore>()
-                  .init(context: context);
-              NavigationService.navigatorKey.currentContext
-                  .read<GymStore>()
-                  .changeNavigationTab(index: 2);
-            },
-          ),
+        bottomNavigationBar: SlideButton(
+          "Let\'s WTF",
+          () {
+            Navigator.of(NavigationService.navigatorKey.currentContext)
+                .popUntil((route) => route.isFirst);
+            NavigationService.navigatorKey.currentContext
+                .read<GymStore>()
+                .init(context: context);
+            NavigationService.navigatorKey.currentContext
+                .read<GymStore>()
+                .changeNavigationTab(index: 2);
+          },
         ),
         body: SingleChildScrollView(
           child: IntrinsicHeight(
@@ -576,22 +573,19 @@ class EventPurchaseDone extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: SizedBox(
-          height: 110.0,
-          child: SlideButton(
-            "Let\'s WTF",
-            () {
-              Navigator.of(NavigationService.navigatorKey.currentContext)
-                  .popUntil((route) => route.isFirst);
-              NavigationService.navigatorKey.currentContext
-                  .read<GymStore>()
-                  .init(context: context);
-              NavigationService.navigatorKey.currentContext
-                  .read<GymStore>()
-                  .changeNavigationTab(index: 2);
-              // NavigationService.navigateTo(Routes.scheduleSlotPage);
-            },
-          ),
+        bottomNavigationBar: SlideButton(
+          "Let\'s WTF",
+          () {
+            Navigator.of(NavigationService.navigatorKey.currentContext)
+                .popUntil((route) => route.isFirst);
+            NavigationService.navigatorKey.currentContext
+                .read<GymStore>()
+                .init(context: context);
+            NavigationService.navigatorKey.currentContext
+                .read<GymStore>()
+                .changeNavigationTab(index: 2);
+            // NavigationService.navigateTo(Routes.scheduleSlotPage);
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

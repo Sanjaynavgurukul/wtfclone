@@ -123,72 +123,69 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 100.0,
-        child: SlideButton(
-          "Proceed to buy",
-          () async {
-            Map<String, dynamic> body = {
-              "gym_id": gymStore.selectedGymDetail.data.userId,
-              "user_id": locator<AppPrefs>().memberId.getValue(),
-              "price": totalAmount.toString(),
-              "tax_percentage": gymStore.selectedGymPlan.taxPercentage,
-              "tax_amount": tax.toString(),
-              "type": 'regular',
-              "slot_id": '',
-              "addon": "",
-              "start_date": Helper.stringForDatetime3(
-                      gymStore.selectedStartingDate.toIso8601String())
-                  .trim(),
-              "expire_date":
-                  Helper.stringForDatetime3(gymStore.selectedStartingDate
-                          .add(
-                            Duration(
-                              days: int.tryParse(
-                                  gymStore.selectedGymPlan.duration),
-                            ),
-                          )
-                          .toIso8601String())
-                      .trim(),
-              "plan_id": gymStore.selectedGymPlan.uid,
-              "isWhatsapp": !_isChecked,
-            };
-            // setState(() {
-            //   subscriptionBody = body;
-            // });
+      bottomNavigationBar: SlideButton(
+        "Proceed to buy",
+        () async {
+          Map<String, dynamic> body = {
+            "gym_id": gymStore.selectedGymDetail.data.userId,
+            "user_id": locator<AppPrefs>().memberId.getValue(),
+            "price": totalAmount.toString(),
+            "tax_percentage": gymStore.selectedGymPlan.taxPercentage,
+            "tax_amount": tax.toString(),
+            "type": 'regular',
+            "slot_id": '',
+            "addon": "",
+            "start_date": Helper.stringForDatetime3(
+                    gymStore.selectedStartingDate.toIso8601String())
+                .trim(),
+            "expire_date":
+                Helper.stringForDatetime3(gymStore.selectedStartingDate
+                        .add(
+                          Duration(
+                            days:
+                                int.tryParse(gymStore.selectedGymPlan.duration),
+                          ),
+                        )
+                        .toIso8601String())
+                    .trim(),
+            "plan_id": gymStore.selectedGymPlan.uid,
+            "isWhatsapp": !_isChecked,
+          };
+          // setState(() {
+          //   subscriptionBody = body;
+          // });
 
-            // if (_isChecked) {
-            //   body['isWhatsapp'] = true;
-            // }
+          // if (_isChecked) {
+          //   body['isWhatsapp'] = true;
+          // }
 
-            if (gymStore.chosenOffer != null) {
-              body['coupon'] = gymStore.chosenOffer.uid;
-            }
-            print("RazoyPayStarting");
-            if (totalAmount != 0) {
-              await gymStore.processPayment(
-                context: context,
-                body: body,
-                price: (totalAmount * 100).toString(),
-              );
+          if (gymStore.chosenOffer != null) {
+            body['coupon'] = gymStore.chosenOffer.uid;
+          }
+          print("RazoyPayStarting");
+          if (totalAmount != 0) {
+            await gymStore.processPayment(
+              context: context,
+              body: body,
+              price: (totalAmount * 100).toString(),
+            );
+          } else {
+            body['trx_id'] = 'discount_applied';
+            body['trx_status'] = 'done';
+            body['order_status'] = 'done';
+            bool isDone = await gymStore.addSubscription(
+              body: body,
+              context: context,
+              showLoader: true,
+            );
+            if (isDone) {
+              gymStore.init(context: context);
+              NavigationService.navigateTo(Routes.purchaseDone);
             } else {
-              body['trx_id'] = 'discount_applied';
-              body['trx_status'] = 'done';
-              body['order_status'] = 'done';
-              bool isDone = await gymStore.addSubscription(
-                body: body,
-                context: context,
-                showLoader: true,
-              );
-              if (isDone) {
-                gymStore.init(context: context);
-                NavigationService.navigateTo(Routes.purchaseDone);
-              } else {
-                FlashHelper.errorBar(context, message: 'Please Try again!');
-              }
+              FlashHelper.errorBar(context, message: 'Please Try again!');
             }
-          },
-        ),
+          }
+        },
       ),
       body: SafeArea(
         child: Padding(
