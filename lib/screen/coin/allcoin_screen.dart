@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/widget/Shimmer/widgets/coincategories.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class AllCoinScreen extends StatefulWidget {
   const AllCoinScreen({Key key}) : super(key: key);
@@ -26,20 +27,26 @@ class _AllCoinScreenState extends State<AllCoinScreen> {
         backgroundColor: AppConstants.appBackground,
         body: Padding(
           padding: EdgeInsets.all(12.r),
-          child: Container(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: .02.sw,
-                mainAxisSpacing: .015.sh,
-                crossAxisCount: 3,
-              ),
-              itemCount: store.shoppingCategories.data.length,
-              itemBuilder: (context, index) => CoinCategoriesIcon(
-                categoryName: store.shoppingCategories.data[index].keyword,
-                categoryImage: store.shoppingCategories.data[index].icon,
-              ),
-            ),
-          ),
+          child: store.shoppingCategories != null
+              ? Container(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: .02.sw,
+                      mainAxisSpacing: .015.sh,
+                      crossAxisCount: 3,
+                    ),
+                    itemCount: store.shoppingCategories.data.length,
+                    itemBuilder: (context, index) => CoinCategoriesIcon(
+                      categoryName:
+                          store.shoppingCategories.data[index].keyword,
+                      categoryImage: store.shoppingCategories.data[index].icon,
+                    ),
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.topCenter,
+                  child: Loading(),
+                ),
         ),
       ),
     );

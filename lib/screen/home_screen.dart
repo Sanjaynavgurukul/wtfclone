@@ -126,6 +126,9 @@ class _HomeScreenState extends State<HomeScreen>
                           .read<GymStore>()
                           .getWTFCoinBalance(context: context);
                       context.read<GymStore>().getCoinHistory(context: context);
+                      context
+                          .read<GymStore>()
+                          .getRedeemHistory(context: context);
                       context.read<GymStore>().getNotifications(
                             context: context,
                             type: 'new',

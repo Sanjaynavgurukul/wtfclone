@@ -17,12 +17,13 @@ class _PointHistoryState extends State<PointHistory> {
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
     return SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-                title: Text('Point History'),
-                backgroundColor: AppConstants.primaryColor),
-            backgroundColor: AppConstants.appBackground,
-            body: store.coinHistory.data != null &&
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text('Point History'),
+            backgroundColor: AppConstants.primaryColor),
+        backgroundColor: AppConstants.appBackground,
+        body: store.coinHistory != null
+            ? store.coinHistory.data != null &&
                     store.coinHistory.data.isNotEmpty
                 ? Container(
                     child: ListView.separated(
@@ -86,6 +87,12 @@ class _PointHistoryState extends State<PointHistory> {
                               fontSize: 20,
                               color: Colors.white70),
                         ),
-                      )));
+                      )
+            : Align(
+                alignment: Alignment.topCenter,
+                child: Loading(),
+              ),
+      ),
+    );
   }
 }

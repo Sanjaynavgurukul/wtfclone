@@ -50,6 +50,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  GymStore gymstore;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -267,10 +269,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ],
                                 ),
                               UnderlineTextField(
-                                inputFormatters: [
-                                  Global.amountValidator,
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
                                 keyboardType: TextInputType.numberWithOptions(
                                   decimal: true,
                                   signed: false,
@@ -496,9 +494,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                     : 'Send OTP & Continue',
                                 color: Colors.white,
                                 onPressed: () async {
+                                  //remove
+                                  // Future.delayed(
+                                  //     Duration(seconds: 1),
+                                  //     () => NavigationService
+                                  //         .navigateToReplacement(
+                                  //             Routes.userDetail));
+                                  //end
                                   if (formKey.currentState.validate()) {
                                     if (isSend) {
                                       if (auth.registerMethod != null) {
+                                        context
+                                            .read<GymStore>()
+                                            .init(context: context);
                                         auth.socialSignup({
                                           "name": name.text,
                                           // "otp": otp.text,
@@ -509,6 +517,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                           // "password:": password.text,
                                         }).then((value) {
                                           if (value.isSuccessed) {
+                                            context
+                                                .read<GymStore>()
+                                                .init(context: context);
                                             auth.registerMethod = null;
                                             Future.delayed(
                                                 Duration(seconds: 1),

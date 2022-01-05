@@ -51,6 +51,7 @@ import 'package:wtf/model/coin_history.dart';
 
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
+import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/geo_address.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
@@ -64,6 +65,7 @@ import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/test.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
+import 'package:wtf/widget/Shimmer/values/type.dart';
 import 'package:wtf/widget/processing_dialog.dart';
 
 import '../main.dart';
@@ -199,6 +201,9 @@ class GymStore extends ChangeNotifier {
   CoinHistory coinHistory;
   RedeemHistory redeemHistory;
 
+  DietPref dprefType1;
+  DietPref dprefType2;
+
   String discoverType = '';
   LocationResult selectedNewLocation;
 
@@ -305,6 +310,8 @@ class GymStore extends ChangeNotifier {
     getShoppingCategories(context: context);
     getCoinHistory(context: context);
     getRedeemHistory(context: context);
+    getdietPref(context: context, type: DietPrefType.type1);
+    getdietPref(context: context, type: DietPrefType.type2);
 
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
@@ -1705,6 +1712,23 @@ class GymStore extends ChangeNotifier {
     } else {
       notifyListeners();
       return false;
+    }
+  }
+
+//dietpref
+  Future<void> getdietPref({BuildContext context, DietPrefType type}) async {
+    if (type == DietPrefType.type1) {
+      DietPref res = await RestDatasource().getDietPref("type1");
+      if (res != null) {
+        dprefType1 = res;
+        notifyListeners();
+      }
+    } else {
+      DietPref res = await RestDatasource().getDietPref("type2");
+      if (res != null) {
+        dprefType2 = res;
+        notifyListeners();
+      }
     }
   }
 }

@@ -42,6 +42,7 @@ class _CoinScreenState extends State<CoinScreen> {
                         child: Row(
                           children: [
                             CoinBalanceWidget(
+                              gradient: false,
                               headerText: 'WTF YPay \nBalance',
                               amount: '0',
                               buttonText: "Coming Soon",
@@ -49,6 +50,7 @@ class _CoinScreenState extends State<CoinScreen> {
                             Spacer(),
                             store.coinBalance.data != null
                                 ? CoinBalanceWidget(
+                                    gradient: true,
                                     headerText: 'WTF Coin \nBalance',
                                     amount: store
                                         .coinBalance.data.first.wtfCoins
@@ -58,6 +60,7 @@ class _CoinScreenState extends State<CoinScreen> {
                                         Routes.allcoin),
                                   )
                                 : CoinBalanceWidget(
+                                    gradient: true,
                                     headerText: 'WTF Coin \nBalance',
                                     amount: '0',
                                     buttonText: "Redeem Now",
@@ -237,12 +240,14 @@ class CoinBalanceWidget extends StatelessWidget {
   final String amount;
   final String buttonText;
   final Function onTap;
+  final bool gradient;
   const CoinBalanceWidget({
     Key key,
     this.headerText,
     this.amount,
     this.buttonText,
     this.onTap,
+    this.gradient,
   }) : super(key: key);
 
   @override
@@ -253,14 +258,17 @@ class CoinBalanceWidget extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomLeft,
-              colors: [
-                AppConstants.stcoinbgColor,
-                AppConstants.primaryColor,
-              ],
-            ),
+            color: AppConstants.cardBg2,
+            gradient: gradient
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      AppConstants.stcoinbgColor,
+                      AppConstants.primaryColor,
+                    ],
+                  )
+                : null,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
         width: MediaQuery.of(context).size.width / 2 - 12,
@@ -296,17 +304,20 @@ class CoinBalanceWidget extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 10.r),
                 child: Container(
                   height: .03.sh,
-                  width: .3.sw,
+                  width: .4.sw,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                        AppConstants.stcoinbgColor,
-                        AppConstants.primaryColor,
-                      ],
-                    ),
+                    color: AppConstants.cardBg2,
+                    gradient: gradient
+                        ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              AppConstants.stcoinbgColor,
+                              AppConstants.primaryColor,
+                            ],
+                          )
+                        : null,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black,

@@ -79,4 +79,5 @@ class Api {
       "coins/getcoinstatment/?user_id=${locator<AppPrefs>().memberId.getValue()}";
   static String getRedeemHistory() =>
       "coins/redeemhistory?user_id=${locator<AppPrefs>().memberId.getValue()}";
+  static String dietPref(String type) => "diettype/getall?page=1&type=$type";
 }

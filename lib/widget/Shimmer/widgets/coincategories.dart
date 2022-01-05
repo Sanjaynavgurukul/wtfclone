@@ -22,6 +22,8 @@ class CoinCategoriesIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = .12.sh;
+    double width = .8.sw;
     GymStore store = Provider.of<GymStore>(context);
     return Container(
       decoration: BoxDecoration(
@@ -47,8 +49,8 @@ class CoinCategoriesIcon extends StatelessWidget {
             icon: Image.network(
               categoryImage,
               fit: BoxFit.cover,
-              height: .12.sh,
-              width: .7.sw,
+              height: height,
+              width: width,
               loadingBuilder: (context, _, chunk) => chunk == null
                   ? _
                   : RectangleShimmering(

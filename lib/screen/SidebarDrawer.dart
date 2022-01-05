@@ -20,6 +20,7 @@ import 'package:wtf/widget/custom_dialog.dart';
 
 import '../main.dart';
 import 'Menu_item.dart';
+import 'home/notifications/notifications.dart';
 
 class SidebarDrawer extends StatefulWidget {
   @override
@@ -185,17 +186,17 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                       NavigationService.navigateTo(Routes.shiftTrainer);
                     },
                   ),
-                // MenuItem(
-                //   icon: Icons.card_giftcard,
-                //   title: 'My Notification',
-                //   onTap: () {
-                //     NavigationService.goBack;
-                //     showDialog(
-                //       context: context,
-                //       builder: (context) => Notifications(),
-                //     );
-                //   },
-                // ),
+                MenuItem(
+                  icon: Icons.card_giftcard,
+                  title: 'My Notification',
+                  onTap: () {
+                    NavigationService.goBack;
+                    showDialog(
+                      context: context,
+                      builder: (context) => Notifications(),
+                    );
+                  },
+                ),
                 MenuItem(
                   icon: Icons.card_giftcard,
                   title: 'My Subscription',

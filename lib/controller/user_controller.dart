@@ -50,6 +50,8 @@ class UserController extends ChangeNotifier {
               .split(',')
               .toList()
           : [];
+  String type1;
+  String type2;
 
   setValue({
     String name,
@@ -66,6 +68,8 @@ class UserController extends ChangeNotifier {
     bool isSmoking,
     bool isDrinking,
     String existingDisease,
+    String type1,
+    String type2,
   }) {
     this.name = name == null ? this.name : name;
     this.gender = gender == null ? this.gender : gender;
@@ -82,9 +86,12 @@ class UserController extends ChangeNotifier {
     this.existingDisease =
         existingDisease == null ? this.existingDisease : existingDisease;
     this.activeType = activeType == null ? this.activeType : activeType;
+    this.type1 = type1 == null ? this.type1 : type1;
+    this.type2 = type2 == null ? this.type2 : type2;
     notifyListeners();
   }
 
+//type1,type2
   Future<dynamic> addMember({BuildContext context}) async {
     loading = true;
     notifyListeners();
@@ -106,6 +113,8 @@ class UserController extends ChangeNotifier {
       'is_smoking': isSmoking,
       'is_drinking': isDrinking,
       'howactive': activeType,
+      'type1': type1,
+      'type2': type2,
     };
     print('body: $body');
     Map<String, dynamic> res = await RestDatasource().addMember(body);
@@ -136,6 +145,8 @@ class UserController extends ChangeNotifier {
       'is_smoking': isSmoking,
       'is_drinking': isDrinking,
       'howactive': activeType,
+      'type1': type1,
+      'type2': type2,
     };
     print('body: $body');
     locator<AppPrefs>().updateMemberData.setValue(false);
@@ -193,6 +204,8 @@ class UserUpdateController extends ChangeNotifier {
               .split(',')
               .toList()
           : [];
+  String type1;
+  String type2;
 
   setValue({
     String name,
@@ -209,6 +222,8 @@ class UserUpdateController extends ChangeNotifier {
     bool isSmoking,
     bool isDrinking,
     String existingDisease,
+    String type1,
+    String type2,
   }) {
     this.name = name == null ? this.name : name;
     this.gender = gender == null ? this.gender : gender;
@@ -249,6 +264,8 @@ class UserUpdateController extends ChangeNotifier {
       'is_smoking': isSmoking,
       'is_drinking': isDrinking,
       'howactive': activeType,
+      'type1': type1,
+      'type2': type2,
     };
     print('body: $body');
     Map<String, dynamic> res = await RestDatasource().addMember(body);
@@ -279,6 +296,8 @@ class UserUpdateController extends ChangeNotifier {
       'is_smoking': isSmoking,
       'is_drinking': isDrinking,
       'howactive': activeType,
+      'type1': type1,
+      'type2': type2,
     };
     print('body: $body');
     locator<AppPrefs>().updateMemberData.setValue(false);

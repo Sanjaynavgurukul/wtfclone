@@ -5,10 +5,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
+import 'package:wtf/widget/Shimmer/values/type.dart';
 import 'package:wtf/widget/slide_to_move_widget.dart';
 
 import '../main.dart';
@@ -99,6 +101,7 @@ class _SplashPageState extends State<SplashPage> {
 class SplashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    GymStore gymstore;
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,

@@ -34,6 +34,7 @@ import 'package:wtf/model/coin_history.dart';
 
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
+import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
@@ -1208,6 +1209,21 @@ class RestDatasource {
         .then((dynamic res) {
       print("response of Redeem History : " + res.toString());
       RedeemHistory model = RedeemHistory.fromJson(res);
+      return model;
+    });
+  }
+
+  //get diet pref
+  Future<DietPref> getDietPref(String type) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.dietPref(type), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of pref : " + res.toString());
+      DietPref model = DietPref.fromJson(res);
       return model;
     });
   }
