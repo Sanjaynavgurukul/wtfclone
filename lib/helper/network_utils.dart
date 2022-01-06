@@ -25,7 +25,7 @@ class NetworkUtil {
         .get(Uri.parse(url), headers: headers)
         .then((http.Response response) async {
       final int statusCode = response.statusCode;
-      log('RESP: $url \n ${response.body}');
+      log('RESP: $url \n ${response.body} \n status code: $statusCode');
       if (statusCode == 200 || statusCode == 201) {
         Map res = json.decode(response.body);
         if (res.containsKey('message') && res['message'] == 'invalid token') {
@@ -33,10 +33,10 @@ class NetworkUtil {
           NavigationService.navigateToReplacement(Routes.loader);
         } else {
           //print('w849379834r98345344634863487r ');
-          //return _decoder.convert(response.body);
+          return _decoder.convert(response.body);
         }
       }
-      if (statusCode < 200 || statusCode > 400 || json == null) {
+      if (statusCode < 200 || json == null) {
         return null;
       }
 

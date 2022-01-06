@@ -33,6 +33,9 @@ class APIHelper {
   static const String ATTENDANCE = BASE_URL + 'attandance/add';
   static const String BANNER = BASE_URL + 'banner';
   static const String giveFeedback = BASE_URL + 'feedback/add';
+  static const String joinLiveSession = BASE_URL + 'liveparticipant/add';
+  static const String completeLiveSession =
+      BASE_URL + 'liveparticipant/complete';
   static String checkOffer(String offerId) =>
       BASE_URL +
       'offervalidation?user_id=${locator<AppPrefs>().memberId.getValue()}&offer_id=$offerId';

@@ -106,31 +106,31 @@ class SlotData {
       case '00':
         temp2 = '12';
         break;
-      case '1':
+      case '01':
         temp2 = '01';
         break;
-      case '2':
+      case '02':
         temp2 = '02';
         break;
-      case '3':
+      case '03':
         temp2 = '03';
         break;
-      case '4':
+      case '04':
         temp2 = '04';
         break;
-      case '5':
+      case '05':
         temp2 = '05';
         break;
-      case '6':
+      case '06':
         temp2 = '06';
         break;
-      case '7':
+      case '07':
         temp2 = '07';
         break;
-      case '8':
+      case '08':
         temp2 = '08';
         break;
-      case '9':
+      case '09':
         temp2 = '09';
         break;
       case '10':

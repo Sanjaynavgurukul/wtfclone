@@ -2,18 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
-import 'package:wtf/helper/ui_helpers.dart';
-import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/more_categories/categories_item.dart';
 import 'package:wtf/widget/Shimmer/widgets/coincategories.dart';
-import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class CoinScreen extends StatefulWidget {
@@ -253,9 +247,7 @@ class CoinBalanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onTap();
-      },
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
             color: AppConstants.cardBg2,

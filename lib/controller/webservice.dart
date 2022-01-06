@@ -31,7 +31,6 @@ import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/check_event_participation.dart';
 import 'package:wtf/model/coin_balance.dart';
 import 'package:wtf/model/coin_history.dart';
-
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_pref.dart';
@@ -561,6 +560,36 @@ class RestDatasource {
     var res = await _netUtil.get(
       APIHelper.checkOffer(offerId),
       headers: mapHeader,
+    );
+    print("response checkOffer : " + res.toString());
+    return res;
+  }
+
+  Future<Map<String, dynamic>> joinLiveSession(
+      {Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      APIHelper.joinLiveSession,
+      headers: mapHeader,
+      body: body,
+    );
+    print("response checkOffer : " + res.toString());
+    return res;
+  }
+
+  Future<Map<String, dynamic>> completeLiveSession(
+      {Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      APIHelper.completeLiveSession,
+      headers: mapHeader,
+      body: body,
     );
     print("response checkOffer : " + res.toString());
     return res;
@@ -1204,13 +1233,12 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil
-        .get(BASE_URL + Api.getRedeemHistory(), headers: mapHeader)
-        .then((dynamic res) {
-      print("response of Redeem History : " + res.toString());
-      RedeemHistory model = RedeemHistory.fromJson(res);
-      return model;
-    });
+    print('URL::_> ${Api.getRedeemHistory()}');
+    var res = await _netUtil.get(BASE_URL + Api.getRedeemHistory(),
+        headers: mapHeader);
+    print("response of Redeem History : " + res.toString());
+    RedeemHistory model = RedeemHistory.fromJson(res);
+    return model;
   }
 
   //get diet pref

@@ -11,6 +11,7 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/widget/BenefitsSection.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/processing_dialog.dart';
@@ -591,6 +592,10 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                           SizedBox(
                                             height: 12.0,
                                           ),
+                                          GymLiveWidget(),
+                                          SizedBox(
+                                            height: 12.0,
+                                          ),
                                           GymAddonWidget(),
                                           // Gymnastic
                                           Consumer<GymStore>(
@@ -1098,6 +1103,10 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                   SizedBox(
                                                     height: 12.0,
                                                   ),
+                                                  GymLiveWidget(),
+                                                  SizedBox(
+                                                    height: 12.0,
+                                                  ),
                                                   GymAddonWidget(),
                                                   // Gymnastic
                                                   Consumer<GymStore>(
@@ -1395,122 +1404,107 @@ class BookLiveWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GymStore gymStore = context.watch<GymStore>();
-    return gymStore.addOnSubscriptions != null &&
-            gymStore.addOnSubscriptions.isNotEmpty &&
-            gymStore.addOnSubscriptions
-                    .where((e) =>
-                        gymStore.selectedGymDetail.data.userId == e.gymId &&
-                        e.type == 'addon' &&
-                        e.expireDate.isAfter(DateTime.now()) &&
-                        e.completedSession.toString() != e.nSession.toString())
-                    .toList()
-                    .length >
-                0
-        ? Container()
-        : Container(
-            width: MediaQuery.of(context).size.width,
-            padding: gymStore.selectedGymAddOns.data
-                        .where((element) =>
-                            element.isLive != null && element.isLive == 'true')
-                        .toList()
-                        .length >
-                    0
-                ? EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 2.0,
-                  )
-                : EdgeInsets.zero,
-            color: Colors.grey[800],
-            child: gymStore.selectedGymAddOns.data
-                        .where((element) =>
-                            element.isLive != null && element.isLive == 'true')
-                        .toList()
-                        .length >
-                    0
-                ? Column(
-                    children: [
-                      Text(
-                        gymStore.selectedGymAddOns.data
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: gymStore.selectedGymAddOns.data
+                  .where((element) =>
+                      element.isLive != null && element.isLive == 'true')
+                  .toList()
+                  .length >
+              0
+          ? EdgeInsets.symmetric(
+              vertical: 15,
+              horizontal: 2.0,
+            )
+          : EdgeInsets.zero,
+      color: Colors.grey[800],
+      child: gymStore.selectedGymAddOns.data
+                  .where((element) =>
+                      element.isLive != null && element.isLive == 'true')
+                  .toList()
+                  .length >
+              0
+          ? Column(
+              children: [
+                Text(
+                  gymStore.selectedGymAddOns.data
+                      .where((element) =>
+                          element.isLive != null && element.isLive == 'true')
+                      .toList()[0]
+                      .name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                UIHelper.verticalSpace(8.0),
+                Text(
+                  gymStore.selectedGymAddOns.data
+                      .where((element) =>
+                          element.isLive != null && element.isLive == 'true')
+                      .toList()[0]
+                      .description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                InkWell(
+                  onTap: () {
+                    if (gymStore.activeSubscriptions != null &&
+                        gymStore.activeSubscriptions.data != null) {
+                      gymStore.setAddOnSlot(
+                        context: context,
+                        data: gymStore.selectedGymAddOns.data
                             .where((element) =>
                                 element.isLive != null &&
                                 element.isLive == 'true')
-                            .toList()[0]
-                            .name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      UIHelper.verticalSpace(8.0),
-                      Text(
-                        gymStore.selectedGymAddOns.data
-                            .where((element) =>
-                                element.isLive != null &&
-                                element.isLive == 'true')
-                            .toList()[0]
-                            .description,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (gymStore.activeSubscriptions != null &&
-                              gymStore.activeSubscriptions.data != null) {
-                            gymStore.setAddOnSlot(
-                              context: context,
-                              data: gymStore.selectedGymAddOns.data
-                                  .where((element) =>
-                                      element.isLive != null &&
-                                      element.isLive == 'true')
-                                  .toList()[0],
-                            );
-                            NavigationService.navigateTo(
-                              Routes.ptIntro,
-                            );
-                          } else {
-                            FlashHelper.informationBar(
-                              context,
-                              message:
-                                  'In order to buy Live Training sessions, First you need to Buy Membership of this gym first',
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppConstants.primaryColor,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            // crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Book Live Training',
-                                // '${gymStore.selectedGymAddOns.data .where((element) => element.isLive != null && element.isLive == 'true').toList()[0].name}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
+                            .toList()[0],
+                      );
+                      NavigationService.navigateTo(
+                        Routes.ptIntro,
+                      );
+                    } else {
+                      FlashHelper.informationBar(
+                        context,
+                        message:
+                            'In order to buy Live Training sessions, First you need to Buy Membership of this gym first',
+                      );
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppConstants.primaryColor,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Book Live Training',
+                          // '${gymStore.selectedGymAddOns.data .where((element) => element.isLive != null && element.isLive == 'true').toList()[0].name}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                : Container(),
-          );
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Container(),
+    );
   }
 }
 
@@ -1632,156 +1626,54 @@ class GymAddonWidget extends StatelessWidget {
           controlAffinity: ListTileControlAffinity.platform,
           children: [
             Consumer<GymStore>(
-              builder: (context, gymStore, child) => gymStore
-                          .selectedGymAddOns !=
-                      null
-                  ? gymStore.selectedGymAddOns.data != null &&
-                          gymStore.selectedGymAddOns.data.isNotEmpty &&
-                          gymStore.selectedGymAddOns.data
-                                  .where((e) => e.isPt == '0' && e.price != '0')
-                                  .toList()
-                                  .length >
-                              0
-                      ? Container(
-                          height: 120,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: gymStore.selectedGymAddOns.data.length,
-                            itemBuilder: (context, index) {
-                              return gymStore.selectedGymAddOns.data[index]
-                                              .price ==
-                                          '0' ||
-                                      gymStore.selectedGymAddOns.data[index]
-                                              .isPt ==
-                                          '1'
-                                  ? Container()
-                                  : InkWell(
-                                      onTap: () {
-                                        gymStore.setAddOnSlot(
-                                          context: context,
+              builder: (context, gymStore, child) =>
+                  gymStore.selectedGymAddOns != null
+                      ? gymStore.selectedGymAddOns.data != null &&
+                              gymStore.selectedGymAddOns.data.isNotEmpty &&
+                              gymStore.selectedGymAddOns.data
+                                      .where((e) =>
+                                          e.isPt == '0' &&
+                                          e.price != '0' &&
+                                          !e.isLive)
+                                      .toList()
+                                      .length >
+                                  0
+                          ? Container(
+                              height: 120,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    gymStore.selectedGymAddOns.data.length,
+                                itemBuilder: (context, index) {
+                                  return gymStore.selectedGymAddOns.data[index]
+                                                  .price ==
+                                              '0' ||
+                                          gymStore.selectedGymAddOns.data[index]
+                                                  .isPt ==
+                                              '1' ||
+                                          gymStore.selectedGymAddOns.data[index]
+                                              .isLive
+                                      ? Container()
+                                      : AddonCard(
                                           data: gymStore
                                               .selectedGymAddOns.data[index],
-                                          getTrainers: true,
                                         );
-                                        // gymStore.getSlotDetails(
-                                        //   context: context,
-                                        //   date: Helper.formatDate2(
-                                        //     DateTime.now().toIso8601String(),
-                                        //   ),
-                                        //   addOnId:
-                                        //       gymStore.selectedAddOnSlot.uid,
-                                        //   trainerId: null,
-                                        // );
-                                        // NavigationService.navigateTo(
-                                        //   Routes.chooseSlotScreenAddon,
-                                        // );
-                                        NavigationService.navigateTo(
-                                          Routes.chooseSlotScreen,
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 120,
-                                        width: 100,
-                                        margin: EdgeInsets.only(left: 10),
-                                        // padding: EdgeInsets.symmetric(vertical: 8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                gymStore.selectedGymAddOns
-                                                        .data[index].name ??
-                                                    '',
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ),
-                                            UIHelper.verticalSpace(6.0),
-                                            RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text: "Price Starts ",
-                                                  ),
-                                                  TextSpan(
-                                                    text: "from",
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                    ),
-                                                  ),
-                                                ],
-                                                style: TextStyle(
-                                                  fontSize: 9,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              "\u20B9 ${gymStore.selectedGymAddOns.data[index].price}",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 4,
-                                                vertical: 4,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  6,
-                                                ),
-                                              ),
-                                              child: Text(
-                                                'Book Session',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                            },
-                          ),
-                        )
-                      : Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 6.0),
-                            child: Text(
-                              'No ADDON Available',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
+                                },
                               ),
-                            ),
-                          ),
-                        )
-                  : Loading(),
+                            )
+                          : Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 6.0),
+                                child: Text(
+                                  'No ADDON Available',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                      : Loading(),
             ),
           ],
           title: Container(
@@ -1817,6 +1709,218 @@ class GymAddonWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class GymLiveWidget extends StatelessWidget {
+  const GymLiveWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ExpansionTile(
+          collapsedIconColor: Colors.white,
+          collapsedTextColor: Colors.white,
+          collapsedBackgroundColor: Colors.grey[800],
+          iconColor: Colors.white,
+          // tilePadding: EdgeInsets.zero,
+          initiallyExpanded: true,
+          controlAffinity: ListTileControlAffinity.platform,
+          children: [
+            Consumer<GymStore>(
+              builder: (context, gymStore, child) =>
+                  gymStore.selectedGymAddOns != null
+                      ? gymStore.selectedGymAddOns.data != null &&
+                              gymStore.selectedGymAddOns.data.isNotEmpty &&
+                              gymStore.selectedGymAddOns.data
+                                      .where((e) => e.isLive)
+                                      .toList()
+                                      .length >
+                                  0
+                          ? Container(
+                              height: 120,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    gymStore.selectedGymAddOns.data.length,
+                                itemBuilder: (context, index) {
+                                  return gymStore
+                                          .selectedGymAddOns.data[index].isLive
+                                      ? AddonCard(
+                                          data: gymStore
+                                              .selectedGymAddOns.data[index],
+                                        )
+                                      : Container();
+                                },
+                              ),
+                            )
+                          : Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 6.0),
+                                child: Text(
+                                  'No ADDON Available',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ),
+                            )
+                      : Loading(),
+            ),
+          ],
+          title: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                // mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Live Sessions',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  // Icon(
+                  //   Icons.keyboard_arrow_up_sharp,
+                  //   color: Colors.white,
+                  //   size: 30,
+                  // )
+                ],
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+      ],
+    );
+  }
+}
+
+class AddonCard extends StatelessWidget {
+  final AddOnData data;
+  const AddonCard({Key key, this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GymStore>(builder: (context, gymStore, child) {
+      return InkWell(
+        onTap: () {
+          gymStore.setAddOnSlot(
+            context: context,
+            data: data,
+            getTrainers: true,
+          );
+          // gymStore.getSlotDetails(
+          //   context: context,
+          //   date: Helper.formatDate2(
+          //     DateTime.now().toIso8601String(),
+          //   ),
+          //   addOnId:
+          //       gymStore.selectedAddOnSlot.uid,
+          //   trainerId: null,
+          // );
+          // NavigationService.navigateTo(
+          //   Routes.chooseSlotScreenAddon,
+          // );
+          NavigationService.navigateTo(
+            Routes.chooseSlotScreen,
+          );
+        },
+        child: Container(
+          height: 120,
+          width: 250,
+          margin: EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          // padding: EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  data.name ?? '',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              UIHelper.verticalSpace(6.0),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Price Starts ",
+                    ),
+                    TextSpan(
+                      text: "from",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Text(
+                "\u20B9 ${data.price}",
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 6.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(
+                    6,
+                  ),
+                ),
+                child: Text(
+                  'Book Session',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
 

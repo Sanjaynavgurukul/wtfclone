@@ -13,14 +13,13 @@ class RedeemHistory {
   bool status;
   List<Datum> data;
 
-  factory RedeemHistory.fromRawJson(String str) =>
-      RedeemHistory.fromJson(json.decode(str));
-
   String toRawJson() => json.encode(toJson());
 
   factory RedeemHistory.fromJson(Map<String, dynamic> json) => RedeemHistory(
         status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: json.containsKey('data')
+            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

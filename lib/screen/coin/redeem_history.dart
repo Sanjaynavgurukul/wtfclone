@@ -113,7 +113,8 @@ class _RedeemHistoryState extends State<RedeemHistory> {
                       },
                     ),
                   )
-                : store.redeemHistory.data.isNotEmpty
+                : store.redeemHistory.data != null &&
+                        store.redeemHistory.data.isNotEmpty
                     ? Align(
                         alignment: Alignment.topCenter,
                         child: Loading(),

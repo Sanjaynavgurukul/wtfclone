@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class PointHistory extends StatefulWidget {
@@ -42,7 +41,7 @@ class _PointHistoryState extends State<PointHistory> {
                                 fontSize: 18),
                           ),
                           subtitle: Text(
-                            UIHelper.parse(store.coinHistory.data[i].dateAdded),
+                            store.coinHistory.data[i].dateAdded,
                             // '9:00 AM 13th December',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,

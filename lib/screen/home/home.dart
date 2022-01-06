@@ -371,6 +371,15 @@ class TodayScheduleCard extends StatelessWidget {
                             store.mySchedule.data.addon.first.completedSession,
                         data: store.mySchedule.data.addon.first,
                       ),
+                    if (store.mySchedule.data.addonLive.isNotEmpty)
+                      TodayScheduleItem(
+                        scheduleName:
+                            store.mySchedule.data.addonLive.first.addonName,
+                        session: store.mySchedule.data.addonLive.first.nSession,
+                        completedSession: store
+                            .mySchedule.data.addonLive.first.completedSession,
+                        data: store.mySchedule.data.addonLive.first,
+                      ),
                     if (store.mySchedule.data.event.isNotEmpty)
                       TodayScheduleItem(
                         scheduleName:
@@ -663,11 +672,22 @@ class TodayScheduleItem extends StatelessWidget {
                       vertical: 6.0,
                       horizontal: 16.0,
                     ),
-                    text: 'CONTINUE',
+                    text: data.type == 'addon_live'
+                        ? 'Join Live Session'
+                        : 'CONTINUE',
                     bgColor: AppConstants.primaryColor,
                     textColor: Colors.white,
                     onTap: () {
-                      NavigationService.navigateTo(Routes.mySchedule);
+                      if (data.type == 'addon_live') {
+                        context.read<GymStore>().joinLiveSession(
+                              addonName: data.addonName,
+                              liveClassId: data.liveClassId,
+                              roomId: data.roomId,
+                              context: context,
+                              addonId: data.addonId,
+                            );
+                      } else
+                        NavigationService.navigateTo(Routes.mySchedule);
                     },
                     textSize: 12.0,
                     height: 30.0,

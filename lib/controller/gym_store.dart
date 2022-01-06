@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -43,12 +45,8 @@ import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/banner_model.dart';
 import 'package:wtf/model/check_event_participation.dart';
-
-import 'package:wtf/model/coin_balance.dart';
-
 import 'package:wtf/model/coin_balance.dart';
 import 'package:wtf/model/coin_history.dart';
-
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_pref.dart';
@@ -315,6 +313,153 @@ class GymStore extends ChangeNotifier {
 
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
+  }
+
+  Future<void> joinLiveSession({
+    BuildContext context,
+    String liveClassId,
+    String roomId,
+    String addonId,
+    String addonName,
+  }) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    var body = {
+      "trainer_id": currentTrainer.data.userId,
+      "addon_id": addonId,
+      "liveclass_id": liveClassId,
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "date": Helper.formatDate2(DateTime.now().toIso8601String()),
+    };
+    Map<String, dynamic> res =
+        await RestDatasource().joinLiveSession(body: body);
+    Navigator.pop(context);
+    if (res != null && res['status']) {
+      locator<AppPrefs>()
+          .liveClassParticipantId
+          .setValue(res['liveclass_participant_id']);
+      locator<AppPrefs>()
+          .livePtVerificationId
+          .setValue(res['pt_verification_id']);
+      log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
+      _joinMyMeeting(
+        liveClassId: roomId,
+        addonName: addonName,
+      );
+    }
+  }
+
+  Future<void> completeLiveSession(
+      {BuildContext context,
+      String liveClassId,
+      String addonId,
+      String addonName}) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    var body = {
+      "liveclassparticipant_id":
+          locator<AppPrefs>().liveClassParticipantId.getValue(),
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "uid": locator<AppPrefs>().livePtVerificationId.getValue(),
+    };
+    Map<String, dynamic> res =
+        await RestDatasource().completeLiveSession(body: body);
+    Navigator.pop(context);
+    if (res != null && res['status']) {
+      locator<AppPrefs>()
+          .liveClassParticipantId
+          .setValue(res['liveclass_participant_id']);
+      locator<AppPrefs>()
+          .livePtVerificationId
+          .setValue(res['pt_verification_id']);
+      log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
+    }
+  }
+
+  _joinMyMeeting({
+    String liveClassId,
+    String addonName,
+  }) async {
+    String serverUrl = 'https://wtfup.me/';
+
+    // Enable or disable any feature flag here
+    // If feature flag are not provided, default values will be used
+    // Full list of feature flags (and defaults) available in the README
+    Map<FeatureFlagEnum, bool> featureFlags = {
+      FeatureFlagEnum.WELCOME_PAGE_ENABLED: true,
+      FeatureFlagEnum.LIVE_STREAMING_ENABLED: true,
+      FeatureFlagEnum.MEETING_PASSWORD_ENABLED: false,
+      // FeatureFlagEnum.KICK_OUT_ENABLED: true,
+      // FeatureFlagEnum.HELP_BUTTON_ENABLED: false,
+
+      FeatureFlagEnum.ADD_PEOPLE_ENABLED: true,
+      FeatureFlagEnum.INVITE_ENABLED: true,
+      // FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: false,
+      // FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: false,
+
+      FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: true,
+      FeatureFlagEnum.CALL_INTEGRATION_ENABLED: false,
+      FeatureFlagEnum.CALENDAR_ENABLED: false
+    };
+
+    // Here is an example, disabling features for each platform
+    if (Platform.isAndroid) {
+      // Disable ConnectionService usage on Android to avoid issues (see README)
+
+      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
+      // featureFlags[FeatureFlagEnum.ANROID_SCREENSHARING_ENABLED] = false;
+
+    } else if (Platform.isIOS) {
+      // Disable PIP on iOS as it looks weird
+      featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
+      featureFlags[FeatureFlagEnum.IOS_RECORDING_ENABLED] = false;
+    }
+    // Define MyMeetings options here
+    var options = JitsiMeetingOptions(
+      room: liveClassId,
+    )
+      // ..serverURL = serverUrl
+      ..subject = addonName
+      ..userDisplayName = locator<AppPrefs>().userName.getValue()
+      ..userEmail = locator<AppPrefs>().userEmail.getValue()
+      ..audioOnly = false
+      ..audioMuted = true
+      ..videoMuted = true
+      ..featureFlags.addAll(featureFlags);
+
+    await JitsiMeet.joinMeeting(
+      options,
+      listener: JitsiMeetingListener(
+        onConferenceWillJoin: (message) async {
+          log("${options.room} will join with message: $message");
+        },
+        onConferenceJoined: (message) {
+          log("${options.room} joined with message: $message");
+        },
+        onConferenceTerminated: (message) {
+          log("${options.room} terminated with message: $message");
+        },
+        genericListeners: [
+          JitsiGenericListener(
+            eventName: 'readyToClose',
+            callback: (dynamic message) {
+              debugPrint("readyToClose callback ${message}");
+            },
+          ),
+        ],
+        onError: (e) {
+          log('Jitsiiii error:: $e');
+        },
+      ),
+    );
   }
 
   Future<void> getUpcomingEvents({BuildContext context}) async {
