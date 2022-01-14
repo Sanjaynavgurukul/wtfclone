@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:rolling_nav_bar/indexed.dart';
+import 'package:rolling_nav_bar/rolling_nav_bar.dart';
 import 'package:wtf/controller/explore_controller_presenter.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
+import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';
-import 'package:wtf/widget/CustomBottomNavigation.dart';
 
 import 'coin/coin_screen.dart';
 import 'home/home.dart';
-import 'home/notifications/notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,6 +26,88 @@ class _HomeScreenState extends State<HomeScreen>
   GymModel _gymModel;
   bool isLoaded = false;
   GymStore store;
+  List<Widget> get badgeWidgets => indexed(badges)
+      .map((Indexed indexed) => indexed.value != null
+          ? Text(indexed.value.toString(),
+              style: TextStyle(
+                color: indexed.index == store.currentIndex
+                    ? indicatorColors[indexed.index]
+                    : Colors.white,
+              ))
+          : null)
+      .toList();
+  var iconData = <IconData>[
+//    MyFlutterApp.home,
+    Icons.dashboard_customize,
+    Icons.widgets,
+    Icons.people,
+    Icons.account_balance_wallet,
+    // Icons.settings,
+//    MyFlutterApp.profile,
+//    MyFlutterApp.wallet,
+//    MyFlutterApp.misc,
+  ];
+
+  var badges = <int>[null, null, null, null];
+
+  var iconText = <Widget>[
+    Text(
+      'Dashboard',
+      style: TextStyle(
+        color: AppConstants.white,
+        fontSize: 10.0,
+        fontWeight: FontWeight.w200,
+        // letterSpace: 1.5,
+      ),
+    ),
+    Text(
+      'Explore',
+      style: TextStyle(
+        color: AppConstants.white,
+        fontSize: 10.0,
+        fontWeight: FontWeight.w200,
+        // letterSpace: 1.5,
+      ),
+    ),
+    Text(
+      'My WTF',
+      style: TextStyle(
+        color: AppConstants.white,
+        fontSize: 10.0,
+        fontWeight: FontWeight.w200,
+        // letterSpace: 1.5,
+      ),
+    ),
+    Text(
+      'Coins',
+      style: TextStyle(
+        color: AppConstants.white,
+        fontSize: 10.0,
+        fontWeight: FontWeight.w200,
+        // letterSpace: 1.5,
+      ),
+    ),
+  ];
+
+  var indicatorColors = <Color>[
+    AppConstants.primaryColor,
+    AppConstants.primaryColor,
+    AppConstants.primaryColor,
+    AppConstants.primaryColor,
+  ];
+
+  double scaledHeight(BuildContext context, double baseSize) {
+    return baseSize * (MediaQuery.of(context).size.height / 800);
+  }
+
+  _onAnimate(AnimationUpdate update) {
+    setState(() {
+//      logoColor = update.color;
+      logoColor = AppConstants.black;
+    });
+  }
+
+  Color logoColor;
 
   final List<Widget> _children = [
     DashboardScreen(),
@@ -92,16 +174,108 @@ class _HomeScreenState extends State<HomeScreen>
         },
         child: Scaffold(
           backgroundColor: AppColors.PRIMARY_COLOR,
-          bottomNavigationBar: Consumer<GymStore>(
-            builder: (context, store, child) {
-              return CustomBottomNavigation(
-                selectedIndex: store.currentIndex,
-                showElevation: true,
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                curve: Curves.linearToEaseOut,
-                animationDuration: Duration(
-                    milliseconds: 450), // use this to remove appBar's elevation
-                onItemSelected: (index) => setState(() {
+          // bottomNavigationBar: Consumer<GymStore>(
+          //   builder: (context, store, child) {
+          //     return CustomBottomNavigation(
+          //       selectedIndex: store.currentIndex,
+          //       showElevation: true,
+          //       backgroundColor: AppColors.PRIMARY_COLOR,
+          //       curve: Curves.linearToEaseOut,
+          //       animationDuration: Duration(
+          //           milliseconds: 450), // use this to remove appBar's elevation
+          //       onItemSelected: (index) => setState(() {
+          //         switch (index) {
+          //           case 0:
+          //             context.read<GymStore>().getBanner(context: context);
+          //             context.read<GymStore>().getAllEvents(context: context);
+          //             break;
+          //           case 1:
+          //             context
+          //                 .read<GymStore>()
+          //                 .getActiveSubscriptions(context: context);
+          //             context
+          //                 .read<GymStore>()
+          //                 .getMemberSubscriptions(context: context);
+          //             context.read<GymStore>().getTerms();
+          //             context.read<GymStore>().getBanner(context: context);
+          //             context.read<GymStore>().getAllGyms(context: context);
+          //             context.read<GymStore>().getAllEvents(context: context);
+          //             break;
+          //           case 2:
+          //             break;
+          //           case 3:
+          //             context
+          //                 .read<GymStore>()
+          //                 .getWTFCoinBalance(context: context);
+          //             context.read<GymStore>().getCoinHistory(context: context);
+          //             context
+          //                 .read<GymStore>()
+          //                 .getRedeemHistory(context: context);
+          //             // context.read<GymStore>().getNotifications(
+          //             //       context: context,
+          //             //       type: 'new',
+          //             //     );
+          //             break;
+          //         }
+          //
+          //         setState(() {
+          //           store.currentIndex = index;
+          //         });
+          //         // _pageController.animateToPage(index,
+          //         //     duration: Duration(milliseconds: 300), curve: Curves.ease);
+          //       }),
+          //       items: [
+          //         CustomBottomBarItem(
+          //           icon: 'assets/images/dashboard.png',
+          //           title: Text('Dashboard'),
+          //           activeTextColor: Colors.white,
+          //         ),
+          //         CustomBottomBarItem(
+          //           icon: 'assets/images/explore.png',
+          //           title: Text('Explore'),
+          //           activeTextColor: Colors.white,
+          //         ),
+          //         CustomBottomBarItem(
+          //           icon: 'assets/images/my_wtf.png',
+          //           title: Text('MY WTF'),
+          //           activeTextColor: Colors.white,
+          //         ),
+          //         CustomBottomBarItem(
+          //           icon: 'assets/images/coins.png',
+          //           title: Text('Coin'),
+          //           activeTextColor: Colors.white,
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
+          bottomNavigationBar: SizedBox(
+            height: 56.0,
+            width: MediaQuery.of(context).size.width,
+            child: Material(
+              elevation: 12.0,
+              child: RollingNavBar.iconData(
+                activeBadgeColors: <Color>[
+                  Colors.black,
+                ],
+                activeIndex: store.currentIndex,
+                animationCurve: Curves.linear,
+                animationType: AnimationType.spinOutIn,
+                baseAnimationSpeed: 250,
+                badges: badgeWidgets,
+                iconData: iconData,
+                iconColors: <Color>[Colors.white],
+                iconText: iconText,
+                indicatorColors: [
+                  AppConstants.primaryColor
+//                Color(locator<AppPrefs>().selectedPrimaryColor2.getValue()),
+//                Color(locator<AppPrefs>().selectedPrimaryColor.getValue()),
+//                AppConstants.white
+                ],
+                iconSize: 24,
+                indicatorRadius: scaledHeight(context, 25),
+                onAnimate: _onAnimate,
+                onTap: (index) => setState(() {
                   switch (index) {
                     case 0:
                       context.read<GymStore>().getBanner(context: context);
@@ -129,10 +303,10 @@ class _HomeScreenState extends State<HomeScreen>
                       context
                           .read<GymStore>()
                           .getRedeemHistory(context: context);
-                      context.read<GymStore>().getNotifications(
-                            context: context,
-                            type: 'new',
-                          );
+                      // context.read<GymStore>().getNotifications(
+                      //       context: context,
+                      //       type: 'new',
+                      //     );
                       break;
                   }
 
@@ -142,30 +316,14 @@ class _HomeScreenState extends State<HomeScreen>
                   // _pageController.animateToPage(index,
                   //     duration: Duration(milliseconds: 300), curve: Curves.ease);
                 }),
-                items: [
-                  CustomBottomBarItem(
-                    icon: 'assets/images/dashboard.png',
-                    title: Text('Dashboard'),
-                    activeTextColor: Colors.white,
-                  ),
-                  CustomBottomBarItem(
-                    icon: 'assets/images/explore.png',
-                    title: Text('Explore'),
-                    activeTextColor: Colors.white,
-                  ),
-                  CustomBottomBarItem(
-                    icon: 'assets/images/my_wtf.png',
-                    title: Text('MY WTF'),
-                    activeTextColor: Colors.white,
-                  ),
-                  CustomBottomBarItem(
-                    icon: 'assets/images/coins.png',
-                    title: Text('Coin'),
-                    activeTextColor: Colors.white,
-                  ),
-                ],
-              );
-            },
+                indicatorCornerRadius: 8.0,
+                indicatorSides: 6,
+                activeIconColors: [AppConstants.white],
+                navBarDecoration: BoxDecoration(
+                  color: AppConstants.cardBg1.withOpacity(0.01),
+                ),
+              ),
+            ),
           ),
           body: Column(
             children: [
@@ -173,10 +331,11 @@ class _HomeScreenState extends State<HomeScreen>
                 IntrinsicHeight(
                   child: CommonAppBar(),
                 ),
-              Divider(
-                thickness: 1.2,
-                color: Colors.white10,
-              ),
+              if (store.currentIndex != 2)
+                Divider(
+                  thickness: 1.2,
+                  color: Colors.white10,
+                ),
               Expanded(
                 flex: 4,
                 child: AnimatedSwitcher(

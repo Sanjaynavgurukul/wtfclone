@@ -106,7 +106,7 @@ class AppConstants {
       'https://www.omnicalculator.com/health/bmr';
   static const String calculatorReferenceText = 'Calculation Source';
   static const String bodyFatCalculatorReference =
-      'https://www.omnicalculator.com/health/body-fat';
+      'https://www.omnicalculator.com/health/navy-body-fat';
   static const String calorieCalculatorReference =
       'https://www.omnicalculator.com/health/calorie';
   static const String bodyCalculatorReference =

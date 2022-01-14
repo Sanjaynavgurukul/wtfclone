@@ -229,11 +229,14 @@ class _QRScannerState extends State<QRScanner>
           });
         }
       }
-      store.markAttendance(
+      bool isMarked = await store.markAttendance(
         context: context,
         mode: mode,
         qrCode: scanData.code,
       );
+      if (!isMarked) {
+        await this.controller.resumeCamera();
+      }
     });
   }
 }

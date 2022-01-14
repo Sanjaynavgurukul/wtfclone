@@ -58,8 +58,12 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
     discountAmount = 0;
     if (context.read<GymStore>().chosenOffer != null) {
       if (context.read<GymStore>().chosenOffer.type == 'flat') {
-        discountAmount =
+        int couponValue =
             int.tryParse(context.read<GymStore>().chosenOffer.value);
+        discountAmount = couponValue >
+                int.tryParse(context.read<GymStore>().selectedEventData.price)
+            ? int.tryParse(context.read<GymStore>().selectedEventData.price)
+            : couponValue;
       } else {
         discountAmount =
             (int.tryParse(context.read<GymStore>().selectedEventData.price) *
@@ -251,36 +255,6 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
                       color: Colors.white38,
                     ),
                     SizedBox(height: 4.0),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       ":",
-                    //       style: TextStyle(
-                    //           fontSize: 15,
-                    //           // fontWeight: FontWeight.bold,
-                    //           color: Colors.white),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 15,
-                    //     ),
-                    //     Text(
-                    //       Helper.stringForDatetime2(
-                    //               gymStore.selectedEventData.validTo) ??
-                    //           '',
-                    //       style: TextStyle(
-                    //           fontSize: 15,
-                    //           // fontWeight: FontWeight.bold,
-                    //           color: Colors.white),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(height: 4.0),
-                    // Divider(
-                    //   thickness: 0.7,
-                    //   color: Colors.white,
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,7 +289,7 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
                   ],
                 ),
                 UIHelper.verticalSpace(20.0),
-                if (totalAmount > 0)
+                if (gymStore.chosenOffer != null || totalAmount > 0)
                   OfferSection(
                     onApplied: () {
                       calculateFinalPrice();
@@ -323,140 +297,6 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
                   ),
                 SizedBox(
                   height: 25,
-                ),
-                if (totalAmount > 0)
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 1),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.red,
-                          child: Icon(
-                            Icons.check_circle,
-                            size: 35,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            cursorColor: Colors.white,
-                            controller: couponCodeController,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                            onFieldSubmitted: (val) {
-                              setState(() {
-                                if (couponCodeController.text != '') {
-                                  context
-                                      .read<GymStore>()
-                                      .getCoupon(couponCodeController.text)
-                                      .then((value) {
-                                    if (value != null) {
-                                      gymStore.setOffer(
-                                          data: value, context: context);
-                                      print('set');
-                                      calculateFinalPrice();
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text('Offer does not exists!'),
-                                      ));
-                                      couponCodeController.clear();
-                                    }
-                                  });
-                                }
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: "ENTER YOUR COUPON CODE",
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                              ),
-                              border: InputBorder.none,
-                              suffix: gymStore.chosenOffer != null
-                                  ? InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          gymStore.chosenOffer = null;
-                                          couponCodeController.text = '';
-                                          calculateFinalPrice();
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        margin: const EdgeInsets.only(
-                                          right: 12.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.clear,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          if (couponCodeController.text != '') {
-                                            context
-                                                .read<GymStore>()
-                                                .getCoupon(
-                                                    couponCodeController.text)
-                                                .then((value) {
-                                              if (value != null) {
-                                                gymStore.setOffer(
-                                                    data: value,
-                                                    context: context);
-                                                print('set');
-                                                calculateFinalPrice();
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'Offer does not exists!'),
-                                                ));
-                                                couponCodeController.clear();
-                                              }
-                                            });
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        margin: const EdgeInsets.only(
-                                          right: 12.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.done,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                SizedBox(
-                  height: 20,
                 ),
                 Text(
                   "Payment Details",

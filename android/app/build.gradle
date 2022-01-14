@@ -42,13 +42,12 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         multiDexEnabled true
-        versionCode 11
-        versionName '11.1.0'
+        versionCode 14
+        versionName '14.2.0'
         multiDexEnabled true
     }
 
     signingConfigs {
-
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
@@ -63,7 +62,7 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             debuggable false
             signingConfig signingConfigs.release
-//            minifyEnabled true
+            minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

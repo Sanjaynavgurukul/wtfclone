@@ -5,7 +5,9 @@ import 'package:http/http.dart';
 import 'package:wtf/controller/webservice.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Toast.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/User.dart';
 import 'package:wtf/model/member_detils.dart';
@@ -71,9 +73,15 @@ class UserStore extends ChangeNotifier {
         id: locator<AppPrefs>().memberId.getValue(), context: context);
     if (res != null) {
       try {
-        print('member Data :::: ${res.toJson()}');
-        locator<AppPrefs>().memberData.setValue(res.data);
-        notifyListeners();
+        if (res.status) {
+          print('member Data :::: ${res.toJson()}');
+          locator<AppPrefs>().memberData.setValue(res.data);
+          notifyListeners();
+        } else {
+          NavigationService.navigateTo(Routes.userDetail);
+          FlashHelper.informationBar(context,
+              message: 'Please add your details before using WTF services');
+        }
         //NavigationService.goBack;
       } catch (e) {
         print('user data update error: $e');

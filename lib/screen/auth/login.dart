@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (value.isEmpty || value == null) {
                             isMobileNumber = false;
                             isSend = false;
-                          } else if (value.length < 8) {
+                          } else if (value.length < 9) {
                             isMobileNumber = false;
                             isSend = false;
                           } else {
@@ -363,7 +363,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                       SizedBox(height: 30),
-                      if (!Platform.isIOS)
+                      if (Platform.isAndroid)
                         IntrinsicHeight(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

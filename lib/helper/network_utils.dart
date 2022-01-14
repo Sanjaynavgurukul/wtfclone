@@ -47,26 +47,28 @@ class NetworkUtil {
   Future<dynamic> put(String url,
       {Map<String, String> headers, Map body}) async {
     print("${url}  ${headers}");
+    log('body: ${body}');
     return http
         .put(Uri.parse(url), headers: headers, body: json.encode(body))
         .then((http.Response response) async {
       Map res = json.decode(response.body);
       final int statusCode = response.statusCode;
-      print('res: ${res}');
-      if (res.containsKey('message') && res['message'] == 'invalid token') {
-        await locator<AppPrefs>().clear();
-        NavigationService.navigateToReplacement(Routes.loader);
-      }
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        return null;
-      }
+      log('res: ${res}');
+      // if (res.containsKey('message') && res['message'] == 'invalid token') {
+      //   await locator<AppPrefs>().clear();
+      //   NavigationService.navigateToReplacement(Routes.loader);
+      // }
+      // if (statusCode < 200 || statusCode > 400 || json == null) {
+      //   return null;
+      // }
       return _decoder.convert(response.body);
     });
   }
 
   Future<dynamic> post(String url,
       {Map<String, String> headers, Map body, encoding}) {
-    print(body);
+    log('url: ${url}');
+    log('body: ${body}');
     return http
         .post(Uri.parse(url),
             body: json.encode(body), headers: headers, encoding: encoding)

@@ -2,7 +2,6 @@ import UIKit
 import Flutter
 import GoogleMaps
 import Firebase
-import FirebaseAuth
 import FirebaseMessaging
 
 @UIApplicationMain
@@ -36,7 +35,6 @@ import FirebaseMessaging
     // https://firebase.google.com/docs/cloud-messaging/ios/client#token-swizzle-disabled
     override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         // Pass device token to auth
-        Auth.auth().setAPNSToken(deviceToken, type: .unknown)
         
         // Pass device token to messaging
         Messaging.messaging().apnsToken = deviceToken

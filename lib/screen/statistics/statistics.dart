@@ -5,7 +5,6 @@ import 'package:wtf/screen/statistics/statistics_date.dart';
 import 'package:wtf/screen/statistics/statistics_statistics.dart';
 
 import 'chart.dart';
-import 'more_categories.dart';
 
 class Statistics extends StatelessWidget {
   const Statistics({Key key}) : super(key: key);
@@ -42,10 +41,6 @@ class Statistics extends StatelessWidget {
           Chart(),
           SizedBox(
             height: 40,
-          ),
-          MoreCategories(),
-          SizedBox(
-            height: 20,
           ),
         ],
       ),

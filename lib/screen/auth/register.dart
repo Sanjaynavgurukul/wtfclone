@@ -653,7 +653,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 30),
-                              if (!Platform.isIOS)
+                              if (Platform.isAndroid)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

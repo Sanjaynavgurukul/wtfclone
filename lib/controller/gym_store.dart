@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:jitsi_meet/jitsi_meet.dart';
+// import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -61,6 +61,7 @@ import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
+import 'package:wtf/screen/home/jitsi_meeting.dart';
 import 'package:wtf/screen/test.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/Shimmer/values/type.dart';
@@ -141,6 +142,7 @@ class GymStore extends ChangeNotifier {
 
   List<SubscriptionData> regularSubscriptions;
   List<SubscriptionData> addOnSubscriptions;
+  List<SubscriptionData> addOnLiveSubscriptions;
   List<SubscriptionData> eventSubscriptions;
 
   NewTrainersModel newTrainers;
@@ -224,14 +226,19 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> setOffer({BuildContext context, OfferData data}) async {
-    var isValid = await RestDatasource().checkOffer(offerId: data.uid);
-    if (isValid != null && isValid['status']) {
-      chosenOffer = data;
+    if (data != null) {
+      var isValid = await RestDatasource().checkOffer(offerId: data.uid);
+      if (isValid != null && isValid['status']) {
+        log('selected offer -->> ${data.code}  --- >>> ${data.value}');
+        chosenOffer = data;
+      } else {
+        FlashHelper.informationBar(
+          context,
+          message: isValid['message'] ?? 'This offer cannot be selected',
+        );
+      }
     } else {
-      FlashHelper.informationBar(
-        context,
-        message: isValid['message'] ?? 'This offer cannot be selected',
-      );
+      chosenOffer = null;
     }
     notifyListeners();
   }
@@ -345,121 +352,51 @@ class GymStore extends ChangeNotifier {
       locator<AppPrefs>()
           .livePtVerificationId
           .setValue(res['pt_verification_id']);
+      locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
       log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
-      _joinMyMeeting(
-        liveClassId: roomId,
-        addonName: addonName,
+      await showDialog(
+        context: context,
+        builder: (context) => JitsiMeeting(
+          meetingRoomId: roomId,
+          meetingSubject: addonName,
+        ),
       );
+      // Navigator.of(context).push(
+      //   CupertinoPageRoute(
+      //     builder: (context) => JitsiMeeting(
+      //       meetingRoomId: roomId,
+      //       meetingSubject: addonName,
+      //     ),
+      //   ),
+      // );
+    } else {
+      FlashHelper.errorBar(context, message: res['message']);
     }
   }
 
   Future<void> completeLiveSession(
-      {BuildContext context,
-      String liveClassId,
-      String addonId,
-      String addonName}) async {
-    showDialog(
-      context: context,
-      builder: (context) => ProcessingDialog(
-        message: 'Please wait...',
-      ),
-    );
+      {BuildContext context, String eDuration}) async {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => ProcessingDialog(
+    //     message: 'Please wait, compliting your session...',
+    //   ),
+    // );
     var body = {
       "liveclassparticipant_id":
           locator<AppPrefs>().liveClassParticipantId.getValue(),
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "uid": locator<AppPrefs>().livePtVerificationId.getValue(),
+      "e_duration": eDuration,
     };
     Map<String, dynamic> res =
         await RestDatasource().completeLiveSession(body: body);
-    Navigator.pop(context);
+    // Navigator.pop(context);
+    log('mesg-->> ${res}');
     if (res != null && res['status']) {
-      locator<AppPrefs>()
-          .liveClassParticipantId
-          .setValue(res['liveclass_participant_id']);
-      locator<AppPrefs>()
-          .livePtVerificationId
-          .setValue(res['pt_verification_id']);
-      log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
+      // changeNavigationTab(index: 2);
+      getLiveWorkoutCalculation(context: context);
     }
-  }
-
-  _joinMyMeeting({
-    String liveClassId,
-    String addonName,
-  }) async {
-    String serverUrl = 'https://wtfup.me/';
-
-    // Enable or disable any feature flag here
-    // If feature flag are not provided, default values will be used
-    // Full list of feature flags (and defaults) available in the README
-    Map<FeatureFlagEnum, bool> featureFlags = {
-      FeatureFlagEnum.WELCOME_PAGE_ENABLED: true,
-      FeatureFlagEnum.LIVE_STREAMING_ENABLED: true,
-      FeatureFlagEnum.MEETING_PASSWORD_ENABLED: false,
-      // FeatureFlagEnum.KICK_OUT_ENABLED: true,
-      // FeatureFlagEnum.HELP_BUTTON_ENABLED: false,
-
-      FeatureFlagEnum.ADD_PEOPLE_ENABLED: true,
-      FeatureFlagEnum.INVITE_ENABLED: true,
-      // FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: false,
-      // FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: false,
-
-      FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: true,
-      FeatureFlagEnum.CALL_INTEGRATION_ENABLED: false,
-      FeatureFlagEnum.CALENDAR_ENABLED: false
-    };
-
-    // Here is an example, disabling features for each platform
-    if (Platform.isAndroid) {
-      // Disable ConnectionService usage on Android to avoid issues (see README)
-
-      featureFlags[FeatureFlagEnum.RECORDING_ENABLED] = false;
-      // featureFlags[FeatureFlagEnum.ANROID_SCREENSHARING_ENABLED] = false;
-
-    } else if (Platform.isIOS) {
-      // Disable PIP on iOS as it looks weird
-      featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
-      featureFlags[FeatureFlagEnum.IOS_RECORDING_ENABLED] = false;
-    }
-    // Define MyMeetings options here
-    var options = JitsiMeetingOptions(
-      room: liveClassId,
-    )
-      // ..serverURL = serverUrl
-      ..subject = addonName
-      ..userDisplayName = locator<AppPrefs>().userName.getValue()
-      ..userEmail = locator<AppPrefs>().userEmail.getValue()
-      ..audioOnly = false
-      ..audioMuted = true
-      ..videoMuted = true
-      ..featureFlags.addAll(featureFlags);
-
-    await JitsiMeet.joinMeeting(
-      options,
-      listener: JitsiMeetingListener(
-        onConferenceWillJoin: (message) async {
-          log("${options.room} will join with message: $message");
-        },
-        onConferenceJoined: (message) {
-          log("${options.room} joined with message: $message");
-        },
-        onConferenceTerminated: (message) {
-          log("${options.room} terminated with message: $message");
-        },
-        genericListeners: [
-          JitsiGenericListener(
-            eventName: 'readyToClose',
-            callback: (dynamic message) {
-              debugPrint("readyToClose callback ${message}");
-            },
-          ),
-        ],
-        onError: (e) {
-          log('Jitsiiii error:: $e');
-        },
-      ),
-    );
   }
 
   Future<void> getUpcomingEvents({BuildContext context}) async {
@@ -485,7 +422,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> markAttendance(
+  Future<bool> markAttendance(
       {BuildContext context, String mode, String qrCode}) async {
     showDialog(
       context: context,
@@ -503,13 +440,19 @@ class GymStore extends ChangeNotifier {
       "role": 'member',
       "qr_code": qrCode,
     };
-    bool isMarked =
+    var jsonResp =
         await RestDatasource().markAttendance(body: body, context: context);
     Navigator.pop(context);
-    if (isMarked) {
+    if (jsonResp != null && jsonResp['status']) {
       getCurrentAttendance(context: context);
       NavigationService.goBack;
       NavigationService.navigateTo(Routes.mySchedule);
+    } else {
+      FlashHelper.errorBar(
+        context,
+        message: jsonResp['message'] ?? '--',
+      );
+      return false;
     }
   }
 
@@ -848,7 +791,11 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> setSession(SessionData data) async {
-    selectedSession = data;
+    if (selectedSession == data) {
+      selectedSession = null;
+    } else {
+      selectedSession = data;
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
@@ -1474,6 +1421,29 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  Future<void> getLiveWorkoutCalculation({BuildContext context}) async {
+    showDialog(
+      context: NavigationService.navigatorKey.currentContext,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+      context: context,
+      body: {
+        'exercises': [locator<AppPrefs>().liveExerciseId.getValue()]
+      },
+    );
+    Navigator.pop(NavigationService.navigatorKey.currentContext);
+    // manageGlobalTimer(context: context, mode: 'stop');
+    if (res != null) {
+      completedWorkout = res;
+      notifyListeners();
+      init(context: NavigationService.navigatorKey.currentContext);
+      NavigationService.navigateTo(Routes.exerciseDone);
+    }
+  }
+
   Future<void> getNotifications({BuildContext context, String type}) async {
     AllNotifications res = await RestDatasource().getNotifications(
       type: type,
@@ -1504,6 +1474,7 @@ class GymStore extends ChangeNotifier {
       loading = true;
       regularSubscriptions = [];
       addOnSubscriptions = [];
+      addOnLiveSubscriptions = [];
       eventSubscriptions = [];
       notifyListeners();
       //TODO: uncomment these when api is fixed
@@ -1522,6 +1493,9 @@ class GymStore extends ChangeNotifier {
             }
             if (element.type == 'addon' || element.type == 'addon_pt') {
               addOnSubscriptions.add(element);
+            }
+            if (element.type == 'addon_live') {
+              addOnLiveSubscriptions.add(element);
             }
             if (element.type == 'event') {
               eventSubscriptions.add(element);

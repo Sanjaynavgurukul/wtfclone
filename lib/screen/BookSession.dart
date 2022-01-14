@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
@@ -11,7 +12,12 @@ import 'package:wtf/main.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/widget/custom_button.dart';
 
-class PTIntro extends StatelessWidget {
+class PTIntro extends StatefulWidget {
+  @override
+  State<PTIntro> createState() => _PTIntroState();
+}
+
+class _PTIntroState extends State<PTIntro> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -150,7 +156,12 @@ class _BookSessionState extends State<BookSession> {
             setState(() {
               store.chosenOffer = null;
             });
-            NavigationService.navigateTo(Routes.bookingSummaryAddOn);
+            if (store.selectedSession != null) {
+              NavigationService.navigateTo(Routes.bookingSummaryAddOn);
+            } else {
+              FlashHelper.informationBar(context,
+                  message: 'Please select a session first');
+            }
           },
           text: 'Next',
           bgColor: AppConstants.primaryColor,

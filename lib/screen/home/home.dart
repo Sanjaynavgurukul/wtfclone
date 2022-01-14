@@ -5,6 +5,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
@@ -650,20 +651,51 @@ class TodayScheduleItem extends StatelessWidget {
                       vertical: 6.0,
                       horizontal: 16.0,
                     ),
-                    text: 'Lets WTF - Check In',
+                    text: data.type == 'addon_live'
+                        ? 'Join Live Session'
+                        : 'Lets WTF - Check In',
                     bgColor: AppConstants.primaryColor,
                     textColor: Colors.white,
                     textSize: 12.0,
                     height: 30.0,
                     onTap: () {
-                      context.read<GymStore>().setSelectedSchedule(
-                            context: context,
-                            val: data,
-                          );
-                      context
-                          .read<GymStore>()
-                          .getCurrentAttendance(context: context);
-                      NavigationService.navigateTo(Routes.mainAttendance);
+                      if (data.type == 'addon_live') {
+                        switch (data.roomStatus) {
+                          case 'scheduled':
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                                  'Trainer has not started the live session yet',
+                            );
+                            break;
+                          case 'started':
+                            context.read<GymStore>().joinLiveSession(
+                                  addonName: data.addonName,
+                                  liveClassId: data.liveClassId,
+                                  roomId: data.roomId,
+                                  context: context,
+                                  addonId: data.addonId,
+                                );
+                            break;
+                          case 'completed':
+                            FlashHelper.informationBar(
+                              context,
+                              message: 'Trainer has ended the live session',
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                      } else {
+                        context.read<GymStore>().setSelectedSchedule(
+                              context: context,
+                              val: data,
+                            );
+                        context
+                            .read<GymStore>()
+                            .getCurrentAttendance(context: context);
+                        NavigationService.navigateTo(Routes.mainAttendance);
+                      }
                     },
                   )
                 else
@@ -672,22 +704,11 @@ class TodayScheduleItem extends StatelessWidget {
                       vertical: 6.0,
                       horizontal: 16.0,
                     ),
-                    text: data.type == 'addon_live'
-                        ? 'Join Live Session'
-                        : 'CONTINUE',
+                    text: 'CONTINUE',
                     bgColor: AppConstants.primaryColor,
                     textColor: Colors.white,
                     onTap: () {
-                      if (data.type == 'addon_live') {
-                        context.read<GymStore>().joinLiveSession(
-                              addonName: data.addonName,
-                              liveClassId: data.liveClassId,
-                              roomId: data.roomId,
-                              context: context,
-                              addonId: data.addonId,
-                            );
-                      } else
-                        NavigationService.navigateTo(Routes.mySchedule);
+                      NavigationService.navigateTo(Routes.mySchedule);
                     },
                     textSize: 12.0,
                     height: 30.0,

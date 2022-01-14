@@ -613,18 +613,15 @@ class _OfferCardState extends State<OfferCard> {
             Expanded(
               flex: 1,
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   if (store.chosenOffer != null &&
                       store.chosenOffer == widget.data) {
-                    setState(() {
-                      store.chosenOffer = null;
-                    });
+                    await store.setOffer(context: context, data: null);
+                    widget.onApplied();
                   } else {
-                    setState(() {
-                      store.setOffer(context: context, data: widget.data);
-                    });
+                    await store.setOffer(context: context, data: widget.data);
+                    widget.onApplied();
                   }
-                  widget.onApplied();
                 },
                 child: Container(
                   alignment: Alignment.topCenter,

@@ -77,6 +77,8 @@ class AppPrefs {
             defaultValue: 'en'),
         livePtVerificationId = preferences
             .getString(PrefsConstants.livePtVerificationId, defaultValue: 'en'),
+        liveExerciseId = preferences.getString(PrefsConstants.liveExerciseId,
+            defaultValue: 'en'),
         updateMemberData = preferences.getBool(PrefsConstants.updateMemberData,
             defaultValue: false),
         memberId =
@@ -88,6 +90,7 @@ class AppPrefs {
   final Preference<String> token;
   final Preference<String> liveClassParticipantId;
   final Preference<String> livePtVerificationId;
+  final Preference<String> liveExerciseId;
   final Preference<String> fcmToken;
   final Preference<String> phoneNumber;
   final Preference<String> dateAdded;
@@ -165,6 +168,7 @@ class PrefsConstants {
   static const String language = 'language';
   static const String liveClassParticipantId = 'liveClassParticipantId';
   static const String livePtVerificationId = 'livePtVerificationId';
+  static const String liveExerciseId = 'liveExerciseId';
   static const String updateMemberData = 'updateMemberData';
   static const String userId = 'userId';
   static const String userName = 'userName';

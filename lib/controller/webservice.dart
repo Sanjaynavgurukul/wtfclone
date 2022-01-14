@@ -145,7 +145,7 @@ class RestDatasource {
     return Future.value(res);
   }
 
-  Future<bool> markAttendance(
+  Future<dynamic> markAttendance(
       {BuildContext context, Map<String, dynamic> body}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -158,11 +158,7 @@ class RestDatasource {
       body: body,
       headers: mapHeader,
     );
-    bool isAdded = false;
-    if (res != null) {
-      isAdded = res['status'];
-    }
-    return Future.value(isAdded);
+    return Future.value(res);
   }
 
   Future<bool> saveCalorieProgress({Map<String, dynamic> body}) async {
@@ -350,8 +346,10 @@ class RestDatasource {
       headers: mapHeader,
     );
     MemberDetails res;
-    if (response != null) {
+    if (response != null && response['status']) {
       res = MemberDetails.fromJson(response);
+    } else {
+      res = MemberDetails(status: false);
     }
     return Future.value(res);
   }
@@ -576,7 +574,7 @@ class RestDatasource {
       headers: mapHeader,
       body: body,
     );
-    print("response checkOffer : " + res.toString());
+    print("joinLiveSession : " + res.toString());
     return res;
   }
 
@@ -586,7 +584,9 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    var res = await _netUtil.post(
+    String url = APIHelper.completeLiveSession;
+    log('url--> $url  ---- >>> body:: $body');
+    var res = await _netUtil.put(
       APIHelper.completeLiveSession,
       headers: mapHeader,
       body: body,
@@ -715,6 +715,7 @@ class RestDatasource {
               allData: {},
               event: [],
               regular: [],
+              addonLive: [],
             ),
           );
   }
