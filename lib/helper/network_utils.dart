@@ -86,7 +86,8 @@ class NetworkUtil {
 
   Future<dynamic> postJsonBody(String url,
       {Map<String, String> headers, String body, encoding}) {
-    print(body);
+    log('url: ${url}');
+    log('body: ${body}');
     return http
         .post(Uri.parse(url), body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -102,6 +103,7 @@ class NetworkUtil {
   }
 
   Future<dynamic> getWithHeader(String url, {Map<String, String> headers}) {
+    log('url: ${url}');
     return http
         .get(Uri.parse(url), headers: headers)
         .then((http.Response response) {

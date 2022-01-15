@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:http/http.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/api_helper.dart';
 import 'package:wtf/helper/network_utils.dart';
@@ -466,6 +465,26 @@ class RestDatasource {
     } catch (e) {
       print('add member error: $e');
       return WhyChooseWtf(data: []);
+    }
+  }
+
+  Future<GymAddOn> getLiveClasses() async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+        APIHelper.getAllLiveClasses,
+        headers: mapHeader,
+      );
+      print("response getAllLiveClasses : " + res.toString());
+      GymAddOn data;
+      if (res != null) data = GymAddOn.fromJson(res);
+      return data;
+    } catch (e) {
+      print('getAllLiveClasses error: $e');
+      return GymAddOn(data: []);
     }
   }
 
@@ -1089,13 +1108,8 @@ class RestDatasource {
     });
   }
 
-  //get Gym Plans
-  ///@Gaurav
-  Future<GymPlanModel> getGymPlans() async {
-    print("get Gym Plans 2");
+  Future<GymPlanModel> getGymPlans({BuildContext context, String gymId}) async {
     String token = locator<AppPrefs>().token.getValue();
-    String gymId = LocalValue.GYM_ID;
-    print("get Gym Plans 3");
     String url = BASE_URL + Api.GET_GYM_PLAN;
     var headers = {
       'content-type': 'application/json',
@@ -1111,8 +1125,6 @@ class RestDatasource {
     });
   }
 
-  //get Gym Slots
-  ///@Gaurav
   Future<GymSlotModel> getGymSlot(String gymId) async {
     print("get Gym Slot 2");
     String token = locator<AppPrefs>().token.getValue();

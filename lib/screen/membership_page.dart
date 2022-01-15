@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
@@ -615,11 +614,15 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                   gymStore.activeSubscriptions
                                                                           .data ==
                                                                       null)) {
-                                                            LocalValue.GYM_ID =
-                                                                gymStore
-                                                                    .selectedGymDetail
-                                                                    .data
-                                                                    .userId;
+                                                            gymStore
+                                                                .getGymPlans(
+                                                              gymId: gymStore
+                                                                  .selectedGymDetail
+                                                                  .data
+                                                                  .userId,
+                                                              context: context,
+                                                            );
+
                                                             NavigationService
                                                                 .navigateTo(
                                                               Routes
@@ -655,12 +658,15 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                     null &&
                                                                 selection ==
                                                                     'yes') {
-                                                              LocalValue
-                                                                      .GYM_ID =
-                                                                  gymStore
-                                                                      .selectedGymDetail
-                                                                      .data
-                                                                      .userId;
+                                                              gymStore
+                                                                  .getGymPlans(
+                                                                gymId: gymStore
+                                                                    .selectedGymDetail
+                                                                    .data
+                                                                    .userId,
+                                                                context:
+                                                                    context,
+                                                              );
                                                               NavigationService
                                                                   .navigateTo(
                                                                 Routes
@@ -1126,12 +1132,15 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                               null &&
                                                                           gymStore.activeSubscriptions.data ==
                                                                               null)) {
-                                                                    LocalValue
-                                                                            .GYM_ID =
-                                                                        gymStore
-                                                                            .selectedGymDetail
-                                                                            .data
-                                                                            .userId;
+                                                                    gymStore
+                                                                        .getGymPlans(
+                                                                      gymId: gymStore
+                                                                          .selectedGymDetail
+                                                                          .data
+                                                                          .userId,
+                                                                      context:
+                                                                          context,
+                                                                    );
                                                                     NavigationService
                                                                         .navigateTo(
                                                                       Routes
@@ -1171,10 +1180,15 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                             null &&
                                                                         selection ==
                                                                             'yes') {
-                                                                      LocalValue.GYM_ID = gymStore
-                                                                          .selectedGymDetail
-                                                                          .data
-                                                                          .userId;
+                                                                      gymStore
+                                                                          .getGymPlans(
+                                                                        gymId: gymStore
+                                                                            .selectedGymDetail
+                                                                            .data
+                                                                            .userId,
+                                                                        context:
+                                                                            context,
+                                                                      );
                                                                       NavigationService
                                                                           .navigateTo(
                                                                         Routes
@@ -1408,7 +1422,7 @@ class BookLiveWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: gymStore.selectedGymAddOns.data
                   .where((element) =>
-                      element.isLive != null && element.isLive == 'true')
+                      element.isLive != null && element.isLive == true)
                   .toList()
                   .length >
               0
@@ -1420,7 +1434,7 @@ class BookLiveWidget extends StatelessWidget {
       color: Colors.grey[800],
       child: gymStore.selectedGymAddOns.data
                   .where((element) =>
-                      element.isLive != null && element.isLive == 'true')
+                      element.isLive != null && element.isLive == true)
                   .toList()
                   .length >
               0
@@ -1429,7 +1443,7 @@ class BookLiveWidget extends StatelessWidget {
                 Text(
                   gymStore.selectedGymAddOns.data
                       .where((element) =>
-                          element.isLive != null && element.isLive == 'true')
+                          element.isLive != null && element.isLive == true)
                       .toList()[0]
                       .name,
                   textAlign: TextAlign.center,
@@ -1443,7 +1457,7 @@ class BookLiveWidget extends StatelessWidget {
                 Text(
                   gymStore.selectedGymAddOns.data
                       .where((element) =>
-                          element.isLive != null && element.isLive == 'true')
+                          element.isLive != null && element.isLive == true)
                       .toList()[0]
                       .description,
                   textAlign: TextAlign.center,
@@ -1464,7 +1478,7 @@ class BookLiveWidget extends StatelessWidget {
                         data: gymStore.selectedGymAddOns.data
                             .where((element) =>
                                 element.isLive != null &&
-                                element.isLive == 'true')
+                                element.isLive == true)
                             .toList()[0],
                       );
                       NavigationService.navigateTo(
@@ -1490,7 +1504,7 @@ class BookLiveWidget extends StatelessWidget {
                       children: [
                         Text(
                           'Book Live Training',
-                          // '${gymStore.selectedGymAddOns.data .where((element) => element.isLive != null && element.isLive == 'true').toList()[0].name}',
+                          // '${gymStore.selectedGymAddOns.data .where((element) => element.isLive != null && element.isLive == true).toList()[0].name}',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -1558,7 +1572,10 @@ class RenewMembership extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  LocalValue.GYM_ID = gymId;
+                  gymStore.getGymPlans(
+                    gymId: gymId,
+                    context: context,
+                  );
                   gymStore.setRenew(true);
                   NavigationService.navigateTo(
                     Routes.membershipPlanPage,

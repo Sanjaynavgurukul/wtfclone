@@ -5,6 +5,7 @@ import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/slide_button.dart';
 
@@ -37,7 +38,7 @@ class PurchaseDone extends StatelessWidget {
           "Let\'s WTF",
           () {
             Navigator.of(NavigationService.navigatorKey.currentContext)
-                .popUntil((route) => route.isFirst);
+                .popUntil((route) => route.settings.name == Routes.homePage);
             NavigationService.navigatorKey.currentContext
                 .read<GymStore>()
                 .init(context: context);

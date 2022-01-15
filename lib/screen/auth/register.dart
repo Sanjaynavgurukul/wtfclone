@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/global.dart';
@@ -21,8 +19,6 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/app_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 import 'package:wtf/widget/text_field.dart';
-
-import '../../main.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -595,10 +591,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
                                           if (res['status']) {
                                             Future.delayed(
-                                                Duration(seconds: 1),
-                                                () => NavigationService
-                                                    .navigateToReplacement(
-                                                        Routes.userDetail));
+                                              Duration(seconds: 1),
+                                              () => NavigationService
+                                                  .navigateToReplacement(
+                                                      Routes.userDetail),
+                                            );
                                           }
                                         } else {
                                           FlashHelper.informationBar(context,
@@ -653,139 +650,139 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 30),
-                              if (Platform.isAndroid)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Sign up with : ',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: AppColors.TEXT_DARK),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        auth.socialLogin().then(
-                                          (value) {
-                                            if (value != null) {
-                                              if (value.isSuccessed) {
-                                                final res = value.data;
-                                                print(
-                                                    'RESP DATA:: ${value.data}');
-                                                locator<AppPrefs>()
-                                                    .memberId
-                                                    .setValue(res['uid']);
-                                                locator<AppPrefs>()
-                                                    .userName
-                                                    .setValue(res['name']);
-                                                locator<AppPrefs>()
-                                                    .phoneNumber
-                                                    .setValue(res['mobile']);
-                                                locator<AppPrefs>()
-                                                    .userEmail
-                                                    .setValue(res['email']);
-                                                locator<AppPrefs>()
-                                                    .token
-                                                    .setValue(
-                                                      res['token'],
-                                                    );
-                                                locator<AppPrefs>()
-                                                    .dateAdded
-                                                    .setValue(
-                                                        res['date_added']);
-                                                locator<AppPrefs>()
-                                                    .isLoggedIn
-                                                    .setValue(true);
-                                                context
-                                                    .read<GymStore>()
-                                                    .init(context: context);
-                                                NavigationService
-                                                    .navigateToReplacement(
-                                                        Routes.homePage);
-                                              } else {
-                                                setState(() {
-                                                  emailAddress.text =
-                                                      value.data[0].toString();
-                                                  name.text =
-                                                      value.data[1].toString();
-                                                });
-                                                FlashHelper.informationBar(
-                                                    context,
-                                                    message:
-                                                        'Please Enter remaining data.');
-                                              }
-                                            }
-                                          },
-                                        );
-                                      },
-                                      child: Image.asset(
-                                        Images.GOOGLE,
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                    ),
-                                    // SizedBox(
-                                    //   width: 10,
-                                    // ),
-                                    // GestureDetector(
-                                    //   onTap: () {
-                                    //     auth
-                                    //         .socialLogin(provider: 'facebook')
-                                    //         .then((value) {
-                                    //       print('data');
-                                    //       if (value != null) {
-                                    //         if (value.isSuccessed) {
-                                    //           final res = value.data;
-                                    //           print('RESP DATA:: ${value.data}');
-                                    //           locator<AppPrefs>()
-                                    //               .memberId
-                                    //               .setValue(res['uid']);
-                                    //           locator<AppPrefs>()
-                                    //               .userName
-                                    //               .setValue(res['name']);
-                                    //           locator<AppPrefs>()
-                                    //               .phoneNumber
-                                    //               .setValue(res['mobile']);
-                                    //           locator<AppPrefs>()
-                                    //               .userEmail
-                                    //               .setValue(res['email']);
-                                    //           locator<AppPrefs>().token.setValue(
-                                    //                 res['token'],
-                                    //               );
-                                    //           locator<AppPrefs>()
-                                    //               .isLoggedIn
-                                    //               .setValue(true);
-                                    //
-                                    //           NavigationService
-                                    //               .navigateToReplacement(
-                                    //                   Routes.homePage);
-                                    //         } else {
-                                    //           print('show error');
-                                    //           setState(() {
-                                    //             emailAddress.text =
-                                    //                 value.data[0].toString();
-                                    //             name.text =
-                                    //                 value.data[1].toString();
-                                    //           });
-                                    //           ScaffoldMessenger.of(context)
-                                    //               .showSnackBar(SnackBar(
-                                    //                   content:
-                                    //                       Text(value.message)));
-                                    //         }
-                                    //       }
-                                    //     });
-                                    //   },
-                                    //   child: Image.asset(
-                                    //     Images.FACEBOOK,
-                                    //     width: 35,
-                                    //     height: 35,
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
+                              // if (Platform.isAndroid)
+                              //   Row(
+                              //     mainAxisAlignment: MainAxisAlignment.center,
+                              //     children: [
+                              //       Text(
+                              //         'Sign up with : ',
+                              //         style: TextStyle(
+                              //             fontSize: 16,
+                              //             color: AppColors.TEXT_DARK),
+                              //       ),
+                              //       SizedBox(
+                              //         width: 10,
+                              //       ),
+                              //       GestureDetector(
+                              //         onTap: () {
+                              //           auth.socialLogin().then(
+                              //             (value) {
+                              //               if (value != null) {
+                              //                 if (value.isSuccessed) {
+                              //                   final res = value.data;
+                              //                   print(
+                              //                       'RESP DATA:: ${value.data}');
+                              //                   locator<AppPrefs>()
+                              //                       .memberId
+                              //                       .setValue(res['uid']);
+                              //                   locator<AppPrefs>()
+                              //                       .userName
+                              //                       .setValue(res['name']);
+                              //                   locator<AppPrefs>()
+                              //                       .phoneNumber
+                              //                       .setValue(res['mobile']);
+                              //                   locator<AppPrefs>()
+                              //                       .userEmail
+                              //                       .setValue(res['email']);
+                              //                   locator<AppPrefs>()
+                              //                       .token
+                              //                       .setValue(
+                              //                         res['token'],
+                              //                       );
+                              //                   locator<AppPrefs>()
+                              //                       .dateAdded
+                              //                       .setValue(
+                              //                           res['date_added']);
+                              //                   locator<AppPrefs>()
+                              //                       .isLoggedIn
+                              //                       .setValue(true);
+                              //                   context
+                              //                       .read<GymStore>()
+                              //                       .init(context: context);
+                              //                   NavigationService
+                              //                       .navigateToReplacement(
+                              //                           Routes.homePage);
+                              //                 } else {
+                              //                   setState(() {
+                              //                     emailAddress.text =
+                              //                         value.data[0].toString();
+                              //                     name.text =
+                              //                         value.data[1].toString();
+                              //                   });
+                              //                   FlashHelper.informationBar(
+                              //                       context,
+                              //                       message:
+                              //                           'Please Enter remaining data.');
+                              //                 }
+                              //               }
+                              //             },
+                              //           );
+                              //         },
+                              //         child: Image.asset(
+                              //           Images.GOOGLE,
+                              //           width: 40,
+                              //           height: 40,
+                              //         ),
+                              //       ),
+                              //       // SizedBox(
+                              //       //   width: 10,
+                              //       // ),
+                              //       // GestureDetector(
+                              //       //   onTap: () {
+                              //       //     auth
+                              //       //         .socialLogin(provider: 'facebook')
+                              //       //         .then((value) {
+                              //       //       print('data');
+                              //       //       if (value != null) {
+                              //       //         if (value.isSuccessed) {
+                              //       //           final res = value.data;
+                              //       //           print('RESP DATA:: ${value.data}');
+                              //       //           locator<AppPrefs>()
+                              //       //               .memberId
+                              //       //               .setValue(res['uid']);
+                              //       //           locator<AppPrefs>()
+                              //       //               .userName
+                              //       //               .setValue(res['name']);
+                              //       //           locator<AppPrefs>()
+                              //       //               .phoneNumber
+                              //       //               .setValue(res['mobile']);
+                              //       //           locator<AppPrefs>()
+                              //       //               .userEmail
+                              //       //               .setValue(res['email']);
+                              //       //           locator<AppPrefs>().token.setValue(
+                              //       //                 res['token'],
+                              //       //               );
+                              //       //           locator<AppPrefs>()
+                              //       //               .isLoggedIn
+                              //       //               .setValue(true);
+                              //       //
+                              //       //           NavigationService
+                              //       //               .navigateToReplacement(
+                              //       //                   Routes.homePage);
+                              //       //         } else {
+                              //       //           print('show error');
+                              //       //           setState(() {
+                              //       //             emailAddress.text =
+                              //       //                 value.data[0].toString();
+                              //       //             name.text =
+                              //       //                 value.data[1].toString();
+                              //       //           });
+                              //       //           ScaffoldMessenger.of(context)
+                              //       //               .showSnackBar(SnackBar(
+                              //       //                   content:
+                              //       //                       Text(value.message)));
+                              //       //         }
+                              //       //       }
+                              //       //     });
+                              //       //   },
+                              //       //   child: Image.asset(
+                              //       //     Images.FACEBOOK,
+                              //       //     width: 35,
+                              //       //     height: 35,
+                              //       //   ),
+                              //       // ),
+                              //     ],
+                              //   ),
                               Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: Center(

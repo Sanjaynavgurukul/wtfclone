@@ -11,7 +11,7 @@ class GradientImageWidget extends StatelessWidget {
   final String network;
   final BoxFit boxFit;
   GradientImageWidget(
-      {this.borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+      {this.borderRadius: const BorderRadius.all(Radius.circular(6.0)),
       this.gragientColor,
       this.stops,
       this.assets,

@@ -10,7 +10,7 @@ import '../main.dart';
 import 'AppPrefs.dart';
 
 class APIHelper {
-  static const String BASE_URL = 'https://api.wtfup.me/';
+  static const String BASE_URL = 'https://devapi.wtfup.me/';
   // static const String DEV_BASE_URL = 'https://devapi.wtfup.me/';
   // static const String BASE_URL = 'http://13.232.102.139:9000/';
 
@@ -22,6 +22,7 @@ class APIHelper {
   static const String ADD_MEMBER = BASE_URL + 'member/add';
   static const String updateMember = BASE_URL + 'member/update';
   static const String whyChooseWtf = BASE_URL + 'terms';
+  static const String getAllLiveClasses = BASE_URL + 'addon?is_live=true';
   static const String FORGOT_PASSWORD = BASE_URL + 'user/forgot';
   static const String RESET_PASSWORD = BASE_URL + 'user/reset';
   static const String GET_GYM = BASE_URL + 'gym/';

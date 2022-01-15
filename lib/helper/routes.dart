@@ -35,12 +35,12 @@ import 'package:wtf/screen/coin/shopping_screen.dart';
 import 'package:wtf/screen/diet_schedule.dart';
 import 'package:wtf/screen/exercise/exercise.dart';
 import 'package:wtf/screen/exercise/exercise_start/exercise_start.dart';
+import 'package:wtf/screen/gym_membership_plan_page.dart';
 import 'package:wtf/screen/home/home.dart';
 import 'package:wtf/screen/home/notifications/notifications.dart';
 import 'package:wtf/screen/home_screen.dart';
 import 'package:wtf/screen/loader.dart';
 import 'package:wtf/screen/membership_page.dart';
-import 'package:wtf/screen/membership_plan_screen.dart';
 import 'package:wtf/screen/my_schedule.dart';
 import 'package:wtf/screen/my_subscription.dart';
 import 'package:wtf/screen/my_transaaction.dart';
@@ -302,11 +302,11 @@ class RouteGenerator {
       case Routes.membershipPlanPage:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
-                widget: MembershipPlanScreen(),
+                widget: GymMembershipPlanPage(),
                 settings: settings,
               )
             : CupertinoPageRoute(
-                builder: (context) => MembershipPlanScreen(),
+                builder: (context) => GymMembershipPlanPage(),
                 settings: settings);
       case Routes.scheduleSlotPage:
         return Platform.isAndroid

@@ -82,6 +82,8 @@ class GymStore extends ChangeNotifier {
 
   WhyChooseWtf whyChooseWtf;
 
+  GymAddOn allLiveClasses;
+
   GymAddOn selectedGymAddOns;
 
   AddOnData selectedAddOnSlot;
@@ -215,6 +217,8 @@ class GymStore extends ChangeNotifier {
 
   bool showTrailOffer = true;
 
+  GymPlanModel selectedGymPlans;
+  String selectedGymId;
   Future<void> setSessionRating({double rating}) async {
     sessionRating = rating;
     notifyListeners();
@@ -317,7 +321,7 @@ class GymStore extends ChangeNotifier {
     getRedeemHistory(context: context);
     getdietPref(context: context, type: DietPrefType.type1);
     getdietPref(context: context, type: DietPrefType.type2);
-
+    getAllLiveClasses(context: context);
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
   }
@@ -1220,6 +1224,7 @@ class GymStore extends ChangeNotifier {
       selectedSlotData = null;
       selectedAddOnSlot = null;
       chosenOffer = null;
+      selectedSession = null;
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
@@ -1502,6 +1507,7 @@ class GymStore extends ChangeNotifier {
             }
           }
         });
+        log('Total:: ${memberSubscriptions.data.length} ,  regular: ${regularSubscriptions.length} , live:: ${addOnLiveSubscriptions.length}');
         notifyListeners();
       }
     } catch (e) {
@@ -1587,6 +1593,7 @@ class GymStore extends ChangeNotifier {
     AddOnData data,
     bool getTrainers = true,
     bool isFree = false,
+    String gymId,
   }) {
     selectedSlotDetails = null;
     selectedAddOnSlot = null;
@@ -1597,6 +1604,9 @@ class GymStore extends ChangeNotifier {
       notifyListeners();
     });
     selectedAddOnSlot = data;
+    if (gymId != null) {
+      selectedGymId = gymId;
+    }
     notifyListeners();
     // getSlotDetails(
     //   context: context,
@@ -1604,11 +1614,18 @@ class GymStore extends ChangeNotifier {
     //   date: Helper.formatDate(DateTime.now().toIso8601String()),
     // );
     if (getTrainers)
-      getGymTrainers(context: context, gymId: selectedGymDetail.data.userId);
+      getGymTrainers(
+          context: context,
+          gymId: gymId != null ? gymId : selectedGymDetail.data.userId);
   }
 
   setStartDate({BuildContext context, DateTime dateTime}) {
     selectedStartingDate = dateTime;
+    notifyListeners();
+  }
+
+  Future<void> setGymId(String id) {
+    selectedGymId = id;
     notifyListeners();
   }
 
@@ -1626,7 +1643,8 @@ class GymStore extends ChangeNotifier {
       date: date,
       addOnId: addOnId,
       trainerId: trainerId,
-      gymId: selectedGymDetail.data.userId,
+      gymId:
+          selectedGymId != null ? selectedGymId : selectedGymDetail.data.userId,
     );
     if (res != null) {
       selectedSlotDetails = res;
@@ -1634,6 +1652,20 @@ class GymStore extends ChangeNotifier {
       print('details saved: ${selectedSlotDetails?.data?.length}');
       notifyListeners();
     }
+  }
+
+  Future<void> getGymPlans({BuildContext context, String gymId}) async {
+    print("get Gym Details 1");
+    GymPlanModel model = await RestDatasource().getGymPlans(gymId: gymId);
+
+    if (model != null) {
+      selectedGymPlans = model;
+    } else {
+      selectedGymPlans = GymPlanModel(
+        data: [],
+      );
+    }
+    notifyListeners();
   }
 
   Future<void> getGymDetails({BuildContext context, String gymId}) async {
@@ -1696,6 +1728,18 @@ class GymStore extends ChangeNotifier {
       loading = false;
       whyChooseWtf = res;
       print('why choose us len =========== ${whyChooseWtf.data.length}');
+      notifyListeners();
+    }
+  }
+
+  Future<void> getAllLiveClasses({BuildContext context}) async {
+    loading = true;
+    notifyListeners();
+    GymAddOn res = await RestDatasource().getLiveClasses();
+    if (res != null) {
+      loading = false;
+      allLiveClasses = res;
+      print('getAllLiveClasses len =========== ${whyChooseWtf.data.length}');
       notifyListeners();
     }
   }

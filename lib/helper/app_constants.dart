@@ -88,6 +88,8 @@ class AppConstants {
   static const Color lightText = Color(0xFF4A6572);
   static const Color deactivatedText = Color(0xFF767676);
   static const Color dismissibleBackground = Color(0xFF364A54);
+  static const Color offPinkColor = Color(0xFFD98E90);
+  static const Color darkPrimaryColor = Color(0xFF740E0E);
   static const Color chipBackground = Color(0xFFEEF1F3);
   static const Color spacer = Color(0xFFF2F2F2);
   static const Color green = Color(0xFF22BF28);

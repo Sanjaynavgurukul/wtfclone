@@ -13,7 +13,6 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/global.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
-import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/app_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -253,149 +252,149 @@ class _LoginEmailState extends State<LoginEmail> {
                         },
                       ),
                       SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Login with : ',
-                            style: TextStyle(
-                                fontSize: 16, color: AppColors.TEXT_DARK),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              auth.socialLogin().then(
-                                (value) {
-                                  if (value != null) {
-                                    if (value.isSuccessed) {
-                                      final res = value.data;
-                                      print('RESP DATA:: ${value.data}');
-                                      locator<AppPrefs>()
-                                          .memberId
-                                          .setValue(res['uid']);
-                                      locator<AppPrefs>()
-                                          .userName
-                                          .setValue(res['name']);
-                                      locator<AppPrefs>()
-                                          .phoneNumber
-                                          .setValue(res['mobile']);
-                                      locator<AppPrefs>()
-                                          .dateAdded
-                                          .setValue(res['date_added']);
-                                      locator<AppPrefs>()
-                                          .userEmail
-                                          .setValue(res['email']);
-                                      locator<AppPrefs>()
-                                          .token
-                                          .setValue(res['token']);
-                                      locator<AppPrefs>()
-                                          .isLoggedIn
-                                          .setValue(true);
-                                      if (res.containsKey('profile')) {
-                                        locator<AppPrefs>()
-                                            .avatar
-                                            .setValue(res['profile']);
-                                      }
-                                      context
-                                          .read<GymStore>()
-                                          .init(context: context);
-
-                                      if (res['memDetail']) {
-                                        NavigationService.navigateToReplacement(
-                                            Routes.homePage);
-                                      } else {
-                                        NavigationService.navigateToReplacement(
-                                            Routes.userDetail);
-                                      }
-                                    } else {
-                                      NavigationService.navigateToReplacement(
-                                        Routes.register,
-                                      );
-                                      // ScaffoldMessenger.of(context)
-                                      //     .showSnackBar(
-                                      //   SnackBar(
-                                      //     content: Text(value.message),
-                                      //   ),
-                                      // );
-                                    }
-                                  }
-                                },
-                              );
-                            },
-                            child: Image.asset(
-                              Images.GOOGLE,
-                              width: 40,
-                              height: 40,
-                            ),
-                          ),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     auth
-                          //         .socialLogin(provider: 'facebook')
-                          //         .then((value) {
-                          //       if (value != null) {
-                          //         if (value.isSuccessed) {
-                          //           final res = value.data;
-                          //           print('RESP DATA:: ${value.data}');
-                          //           locator<AppPrefs>()
-                          //               .memberId
-                          //               .setValue(res['uid']);
-                          //           locator<AppPrefs>()
-                          //               .userName
-                          //               .setValue(res['name']);
-                          //           // locator<AppPrefs>().phoneNumber.setValue(mobile);
-                          //           locator<AppPrefs>()
-                          //               .userEmail
-                          //               .setValue(res['email']);
-                          //           locator<AppPrefs>().token.setValue(
-                          //                 res['token'],
-                          //               );
-                          //           locator<AppPrefs>()
-                          //               .isLoggedIn
-                          //               .setValue(true);
-                          //           context
-                          //               .read<GymStore>()
-                          //               .getAllGyms(context: context);
-                          //           context
-                          //               .read<GymStore>()
-                          //               .getActiveSubscriptions(
-                          //                   context: context);
-                          //           context
-                          //               .read<GymStore>()
-                          //               .getMemberSubscriptions(
-                          //                   context: context);
-                          //           context
-                          //               .read<GymStore>()
-                          //               .getBanner(context: context);
-                          //           context
-                          //               .read<UserStore>()
-                          //               .getUserById(context: context);
-                          //           context.read<GymStore>().getTerms();
-                          //
-                          //           NavigationService.navigateToReplacement(
-                          //               Routes.homePage);
-                          //         } else {
-                          //           NavigationService.navigateToReplacement(
-                          //               Routes.register);
-                          //           ScaffoldMessenger.of(context).showSnackBar(
-                          //               SnackBar(content: Text(value.message)));
-                          //         }
-                          //       }
-                          //     });
-                          //   },
-                          //   child: Image.asset(
-                          //     Images.FACEBOOK,
-                          //     width: 35,
-                          //     height: 35,
-                          //   ),
-                          // ),
-                        ],
-                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Text(
+                      //       'Login with : ',
+                      //       style: TextStyle(
+                      //           fontSize: 16, color: AppColors.TEXT_DARK),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         auth.socialLogin().then(
+                      //           (value) {
+                      //             if (value != null) {
+                      //               if (value.isSuccessed) {
+                      //                 final res = value.data;
+                      //                 print('RESP DATA:: ${value.data}');
+                      //                 locator<AppPrefs>()
+                      //                     .memberId
+                      //                     .setValue(res['uid']);
+                      //                 locator<AppPrefs>()
+                      //                     .userName
+                      //                     .setValue(res['name']);
+                      //                 locator<AppPrefs>()
+                      //                     .phoneNumber
+                      //                     .setValue(res['mobile']);
+                      //                 locator<AppPrefs>()
+                      //                     .dateAdded
+                      //                     .setValue(res['date_added']);
+                      //                 locator<AppPrefs>()
+                      //                     .userEmail
+                      //                     .setValue(res['email']);
+                      //                 locator<AppPrefs>()
+                      //                     .token
+                      //                     .setValue(res['token']);
+                      //                 locator<AppPrefs>()
+                      //                     .isLoggedIn
+                      //                     .setValue(true);
+                      //                 if (res.containsKey('profile')) {
+                      //                   locator<AppPrefs>()
+                      //                       .avatar
+                      //                       .setValue(res['profile']);
+                      //                 }
+                      //                 context
+                      //                     .read<GymStore>()
+                      //                     .init(context: context);
+                      //
+                      //                 if (res['memDetail']) {
+                      //                   NavigationService.navigateToReplacement(
+                      //                       Routes.homePage);
+                      //                 } else {
+                      //                   NavigationService.navigateToReplacement(
+                      //                       Routes.userDetail);
+                      //                 }
+                      //               } else {
+                      //                 NavigationService.navigateToReplacement(
+                      //                   Routes.register,
+                      //                 );
+                      //                 // ScaffoldMessenger.of(context)
+                      //                 //     .showSnackBar(
+                      //                 //   SnackBar(
+                      //                 //     content: Text(value.message),
+                      //                 //   ),
+                      //                 // );
+                      //               }
+                      //             }
+                      //           },
+                      //         );
+                      //       },
+                      //       child: Image.asset(
+                      //         Images.GOOGLE,
+                      //         width: 40,
+                      //         height: 40,
+                      //       ),
+                      //     ),
+                      //     // SizedBox(
+                      //     //   width: 10,
+                      //     // ),
+                      //     // GestureDetector(
+                      //     //   onTap: () {
+                      //     //     auth
+                      //     //         .socialLogin(provider: 'facebook')
+                      //     //         .then((value) {
+                      //     //       if (value != null) {
+                      //     //         if (value.isSuccessed) {
+                      //     //           final res = value.data;
+                      //     //           print('RESP DATA:: ${value.data}');
+                      //     //           locator<AppPrefs>()
+                      //     //               .memberId
+                      //     //               .setValue(res['uid']);
+                      //     //           locator<AppPrefs>()
+                      //     //               .userName
+                      //     //               .setValue(res['name']);
+                      //     //           // locator<AppPrefs>().phoneNumber.setValue(mobile);
+                      //     //           locator<AppPrefs>()
+                      //     //               .userEmail
+                      //     //               .setValue(res['email']);
+                      //     //           locator<AppPrefs>().token.setValue(
+                      //     //                 res['token'],
+                      //     //               );
+                      //     //           locator<AppPrefs>()
+                      //     //               .isLoggedIn
+                      //     //               .setValue(true);
+                      //     //           context
+                      //     //               .read<GymStore>()
+                      //     //               .getAllGyms(context: context);
+                      //     //           context
+                      //     //               .read<GymStore>()
+                      //     //               .getActiveSubscriptions(
+                      //     //                   context: context);
+                      //     //           context
+                      //     //               .read<GymStore>()
+                      //     //               .getMemberSubscriptions(
+                      //     //                   context: context);
+                      //     //           context
+                      //     //               .read<GymStore>()
+                      //     //               .getBanner(context: context);
+                      //     //           context
+                      //     //               .read<UserStore>()
+                      //     //               .getUserById(context: context);
+                      //     //           context.read<GymStore>().getTerms();
+                      //     //
+                      //     //           NavigationService.navigateToReplacement(
+                      //     //               Routes.homePage);
+                      //     //         } else {
+                      //     //           NavigationService.navigateToReplacement(
+                      //     //               Routes.register);
+                      //     //           ScaffoldMessenger.of(context).showSnackBar(
+                      //     //               SnackBar(content: Text(value.message)));
+                      //     //         }
+                      //     //       }
+                      //     //     });
+                      //     //   },
+                      //     //   child: Image.asset(
+                      //     //     Images.FACEBOOK,
+                      //     //     width: 35,
+                      //     //     height: 35,
+                      //     //   ),
+                      //     // ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
