@@ -188,63 +188,66 @@ class _NutritioncardState extends State<Nutritioncard> {
                   SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      DateTime tdate = DateTime.now();
-                      final df = DateFormat('dd-MM-yyyy');
-                      String today = df.format(tdate).toString();
-                      if (today == widget.date) {
-                        store
-                            .dietConsume(
-                              context: context,
-                              mealId: uid,
-                              date: widget.date,
-                              image: base64Image,
-                            )
-                            .then((value) => store.getdietcat(
-                                context: context,
-                                day: widget.day,
-                                date: widget.date))
-                            .then((value) => NavigationService.goBack);
-                      } else {
-                        FlashHelper.informationBar(
-                          context,
-                          message: "You can't consume it now",
-                        );
-                      }
-                    },
-                    child: Container(
-                      height: .05.sh,
-                      width: .8.sw,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              AppConstants.stcoinbgColor,
-                              AppConstants.primaryColor,
-                            ],
+                  image != null
+                      ? GestureDetector(
+                          onTap: () async {
+                            DateTime tdate = DateTime.now();
+                            final df = DateFormat('dd-MM-yyyy');
+                            String today = df.format(tdate).toString();
+                            if (today == widget.date) {
+                              store
+                                  .dietConsume(
+                                    context: context,
+                                    mealId: uid,
+                                    date: widget.date,
+                                    image: base64Image,
+                                  )
+                                  .then((value) => store.getdietcat(
+                                      context: context,
+                                      day: widget.day,
+                                      date: widget.date))
+                                  .then((value) => NavigationService.goBack);
+                            } else {
+                              FlashHelper.informationBar(
+                                context,
+                                message: "You can't consume it now",
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: .05.sh,
+                            width: .8.sw,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    AppConstants.stcoinbgColor,
+                                    AppConstants.primaryColor,
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 1,
+                                    offset: Offset(0, 2), // Shadow position
+                                  )
+                                ]),
+                            child: Center(
+                              child: Text(
+                                "Submit Diet!",
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 1,
-                              offset: Offset(0, 2), // Shadow position
-                            )
-                          ]),
-                      child: Center(
-                        child: Text(
-                          "Submit Diet!",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : Text(""),
                 ],
               ),
             ),

@@ -37,14 +37,16 @@ class _DietScheduleState extends State<DietSchedule> {
   String date;
   String day;
   GymStore store;
+
   DatePickerController datePickerController = DatePickerController();
 
   @override
   void initState() {
     Future.delayed(Duration.zero, loadSchedules);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      datePickerController.animateToSelection(
-          duration: Duration(milliseconds: 500));
+      datePickerController.jumpToSelection();
+      // datePickerController.animateToSelection(
+      //     duration: Duration(milliseconds: 500));
     });
     super.initState();
   }
@@ -55,14 +57,51 @@ class _DietScheduleState extends State<DietSchedule> {
     final df = DateFormat('dd-MM-yyyy');
     date = df.format(tdate).toString();
     store.getdietcat(context: context, day: day, date: date);
+    isConValid();
     //store.getdietConsumed(context: context, date: date);
+  }
+
+  bool isConValid() {
+    int consumed = 0;
+    if (store.dietItem != null) {
+      store.dietItem.data.first.day.breakfast.map((e) {
+        if (e.consumptionStatus ?? false) {
+          consumed += 1;
+        }
+      }).toList();
+      store.dietItem.data.first.day.dinner.map((e) {
+        if (e.consumptionStatus ?? false) {
+          consumed += 1;
+        }
+      }).toList();
+      store.dietItem.data.first.day.snacks.map((e) {
+        if (e.consumptionStatus ?? false) {
+          consumed += 1;
+        }
+      }).toList();
+      store.dietItem.data.first.day.lunch.map((e) {
+        if (e.consumptionStatus ?? false) {
+          consumed += 1;
+        }
+      }).toList();
+
+      if (consumed ==
+          (store.dietItem.data.first.day.breakfast.length +
+              store.dietItem.data.first.day.dinner.length +
+              store.dietItem.data.first.day.lunch.length +
+              store.dietItem.data.first.day.snacks.length)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
     userStore = context.watch<UserStore>();
     store = context.watch<GymStore>();
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppConstants.primaryColor,
@@ -87,7 +126,7 @@ class _DietScheduleState extends State<DietSchedule> {
               color: Colors.white,
               height: 90.0,
               child: DatePicker(
-                DateTime(calendetDate.year, calendetDate.month - 3,
+                DateTime(calendetDate.year, calendetDate.month - 1,
                     calendetDate.day),
                 initialSelectedDate: selectedValue,
                 controller: datePickerController,
@@ -100,6 +139,7 @@ class _DietScheduleState extends State<DietSchedule> {
                   date = df.format(cdate).toString();
                   if (day != null) {
                     store.getdietcat(context: context, day: day, date: date);
+                    isConValid();
                     // store.getdietConsumed(context: context, date: date);
                   }
                 },
@@ -159,42 +199,33 @@ class _DietScheduleState extends State<DietSchedule> {
                       child: Loading(),
                     ),
             ),
-            Consumer<GymStore>(
-              builder: (context, value, child) => value.dietConsumed != null &&
-                      store.dietConsumed.data.length > 0 &&
-                      store.dietConsumed.data.length - 1 ==
-                          (store.dietItem.data.first.day.breakfast.length +
-                              store.dietItem.data.first.day.dinner.length +
-                              store.dietItem.data.first.day.lunch.length +
-                              store.dietItem.data.first.day.snacks.length)
-                  ? Container(
-                      child: TextButton(
-                        onPressed: () {
-                          store.collectDietRewards(
-                              context: context, date: date);
-                        },
-                        child: Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width * .95,
-                          decoration: BoxDecoration(
-                            color: AppConstants.bgColor,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Claim WTF Coins",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
+            store.dietItem != null && isConValid()
+                ? Container(
+                    child: TextButton(
+                      onPressed: () {
+                        store.collectDietRewards(context: context, date: date);
+                      },
+                      child: Container(
+                        height: 35,
+                        width: MediaQuery.of(context).size.width * .95,
+                        decoration: BoxDecoration(
+                          color: AppConstants.bgColor,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Claim WTF Coins",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
-                    )
-                  : CollecReward(),
-            )
+                    ),
+                  )
+                : CollecReward(),
           ],
         ),
       ),
