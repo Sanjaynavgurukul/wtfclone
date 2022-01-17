@@ -111,6 +111,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             case 9:
             case 10:
             case 11:
+            case 12:
               currentIndex--;
               _controller.animateToPage(currentIndex,
                   duration: Duration(milliseconds: 500),
@@ -340,6 +341,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(new SnackBar(
                                           content: new Text(
                                               'Select your target weight')));
+                                      return;
+                                    }
+                                  }
+
+                                  if (currentIndex == 11) {
+                                    if (user.type1 == null ||
+                                        user.type2 == null) {
+                                      key.currentState.showSnackBar(
+                                          new SnackBar(
+                                              content: new Text(
+                                                  'Select your diet')));
                                       return;
                                     }
                                   }

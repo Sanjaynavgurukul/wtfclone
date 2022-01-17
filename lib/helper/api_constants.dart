@@ -10,6 +10,8 @@ class Api {
   static const String GYM_DETAILS = 'gym/getbyid?uid=';
   static const String EVENTS = 'event?type=new';
   static const String getWorkoutCalculations = 'workoutmapping/cal';
+  static const String DIET_CONSUMPTION = "dietmapping/add";
+  static const String COLLETC_DIET_REWARDS = "dietmapping/cal";
   static getEventById(String eventId) => 'event/getbyid?uid=$eventId';
   static getUserById(String id) => 'user/id/$id';
   static getMemberById(String id) => 'member/id/$id';
@@ -80,4 +82,8 @@ class Api {
   static String getRedeemHistory() =>
       "coins/redeemhistory?user_id=${locator<AppPrefs>().memberId.getValue()}";
   static String dietPref(String type) => "diettype/getall?page=1&type=$type";
+  static String getDietCat(String day, String date) =>
+      'dietcat/getbyId?uid=${locator<AppPrefs>().memberData.getValue().dietcategoryid}&day=$day&user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
+  static String getConsumedDiet(String date) =>
+      "dietmapping?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date";
 }

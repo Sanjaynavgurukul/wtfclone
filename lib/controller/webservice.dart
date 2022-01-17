@@ -7,6 +7,7 @@ import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:http/http.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/api_constants.dart';
@@ -34,6 +35,8 @@ import 'package:wtf/model/coin_history.dart';
 
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
+import 'package:wtf/model/diet_consumed.dart';
+import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
@@ -1226,5 +1229,84 @@ class RestDatasource {
       DietPref model = DietPref.fromJson(res);
       return model;
     });
+  }
+
+  //get diet pref
+  Future<DietItem> getDietCat(String day, String date) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    return _netUtil
+        .get(BASE_URL + Api.getDietCat(day, date), headers: mapHeader)
+        .then((dynamic res) {
+      print("response of pref : " + res.toString());
+      DietItem model;
+      if (res['status']) {
+        model = DietItem.fromJson(res);
+      } else {
+        model = DietItem();
+      }
+      return model;
+    });
+  }
+
+  //diet consumption
+  Future<dynamic> dietConsumtion(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      BASE_URL + Api.DIET_CONSUMPTION,
+      headers: mapHeader,
+      body: body,
+    );
+    //  log(body.toString());
+
+    print("response get Consumption : " + res.toString());
+    dynamic complete = res;
+    return complete;
+  }
+
+  //diet consumed
+  Future<DietConsumed> dietConsumed({BuildContext context, String date}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(
+      BASE_URL + Api.getConsumedDiet(date),
+      headers: mapHeader,
+    );
+    DietConsumed complete;
+    print("response get diet consumed : " + res.toString());
+    if (res != null) {
+      complete = DietConsumed.fromJson(res);
+    } else {
+      complete = null;
+    }
+
+    return complete;
+  }
+
+  //diet consumption
+  Future<dynamic> dietRewards(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      BASE_URL + Api.COLLETC_DIET_REWARDS,
+      headers: mapHeader,
+      body: body,
+    );
+    log(body.toString());
+
+    print("response get Consumption : " + res.toString());
+    dynamic complete = res;
+    return complete;
   }
 }

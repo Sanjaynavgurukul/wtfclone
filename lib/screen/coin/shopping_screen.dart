@@ -138,6 +138,8 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
                                           if (res) {
                                             store.getCoinHistory(
                                                 context: context);
+                                            store.getRedeemHistory(
+                                                context: context);
                                             _showDialog(store, i);
                                           } else {
                                             _showFailureDialog();

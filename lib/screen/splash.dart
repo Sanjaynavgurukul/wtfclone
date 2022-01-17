@@ -65,6 +65,12 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void manageLogin() {}
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    videoPlayerController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -127,9 +127,14 @@ class _RedeemHistoryState extends State<RedeemHistory> {
                               color: Colors.white70),
                         ),
                       )
-            : Align(
-                alignment: Alignment.topCenter,
-                child: Loading(),
+            : Center(
+                child: Text(
+                  'No Redeem History Available!',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: Colors.white70),
+                ),
               ),
       ),
     );

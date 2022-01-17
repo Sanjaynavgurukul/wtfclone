@@ -32,6 +32,7 @@ import 'package:wtf/screen/coin/coin_screen.dart';
 import 'package:wtf/screen/coin/point_history.dart';
 import 'package:wtf/screen/coin/redeem_history.dart';
 import 'package:wtf/screen/coin/shopping_screen.dart';
+import 'package:wtf/screen/congrats_screen.dart';
 import 'package:wtf/screen/diet_schedule.dart';
 import 'package:wtf/screen/exercise/exercise.dart';
 import 'package:wtf/screen/exercise/exercise_start/exercise_start.dart';
@@ -114,6 +115,7 @@ class Routes {
   static const String pointHistory = '/pointHistory';
   static const String redeemHistory = '/redeemHistory';
   static const String shoppingScreen = '/shoppingScreen';
+  static const String congratsScreen = '/congratsScreen';
 }
 
 class RouteGenerator {
@@ -588,6 +590,14 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => ShoppingScreen(), settings: settings);
+      case Routes.congratsScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: CongtarsScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => CongtarsScreen(), settings: settings);
       default:
         return null;
     }

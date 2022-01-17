@@ -51,6 +51,8 @@ import 'package:wtf/model/coin_history.dart';
 
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
+import 'package:wtf/model/diet_consumed.dart';
+import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/geo_address.dart';
 import 'package:wtf/model/gym_add_on.dart';
@@ -203,6 +205,9 @@ class GymStore extends ChangeNotifier {
 
   DietPref dprefType1;
   DietPref dprefType2;
+
+  DietItem dietItem;
+  DietConsumed dietConsumed;
 
   String discoverType = '';
   LocationResult selectedNewLocation;
@@ -1730,5 +1735,86 @@ class GymStore extends ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+//dietcat
+  Future<void> getdietcat(
+      {BuildContext context, String day, String date}) async {
+    dietItem = null;
+    notifyListeners();
+    DietItem res = await RestDatasource().getDietCat(day, date);
+    if (res != null) {
+      dietItem = res;
+      notifyListeners();
+    }
+  }
+
+  //dietcon
+  Future<void> dietConsume(
+      {BuildContext context, String mealId, String date, String image}) async {
+    Map<String, dynamic> body = {
+      "meal_id": mealId,
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "dietcategory_id":
+          locator<AppPrefs>().memberData.getValue().dietcategoryid,
+      "status": "active",
+      "date": date,
+      "image": image,
+    };
+
+    dynamic res =
+        await RestDatasource().dietConsumtion(context: context, body: body);
+    if (res != null) {
+      //dietItem = res;
+      log("diet consumed" + res.toString());
+      FlashHelper.informationBar(
+        context,
+        message: res['message'],
+      );
+      notifyListeners();
+    }
+  }
+
+  //diet consumed
+  Future<void> getdietConsumed({BuildContext context, String date}) async {
+    DietConsumed res =
+        await RestDatasource().dietConsumed(context: context, date: date);
+    log(res.toString());
+    dietConsumed = res;
+    notifyListeners();
+  }
+
+  Future<void> collectDietRewards({BuildContext context, String date}) async {
+    List<String> consumedItem = [];
+    RestDatasource()
+        .dietConsumed(context: context, date: date)
+        .then((res) async {
+      if (res != null) {
+        res.data.map((e) {
+          consumedItem.add(e.uid);
+        }).toList();
+        Map<String, dynamic> body = {
+          "dietmapping_ids": consumedItem,
+        };
+
+        if (consumedItem != null) {
+          dynamic re2 =
+              await RestDatasource().dietRewards(context: context, body: body);
+          if (re2 != null) {
+            if (re2['coins'] != null) {
+              NavigationService.navigateToWithArgs(
+                  Routes.congratsScreen, {'coin': re2['coins'].toString()});
+            } else {
+              FlashHelper.informationBar(
+                context,
+                message: "You have already collected todays reward",
+              );
+            }
+
+            notifyListeners();
+          }
+        }
+      }
+    });
   }
 }

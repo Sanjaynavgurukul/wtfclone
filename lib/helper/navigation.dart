@@ -13,6 +13,9 @@ class NavigationService {
     return await navigatorKey.currentState.popAndPushNamed(routeName);
   }
 
+  static Future<dynamic> navigateToWithArgs(String routeName, Map args) =>
+      navigatorKey.currentState.pushNamed(routeName, arguments: args);
+
   static get goBack => navigatorKey.currentState.pop();
 
   static get context => navigatorKey.currentContext;

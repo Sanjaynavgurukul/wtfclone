@@ -55,7 +55,7 @@ class AddOnData {
   String image;
   String isPt;
   String price;
-  String isLive;
+  bool isLive;
   String freeSession;
   String gymName;
   String status;
@@ -75,7 +75,7 @@ class AddOnData {
       isPt: json['is_pt'] != null ? json['is_pt'] : '0',
       gymName: json['gym_name'] ?? '',
       freeSession: json['free_seesion'] ?? '',
-      isLive: json['is_live'] ?? '');
+      isLive: json['is_live'] ?? false);
 
   Map<String, dynamic> toJson() => {
         "uid": uid,

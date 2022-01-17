@@ -50,8 +50,12 @@ class UserController extends ChangeNotifier {
               .split(',')
               .toList()
           : [];
-  String type1;
-  String type2;
+  String type1 = locator<AppPrefs>().type1.getValue() != null
+      ? locator<AppPrefs>().type1.getValue()
+      : '';
+  String type2 = locator<AppPrefs>().type2.getValue() != null
+      ? locator<AppPrefs>().type2.getValue()
+      : '';
 
   setValue({
     String name,
@@ -128,25 +132,26 @@ class UserController extends ChangeNotifier {
     loading = true;
     notifyListeners();
     Map<String, dynamic> body = {
-      'user_id': locator<AppPrefs>().memberId.getValue(),
+      "uid": locator<AppPrefs>().memberData.getValue().uid,
+      "user_uid": locator<AppPrefs>().memberId.getValue(),
       'name': locator<AppPrefs>().userName.getValue(),
       'email': locator<AppPrefs>().userEmail.getValue(),
       'age': age,
       'gender': gender,
-      'height': heightFeet,
-      'weight': weight,
-      'target_weight': targetWeight,
-      'target_duration': goalWeight.toStringAsFixed(2),
       'location': address,
       'lat': context.read<GymStore>().currentPosition.latitude ?? '',
       'long': context.read<GymStore>().currentPosition.longitude ?? '',
       'body_type': bodyType,
+      "is_smoking": isSmoking,
+      "is_drinking": isDrinking,
+      'height': heightFeet,
+      'weight': weight,
+      'target_weight': targetWeight,
+      'target_duration': goalWeight.toStringAsFixed(2),
       'existing_disease': existingDisease.join(','),
-      'is_smoking': isSmoking,
-      'is_drinking': isDrinking,
-      'howactive': activeType,
       'type1': type1,
       'type2': type2,
+      'status': 'active',
     };
     print('body: $body');
     locator<AppPrefs>().updateMemberData.setValue(false);
@@ -204,8 +209,12 @@ class UserUpdateController extends ChangeNotifier {
               .split(',')
               .toList()
           : [];
-  String type1;
-  String type2;
+  String type1 = locator<AppPrefs>().type1.getValue() != null
+      ? locator<AppPrefs>().type1.getValue()
+      : '';
+  String type2 = locator<AppPrefs>().type2.getValue() != null
+      ? locator<AppPrefs>().type2.getValue()
+      : '';
 
   setValue({
     String name,
@@ -240,6 +249,8 @@ class UserUpdateController extends ChangeNotifier {
     this.existingDisease =
         existingDisease == null ? this.existingDisease : existingDisease;
     this.activeType = activeType == null ? this.activeType : activeType;
+    this.type1 = type1 == null ? this.type1 : type1;
+    this.type2 = type2 == null ? this.type2 : type2;
     notifyListeners();
   }
 
@@ -279,6 +290,7 @@ class UserUpdateController extends ChangeNotifier {
     loading = true;
     notifyListeners();
     Map<String, dynamic> body = {
+      'uid': locator<AppPrefs>().userData.getValue().uid,
       'user_id': locator<AppPrefs>().memberId.getValue(),
       'name': locator<AppPrefs>().userName.getValue(),
       'email': locator<AppPrefs>().userEmail.getValue(),
