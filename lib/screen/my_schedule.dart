@@ -9,6 +9,7 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
@@ -414,6 +415,35 @@ class ScheduleListItems extends StatelessWidget {
                               addonId: e.addonId);
                           NavigationService.navigateTo(
                               Routes.mainWorkoutScreen);
+                          break;
+                        case 'Live Sessions':
+                          switch (e.roomStatus) {
+                            case 'scheduled':
+                              FlashHelper.informationBar(
+                                context,
+                                message:
+                                    'Trainer has not started the live session yet',
+                              );
+                              break;
+                            case 'started':
+                              context.read<GymStore>().joinLiveSession(
+                                    addonName: e.addonName,
+                                    liveClassId: e.liveClassId,
+                                    roomId: e.roomId,
+                                    context: context,
+                                    addonId: e.addonId,
+                                  );
+                              break;
+                            case 'completed':
+                              FlashHelper.informationBar(
+                                context,
+                                message: 'Trainer has ended the live session',
+                              );
+                              break;
+                            default:
+                              break;
+                          }
+
                           break;
                       }
                     },

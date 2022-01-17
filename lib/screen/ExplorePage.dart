@@ -14,6 +14,7 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/all_events.dart';
+import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -99,6 +100,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   SizedBox(
                     height: 5.0,
                   ),
+
                   Text(
                     'Explore Arena & Fitness Studios near you',
                     style: TextStyle(
@@ -169,8 +171,9 @@ class _ExplorePageState extends State<ExplorePage> {
                     ),
                   ),
                   SizedBox(
-                    height: 30.0,
+                    height: 20.0,
                   ),
+                  LiveAddonWidget(),
                   Text(
                     'Challenges',
                     style: TextStyle(
@@ -445,6 +448,133 @@ class EventCard extends StatelessWidget {
   }
 }
 
+class LiveCard extends StatelessWidget {
+  final AddOnData data;
+  const LiveCard({
+    Key key,
+    this.data,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GymStore>(
+      builder: (context, store, child) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width / 1.6,
+            height: 160.0,
+            margin: EdgeInsets.only(right: 15),
+            child: Stack(
+              children: [
+                GradientImageWidget(
+                  // assets:
+                  //     'assets/images/challenge.png',
+                  network: data.image,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
+                    left: 10.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.name ?? '',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      UIHelper.verticalSpace(6.0),
+                      Text(
+                        data.gymName ?? '',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10.0,
+                        ),
+                      ),
+                      UIHelper.verticalSpace(6.0),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                if (data.price == '0')
+                  Positioned(
+                    right: 16.0,
+                    top: 10.0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 10.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppConstants.primaryColor,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                        'FREE',
+                        style: TextStyle(
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          UIHelper.verticalSpace(8.0),
+          Ink(
+            decoration: BoxDecoration(
+              color: AppConstants.primaryColor,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: InkWell(
+              onTap: () {
+                store.setAddOnSlot(
+                  context: context,
+                  data: data,
+                  gymId: data.gymId,
+                );
+                NavigationService.navigateTo(
+                  Routes.chooseSlotScreen,
+                );
+              },
+              child: Container(
+                height: 30.0,
+                padding: const EdgeInsets.all(
+                  6.0,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                width: MediaQuery.of(context).size.width / 1.8,
+                alignment: Alignment.center,
+                child: Text(
+                  'Book Now',
+                  style: TextStyle(
+                    color: AppConstants.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CommonAppBar extends StatelessWidget {
   const CommonAppBar({
     Key key,
@@ -506,15 +636,6 @@ class CommonAppBar extends StatelessWidget {
             child: Consumer<GymStore>(
               builder: (context, store, child) => InkWell(
                 onTap: () async {
-                  // await context
-                  //     .read<GymStore>()
-                  //     .getActiveSubscriptions(context: context);
-                  // if (store.activeSubscriptions != null)
-                  //   context.read<GymStore>().getGymDetails(
-                  //         context: context,
-                  //         gymId: store.activeSubscriptions.data.gymId,
-                  //       );
-                  // NavigationService.navigateTo(Routes.activeSubscriptionScreen);
                   context.read<GymStore>().getGymDetails(
                         context: context,
                         gymId: store.activeSubscriptions.data.gymId,
@@ -579,48 +700,6 @@ class CommonAppBar extends StatelessWidget {
                           color: Colors.redAccent,
                         ),
                       )
-                    // else
-                    //   Text(
-                    //     'WTF',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.w900,
-                    //       fontSize: 20.0,
-                    //       color: Colors.redAccent,
-                    //     ),
-                    // ),
-                    // RichText(
-                    //   overflow: TextOverflow.ellipsis,
-                    //   text: TextSpan(
-                    //     text: 'Welcome to  \n',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.w400,
-                    //       fontSize: 14.0,
-                    //       color: Colors.white,
-                    //     ),
-                    //     children: [
-                    //       if (store.activeSubscriptions != null &&
-                    //           store.activeSubscriptions.data != null)
-                    //         TextSpan(
-                    //           text:
-                    //               store.activeSubscriptions.data.gymName ?? 'n/a',
-                    //           style: TextStyle(
-                    //             fontWeight: FontWeight.w900,
-                    //             fontSize: 16.0,
-                    //             color: Colors.redAccent,
-                    //           ),
-                    //         )
-                    //       else
-                    //         TextSpan(
-                    //           text: 'WTF',
-                    //           style: TextStyle(
-                    //             fontWeight: FontWeight.w900,
-                    //             fontSize: 20.0,
-                    //             color: Colors.redAccent,
-                    //           ),
-                    //         )
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

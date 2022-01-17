@@ -10,7 +10,7 @@ import '../main.dart';
 import 'AppPrefs.dart';
 
 class APIHelper {
-  static const String BASE_URL = 'https://api.wtfup.me/';
+  static const String BASE_URL = 'https://devapi.wtfup.me/';
   // static const String DEV_BASE_URL = 'https://devapi.wtfup.me/';
   // static const String BASE_URL = 'http://13.232.102.139:9000/';
 
@@ -22,6 +22,7 @@ class APIHelper {
   static const String ADD_MEMBER = BASE_URL + 'member/add';
   static const String updateMember = BASE_URL + 'member/update';
   static const String whyChooseWtf = BASE_URL + 'terms';
+  static const String getAllLiveClasses = BASE_URL + 'addon?is_live=true';
   static const String FORGOT_PASSWORD = BASE_URL + 'user/forgot';
   static const String RESET_PASSWORD = BASE_URL + 'user/reset';
   static const String GET_GYM = BASE_URL + 'gym/';
@@ -33,6 +34,9 @@ class APIHelper {
   static const String ATTENDANCE = BASE_URL + 'attandance/add';
   static const String BANNER = BASE_URL + 'banner';
   static const String giveFeedback = BASE_URL + 'feedback/add';
+  static const String joinLiveSession = BASE_URL + 'liveparticipant/add';
+  static const String completeLiveSession =
+      BASE_URL + 'liveparticipant/complete';
   static String checkOffer(String offerId) =>
       BASE_URL +
       'offervalidation?user_id=${locator<AppPrefs>().memberId.getValue()}&offer_id=$offerId';

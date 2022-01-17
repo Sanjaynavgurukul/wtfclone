@@ -72,6 +72,13 @@ class AppPrefs {
             preferences.getString(PrefsConstants.userName, defaultValue: ''),
         language =
             preferences.getString(PrefsConstants.language, defaultValue: 'en'),
+        liveClassParticipantId = preferences.getString(
+            PrefsConstants.liveClassParticipantId,
+            defaultValue: 'en'),
+        livePtVerificationId = preferences
+            .getString(PrefsConstants.livePtVerificationId, defaultValue: 'en'),
+        liveExerciseId = preferences.getString(PrefsConstants.liveExerciseId,
+            defaultValue: 'en'),
         updateMemberData = preferences.getBool(PrefsConstants.updateMemberData,
             defaultValue: false),
         memberId =
@@ -83,6 +90,9 @@ class AppPrefs {
   final Preference<bool> isFirstOpen;
 
   final Preference<String> token;
+  final Preference<String> liveClassParticipantId;
+  final Preference<String> livePtVerificationId;
+  final Preference<String> liveExerciseId;
   final Preference<String> fcmToken;
   final Preference<String> phoneNumber;
   final Preference<String> dateAdded;
@@ -160,6 +170,9 @@ class PrefsConstants {
   static const String adsRecentSearches = 'adsRecentSearches';
   static const String remoteConfig = 'remoteConfig';
   static const String language = 'language';
+  static const String liveClassParticipantId = 'liveClassParticipantId';
+  static const String livePtVerificationId = 'livePtVerificationId';
+  static const String liveExerciseId = 'liveExerciseId';
   static const String updateMemberData = 'updateMemberData';
   static const String userId = 'userId';
   static const String userName = 'userName';

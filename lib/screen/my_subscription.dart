@@ -20,7 +20,7 @@ class _MySubscriptionState extends State<MySubscription> {
     store = context.watch<GymStore>();
     return DefaultTabController(
       initialIndex: 0,
-      length: 3,
+      length: 4,
       child: Scaffold(
           backgroundColor: AppColors.PRIMARY_COLOR,
           appBar: AppBar(
@@ -39,6 +39,9 @@ class _MySubscriptionState extends State<MySubscription> {
               ),
               Tab(
                 text: 'Addon',
+              ),
+              Tab(
+                text: 'Live',
               ),
               Tab(
                 text: 'Event',
@@ -241,6 +244,221 @@ class _MySubscriptionState extends State<MySubscription> {
                               store.addOnSubscriptions.isNotEmpty) {
                             SubscriptionData e =
                                 store.addOnSubscriptions[index];
+                            return Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                    vertical: 10.0,
+                                  ),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            child: RichText(
+                                              text: TextSpan(
+                                                text: 'Gym Name:  \n',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: e.gymName,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          RichText(
+                                            textAlign: TextAlign.right,
+                                            text: TextSpan(
+                                              text: 'Start Date:  \n',
+                                              style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.6),
+                                                fontSize: 12.0,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: e.startDate != null
+                                                      ? Helper
+                                                          .stringForDatetime2(e
+                                                              .startDate
+                                                              .toIso8601String())
+                                                      : '',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      UIHelper.verticalSpace(16.0),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            child: RichText(
+                                              text: TextSpan(
+                                                text: 'Addon Name:  \n',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: e.addonName,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          RichText(
+                                            textAlign: TextAlign.right,
+                                            text: TextSpan(
+                                              text: 'End Date:  \n',
+                                              style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.6),
+                                                fontSize: 12.0,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: e.expireDate != null
+                                                      ? Helper
+                                                          .stringForDatetime2(e
+                                                              .expireDate
+                                                              .toIso8601String())
+                                                      : '',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.0,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      UIHelper.verticalSpace(16.0),
+                                      if (e.price != 0)
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                text: 'Addon Sessions:  \n',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: e.nSession,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            RichText(
+                                              textAlign: TextAlign.right,
+                                              text: TextSpan(
+                                                text: 'Completed Session:  \n',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.6),
+                                                  fontSize: 12.0,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: e.completedSession,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'No Addon Found',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      }),
+                ),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    context
+                        .read<GymStore>()
+                        .getMemberSubscriptions(context: context);
+                  },
+                  backgroundColor: Colors.white,
+                  child: ListView.builder(
+                      padding: EdgeInsets.all(20),
+                      shrinkWrap: true,
+                      itemCount: store.addOnLiveSubscriptions.length == 0
+                          ? 1
+                          : store.addOnLiveSubscriptions.length,
+                      itemBuilder: (context, index) {
+                        if (store.addOnLiveSubscriptions == null) {
+                          return Loading();
+                        } else {
+                          if (store.addOnLiveSubscriptions != null &&
+                              store.addOnLiveSubscriptions.isNotEmpty) {
+                            SubscriptionData e =
+                                store.addOnLiveSubscriptions[index];
                             return Column(
                               children: [
                                 Container(

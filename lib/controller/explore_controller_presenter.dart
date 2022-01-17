@@ -78,7 +78,7 @@ class ExplorePresenter {
 
   getGymPlans(String gymId) async {
     print("get Gym Details 1");
-    api.getGymPlans().then(
+    api.getGymPlans(gymId: gymId).then(
       (GymPlanModel model) {
         if (model.status) {
           _view.onGymPlansSuccess(model);

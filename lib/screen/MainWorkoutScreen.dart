@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
@@ -63,8 +64,9 @@ class _MainWorkoutScreenState extends State<MainWorkoutScreen> {
                                       .map((e) =>
                                           e.isCompleted ||
                                           e.exercises
-                                              .map(
-                                                  (e) => e.eDuration.isNotEmpty)
+                                              .map((e) =>
+                                                  e.eDuration != null &&
+                                                  e.eDuration.isNotEmpty)
                                               .toList()[0])
                                       .toList()
                                       .isNotEmpty &&
@@ -72,8 +74,9 @@ class _MainWorkoutScreenState extends State<MainWorkoutScreen> {
                                       .map((e) =>
                                           e.isCompleted ||
                                           e.exercises
-                                              .map(
-                                                  (e) => e.eDuration.isNotEmpty)
+                                              .map((e) =>
+                                                  e.eDuration != null &&
+                                                  e.eDuration.isNotEmpty)
                                               .toList()[0])
                                       .toList()[0] &&
                                   store.selectedSchedule.workoutStatus
@@ -92,53 +95,68 @@ class _MainWorkoutScreenState extends State<MainWorkoutScreen> {
                       onTap: () async {
                         print('dadad');
                         if (store.workoutGlobalTimer == null) {
-                          if (store.attendanceDetails != null &&
-                              store.attendanceDetails.data != null) {
-                            if (store.myWorkoutSchedule != null &&
-                                store.myWorkoutSchedule.data != null &&
-                                store.myWorkoutSchedule.data
-                                    .map((e) =>
-                                        e.isCompleted ||
-                                        e.exercises
-                                            .map((e) => e.eDuration.isNotEmpty)
-                                            .toList()[0])
-                                    .toList()
-                                    .isNotEmpty &&
-                                store.myWorkoutSchedule.data
-                                    .map((e) =>
-                                        e.isCompleted ||
-                                        e.exercises
-                                            .map((e) => e.eDuration.isNotEmpty)
-                                            .toList()[0])
-                                    .toList()[0] &&
-                                store.selectedSchedule.workoutStatus) {
-                              FlashHelper.informationBar(context,
-                                  message: 'Workout Already completed');
-                            } else {
-                              if (store.myWorkoutSchedule
-                                          .workoutVerification ==
-                                      null ||
-                                  store.myWorkoutSchedule.workoutVerification
-                                          .eDuration ==
-                                      null ||
-                                  store.myWorkoutSchedule.workoutVerification
-                                          .eDuration ==
-                                      'NaN:NaN:NaN') {
-                                store.manageGlobalTimer(
-                                  context: context,
-                                  mode: 'start',
-                                );
-                              } else {
+                          if (locator<AppPrefs>()
+                                  .selectedWorkoutDate
+                                  .getValue() ==
+                              Helper.formatDate2(
+                                  DateTime.now().toIso8601String())) {
+                            if (store.attendanceDetails != null &&
+                                store.attendanceDetails.data != null) {
+                              if (store.myWorkoutSchedule != null &&
+                                  store.myWorkoutSchedule.data != null &&
+                                  store.myWorkoutSchedule.data
+                                      .map((e) =>
+                                          e.isCompleted ||
+                                          e.exercises
+                                              .map(
+                                                  (e) => e.eDuration.isNotEmpty)
+                                              .toList()[0])
+                                      .toList()
+                                      .isNotEmpty &&
+                                  store.myWorkoutSchedule.data
+                                      .map((e) =>
+                                          e.isCompleted ||
+                                          e.exercises
+                                              .map(
+                                                  (e) => e.eDuration.isNotEmpty)
+                                              .toList()[0])
+                                      .toList()[0] &&
+                                  store.selectedSchedule.workoutStatus) {
                                 FlashHelper.informationBar(context,
                                     message: 'Workout Already completed');
+                              } else {
+                                if (store.myWorkoutSchedule
+                                            .workoutVerification ==
+                                        null ||
+                                    store.myWorkoutSchedule.workoutVerification
+                                            .eDuration ==
+                                        null ||
+                                    store.myWorkoutSchedule.workoutVerification
+                                            .eDuration ==
+                                        'NaN:NaN:NaN') {
+                                  store.manageGlobalTimer(
+                                    context: context,
+                                    mode: 'start',
+                                  );
+                                } else {
+                                  FlashHelper.informationBar(context,
+                                      message: 'Workout Already completed');
+                                }
                               }
+                            } else {
+                              FlashHelper.informationBar(
+                                context,
+                                message: 'Please mark your attendance first.',
+                              );
+                              NavigationService.navigateTo(
+                                  Routes.mainAttendance);
                             }
                           } else {
                             FlashHelper.informationBar(
                               context,
-                              message: 'Please mark your attendance first.',
+                              message:
+                                  'Only present day sessions can be started.',
                             );
-                            NavigationService.navigateTo(Routes.mainAttendance);
                           }
                         } else {
                           if (store.workoutGlobalTimer.stopwatch.isRunning) {
@@ -540,7 +558,8 @@ class WorkoutListItems extends StatelessWidget {
                       ),
                       children: [
                         if (schedule.exercises
-                            .map((e) => e.eDuration.isNotEmpty)
+                            .map((e) =>
+                                e.eDuration != null && e.eDuration.isNotEmpty)
                             .toList()[0])
                           TextSpan(
                             text: ' (Completed)',

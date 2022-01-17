@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
@@ -48,11 +47,16 @@ class ActiveSubscriptionScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  LocalValue.GYM_ID = store.activeSubscriptions.data.gymId;
+                  // LocalValue.GYM_ID = store.activeSubscriptions.data.gymId;
                   store.setRenew(true);
                   await store.getGymDetails(
-                      context: context,
-                      gymId: store.activeSubscriptions.data.gymId);
+                    context: context,
+                    gymId: store.activeSubscriptions.data.gymId,
+                  );
+                  store.getGymPlans(
+                    gymId: store.activeSubscriptions.data.gymId,
+                    context: context,
+                  );
                   NavigationService.navigateTo(
                     Routes.membershipPlanPage,
                   );

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 
-import 'package:html/parser.dart';
 import 'Toast.dart';
 
 class Helper {
@@ -70,6 +70,13 @@ class Helper {
         getParsedTime(min.toString()) + " : " + getParsedTime(sec.toString());
 
     return parsedTime;
+  }
+
+  static getDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   static String printDuration(Duration duration) {

@@ -15,10 +15,14 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   List<Map> _itemsList = [
+    // {
+    //   'name': 'My\n WTF',
+    //   'img': 'assets/images/wtf.png',
+    //   // 'img': 'assets/images/mywtf.jpeg',
+    // },
     {
-      'name': 'My\n WTF',
-      'img': 'assets/images/wtf.png',
-      // 'img': 'assets/images/mywtf.jpeg',
+      'name': 'WTF\n Coins',
+      'img': 'assets/images/coins.png',
     },
     {
       'name': 'My\n Schedule',
@@ -42,8 +46,8 @@ class _CategoriesState extends State<Categories> {
   navigation(int index, BuildContext context) {
     switch (index) {
       case 0:
-        store.changeNavigationTab(index: 2);
-
+        // store.changeNavigationTab(index: 2);
+        store.changeNavigationTab(index: 3);
         break;
       case 1:
         NavigationService.navigateTo(Routes.mySchedule);

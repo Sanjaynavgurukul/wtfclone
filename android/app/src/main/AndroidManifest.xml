@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wtf.member">
+    package="com.wtf.member"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,6 +14,8 @@
 <!--    android:networkSecurityConfig="@xml/network_security_config"-->
     <application
         android:label="WTF"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -26,7 +26,9 @@ class MySchedule {
   factory MySchedule.fromJson(Map<String, dynamic> json) => MySchedule(
         status: json["status"],
         message: json["message"],
-        data: ScheduleData.fromJson(json["data"]),
+        data: json.containsKey('data')
+            ? ScheduleData.fromJson(json["data"])
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +45,7 @@ class ScheduleData {
     this.event,
     this.addonPt,
     this.allData,
+    this.addonLive,
     this.workoutAvailable,
   });
 
@@ -50,6 +53,7 @@ class ScheduleData {
   List<MyScheduleAddonData> addon;
   List<MyScheduleAddonData> event;
   List<MyScheduleAddonData> addonPt;
+  List<MyScheduleAddonData> addonLive;
   Map<String, List<MyScheduleAddonData>> allData;
   String workoutAvailable;
 
@@ -58,6 +62,8 @@ class ScheduleData {
           addon.isNotEmpty ||
           event.isNotEmpty ||
           addonPt.isNotEmpty ||
+          // (addonLive != null && addonLive.isNotEmpty) ||
+          (addonLive.isNotEmpty) ||
           allData.isNotEmpty) &&
       workoutAvailable != '0';
   // bool hasData() => workoutAvailable != '0';
@@ -72,6 +78,8 @@ class ScheduleData {
         json["regular"].map((x) => MyScheduleAddonData.fromJson(x)));
     List<MyScheduleAddonData> event = List<MyScheduleAddonData>.from(
         json["event"].map((x) => MyScheduleAddonData.fromJson(x)));
+    List<MyScheduleAddonData> addonLive = List<MyScheduleAddonData>.from(
+        json["addon_live"].map((x) => MyScheduleAddonData.fromJson(x)));
 
     if (regular.isNotEmpty) {
       if (addonPt.isNotEmpty) {
@@ -90,6 +98,9 @@ class ScheduleData {
     if (addon.isNotEmpty) {
       temp['addon'] = addon;
     }
+    if (addonLive.isNotEmpty) {
+      temp['Live Sessions'] = addonLive;
+    }
     log('ALL SCHEDULE LEN:--------- $temp');
     return ScheduleData(
       regular: List<MyScheduleAddonData>.from(
@@ -100,6 +111,8 @@ class ScheduleData {
           json["event"].map((x) => MyScheduleAddonData.fromJson(x))),
       addonPt: List<MyScheduleAddonData>.from(
           json["addon_pt"].map((x) => MyScheduleAddonData.fromJson(x))),
+      addonLive: List<MyScheduleAddonData>.from(
+          json["addon_live"].map((x) => MyScheduleAddonData.fromJson(x))),
       allData: temp,
       workoutAvailable: json['workoutAvailable'] ?? '0',
     );
@@ -110,6 +123,7 @@ class ScheduleData {
         "addon": List<dynamic>.from(addon.map((x) => x.toJson())),
         "event": List<dynamic>.from(event.map((x) => x)),
         "addon_pt": List<dynamic>.from(addonPt.map((x) => x.toJson())),
+        "addon_live": List<dynamic>.from(addonLive.map((x) => x.toJson())),
         "workoutAvailable": workoutAvailable,
       };
 }
@@ -144,6 +158,9 @@ class MyScheduleAddonData {
     this.gymLng,
     this.workoutStatus,
     this.eventType,
+    this.roomId,
+    this.liveClassId,
+    this.roomStatus,
   });
 
   String uid;
@@ -170,6 +187,9 @@ class MyScheduleAddonData {
   bool workoutStatus;
   String gymCoverImage;
   String addonName;
+  String roomStatus;
+  String roomId;
+  String liveClassId;
   var nSession;
   var completedSession;
   String planName;
@@ -185,36 +205,39 @@ class MyScheduleAddonData {
           AppConstants.cloudFrontDocument);
     }
     return MyScheduleAddonData(
-      uid: json["uid"],
-      dateAdded: json["date_added"],
-      startDate: DateTime.parse(json["start_date"]),
-      expireDate: DateTime.parse(json["expire_date"]),
-      addonId: json['addon_id'],
-      coupon: json["coupon"],
-      type: json["type"],
-      receipt: json["receipt"],
-      gymname: json["gymname"],
-      gymUid: json["gym_uid"],
-      gymAddress1: json["gym_address1"],
-      gymType: json["gym_type"],
-      gymAddress2: json["gym_address2"],
-      gymCity: json["gym_city"],
-      gymState: json["gym_state"],
-      gymPin: json["gym_pin"],
-      eventType: json['event_type'] ?? '',
-      gymCountry: json["gym_country"],
-      gymCoverImage: json['gym_cover_image'],
-      addonName: json["addon_name"] == null ? null : json["addon_name"],
-      nSession: json["n_session"] == null ? null : json["n_session"],
-      completedSession:
-          json["completed_session"] == null ? null : json["completed_session"],
-      planName: json["plan_name"] == null ? null : json["plan_name"],
-      eventName: json.containsKey('event_name') ? json['event_name'] : '',
-      eventId: json['event_id'] ?? '',
-      gymLat: json['gym_lat'] ?? '',
-      gymLng: json['gym_long'] ?? '',
-      workoutStatus: json['workout_status'] ?? false,
-    );
+        uid: json["uid"],
+        dateAdded: json["date_added"],
+        startDate: DateTime.parse(json["start_date"]),
+        expireDate: DateTime.parse(json["expire_date"]),
+        addonId: json['addon_id'],
+        coupon: json["coupon"],
+        type: json["type"],
+        receipt: json["receipt"],
+        gymname: json["gymname"],
+        gymUid: json["gym_uid"],
+        gymAddress1: json["gym_address1"],
+        gymType: json["gym_type"],
+        gymAddress2: json["gym_address2"],
+        gymCity: json["gym_city"],
+        gymState: json["gym_state"],
+        gymPin: json["gym_pin"],
+        eventType: json['event_type'] ?? '',
+        gymCountry: json["gym_country"],
+        gymCoverImage: json['gym_cover_image'],
+        addonName: json["addon_name"] == null ? null : json["addon_name"],
+        nSession: json["n_session"] == null ? null : json["n_session"],
+        completedSession: json["completed_session"] == null
+            ? null
+            : json["completed_session"],
+        planName: json["plan_name"] == null ? null : json["plan_name"],
+        eventName: json.containsKey('event_name') ? json['event_name'] : '',
+        eventId: json['event_id'] ?? '',
+        gymLat: json['gym_lat'] ?? '',
+        gymLng: json['gym_long'] ?? '',
+        workoutStatus: json['workout_status'] ?? false,
+        roomId: json['room_id'] ?? '',
+        liveClassId: json['liveclass_id'] ?? '',
+        roomStatus: json['room_status'] ?? 'started');
   }
 
   Map<String, dynamic> toJson() => {
@@ -246,5 +269,7 @@ class MyScheduleAddonData {
         "gym_lat": gymLat,
         "gym_long": gymLng,
         "workout_status": workoutStatus,
+        "room_id": roomId,
+        "liveclass_id": liveClassId,
       };
 }

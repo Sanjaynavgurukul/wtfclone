@@ -9,7 +9,6 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:http/http.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/api_helper.dart';
 import 'package:wtf/helper/network_utils.dart';
@@ -32,7 +31,6 @@ import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/check_event_participation.dart';
 import 'package:wtf/model/coin_balance.dart';
 import 'package:wtf/model/coin_history.dart';
-
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_consumed.dart';
@@ -149,7 +147,7 @@ class RestDatasource {
     return Future.value(res);
   }
 
-  Future<bool> markAttendance(
+  Future<dynamic> markAttendance(
       {BuildContext context, Map<String, dynamic> body}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -162,11 +160,7 @@ class RestDatasource {
       body: body,
       headers: mapHeader,
     );
-    bool isAdded = false;
-    if (res != null) {
-      isAdded = res['status'];
-    }
-    return Future.value(isAdded);
+    return Future.value(res);
   }
 
   Future<bool> saveCalorieProgress({Map<String, dynamic> body}) async {
@@ -354,8 +348,10 @@ class RestDatasource {
       headers: mapHeader,
     );
     MemberDetails res;
-    if (response != null) {
+    if (response != null && response['status']) {
       res = MemberDetails.fromJson(response);
+    } else {
+      res = MemberDetails(status: false);
     }
     return Future.value(res);
   }
@@ -475,6 +471,26 @@ class RestDatasource {
     }
   }
 
+  Future<GymAddOn> getLiveClasses() async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+        APIHelper.getAllLiveClasses,
+        headers: mapHeader,
+      );
+      print("response getAllLiveClasses : " + res.toString());
+      GymAddOn data;
+      if (res != null) data = GymAddOn.fromJson(res);
+      return data;
+    } catch (e) {
+      print('getAllLiveClasses error: $e');
+      return GymAddOn(data: []);
+    }
+  }
+
   Future<MemberSubscriptions> memberSubscription(String memberId) async {
     try {
       String token = locator<AppPrefs>().token.getValue();
@@ -564,6 +580,38 @@ class RestDatasource {
     var res = await _netUtil.get(
       APIHelper.checkOffer(offerId),
       headers: mapHeader,
+    );
+    print("response checkOffer : " + res.toString());
+    return res;
+  }
+
+  Future<Map<String, dynamic>> joinLiveSession(
+      {Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      APIHelper.joinLiveSession,
+      headers: mapHeader,
+      body: body,
+    );
+    print("joinLiveSession : " + res.toString());
+    return res;
+  }
+
+  Future<Map<String, dynamic>> completeLiveSession(
+      {Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = APIHelper.completeLiveSession;
+    log('url--> $url  ---- >>> body:: $body');
+    var res = await _netUtil.put(
+      APIHelper.completeLiveSession,
+      headers: mapHeader,
+      body: body,
     );
     print("response checkOffer : " + res.toString());
     return res;
@@ -689,6 +737,7 @@ class RestDatasource {
               allData: {},
               event: [],
               regular: [],
+              addonLive: [],
             ),
           );
   }
@@ -1062,13 +1111,8 @@ class RestDatasource {
     });
   }
 
-  //get Gym Plans
-  ///@Gaurav
-  Future<GymPlanModel> getGymPlans() async {
-    print("get Gym Plans 2");
+  Future<GymPlanModel> getGymPlans({BuildContext context, String gymId}) async {
     String token = locator<AppPrefs>().token.getValue();
-    String gymId = LocalValue.GYM_ID;
-    print("get Gym Plans 3");
     String url = BASE_URL + Api.GET_GYM_PLAN;
     var headers = {
       'content-type': 'application/json',
@@ -1084,8 +1128,6 @@ class RestDatasource {
     });
   }
 
-  //get Gym Slots
-  ///@Gaurav
   Future<GymSlotModel> getGymSlot(String gymId) async {
     print("get Gym Slot 2");
     String token = locator<AppPrefs>().token.getValue();
@@ -1207,13 +1249,12 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil
-        .get(BASE_URL + Api.getRedeemHistory(), headers: mapHeader)
-        .then((dynamic res) {
-      print("response of Redeem History : " + res.toString());
-      RedeemHistory model = RedeemHistory.fromJson(res);
-      return model;
-    });
+    print('URL::_> ${Api.getRedeemHistory()}');
+    var res = await _netUtil.get(BASE_URL + Api.getRedeemHistory(),
+        headers: mapHeader);
+    print("response of Redeem History : " + res.toString());
+    RedeemHistory model = RedeemHistory.fromJson(res);
+    return model;
   }
 
   //get diet pref

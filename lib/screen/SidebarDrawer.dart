@@ -153,14 +153,6 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 ),
                 MenuItem(
                   icon: Icons.card_giftcard,
-                  title: 'My WTF',
-                  onTap: () {
-                    NavigationService.goBack;
-                    NavigationService.navigateTo(Routes.myWtf);
-                  },
-                ),
-                MenuItem(
-                  icon: Icons.card_giftcard,
                   title: 'My Profile',
                   onTap: () {
                     NavigationService.goBack;

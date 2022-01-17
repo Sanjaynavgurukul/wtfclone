@@ -21,7 +21,9 @@ class AttendanceDetails {
 
   factory AttendanceDetails.fromJson(Map<String, dynamic> json) =>
       AttendanceDetails(
-        data: AttendanceDetailsData.fromJson(json["data"]),
+        data: json['data'] != null
+            ? AttendanceDetailsData.fromJson(json["data"])
+            : null,
         status: json["status"],
       );
 

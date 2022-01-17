@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+// import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -43,12 +45,8 @@ import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/all_notifications.dart';
 import 'package:wtf/model/banner_model.dart';
 import 'package:wtf/model/check_event_participation.dart';
-
-import 'package:wtf/model/coin_balance.dart';
-
 import 'package:wtf/model/coin_balance.dart';
 import 'package:wtf/model/coin_history.dart';
-
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_consumed.dart';
@@ -65,6 +63,7 @@ import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
+import 'package:wtf/screen/home/jitsi_meeting.dart';
 import 'package:wtf/screen/test.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/Shimmer/values/type.dart';
@@ -84,6 +83,8 @@ class GymStore extends ChangeNotifier {
   GymDetailsModel selectedGymDetail;
 
   WhyChooseWtf whyChooseWtf;
+
+  GymAddOn allLiveClasses;
 
   GymAddOn selectedGymAddOns;
 
@@ -145,6 +146,7 @@ class GymStore extends ChangeNotifier {
 
   List<SubscriptionData> regularSubscriptions;
   List<SubscriptionData> addOnSubscriptions;
+  List<SubscriptionData> addOnLiveSubscriptions;
   List<SubscriptionData> eventSubscriptions;
 
   NewTrainersModel newTrainers;
@@ -220,6 +222,8 @@ class GymStore extends ChangeNotifier {
 
   bool showTrailOffer = true;
 
+  GymPlanModel selectedGymPlans;
+  String selectedGymId;
   Future<void> setSessionRating({double rating}) async {
     sessionRating = rating;
     notifyListeners();
@@ -231,14 +235,19 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> setOffer({BuildContext context, OfferData data}) async {
-    var isValid = await RestDatasource().checkOffer(offerId: data.uid);
-    if (isValid != null && isValid['status']) {
-      chosenOffer = data;
+    if (data != null) {
+      var isValid = await RestDatasource().checkOffer(offerId: data.uid);
+      if (isValid != null && isValid['status']) {
+        log('selected offer -->> ${data.code}  --- >>> ${data.value}');
+        chosenOffer = data;
+      } else {
+        FlashHelper.informationBar(
+          context,
+          message: isValid['message'] ?? 'This offer cannot be selected',
+        );
+      }
     } else {
-      FlashHelper.informationBar(
-        context,
-        message: isValid['message'] ?? 'This offer cannot be selected',
-      );
+      chosenOffer = null;
     }
     notifyListeners();
   }
@@ -317,9 +326,86 @@ class GymStore extends ChangeNotifier {
     getRedeemHistory(context: context);
     getdietPref(context: context, type: DietPrefType.type1);
     getdietPref(context: context, type: DietPrefType.type2);
-
+    getAllLiveClasses(context: context);
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
+  }
+
+  Future<void> joinLiveSession({
+    BuildContext context,
+    String liveClassId,
+    String roomId,
+    String addonId,
+    String addonName,
+  }) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    var body = {
+      "trainer_id": currentTrainer.data.userId,
+      "addon_id": addonId,
+      "liveclass_id": liveClassId,
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "date": Helper.formatDate2(DateTime.now().toIso8601String()),
+    };
+    Map<String, dynamic> res =
+        await RestDatasource().joinLiveSession(body: body);
+    Navigator.pop(context);
+    if (res != null && res['status']) {
+      locator<AppPrefs>()
+          .liveClassParticipantId
+          .setValue(res['liveclass_participant_id']);
+      locator<AppPrefs>()
+          .livePtVerificationId
+          .setValue(res['pt_verification_id']);
+      locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
+      log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
+      await showDialog(
+        context: context,
+        builder: (context) => JitsiMeeting(
+          meetingRoomId: roomId,
+          meetingSubject: addonName,
+        ),
+      );
+      // Navigator.of(context).push(
+      //   CupertinoPageRoute(
+      //     builder: (context) => JitsiMeeting(
+      //       meetingRoomId: roomId,
+      //       meetingSubject: addonName,
+      //     ),
+      //   ),
+      // );
+    } else {
+      FlashHelper.errorBar(context, message: res['message']);
+    }
+  }
+
+  Future<void> completeLiveSession(
+      {BuildContext context, String eDuration}) async {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => ProcessingDialog(
+    //     message: 'Please wait, compliting your session...',
+    //   ),
+    // );
+    var body = {
+      "liveclassparticipant_id":
+          locator<AppPrefs>().liveClassParticipantId.getValue(),
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "uid": locator<AppPrefs>().livePtVerificationId.getValue(),
+      "e_duration": eDuration,
+    };
+    Map<String, dynamic> res =
+        await RestDatasource().completeLiveSession(body: body);
+    // Navigator.pop(context);
+    log('mesg-->> ${res}');
+    if (res != null && res['status']) {
+      // changeNavigationTab(index: 2);
+      getLiveWorkoutCalculation(context: context);
+    }
   }
 
   Future<void> getUpcomingEvents({BuildContext context}) async {
@@ -345,7 +431,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> markAttendance(
+  Future<bool> markAttendance(
       {BuildContext context, String mode, String qrCode}) async {
     showDialog(
       context: context,
@@ -363,13 +449,19 @@ class GymStore extends ChangeNotifier {
       "role": 'member',
       "qr_code": qrCode,
     };
-    bool isMarked =
+    var jsonResp =
         await RestDatasource().markAttendance(body: body, context: context);
     Navigator.pop(context);
-    if (isMarked) {
+    if (jsonResp != null && jsonResp['status']) {
       getCurrentAttendance(context: context);
       NavigationService.goBack;
       NavigationService.navigateTo(Routes.mySchedule);
+    } else {
+      FlashHelper.errorBar(
+        context,
+        message: jsonResp['message'] ?? '--',
+      );
+      return false;
     }
   }
 
@@ -708,7 +800,11 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> setSession(SessionData data) async {
-    selectedSession = data;
+    if (selectedSession == data) {
+      selectedSession = null;
+    } else {
+      selectedSession = data;
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
@@ -1133,6 +1229,7 @@ class GymStore extends ChangeNotifier {
       selectedSlotData = null;
       selectedAddOnSlot = null;
       chosenOffer = null;
+      selectedSession = null;
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
@@ -1334,6 +1431,29 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  Future<void> getLiveWorkoutCalculation({BuildContext context}) async {
+    showDialog(
+      context: NavigationService.navigatorKey.currentContext,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+      context: context,
+      body: {
+        'exercises': [locator<AppPrefs>().liveExerciseId.getValue()]
+      },
+    );
+    Navigator.pop(NavigationService.navigatorKey.currentContext);
+    // manageGlobalTimer(context: context, mode: 'stop');
+    if (res != null) {
+      completedWorkout = res;
+      notifyListeners();
+      init(context: NavigationService.navigatorKey.currentContext);
+      NavigationService.navigateTo(Routes.exerciseDone);
+    }
+  }
+
   Future<void> getNotifications({BuildContext context, String type}) async {
     AllNotifications res = await RestDatasource().getNotifications(
       type: type,
@@ -1364,6 +1484,7 @@ class GymStore extends ChangeNotifier {
       loading = true;
       regularSubscriptions = [];
       addOnSubscriptions = [];
+      addOnLiveSubscriptions = [];
       eventSubscriptions = [];
       notifyListeners();
       //TODO: uncomment these when api is fixed
@@ -1383,11 +1504,15 @@ class GymStore extends ChangeNotifier {
             if (element.type == 'addon' || element.type == 'addon_pt') {
               addOnSubscriptions.add(element);
             }
+            if (element.type == 'addon_live') {
+              addOnLiveSubscriptions.add(element);
+            }
             if (element.type == 'event') {
               eventSubscriptions.add(element);
             }
           }
         });
+        log('Total:: ${memberSubscriptions.data.length} ,  regular: ${regularSubscriptions.length} , live:: ${addOnLiveSubscriptions.length}');
         notifyListeners();
       }
     } catch (e) {
@@ -1473,6 +1598,7 @@ class GymStore extends ChangeNotifier {
     AddOnData data,
     bool getTrainers = true,
     bool isFree = false,
+    String gymId,
   }) {
     selectedSlotDetails = null;
     selectedAddOnSlot = null;
@@ -1483,6 +1609,9 @@ class GymStore extends ChangeNotifier {
       notifyListeners();
     });
     selectedAddOnSlot = data;
+    if (gymId != null) {
+      selectedGymId = gymId;
+    }
     notifyListeners();
     // getSlotDetails(
     //   context: context,
@@ -1490,11 +1619,18 @@ class GymStore extends ChangeNotifier {
     //   date: Helper.formatDate(DateTime.now().toIso8601String()),
     // );
     if (getTrainers)
-      getGymTrainers(context: context, gymId: selectedGymDetail.data.userId);
+      getGymTrainers(
+          context: context,
+          gymId: gymId != null ? gymId : selectedGymDetail.data.userId);
   }
 
   setStartDate({BuildContext context, DateTime dateTime}) {
     selectedStartingDate = dateTime;
+    notifyListeners();
+  }
+
+  Future<void> setGymId(String id) {
+    selectedGymId = id;
     notifyListeners();
   }
 
@@ -1512,7 +1648,8 @@ class GymStore extends ChangeNotifier {
       date: date,
       addOnId: addOnId,
       trainerId: trainerId,
-      gymId: selectedGymDetail.data.userId,
+      gymId:
+          selectedGymId != null ? selectedGymId : selectedGymDetail.data.userId,
     );
     if (res != null) {
       selectedSlotDetails = res;
@@ -1520,6 +1657,20 @@ class GymStore extends ChangeNotifier {
       print('details saved: ${selectedSlotDetails?.data?.length}');
       notifyListeners();
     }
+  }
+
+  Future<void> getGymPlans({BuildContext context, String gymId}) async {
+    print("get Gym Details 1");
+    GymPlanModel model = await RestDatasource().getGymPlans(gymId: gymId);
+
+    if (model != null) {
+      selectedGymPlans = model;
+    } else {
+      selectedGymPlans = GymPlanModel(
+        data: [],
+      );
+    }
+    notifyListeners();
   }
 
   Future<void> getGymDetails({BuildContext context, String gymId}) async {
@@ -1582,6 +1733,18 @@ class GymStore extends ChangeNotifier {
       loading = false;
       whyChooseWtf = res;
       print('why choose us len =========== ${whyChooseWtf.data.length}');
+      notifyListeners();
+    }
+  }
+
+  Future<void> getAllLiveClasses({BuildContext context}) async {
+    loading = true;
+    notifyListeners();
+    GymAddOn res = await RestDatasource().getLiveClasses();
+    if (res != null) {
+      loading = false;
+      allLiveClasses = res;
+      print('getAllLiveClasses len =========== ${whyChooseWtf.data.length}');
       notifyListeners();
     }
   }

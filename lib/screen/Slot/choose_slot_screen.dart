@@ -117,97 +117,6 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                     },
                   ),
                 ),
-                // Container(
-                //   height: 50.0,
-                //   color: Colors.transparent,
-                //   child: Consumer<GymStore>(
-                //     builder: (context, store, child) => gymStore
-                //                 .selectedGymTrainers !=
-                //             null
-                //         ? gymStore.selectedGymTrainers.data != null
-                //             ? ListView.builder(
-                //                 itemCount:
-                //                     gymStore.selectedGymTrainers.data.length,
-                //                 itemBuilder: (context, index) => Padding(
-                //                   padding: const EdgeInsets.all(8.0),
-                //                   child: IntrinsicWidth(
-                //                     child: InkWell(
-                //                       onTap: () {
-                //                         if (gymStore.selectedTrainer ==
-                //                             gymStore.selectedGymTrainers
-                //                                 .data[index]) {
-                //                           setState(() {
-                //                             gymStore.selectedTrainer = null;
-                //                           });
-                //                         } else {
-                //                           setState(() {
-                //                             gymStore.selectedTrainer = gymStore
-                //                                 .selectedGymTrainers
-                //                                 .data[index];
-                //                           });
-                //                           gymStore.getSlotDetails(
-                //                             context: context,
-                //                             date: Helper.formatDate2(
-                //                               selectedValue.toIso8601String(),
-                //                             ),
-                //                             addOnId:
-                //                                 gymStore.selectedAddOnSlot.uid,
-                //                             trainerId: gymStore
-                //                                 .selectedTrainer.trainerId,
-                //                           );
-                //                           gymStore.getAddonMySchedules(
-                //                             date: Helper.formatDate2(
-                //                               selectedValue.toIso8601String(),
-                //                             ),
-                //                           );
-                //                         }
-                //                       },
-                //                       child: Ink(
-                //                         decoration: BoxDecoration(
-                //                           color: gymStore.selectedTrainer ==
-                //                                   gymStore.selectedGymTrainers
-                //                                       .data[index]
-                //                               ? AppConstants.primaryColor
-                //                               : Colors.white,
-                //                           borderRadius:
-                //                               BorderRadius.circular(2.0),
-                //                         ),
-                //                         child: Container(
-                //                           padding: const EdgeInsets.symmetric(
-                //                             horizontal: 6.0,
-                //                           ),
-                //                           alignment: Alignment.center,
-                //                           child: Text(
-                //                             gymStore.selectedGymTrainers
-                //                                 .data[index].name,
-                //                             style: GoogleFonts.lato(
-                //                               color: gymStore.selectedTrainer ==
-                //                                       gymStore
-                //                                           .selectedGymTrainers
-                //                                           .data[index]
-                //                                   ? Colors.white
-                //                                   : Colors.black,
-                //                               fontSize: 14.0,
-                //                               fontWeight: FontWeight.normal,
-                //                             ),
-                //                           ),
-                //                         ),
-                //                       ),
-                //                     ),
-                //                   ),
-                //                 ),
-                //                 shrinkWrap: true,
-                //                 scrollDirection: Axis.horizontal,
-                //               )
-                //             : Text(
-                //                 'No Trainers Available',
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                 ),
-                //               )
-                //         : Container(),
-                //   ),
-                // ),
                 Consumer<GymStore>(
                   builder: (context, store, child) => gymStore
                               .selectedGymTrainers !=
@@ -524,6 +433,12 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
     }
 
     return time;
+  }
+
+  @override
+  void dispose() {
+    gymStore.setGymId(null);
+    super.dispose();
   }
 }
 

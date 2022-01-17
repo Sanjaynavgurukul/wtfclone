@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/helper/Local_values.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
@@ -47,15 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              //   child: CommonAppBar(),
-              // ),
-              // Stories(),
-              // Divider(
-              //   thickness: 1.5,
-              //   color: Color(0xff333333),
-              // ),
               BannerWidget(),
               SizedBox(
                 height: 16.0,
@@ -72,9 +63,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               UIHelper.verticalSpace(10.0),
               Categories(),
-              SizedBox(
-                height: 25,
+              UIHelper.verticalSpace(25.0),
+              LiveAddonWidget(
+                showHorizontalPadding: true,
               ),
+              UIHelper.verticalSpace(25.0),
               BodyStats(),
               SizedBox(
                 height: 25,
@@ -371,6 +364,15 @@ class TodayScheduleCard extends StatelessWidget {
                             store.mySchedule.data.addon.first.completedSession,
                         data: store.mySchedule.data.addon.first,
                       ),
+                    if (store.mySchedule.data.addonLive.isNotEmpty)
+                      TodayScheduleItem(
+                        scheduleName:
+                            store.mySchedule.data.addonLive.first.addonName,
+                        session: store.mySchedule.data.addonLive.first.nSession,
+                        completedSession: store
+                            .mySchedule.data.addonLive.first.completedSession,
+                        data: store.mySchedule.data.addonLive.first,
+                      ),
                     if (store.mySchedule.data.event.isNotEmpty)
                       TodayScheduleItem(
                         scheduleName:
@@ -531,7 +533,7 @@ class TodayScheduleItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                    UIHelper.verticalSpace(12.0),
+                    UIHelper.horizontalSpace(12.0),
                     if (completedSession != null)
                       RichText(
                         text: TextSpan(
@@ -641,20 +643,51 @@ class TodayScheduleItem extends StatelessWidget {
                       vertical: 6.0,
                       horizontal: 16.0,
                     ),
-                    text: 'Lets WTF - Check In',
+                    text: data.type == 'addon_live'
+                        ? 'Join Live Session'
+                        : 'Lets WTF - Check In',
                     bgColor: AppConstants.primaryColor,
                     textColor: Colors.white,
                     textSize: 12.0,
                     height: 30.0,
                     onTap: () {
-                      context.read<GymStore>().setSelectedSchedule(
-                            context: context,
-                            val: data,
-                          );
-                      context
-                          .read<GymStore>()
-                          .getCurrentAttendance(context: context);
-                      NavigationService.navigateTo(Routes.mainAttendance);
+                      if (data.type == 'addon_live') {
+                        switch (data.roomStatus) {
+                          case 'scheduled':
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                                  'Trainer has not started the live session yet',
+                            );
+                            break;
+                          case 'started':
+                            context.read<GymStore>().joinLiveSession(
+                                  addonName: data.addonName,
+                                  liveClassId: data.liveClassId,
+                                  roomId: data.roomId,
+                                  context: context,
+                                  addonId: data.addonId,
+                                );
+                            break;
+                          case 'completed':
+                            FlashHelper.informationBar(
+                              context,
+                              message: 'Trainer has ended the live session',
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                      } else {
+                        context.read<GymStore>().setSelectedSchedule(
+                              context: context,
+                              val: data,
+                            );
+                        context
+                            .read<GymStore>()
+                            .getCurrentAttendance(context: context);
+                        NavigationService.navigateTo(Routes.mainAttendance);
+                      }
                     },
                   )
                 else
@@ -663,11 +696,42 @@ class TodayScheduleItem extends StatelessWidget {
                       vertical: 6.0,
                       horizontal: 16.0,
                     ),
-                    text: 'CONTINUE',
+                    text: data.type == 'addon_live'
+                        ? 'Join Live Session'
+                        : 'CONTINUE',
                     bgColor: AppConstants.primaryColor,
                     textColor: Colors.white,
                     onTap: () {
-                      NavigationService.navigateTo(Routes.mySchedule);
+                      if (data.type == 'addon_live') {
+                        switch (data.roomStatus) {
+                          case 'scheduled':
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                                  'Trainer has not started the live session yet',
+                            );
+                            break;
+                          case 'started':
+                            context.read<GymStore>().joinLiveSession(
+                                  addonName: data.addonName,
+                                  liveClassId: data.liveClassId,
+                                  roomId: data.roomId,
+                                  context: context,
+                                  addonId: data.addonId,
+                                );
+                            break;
+                          case 'completed':
+                            FlashHelper.informationBar(
+                              context,
+                              message: 'Trainer has ended the live session',
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                      } else {
+                        NavigationService.navigateTo(Routes.mySchedule);
+                      }
                     },
                     textSize: 12.0,
                     height: 30.0,
@@ -805,7 +869,11 @@ class RenewCardItem extends StatelessWidget {
                   bgColor: AppConstants.primaryColor,
                   textColor: Colors.white,
                   onTap: () {
-                    LocalValue.GYM_ID = data.gymId;
+                    // LocalValue.GYM_ID = data.gymId;
+                    store.getGymPlans(
+                      context: context,
+                      gymId: data.gymId,
+                    );
                     NavigationService.navigateTo(
                       Routes.membershipPlanPage,
                     );
@@ -817,6 +885,76 @@ class RenewCardItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LiveAddonWidget extends StatefulWidget {
+  final bool showHorizontalPadding;
+
+  LiveAddonWidget({this.showHorizontalPadding = false});
+
+  @override
+  _LiveAddonWidgetState createState() => _LiveAddonWidgetState();
+}
+
+class _LiveAddonWidgetState extends State<LiveAddonWidget> {
+  GymStore store;
+  @override
+  Widget build(BuildContext context) {
+    store = context.watch<GymStore>();
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: widget.showHorizontalPadding ? 24.0 : 0.0,
+        vertical: 8.0,
+      ),
+      height: 300.0,
+      child: Consumer<GymStore>(
+        builder: (context, store, child) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'WTF Powered Live Classes',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24.0,
+                ),
+              ),
+              UIHelper.verticalSpace(2.0),
+              Text(
+                'Near you',
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14.0,
+                  color: Colors.white.withOpacity(0.5),
+                ),
+              ),
+              UIHelper.verticalSpace(6.0),
+              Expanded(
+                child: store.allLiveClasses != null
+                    ? store.allLiveClasses.data != null &&
+                            store.allLiveClasses.data.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: store.allLiveClasses.data.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => LiveCard(
+                              data: store.allLiveClasses.data[index],
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              'No live Classes found',
+                            ),
+                          )
+                    : Loading(),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
