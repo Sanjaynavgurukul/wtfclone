@@ -55,7 +55,7 @@ class _NutritioncardState extends State<Nutritioncard> {
     totalcal = 0;
 
     widget.breakfast.forEach((element) {
-      totalcal += int.parse(element.cal);
+      totalcal += int.parse(element.cal ?? "0");
     });
   }
 

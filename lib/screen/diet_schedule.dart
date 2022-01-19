@@ -63,7 +63,7 @@ class _DietScheduleState extends State<DietSchedule> {
 
   bool isConValid() {
     int consumed = 0;
-    if (store.dietItem != null) {
+    if (store.dietItem != null && store.dietItem.data != null) {
       store.dietItem.data.first.day.breakfast.map((e) {
         if (e.consumptionStatus ?? false) {
           consumed += 1;
