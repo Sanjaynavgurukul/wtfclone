@@ -15,6 +15,7 @@ import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
 import 'package:wtf/screen/user/slide11.dart';
+import 'package:wtf/screen/user/slide12.dart';
 import 'package:wtf/screen/user/slide2.dart';
 import 'package:wtf/screen/user/slide3.dart';
 import 'package:wtf/screen/user/slide4.dart';
@@ -74,6 +75,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       Slide6(),
       Slide7(),
       Slide8(),
+      Slide12(),
       Slide10(),
     ];
     // BackButtonInterceptor.add(myInterceptor);
@@ -108,6 +110,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             case 9:
             case 10:
             case 11:
+            case 12:
               currentIndex--;
               _controller.animateToPage(currentIndex,
                   duration: Duration(milliseconds: 500),
@@ -337,6 +340,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(new SnackBar(
                                           content: new Text(
                                               'Select your target weight')));
+                                      return;
+                                    }
+                                  }
+
+                                  if (currentIndex == 11) {
+                                    if (user.type1 == null ||
+                                        user.type2 == null) {
+                                      key.currentState.showSnackBar(
+                                          new SnackBar(
+                                              content: new Text(
+                                                  'Select your diet')));
                                       return;
                                     }
                                   }

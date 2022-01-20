@@ -34,6 +34,8 @@ class Images {
       'https://d1e9q0asw0l2kk.cloudfront.net/global_app/dashboard/delhi.png';
   static const String comingSoonNoida =
       'https://d1e9q0asw0l2kk.cloudfront.net/global_app/dashboard/noida.png';
+  static const String noImageFound =
+      "https://homestaymatch.com/images/no-image-available.png";
   static const String comingSoonGurgaon =
       'https://d1e9q0asw0l2kk.cloudfront.net/global_app/dashboard/gurgaon.png';
 }

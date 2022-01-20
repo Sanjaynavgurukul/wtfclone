@@ -18,6 +18,11 @@ class BuySubscriptionScreen extends StatefulWidget {
 }
 
 class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   ScrollController _controller = ScrollController();
 
   GymStore gymStore;

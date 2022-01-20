@@ -82,7 +82,9 @@ class AppPrefs {
         updateMemberData = preferences.getBool(PrefsConstants.updateMemberData,
             defaultValue: false),
         memberId =
-            preferences.getString(PrefsConstants.userId, defaultValue: '');
+            preferences.getString(PrefsConstants.userId, defaultValue: ''),
+        type1 = preferences.getString(PrefsConstants.type1, defaultValue: ''),
+        type2 = preferences.getString(PrefsConstants.type2, defaultValue: '');
 
   final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
@@ -110,6 +112,8 @@ class AppPrefs {
   final Preference<String> memberId;
   final Preference<String> language;
   final Preference<String> userName;
+  final Preference<String> type1;
+  final Preference<String> type2;
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
     return await preferences.setBool(key, value);
@@ -206,4 +210,7 @@ class PrefsConstants {
   static const String userEmail = 'userEmail';
   static const String gender = 'gender';
   static const String selectedWorkoutDate = 'selectedWorkoutDate';
+  static const String type1 = 'type1';
+  static const String type2 = 'type2';
+  static const String diet_category_id = 'dietcatid';
 }

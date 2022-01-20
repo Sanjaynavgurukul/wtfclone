@@ -13,6 +13,7 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
+import 'package:wtf/screen/user/slide12.dart';
 import 'package:wtf/screen/user/slide3.dart';
 import 'package:wtf/screen/user/slide4.dart';
 import 'package:wtf/screen/user/slide5.dart';
@@ -67,6 +68,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
       Slide6(),
       Slide7(),
       Slide8(),
+      Slide12(),
       Slide10(),
     ];
 

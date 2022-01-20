@@ -253,7 +253,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                           width: 15,
                         ),
                         Text(
-                          gymStore.selectedGymDetail.data.gymName,
+                          gymStore.selectedGymDetail == null? "" : gymStore.selectedGymDetail.data.gymName ,
                           style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,

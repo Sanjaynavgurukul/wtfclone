@@ -14,6 +14,7 @@ class AppConstants {
   static const Color farmDetailBg = Color(0xFFDFDFDF);
   static const Color greenBorder = Color(0xFF28B238);
   static const Color headingTextColor = Color(0xFF2C2C2C);
+  static const Color dietCardHeading = Color(0xFF676767);
   static const Color notWhite = Color(0xFFEDF0F2);
   static const Color shopNowColor = Color(0xFFCCBBB6);
   static const Color walletYellow = Color(0xFFFFB92D);

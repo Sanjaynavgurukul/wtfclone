@@ -49,6 +49,7 @@ class MemberData {
     this.dateAdded,
     this.lastUpdated,
     this.howActive,
+    this.dietcategoryid,
   });
 
   String uid;
@@ -69,6 +70,7 @@ class MemberData {
   String status;
   String dateAdded;
   dynamic lastUpdated;
+  String dietcategoryid;
 
   factory MemberData.fromJson(Map<String, dynamic> json) => MemberData(
         uid: json["uid"],
@@ -89,6 +91,7 @@ class MemberData {
         dateAdded: json["date_added"],
         lastUpdated: json["last_updated"],
         howActive: json["howactive"],
+        dietcategoryid: json["diet_category_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -109,5 +112,6 @@ class MemberData {
         "status": status,
         "date_added": dateAdded,
         "last_updated": lastUpdated,
+        "diet_category_id": dietcategoryid,
       };
 }
