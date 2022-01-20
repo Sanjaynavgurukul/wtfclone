@@ -104,6 +104,10 @@ class AppConstants {
   static const String cloudFrontVideo = 'https://d1gzvbhpg92x41.cloudfront.net';
   static const String confidentialInfo =
       'This information will remain confidential and assist WTF make your fitness journey better.';
+  static const String smokingText =
+      'Smoking causes cancer, Lung Diseases, Cardiac issues and not recommended for any one, let alone active lifestyle.';
+  static const String drinkingText =
+      'It contains mostly carbohydrates, and with mixers such as juice and soft drink, one drink is enough to negate your workout.Or ‘Alcohol causes many ailments with excessive as well as regular use,  also cause water retention and possesses an ability to mess up your fitness journey.';
   static const String bmrCalculatorReference =
       'https://www.omnicalculator.com/health/bmr';
   static const String calculatorReferenceText = 'Calculation Source';

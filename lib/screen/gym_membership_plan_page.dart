@@ -69,7 +69,8 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
           padding: const EdgeInsets.only(top: 12.0),
           child: Consumer<GymStore>(
             builder: (context, store, child) => store.selectedGymPlans != null
-                ? store.selectedGymPlans.data.isNotEmpty
+                ? store.selectedGymPlans.data != null &&
+                        store.selectedGymPlans.data.isNotEmpty
                     ? CustomScrollView(
                         shrinkWrap: true,
                         slivers: [
@@ -241,7 +242,11 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                           )
                         ],
                       )
-                    : Text('No Plans found')
+                    : Center(
+                        child: Text(
+                          'No Plans found',
+                        ),
+                      )
                 : Loading(),
           ),
         ),

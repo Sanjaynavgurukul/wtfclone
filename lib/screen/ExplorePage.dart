@@ -538,7 +538,11 @@ class LiveCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
+                await store.getGymDetails(
+                  gymId: data.gymId,
+                  context: context,
+                );
                 store.setAddOnSlot(
                   context: context,
                   data: data,

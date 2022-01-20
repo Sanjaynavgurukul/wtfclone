@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/processing_dialog.dart';
 
@@ -314,7 +315,18 @@ class _Slide8State extends State<Slide8> {
                       inactiveTrackColor: Colors.grey,
                     ),
                   ], //<Widget>[]
-                ), //R
+                ),
+                if (isDrinking) ...{
+                  UIHelper.verticalSpace(6.0),
+                  Text(
+                    AppConstants.drinkingText,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: AppColors.TEXT_DARK,
+                    ),
+                  ),
+                },
                 SizedBox(
                   height: 24.0,
                 ),
@@ -342,6 +354,17 @@ class _Slide8State extends State<Slide8> {
                     ),
                   ], //<Widget>[]
                 ),
+                if (isSmoking) ...{
+                  UIHelper.verticalSpace(6.0),
+                  Text(
+                    AppConstants.smokingText,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: AppColors.TEXT_DARK,
+                    ),
+                  ),
+                }
               ],
             ),
           ),

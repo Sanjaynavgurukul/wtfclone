@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
@@ -187,6 +188,8 @@ class _MyWtfState extends State<MyWtf> {
                           context.read<GymStore>().getActiveSubscriptions(
                                 context: context,
                               );
+                          NavigationService.navigateTo(
+                              Routes.activeSubscriptionScreen);
                         } else {
                           Fluttertoast.showToast(
                             msg: 'You don\'t have any active subscriptions',
@@ -337,8 +340,8 @@ class MyWtfSubscriptionCard extends StatelessWidget {
                         ),
                       ),
                       UIHelper.horizontalSpace(20.0),
-                      if (!store.activeSubscriptions.data.startDate
-                          .isBefore(DateTime.now()))
+                      if ((DateTime.now()
+                          .isAfter(store.activeSubscriptions.data.startDate)))
                         Expanded(
                           flex: 1,
                           child: Align(
@@ -372,11 +375,11 @@ class MyWtfSubscriptionCard extends StatelessWidget {
                         Expanded(
                           flex: 1,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "No Active",
+                                "Subscription",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 14.0,
@@ -385,7 +388,7 @@ class MyWtfSubscriptionCard extends StatelessWidget {
                               ),
                               UIHelper.verticalSpace(4.0),
                               Text(
-                                "Subscription Found",
+                                "Starts from \n${Helper.stringForDatetime(store.activeSubscriptions.data.startDate.toIso8601String())}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 14.0,

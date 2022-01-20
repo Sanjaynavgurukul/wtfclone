@@ -18,7 +18,8 @@ class PurchaseDone extends StatelessWidget {
     bool isFromAddon = gymStore.selectedSlotData != null ? true : false;
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(NavigationService.navigatorKey.currentContext)
+            .popUntil((route) => route.settings.name == Routes.homePage);
         return true;
       },
       child: Scaffold(
@@ -558,7 +559,8 @@ class EventPurchaseDone extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         gymStore.init(context: context);
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(NavigationService.navigatorKey.currentContext)
+            .popUntil((route) => route.settings.name == Routes.homePage);
         return true;
       },
       child: Scaffold(
