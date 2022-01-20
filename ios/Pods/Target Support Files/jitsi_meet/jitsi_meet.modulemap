@@ -1,0 +1,6 @@
+framework module jitsi_meet {
+  umbrella header "jitsi_meet-umbrella.h"
+
+  export *
+  module * { export * }
+}

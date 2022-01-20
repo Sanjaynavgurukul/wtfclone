@@ -1,0 +1,34 @@
+{
+  "name": "awesome_notifications",
+  "version": "0.0.2",
+  "summary": "A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.",
+  "description": "A complete solution to create Local Notifications and Push Notifications, throught Firebase or another services, using Flutter.",
+  "homepage": "https://github.com/rafaelsetragni/awesome_notifications",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Rafael Setragni": "rafaelsetra@gmail.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "static_framework": true,
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "VALID_ARCHS[sdk=iphonesimulator*]": "x86_64",
+    "ENABLE_BITCODE": "NO",
+    "APPLICATION_EXTENSION_API_ONLY": "NO"
+  },
+  "swift_versions": "5.0",
+  "swift_version": "5.0"
+}
