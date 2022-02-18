@@ -41,9 +41,9 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   final _scrollController = ScrollController();
 
   List<Cat> getList() => [
-        Cat(label: 'Veg', color: Colors.green, selected: true),
-        Cat(label: 'Egg', color: Colors.orange, selected: false),
-        Cat(label: 'Nonveg', color: Colors.red, selected: false)
+        Cat(label: 'Veg', color: Colors.green, selected: true,fullLabel: 'Vegetarian'),
+        Cat(label: 'Egg', color: Colors.orange, selected: false,fullLabel: 'Eggetarian'),
+        Cat(label: 'Nonveg', color: Colors.red, selected: false,fullLabel: 'Non-Vegetarian')
       ];
 
   @override
@@ -145,12 +145,12 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                     height: 0,
                   ),
                   Text(
-                    'Nutrition From Kitchen',
+                    getList()[selectedIndex].fullLabel,
                     style: GoogleFonts.lobster(
                         fontStyle: FontStyle.normal,
                         fontWeight: FontWeight.w500,
-                        fontSize: 26,
-                        color: Colors.white),
+                        fontSize: 35,
+                        color: getList()[selectedIndex].color),
                   )
                 ],
               ),
@@ -269,6 +269,7 @@ class Cat {
   String label;
   Color color;
   bool selected;
+  String fullLabel;
 
-  Cat({this.selected, this.color, this.label});
+  Cat({this.selected, this.color, this.label,this.fullLabel});
 }
