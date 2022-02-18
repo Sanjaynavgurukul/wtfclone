@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_fluid_slider/flutter_fluid_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/user_controller.dart';
+import 'package:wtf/fluid_slider.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 
