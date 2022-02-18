@@ -23,6 +23,7 @@ import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
 import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
 import 'package:wtf/screen/calculators/calories_counter/calorie_state.dart';
 import 'package:wtf/screen/change_diet/change_diet.dart';
+import 'package:wtf/screen/change_diet/diet_details.dart';
 
 import 'helper/AppPrefs.dart';
 import 'helper/NotificationHelper.dart';
@@ -197,7 +198,7 @@ class _MyAppState extends State<MyApp>
           themeMode: ThemeMode.dark,
           // initialRoute: Routes.loader,
           // Routes.splash,
-          home: ChangeDiet(),
+          home: DietDetails(),
           navigatorKey: NavigationService.navigatorKey,
           onGenerateRoute: RouteGenerator.generateRoute,
         ),

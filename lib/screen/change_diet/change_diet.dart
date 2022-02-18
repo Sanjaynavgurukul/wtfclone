@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/screen/change_diet/flexible_appbar.dart';
 import 'package:wtf/screen/change_diet/widget/custom_radio.dart';
+import 'package:wtf/screen/change_diet/widget/diet_item.dart';
 
 class ChangeDiet extends StatefulWidget {
   const ChangeDiet({Key key}) : super(key: key);
@@ -41,9 +44,21 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   final _scrollController = ScrollController();
 
   List<Cat> getList() => [
-        Cat(label: 'Veg', color: Colors.green, selected: true,fullLabel: 'Vegetarian'),
-        Cat(label: 'Egg', color: Colors.orange, selected: false,fullLabel: 'Eggetarian'),
-        Cat(label: 'Nonveg', color: Colors.red, selected: false,fullLabel: 'Non-Vegetarian')
+        Cat(
+            label: 'Veg',
+            color: Colors.green,
+            selected: true,
+            fullLabel: 'Vegetarian'),
+        Cat(
+            label: 'Egg',
+            color: Colors.orange,
+            selected: false,
+            fullLabel: 'Eggetarian'),
+        Cat(
+            label: 'Nonveg',
+            color: Colors.red,
+            selected: false,
+            fullLabel: 'Non-Vegetarian')
       ];
 
   @override
@@ -64,27 +79,11 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: isPreview == true ? const NeverScrollableScrollPhysics() : null,
-      controller: _scrollController,
-      slivers: <Widget>[
+    return Scaffold(
+        body: CustomScrollView(
+      slivers: [
         SliverAppBar(
           centerTitle: false,
-          // backgroundColor: Constants.darkOrange,
-          // leading: InkWell(
-          //   onTap: () => Navigator.pop(context),
-          //   child: Container(
-          //     margin: const EdgeInsets.all(12),
-          //     decoration: BoxDecoration(
-          //       border: Border.all(
-          //           width: 1, color: Colors.white.withOpacity(0.3)),
-          //       shape: BoxShape.circle,
-          //       // color: glassyColor.withOpacity(0.3)
-          //     ),
-          //     child:
-          //     Icon(Icons.close, color: Colors.white.withOpacity(0.3)),
-          //   ),
-          // ),
           actions: [
             Container(
               margin: EdgeInsets.all(12),
@@ -98,7 +97,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                   itemCount: getList().length,
                   itemBuilder: (context, index) {
                     Cat data = getList()[index];
-                    data.selected = selectedIndex==index;
+                    data.selected = selectedIndex == index;
                     return CustomRadio(
                       data: data,
                       onClick: () {
@@ -111,9 +110,9 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
             )
           ],
           pinned: false,
-          expandedHeight: 350.0,
+          expandedHeight: 250.0,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(200.0),
+            preferredSize: const Size.fromHeight(100.0),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
@@ -164,102 +163,196 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
           ),
         ),
         SliverToBoxAdapter(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: <Widget>[
-              //       Text(
-              //         _model.name!,
-              //         style: bigText.copyWith(
-              //             color: Constants.darkOrange, fontWeight: FontWeight.w600),
-              //       ),
-              //       Container(
-              //           decoration: BoxDecoration(
-              //               color: glassyColor,
-              //               borderRadius: BorderRadius.circular(100)),
-              //           child: const Center(
-              //               child: Padding(
-              //                 padding: EdgeInsets.symmetric(
-              //                     vertical: 10, horizontal: 20),
-              //                 child: Text(
-              //                   "Best Seller",
-              //                   style:
-              //                   TextStyle(color: Colors.green, fontSize: 12),
-              //                 ),
-              //               ))),
-              //     ],
-              //   ),
-              // ),const Text(
-              //   'Master at lose weight',
-              //   style: TextStyle(fontSize: 14,color: Colors.black54),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 10,top: 40),
-              //   child: Text(
-              //     'About Me',
-              //     style: bigText.copyWith(
-              //         fontSize: 16,
-              //         color: Colors.black,
-              //         fontWeight: FontWeight.w600),
-              //   ),
-              // ),
-              // Text(
-              //   _model.description!,
-              //   style: description.copyWith(fontSize: 16),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 20),
-              //   child: Text(
-              //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus.psum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus.psum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus. psum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus.',
-              //     style: description.copyWith(fontSize: 16),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 10),
-              //   child: Text(
-              //     'Course Description',
-              //     style: bigText.copyWith(
-              //         fontSize: 16,
-              //         color: Colors.black,
-              //         fontWeight: FontWeight.w600),
-              //   ),
-              // ),
-              // Text(
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus.',
-              //   style: description.copyWith(fontSize: 16),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 20),
-              //   child: Container(
-              //       height: 300,
-              //       child: Image.asset("assets/courseImages.png")),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(bottom: 10),
-              //   child: Text(
-              //     'Prizing',
-              //     style: bigText.copyWith(
-              //         fontSize: 16,
-              //         color: Colors.black,
-              //         fontWeight: FontWeight.w600),
-              //   ),
-              // ),
-              // Text(
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc ut vel dui in aenean. Ornare tellus fringilla malesuada eu auctor. Massadiam libero egestas lectus.',
-              //   style: description.copyWith(fontSize: 16),
-              // ),
-              // Container(
-              //   height: 120,
-              // ),
-            ],
-          ),
+            child: Container(
+          child: mainView(),
         )),
+      ],
+    ));
+  }
+
+  Widget coco() {
+    return Scaffold(
+      body: CustomScrollView(
+        physics:
+            isPreview == true ? const NeverScrollableScrollPhysics() : null,
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverAppBar(
+            centerTitle: false,
+            // backgroundColor: Constants.darkOrange,
+            // leading: InkWell(
+            //   onTap: () => Navigator.pop(context),
+            //   child: Container(
+            //     margin: const EdgeInsets.all(12),
+            //     decoration: BoxDecoration(
+            //       border: Border.all(
+            //           width: 1, color: Colors.white.withOpacity(0.3)),
+            //       shape: BoxShape.circle,
+            //       // color: glassyColor.withOpacity(0.3)
+            //     ),
+            //     child:
+            //     Icon(Icons.close, color: Colors.white.withOpacity(0.3)),
+            //   ),
+            // ),
+            actions: [
+              Container(
+                margin: EdgeInsets.all(12),
+                padding: EdgeInsets.only(left: 8, right: 8),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: getList().length,
+                    itemBuilder: (context, index) {
+                      Cat data = getList()[index];
+                      data.selected = selectedIndex == index;
+                      return CustomRadio(
+                        data: data,
+                        onClick: () {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        },
+                      );
+                    }),
+              )
+            ],
+            pinned: false,
+            expandedHeight: 250.0,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(100.0),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/logo/wtf_light.png',
+                          height: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Text('Powered')
+                      ],
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      'Nutrition From Kitchen',
+                      style: GoogleFonts.montserrat(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 0,
+                    ),
+                    Text(
+                      getList()[selectedIndex].fullLabel,
+                      style: GoogleFonts.lobster(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 35,
+                          color: getList()[selectedIndex].color),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              background: FlexibleAppBar(
+                image: '',
+                color: null,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(child: mainView()),
+        ],
+      ),
+    );
+  }
+
+  Widget mainView() {
+    return Column(
+      children: [
+        ListTile(
+          dense: true,
+          tileColor: Colors.grey.withOpacity(0.5),
+          title: Text('You are currently using free diet plans',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+          trailing: Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+                color: Color(0XffC11818),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Upgrade'),
+                SizedBox(
+                  width: 4,
+                ),
+                Icon(
+                  Icons.verified_user,
+                  size: 16,
+                )
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        ListTile(
+          dense: true,
+          tileColor: AppConstants.bgColor,
+          title: Text('View Current Diet Plans',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
+          trailing: Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          ),
+        ),
+        ListView.builder(
+            itemCount: DietModel.getList().length,
+            shrinkWrap: true,
+            padding: EdgeInsets.only(left: 12,right: 12),
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              DietModel data = DietModel.getList()[index];
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                      title:Text(
+                    data.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18.0,
+                    ),
+                  ),dense: true,),
+
+                  SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: data.list
+                            .map((item) => DietItem(
+                                  data: item,
+                                ))
+                            .toList(),
+                      ))
+                ],
+              );
+            })
       ],
     );
   }
@@ -271,5 +364,47 @@ class Cat {
   bool selected;
   String fullLabel;
 
-  Cat({this.selected, this.color, this.label,this.fullLabel});
+  Cat({this.selected, this.color, this.label, this.fullLabel});
+}
+
+class DietModel {
+  String title;
+  List<Diet> list;
+
+  DietModel({this.title, this.list});
+
+  static List<DietModel> getList() => [
+        DietModel(title: 'Lean Body', list: [
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+        ]),
+        DietModel(title: 'Lean Body', list: [
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+        ]),
+        DietModel(title: 'Lean Body', list: [
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
+        ]),
+
+      ];
+}
+
+class Diet {
+  String title;
+  String imageUrl;
+
+  Diet({this.title, this.imageUrl});
 }
