@@ -182,6 +182,10 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                   icon: Icons.card_giftcard,
                   title: 'My Notification',
                   onTap: () {
+                    context.read<GymStore>().getNotifications(
+                          context: context,
+                          type: 'new',
+                        );
                     NavigationService.goBack;
                     showDialog(
                       context: context,

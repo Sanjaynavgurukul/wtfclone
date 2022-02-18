@@ -1703,12 +1703,15 @@ class GymAddonWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Addons',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                  Flexible(
+                    child: Text(
+                      'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Addons',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                   // Icon(
@@ -1799,12 +1802,15 @@ class GymLiveWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Live Sessions',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                  Flexible(
+                    child: Text(
+                      'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Live Sessions',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                   // Icon(

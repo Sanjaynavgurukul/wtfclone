@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -306,9 +308,10 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
                                     child: Text(
                                       'No Schedules!',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20,
-                                          color: Colors.white70),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                        color: Colors.white70,
+                                      ),
                                     ),
                                   )
                             : Align(
@@ -348,206 +351,228 @@ class ScheduleListItems extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: schedule
-              .map((e) => InkWell(
-                    onTap: () {
-                      context.read<GymStore>().setSelectedSchedule(
-                            context: context,
-                            val: schedule.first,
-                          );
-                      store.getCurrentTrainer(context: context);
-                      switch (name) {
-                        case 'Personal Training':
-                        case 'General Training':
-                          print(
-                              'schedule:: ${schedule.map((e) => e.toJson()).toList()}');
-                          locator<AppPrefs>().selectedMySchedule.setValue(name);
-                          locator<AppPrefs>()
-                              .selectedMyScheduleName
-                              .setValue(name);
-                          locator<AppPrefs>()
-                              .selectedWorkoutDate
-                              .setValue(Helper.formatDate2(
-                                selectedDate.toIso8601String(),
-                              ));
-                          locator<AppPrefs>()
-                              .selectedMyScheduleData
-                              .setValue(e);
-                          context.read<GymStore>().getMyWorkoutSchedules(
-                                date: Helper.formatDate2(
-                                  selectedDate.toIso8601String(),
-                                ),
-                                subscriptionId: e.uid,
-                                addonId: name == 'General Training'
-                                    ? null
-                                    : e.addonId,
-                              );
-                          NavigationService.navigateTo(
-                              Routes.mainWorkoutScreen);
-                          break;
-                        case 'event':
-                          store.getEventById(
-                              context: context, eventId: e.eventId);
-                          locator<AppPrefs>().selectedMySchedule.setValue(name);
-                          locator<AppPrefs>()
-                              .selectedMyScheduleName
-                              .setValue(e.eventName);
-                          NavigationService.navigateTo(Routes.eventDetails);
-                          break;
-                        case 'addon':
-                          locator<AppPrefs>().selectedMySchedule.setValue(name);
-                          locator<AppPrefs>()
-                              .selectedMyScheduleName
-                              .setValue(e.addonName);
-                          print('addonId: ${e.addonId}');
-                          locator<AppPrefs>()
-                              .selectedWorkoutDate
-                              .setValue(Helper.formatDate2(
-                                selectedDate.toIso8601String(),
-                              ));
-                          locator<AppPrefs>()
-                              .selectedMyScheduleData
-                              .setValue(e);
-                          context.read<GymStore>().getMyWorkoutSchedules(
+              .map(
+                (e) => InkWell(
+                  onTap: () {
+                    context.read<GymStore>().setSelectedSchedule(
+                          context: context,
+                          val: schedule.first,
+                        );
+                    store.getCurrentTrainer(context: context);
+                    switch (name) {
+                      case 'Personal Training':
+                      case 'General Training':
+                        print(
+                            'schedule:: ${schedule.map((e) => e.toJson()).toList()}');
+                        locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        locator<AppPrefs>()
+                            .selectedMyScheduleName
+                            .setValue(name);
+                        locator<AppPrefs>()
+                            .selectedWorkoutDate
+                            .setValue(Helper.formatDate2(
+                              selectedDate.toIso8601String(),
+                            ));
+                        locator<AppPrefs>().selectedMyScheduleData.setValue(e);
+                        context.read<GymStore>().getMyWorkoutSchedules(
                               date: Helper.formatDate2(
                                 selectedDate.toIso8601String(),
                               ),
                               subscriptionId: e.uid,
-                              addonId: e.addonId);
-                          NavigationService.navigateTo(
-                              Routes.mainWorkoutScreen);
-                          break;
-                        case 'Live Sessions':
-                          switch (e.roomStatus) {
-                            case 'scheduled':
-                              FlashHelper.informationBar(
-                                context,
-                                message:
-                                    'Trainer has not started the live session yet',
-                              );
-                              break;
-                            case 'started':
-                              context.read<GymStore>().joinLiveSession(
-                                    addonName: e.addonName,
-                                    liveClassId: e.liveClassId,
-                                    roomId: e.roomId,
-                                    context: context,
-                                    addonId: e.addonId,
-                                  );
-                              break;
-                            case 'completed':
-                              FlashHelper.informationBar(
-                                context,
-                                message: 'Trainer has ended the live session',
-                              );
-                              break;
-                            default:
-                              break;
-                          }
+                              addonId:
+                                  name == 'General Training' ? null : e.addonId,
+                            );
+                        NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                        break;
+                      case 'event':
+                        store.getEventById(
+                            context: context, eventId: e.eventId);
+                        locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        locator<AppPrefs>()
+                            .selectedMyScheduleName
+                            .setValue(e.eventName);
+                        NavigationService.navigateTo(Routes.eventDetails);
+                        break;
+                      case 'addon':
+                        locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        locator<AppPrefs>()
+                            .selectedMyScheduleName
+                            .setValue(e.addonName);
+                        print('addonId: ${e.addonId}');
+                        locator<AppPrefs>()
+                            .selectedWorkoutDate
+                            .setValue(Helper.formatDate2(
+                              selectedDate.toIso8601String(),
+                            ));
+                        locator<AppPrefs>().selectedMyScheduleData.setValue(e);
+                        context.read<GymStore>().getMyWorkoutSchedules(
+                            date: Helper.formatDate2(
+                              selectedDate.toIso8601String(),
+                            ),
+                            subscriptionId: e.uid,
+                            addonId: e.addonId);
+                        NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                        break;
+                      case 'Live Sessions':
+                        log('sta:::-->> ${e.roomStatus}');
+                        switch (e.roomStatus) {
+                          case 'scheduled':
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                                  'Trainer has not started the live session yet',
+                            );
+                            break;
+                          case 'started':
+                            context.read<GymStore>().joinLiveSession(
+                                  addonName: e.addonName,
+                                  liveClassId: e.liveClassId,
+                                  roomId: e.roomId,
+                                  context: context,
+                                  addonId: e.addonId,
+                                );
+                            break;
+                          case 'completed':
+                            FlashHelper.informationBar(
+                              context,
+                              message: 'Trainer has ended the live session',
+                            );
+                            break;
+                          default:
+                            break;
+                        }
 
-                          break;
-                      }
-                    },
-                    child: Card(
-                      color: Colors.transparent,
-                      elevation: 0.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            flex: 4,
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  height: 200,
-                                  child: GradientImageWidget(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    network: name == 'General Training'
-                                        ? Images.generalTraining
-                                        : name == 'Personal Training'
-                                            ? Images.personalTraining
-                                            : e.gymCoverImage.startsWith(
-                                                    'https://wtfupme')
-                                                ? null
-                                                : e.gymCoverImage,
+                        break;
+                    }
+                  },
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 0.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                height: 200,
+                                child: GradientImageWidget(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  network: name == 'General Training'
+                                      ? Images.generalTraining
+                                      : name == 'Personal Training'
+                                          ? Images.personalTraining
+                                          : e.gymCoverImage
+                                                  .startsWith('https://wtfupme')
+                                              ? null
+                                              : e.gymCoverImage,
+                                  stops: [0.01, 1.0],
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                    begin: FractionalOffset.topCenter,
+                                    end: FractionalOffset.bottomCenter,
+                                    colors: const [
+                                      Colors.transparent,
+                                      Colors.red,
+                                    ],
+                                    stops: const [0.4, 1.0],
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    color: Colors.white,
-                                    gradient: LinearGradient(
-                                      begin: FractionalOffset.topCenter,
-                                      end: FractionalOffset.bottomCenter,
-                                      colors: const [
-                                        Colors.transparent,
-                                        Colors.red,
-                                      ],
-                                      stops: const [0.4, 1.0],
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 16.0,
-                                  left: 0.0,
-                                  right: 0.0,
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          name == 'addon'
-                                              ? e.addonName
-                                              : name == 'event'
-                                                  ? e.eventName +
-                                                      ' (${e.eventType == 'regular' ? 'Event' : e.eventType ?? ''})'
-                                                  : name,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0,
+                              ),
+                              Positioned(
+                                bottom: 16.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        name == 'addon'
+                                            ? e.addonName
+                                            : name == 'event'
+                                                ? e.eventName +
+                                                    ' (${e.eventType == 'regular' ? 'Event' : e.eventType ?? ''})'
+                                                : name,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                      UIHelper.verticalSpace(10.0),
+                                      if (name == 'Personal Training' ||
+                                          name == 'addon')
+                                        Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  'Total Session: ${e.nSession ?? 0}'),
+                                              Text(
+                                                  'Completed Session: ${e.completedSession ?? 0}'),
+                                            ],
                                           ),
                                         ),
-                                        UIHelper.verticalSpace(10.0),
-                                        if (name == 'Personal Training' ||
-                                            name == 'addon')
-                                          Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                    'Total Session: ${e.nSession ?? 0}'),
-                                                Text(
-                                                    'Completed Session: ${e.completedSession ?? 0}'),
-                                              ],
-                                            ),
+                                      if (name == 'event')
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Addon: - ${e.addonName}',
+                                              ),
+                                              Text(
+                                                'Gym Name - ${e.gymname}',
+                                              ),
+                                              Text(
+                                                'Address: ${e.gymAddress1}, ${e.gymAddress2}',
+                                              ),
+                                            ],
                                           ),
-                                        if (name == 'event')
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text('Gym Name: ${e.gymname}'),
-                                                Text(
-                                                    'Address: ${e.gymAddress1}, ${e.gymAddress2}'),
-                                              ],
-                                            ),
+                                        ),
+                                      if (name == 'Live Sessions')
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${e.addonName}',
+                                              ),
+                                              Text(
+                                                '${e.gymname}',
+                                              ),
+                                            ],
                                           ),
-                                      ],
-                                    ),
+                                        ),
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ))
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),

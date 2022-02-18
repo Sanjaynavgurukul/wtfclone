@@ -46,13 +46,13 @@ class BodyState extends ChangeNotifier {
     this.weight = weight;
     this.height = height;
     this.age = age;
-    this.neck = neck;
-    this.waist = waist;
-
+    this.neck = (neck * 2.54);
+    this.waist = (waist * 2.54);
+    print('neck: ${this.neck}   waist: ${this.waist} ');
     bodyFat = 495 /
             (1.0324 -
-                0.19077 * log(waist - neck) / ln10 +
-                0.15456 * log(height) / ln10) -
+                0.19077 * log(this.waist - this.neck) / ln10 +
+                0.15456 * log(this.height) / ln10) -
         450;
     // bodyFat =
     //     86.010 * log(waist - neck) / ln10 - 70.041 * log(height) / ln10 + 36.76;

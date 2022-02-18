@@ -1,24 +1,16 @@
-import 'dart:developer';
-
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_store.dart';
-import 'package:wtf/controller/webservice.dart';
-import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
-import 'package:wtf/helper/navigation.dart';
-import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
-import 'package:wtf/model/all_diets.dart';
 import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/widget/nutrition_card.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -63,7 +55,9 @@ class _DietScheduleState extends State<DietSchedule> {
 
   bool isConValid() {
     int consumed = 0;
-    if (store.dietItem != null && store.dietItem.data != null) {
+    if (store.dietItem != null &&
+        store.dietItem.data != null &&
+        store.dietItem.data.first.day != null) {
       store.dietItem.data.first.day.breakfast.map((e) {
         if (e.consumptionStatus ?? false) {
           consumed += 1;
@@ -104,7 +98,7 @@ class _DietScheduleState extends State<DietSchedule> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppConstants.primaryColor,
+        backgroundColor: AppColors.PRIMARY_COLOR,
         appBar: AppBar(
           backgroundColor: AppConstants.primaryColor,
           elevation: 1.0,
@@ -147,10 +141,10 @@ class _DietScheduleState extends State<DietSchedule> {
             ),
             Container(
               height: MediaQuery.of(context).size.height - 165 - kToolbarHeight,
-              color: AppConstants.primaryColor,
               child: store.dietItem != null
                   ? store.dietItem.data != null &&
-                          store.dietItem.data.isNotEmpty
+                          store.dietItem.data.isNotEmpty &&
+                          store.dietItem.data.first.day != null
                       ? ListView(
                           shrinkWrap: true,
                           children: [
@@ -203,13 +197,16 @@ class _DietScheduleState extends State<DietSchedule> {
                 ? Container(
                     child: TextButton(
                       onPressed: () {
-                        store.collectDietRewards(context: context, date: date);
+                        store.collectDietRewards(
+                          context: context,
+                          date: date,
+                        );
                       },
                       child: Container(
                         height: 35,
                         width: MediaQuery.of(context).size.width * .95,
                         decoration: BoxDecoration(
-                          color: AppConstants.bgColor,
+                          color: AppConstants.primaryColor,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Center(
@@ -253,14 +250,14 @@ class CollecReward extends StatelessWidget {
           height: 35,
           width: MediaQuery.of(context).size.width * .95,
           decoration: BoxDecoration(
-            color: AppConstants.bgColor,
+            color: AppConstants.primaryColor,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Center(
             child: Text(
               "Claim WTF Coins",
               style: TextStyle(
-                color: AppConstants.deactivatedText,
+                color: AppConstants.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
@@ -273,188 +270,249 @@ class CollecReward extends StatelessWidget {
 }
 
 class DietCard extends StatefulWidget {
-  final DietData data;
-  final Function(bool) onMarked;
+  final Breakfast data;
+  final Function() onMarked;
   final isMarked;
+  String date;
 
   DietCard({
     this.data,
     this.onMarked,
     this.isMarked = false,
+    this.date,
   });
 
   @override
   _DietCardState createState() => _DietCardState(
         this.data,
-        this.isMarked,
+        // this.isMarked,
       );
 }
 
 class _DietCardState extends State<DietCard> {
-  DietData data;
-  bool isMarked;
+  Breakfast data;
+  // bool isMarked;
+
   _DietCardState(
     this.data,
-    this.isMarked,
+    // this.isMarked,
   );
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 12.0,
-      ),
-      // padding: const EdgeInsets.symmetric(
-      //   vertical: 12.0,
-      //   horizontal: 16.0,
-      // ),
-      elevation: 12.0,
-      color: Colors.black.withOpacity(0.3),
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            isMarked = !isMarked;
-          });
-          widget.onMarked(isMarked);
-        },
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 16.0,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Container(
-                          width: 80.0,
-                          height: 80.0,
-                          color: Colors.red.withOpacity(0.1),
-                          child: data.image != null
-                              ? Image.network(
-                                  data.image,
-                                  fit: BoxFit.cover,
-                                )
-                              : Container(),
+    return InkWell(
+      onTap: () {
+        widget.onMarked();
+      },
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12.0,
+              horizontal: 16.0,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Container(
+                        width: 70.0,
+                        height: 70.0,
+                        color: Colors.red.withOpacity(0.1),
+                        child: Image.network(
+                          data.coImage.isEmpty ||
+                                  data.coImage == null ||
+                                  data.coImage == "null"
+                              ? Images.noImageFound
+                              : data.coImage,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      UIHelper.horizontalSpace(12.0),
-                      Column(
+                    ),
+                    UIHelper.horizontalSpace(12.0),
+                    Flexible(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            data.name ?? '',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                          Flexible(
+                            child: Text(
+                              data.name ?? '',
+                              maxLines: 4,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           UIHelper.verticalSpace(6.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ChipBox(
-                                text:
-                                    'Date: ${Helper.stringForDatetime2(data.dateAdded)}' ??
-                                        'n/a',
-                              ),
-                            ],
-                          ),
-                          UIHelper.verticalSpace(8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                children: [
-                                  ChipBox(
-                                    text: 'Calorie Gain',
-                                  ),
-                                  UIHelper.verticalSpace(6.0),
-                                  Text(
-                                    '${data.expCal ?? 0} Cal' ?? 'n/a',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14.0,
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ChipBox(
+                                      text: 'Calorie Consumption',
                                     ),
-                                  ),
-                                ],
-                              ),
-                              UIHelper.horizontalSpace(12.0),
-                              Column(
-                                children: [
-                                  ChipBox(
-                                    text: 'Intake',
-                                  ),
-                                  UIHelper.verticalSpace(6.0),
-                                  Text(
-                                    '${data.intake ?? 0}' ?? 'n/a',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14.0,
+                                    UIHelper.verticalSpace(6.0),
+                                    Text(
+                                      '${data.cal ?? 0} Cal' ?? 'n/a',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14.0,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
-                      )
-                    ],
-                  ),
-                  if (data.status == 'consumed')
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 10.0,
                       ),
-                      margin: const EdgeInsets.symmetric(vertical: 16.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: AppConstants.primaryColor,
-                        borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    UIHelper.horizontalSpace(40.0),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -10.0,
+            right: 10.0,
+            child: (!data.consumptionStatus)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: data.consumptionStatus,
+                        activeColor: AppConstants.primaryColor,
+                        side: BorderSide(
+                          color: Colors.black,
+                        ),
+                        shape: CircleBorder(),
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        onChanged: (val) {
+                          // setState(() {
+                          //   isMarked = val;
+                          // });
+                          widget.onMarked();
+                        },
                       ),
-                      child: Text(
-                        'Consumed',
+                      Text(
+                        ' Click here\nto consume',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppConstants.black,
                           fontWeight: FontWeight.bold,
+                          fontSize: 10.0,
                         ),
                       ),
-                    )
-                ],
-              ),
+                      UIHelper.verticalSpace(4.0),
+                      DietDataInfo(data: data),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Container(
+                        width: 24.0,
+                        height: 24.0,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                          vertical: 20.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.green,
+                              blurRadius: 2.0,
+                              spreadRadius: 5.0,
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.check,
+                          color: AppConstants.white,
+                        ),
+                      ),
+                      UIHelper.verticalSpace(4.0),
+                      DietDataInfo(data: data),
+                    ],
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DietDataInfo extends StatelessWidget {
+  const DietDataInfo({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
+
+  final Breakfast data;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            titlePadding: EdgeInsets.only(
+              left: 16.0,
+              top: 6.0,
+              right: 6.0,
             ),
-            Positioned(
-              top: 2.0,
-              right: 10.0,
-              child: (data.status == 'pending' || data.status == 'active')
-                  ? Checkbox(
-                      value: isMarked,
-                      activeColor: AppConstants.primaryColor,
-                      materialTapTargetSize: MaterialTapTargetSize.padded,
-                      onChanged: (val) {
-                        setState(() {
-                          isMarked = val;
-                        });
-                        widget.onMarked(isMarked);
-                      },
-                    )
-                  : Container(),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Description",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.close),
+                ),
+              ],
             ),
-          ],
-        ),
+            content: Html(
+              data: data.description ?? '',
+              // padding: EdgeInsets.all(8.0),
+              // customRender: (node, children) {
+              //   if (node is dom.Element) {
+              //     switch (node.localName) {
+              //       case "custom_tag": // using this, you can handle custom tags in your HTML
+              //         return Column(children: children);
+              //     }
+              //   }
+              // },
+            ),
+          ),
+        );
+      },
+      child: Icon(
+        Icons.info_outline,
+        color: AppConstants.black,
       ),
     );
   }

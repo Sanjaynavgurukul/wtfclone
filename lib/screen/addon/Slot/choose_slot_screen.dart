@@ -187,13 +187,6 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                                                       child: Ink(
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: gymStore
-                                                                      .selectedTrainer ==
-                                                                  e
-                                                              ? AppConstants
-                                                                  .primaryColor
-                                                              : Colors
-                                                                  .transparent,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -208,17 +201,50 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                                                           ),
                                                           width:
                                                               double.infinity,
-                                                          child: Text(
-                                                            e.name,
-                                                            style: GoogleFonts
-                                                                .lato(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 14.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                            ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                e.name,
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .lato(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      14.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                ),
+                                                              ),
+                                                              if (gymStore
+                                                                      .selectedTrainer ==
+                                                                  e)
+                                                                ChoiceChip(
+                                                                  label: Text(
+                                                                    'Selected',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                  selected:
+                                                                      true,
+                                                                  backgroundColor:
+                                                                      AppConstants
+                                                                          .primaryColor,
+                                                                  selectedColor:
+                                                                      AppConstants
+                                                                          .primaryColor,
+                                                                )
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
@@ -231,8 +257,14 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
+                                  horizontal: 16.0,
+                                  vertical: 16.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppConstants.primaryColor,
+                                ),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(gymStore.selectedTrainer != null
                                         ? gymStore.selectedTrainer.name

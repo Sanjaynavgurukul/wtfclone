@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 
 class CongtarsScreen extends StatelessWidget {
@@ -57,7 +57,8 @@ class CongtarsScreen extends StatelessWidget {
           Container(
             child: TextButton(
               onPressed: () {
-                NavigationService.goBack;
+                Navigator.of(context).popUntil(
+                    (route) => route.settings.name == Routes.homePage);
               },
               child: Container(
                 height: 35,
