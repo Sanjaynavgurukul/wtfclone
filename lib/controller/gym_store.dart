@@ -52,6 +52,7 @@ import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_consumed.dart';
 import 'package:wtf/model/diet_item.dart';
+import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/geo_address.dart';
 import 'package:wtf/model/gym_add_on.dart';
@@ -98,6 +99,7 @@ class GymStore extends ChangeNotifier {
   DateTime selectedStartingDate;
 
   SlotData selectedSlotData;
+  List<Diet> diet = [];
 
   AddOnSlotDetails selectedSlotDetails;
 
@@ -2142,13 +2144,32 @@ class GymStore extends ChangeNotifier {
 
 
 
-    //diet consumed
-    Future<void> getAllDiet({BuildContext context}) async {
-      // notifyListeners();
-      RestDatasource().getAllDietsCategory();
-      // log(res.toString());
-      // dietConsumed = res;
-      // notifyListeners();
-    }
+  //diet consumed
+  Future<void> getAllDiet({BuildContext context}) async {
+    notifyListeners();
+    List<String> productId = ['Lean', 'Gain', 'Maintain'];
+
+    List<DietModel> list =await RestDatasource().getAllDietsCategory();
+    List<Diet> data = productId.map((category) => Diet(
+        categoryLabel: category,
+        products: list
+            .where((product) => product.type1_name == category)
+            .toList()))
+        .toList();
+    // log(res.toString());
+    diet = data;
+    notifyListeners();
+  }
+
+  //
+  // //diet consumed
+  //   Future<void> getAllDiet({BuildContext context}) async {
+  //     // notifyListeners();
+  //     RestDatasource().getAllDietsCategory();
+  //
+  //     // log(res.toString());
+  //     // dietConsumed = res;
+  //     // notifyListeners();
+  //   }
 
 }

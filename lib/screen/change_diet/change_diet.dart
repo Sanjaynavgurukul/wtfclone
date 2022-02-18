@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/screen/change_diet/flexible_appbar.dart';
 import 'package:wtf/screen/change_diet/widget/custom_radio.dart';
 import 'package:wtf/screen/change_diet/widget/diet_item.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class ChangeDiet extends StatefulWidget {
   const ChangeDiet({Key key}) : super(key: key);
@@ -330,39 +332,53 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
             color: Colors.white,
           ),
         ),
-        ListView.builder(
-            itemCount: DietModel.getList().length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(left: 12,right: 12),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              DietModel data = DietModel.getList()[index];
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                      title:Text(
-                    data.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18.0,
-                    ),
-                  ),dense: true,),
+        Container(
+          child: Consumer<GymStore>(
+            builder: (context, store, child) =>
+            store.allChallenges != null
+                ? store.allChallenges.isNotEmpty
+                ? ListView.builder(
+                itemCount: DietModel.getList().length,
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 12,right: 12),
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  DietModel data = DietModel.getList()[index];
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title:Text(
+                          data.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18.0,
+                          ),
+                        ),dense: true,),
 
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: data.list
-                            .map((item) => DietItem(
-                                  data: item,
-                                ))
-                            .toList(),
-                      ))
-                ],
-              );
-            })
+                      SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: data.list
+                                .map((item) => DietItem(
+                              data: item,
+                            ))
+                                .toList(),
+                          ))
+                    ],
+                  );
+                })
+                : Center(
+              child: Text(
+                'No Challenges present as of now.',
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+                : Loading(),
+          )
+        )
       ],
     );
   }

@@ -1,5 +1,11 @@
 import 'package:flutter/foundation.dart';
 
+class Diet{
+  String categoryLabel;
+  List<DietModel> products;
+  Diet({@required this.products, @required this.categoryLabel});
+}
+
 class DietModel {
   String uid;
   String name;
