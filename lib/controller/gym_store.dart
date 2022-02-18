@@ -2139,4 +2139,16 @@ class GymStore extends ChangeNotifier {
       Navigator.pop(context);
     }
   }
+
+
+
+    //diet consumed
+    Future<void> getAllDiet({BuildContext context}) async {
+      // notifyListeners();
+      RestDatasource().getAllDietsCategory();
+      // log(res.toString());
+      // dietConsumed = res;
+      // notifyListeners();
+    }
+
 }

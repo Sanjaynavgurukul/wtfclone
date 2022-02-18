@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/src/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/screen/change_diet/flexible_appbar.dart';
 import 'package:wtf/screen/change_diet/widget/custom_radio.dart';
@@ -19,6 +21,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   bool scrollOrNot = true;
   final bool isPreview = false;
   int selectedIndex = 0;
+  GymStore store;
 
   void showOrHide() {
     if (_scrollController.position.pixels >= 141) {
@@ -66,6 +69,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    store = context.watch<GymStore>();
   }
 
   @override
@@ -81,6 +85,11 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          context.read<GymStore>().getAllDiet(context: context);
+        },child:Icon(Icons.add)
+      ),
         body: CustomScrollView(
       slivers: [
         SliverAppBar(

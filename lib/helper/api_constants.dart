@@ -90,4 +90,7 @@ class Api {
   static String eventSubmissionUpdate() => "eventsubmission/update";
   static String getEventSubmission(String eventId) =>
       "eventsubmission/mobile?event_id=$eventId";
+
+  static String getAllDietDetails()=>'dietcat/getall?page=1';
+
 }

@@ -35,6 +35,7 @@ import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/diet_consumed.dart';
 import 'package:wtf/model/diet_item.dart';
+import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
@@ -1410,18 +1411,24 @@ class RestDatasource {
   }
 
   //Get All Diet category
-  Future<CoinBalance> getDietsCategory() async {
+  Future<List<DietModel>> getAllDietsCategory() async {
     String token = locator<AppPrefs>().token.getValue();
-    // Map<String, String> mapHeader = Map();
-    // mapHeader["Authorization"] = "Bearer " + token;
-    // mapHeader["Content-Type"] = "application/json";
-    // return _netUtil
-    //     .get(BASE_URL + Api.getWTFCoinBalance(), headers: mapHeader)
-    //     .then((dynamic res) {
-    //   print("response of Get CURRENT WTF Balance : " + res.toString());
-    //   CoinBalance model = CoinBalance.fromJson(res);
-    //
-    //   return model;
-    // });
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    List<DietModel> model;
+    var res = await _netUtil
+        .get(BASE_URL + Api.getAllDietDetails(), headers: mapHeader)
+        .then((dynamic res) {
+
+      if (res['status']) {
+        model = (res['data'] as List)
+            .map((p) => DietModel.fromJson(data: p))
+            .toList();
+      } else {
+        model = [];
+      }
+    });
+    return model;
   }
 }
