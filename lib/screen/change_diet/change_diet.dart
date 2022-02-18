@@ -49,21 +49,24 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
 
   final _scrollController = ScrollController();
 
-  List<Cat> getList() => [
-        Cat(
+  List<TopBarModel> getList() => [
+    TopBarModel(
             label: 'Veg',
             color: Colors.green,
             selected: true,
+            imageUrl: 'assets/images/veg_bg.png',
             fullLabel: 'Vegetarian'),
-        Cat(
+    TopBarModel(
             label: 'Egg',
             color: Colors.orange,
             selected: false,
+        imageUrl: 'assets/images/egg_bg.png',
             fullLabel: 'Eggetarian'),
-        Cat(
+    TopBarModel(
             label: 'Nonveg',
             color: Colors.red,
             selected: false,
+        imageUrl: 'assets/images/non_veg_bg.png',
             fullLabel: 'Non-Vegetarian')
       ];
 
@@ -84,14 +87,13 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
     super.initState();
   }
 
+  void callData(){
+    context.read<GymStore>().getAllDiet(context: context);
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          context.read<GymStore>().getAllDiet(context: context);
-        },child:Icon(Icons.add)
-      ),
         body: CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -108,7 +110,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemCount: getList().length,
                   itemBuilder: (context, index) {
-                    Cat data = getList()[index];
+                    TopBarModel data = getList()[index];
                     data.selected = selectedIndex == index;
                     return CustomRadio(
                       data: data,
@@ -169,7 +171,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
           ),
           flexibleSpace: FlexibleSpaceBar(
             background: FlexibleAppBar(
-              image: '',
+              image: getList()[selectedIndex].imageUrl,
               color: null,
             ),
           ),
@@ -218,7 +220,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                     scrollDirection: Axis.horizontal,
                     itemCount: getList().length,
                     itemBuilder: (context, index) {
-                      Cat data = getList()[index];
+                      TopBarModel data = getList()[index];
                       data.selected = selectedIndex == index;
                       return CustomRadio(
                         data: data,
@@ -335,8 +337,8 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
         Container(
           child: Consumer<GymStore>(
             builder: (context, store, child) =>
-            store.allChallenges != null
-                ? store.allChallenges.isNotEmpty
+            store.diet != null
+                ? store.diet.isNotEmpty
                 ? ListView.builder(
                 itemCount: DietModel.getList().length,
                 shrinkWrap: true,
@@ -384,13 +386,14 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   }
 }
 
-class Cat {
+class TopBarModel {
   String label;
   Color color;
   bool selected;
   String fullLabel;
+  String imageUrl;
 
-  Cat({this.selected, this.color, this.label, this.fullLabel});
+  TopBarModel({this.selected, this.color, this.label, this.fullLabel,this.imageUrl});
 }
 
 class DietModel {

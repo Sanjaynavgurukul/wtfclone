@@ -15,9 +15,9 @@ class FlexibleAppBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: statusBarHeight),
       height: statusBarHeight + appBarHeight,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/veg_bg.png"),
+          image: AssetImage(image),
           fit: BoxFit.cover,
         ),
       ),

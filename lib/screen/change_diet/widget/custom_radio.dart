@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wtf/screen/change_diet/change_diet.dart';
 
 class CustomRadio extends StatelessWidget {
-  final Cat data;
+  final TopBarModel data;
   final Function onClick;
 
   CustomRadio({@required this.data, @required this.onClick});
