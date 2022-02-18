@@ -15,7 +15,7 @@ class CategoriesItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var old = Padding(
+    var newOne = Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 2.0,
         vertical: 6.0,
@@ -77,7 +77,7 @@ class CategoriesItem extends StatelessWidget {
         ),
       ),
     );
-    var newOne = Container(
+    var old = Container(
       child: Stack(
         children: [
           // Flexible(
@@ -129,6 +129,34 @@ class CategoriesItem extends StatelessWidget {
         // ),
       ),
     );
-    return old;
+    var latest = Container(
+      width: MediaQuery.of(context).size.width * 0.28,
+      height: 150.0,
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6.0),
+            child: Image.asset(
+              img,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          UIHelper.verticalSpace(10.0),
+          Text(
+            itemName,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+    return latest;
   }
 }

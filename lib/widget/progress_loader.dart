@@ -17,6 +17,11 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
         controller: AnimationController(
             vsync: this, duration: const Duration(seconds: 1)),
       ),
+      // child: Image.asset(
+      //   Gif.loader,
+      //   width: 80.0,
+      //   height: 80.0,
+      // ),
     );
   }
 }

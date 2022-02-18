@@ -31,6 +31,7 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/model/ActiveSubscriptions.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/model/AttendanceDetails.dart';
+import 'package:wtf/model/EventSubmissions.dart';
 import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/Stats.dart';
@@ -64,7 +65,7 @@ import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/home/jitsi_meeting.dart';
-import 'package:wtf/screen/test.dart';
+import 'package:wtf/screen/stopwatch.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/Shimmer/values/type.dart';
 import 'package:wtf/widget/processing_dialog.dart';
@@ -85,6 +86,8 @@ class GymStore extends ChangeNotifier {
   WhyChooseWtf whyChooseWtf;
 
   GymAddOn allLiveClasses;
+
+  GymAddOn allAddonClasses;
 
   GymAddOn selectedGymAddOns;
 
@@ -175,7 +178,7 @@ class GymStore extends ChangeNotifier {
 
   Map<String, dynamic> subscriptionBody = {};
 
-  Dependencies workoutGlobalTimer;
+  StopwatchDependencies workoutGlobalTimer;
 
   AttendanceDetails attendanceDetails;
 
@@ -222,8 +225,19 @@ class GymStore extends ChangeNotifier {
 
   bool showTrailOffer = true;
 
+  EventSubmissions selectedEventSubmissions;
+
   GymPlanModel selectedGymPlans;
+
   String selectedGymId;
+
+  List<Submission> selectedSubmissions = [];
+
+  Future<void> setEventSubmission({List<Submission> data}) async {
+    selectedSubmissions = data;
+    notifyListeners();
+  }
+
   Future<void> setSessionRating({double rating}) async {
     sessionRating = rating;
     notifyListeners();
@@ -327,6 +341,7 @@ class GymStore extends ChangeNotifier {
     getdietPref(context: context, type: DietPrefType.type1);
     getdietPref(context: context, type: DietPrefType.type2);
     getAllLiveClasses(context: context);
+    getAllAddonClasses(context: context);
     context.read<UserStore>().getUserById(context: context);
     context.read<UserStore>().getMemberById(context: context);
   }
@@ -472,7 +487,7 @@ class GymStore extends ChangeNotifier {
   }) async {
     switch (mode) {
       case 'start':
-        workoutGlobalTimer = Dependencies();
+        workoutGlobalTimer = StopwatchDependencies();
         notifyListeners();
         AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
           if (!isAllowed) {
@@ -1652,11 +1667,18 @@ class GymStore extends ChangeNotifier {
           selectedGymId != null ? selectedGymId : selectedGymDetail.data.userId,
     );
     if (res != null) {
-      selectedSlotDetails = res;
-      loading = false;
-      print('details saved: ${selectedSlotDetails?.data?.length}');
-      notifyListeners();
-    }
+      if (res.status) {
+        selectedSlotDetails = res;
+        loading = false;
+        print('details saved: ${selectedSlotDetails?.data?.length}');
+        notifyListeners();
+      } else {
+        selectedSlotDetails = res;
+        loading = false;
+        notifyListeners();
+        FlashHelper.errorBar(context, message: res.message);
+      }
+    } else {}
   }
 
   Future<void> getGymPlans({BuildContext context, String gymId}) async {
@@ -1739,12 +1761,25 @@ class GymStore extends ChangeNotifier {
 
   Future<void> getAllLiveClasses({BuildContext context}) async {
     loading = true;
+    allLiveClasses = null;
     notifyListeners();
     GymAddOn res = await RestDatasource().getLiveClasses();
     if (res != null) {
       loading = false;
       allLiveClasses = res;
-      print('getAllLiveClasses len =========== ${whyChooseWtf.data.length}');
+      print('getAllLiveClasses len =========== ${allLiveClasses.data.length}');
+      notifyListeners();
+    }
+  }
+
+  Future<void> getAllAddonClasses({BuildContext context}) async {
+    loading = true;
+    allAddonClasses = null;
+    notifyListeners();
+    GymAddOn res = await RestDatasource().getLiveClasses(isLive: false);
+    if (res != null) {
+      loading = false;
+      allAddonClasses = res;
       notifyListeners();
     }
   }
@@ -1914,7 +1949,17 @@ class GymStore extends ChangeNotifier {
 
   //dietcon
   Future<void> dietConsume(
-      {BuildContext context, String mealId, String date, String image}) async {
+      {BuildContext context,
+      String mealId,
+      String date,
+      String image,
+      String day}) async {
+    showDialog(
+      context: NavigationService.navigatorKey.currentContext,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
     Map<String, dynamic> body = {
       "meal_id": mealId,
       "user_id": locator<AppPrefs>().memberId.getValue(),
@@ -1924,22 +1969,124 @@ class GymStore extends ChangeNotifier {
       "date": date,
       "image": image,
     };
-
     dynamic res =
         await RestDatasource().dietConsumtion(context: context, body: body);
+    Navigator.pop(context);
     if (res != null) {
       //dietItem = res;
       log("diet consumed" + res.toString());
+      getdietcat(
+        context: context,
+        day: day,
+        date: date,
+      );
       FlashHelper.informationBar(
         context,
         message: res['message'],
       );
+    }
+  }
+
+  Future<bool> eventSubmissionAdd({
+    BuildContext context,
+    String platform,
+    String link,
+    String date,
+  }) async {
+    showDialog(
+      context: NavigationService.navigatorKey.currentContext,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    Map<String, dynamic> body = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "event_id": selectedEventData.uid,
+      "platform": platform,
+      "link": link,
+      "date": date,
+    };
+    dynamic res =
+        await RestDatasource().eventSubmissionAdd(context: context, body: body);
+    Navigator.pop(context);
+    if (res != null) {
+      //dietItem = res;
+      log("event submitted" + res.toString());
+      NavigationService.goBack;
+      getEventSubmission(context: context, eventId: selectedEventData.uid);
+      FlashHelper.informationBar(
+        context,
+        message: res['message'],
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> eventSubmissionUpdate({
+    BuildContext context,
+    String submissionUid,
+    String platform,
+    String link,
+    String date,
+  }) async {
+    showDialog(
+      context: NavigationService.navigatorKey.currentContext,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    Map<String, dynamic> body = {
+      if (submissionUid != null) "uid": submissionUid,
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "event_id": selectedEventData.uid,
+      "platform": platform,
+      "link": link,
+      "date": date,
+    };
+    dynamic res = await RestDatasource()
+        .eventSubmissionUpdate(context: context, body: body);
+    Navigator.pop(context);
+    if (res != null) {
+      //dietItem = res;
+      log("event submitted" + res.toString());
+      selectedSubmissions = [];
       notifyListeners();
+      NavigationService.goBack;
+      getEventSubmission(context: context, eventId: selectedEventData.uid);
+
+      FlashHelper.informationBar(
+        context,
+        message: res['message'],
+      );
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> getEventSubmission({
+    BuildContext context,
+    String eventId,
+  }) async {
+    EventSubmissions res = await RestDatasource()
+        .getEventSubmissions(context: context, eventId: eventId);
+    if (res != null && res.data != null) {
+      //dietItem = res;
+      log("event submissions:: ${res.toJson()}");
+      selectedEventSubmissions = res;
+      notifyListeners();
+    } else {
+      FlashHelper.informationBar(
+        context,
+        message: res.errorMessage,
+      );
     }
   }
 
   //diet consumed
   Future<void> getdietConsumed({BuildContext context, String date}) async {
+    dietConsumed = null;
+    notifyListeners();
     DietConsumed res =
         await RestDatasource().dietConsumed(context: context, date: date);
     log(res.toString());
@@ -1948,36 +2095,48 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> collectDietRewards({BuildContext context, String date}) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
     List<String> consumedItem = [];
-    RestDatasource()
-        .dietConsumed(context: context, date: date)
-        .then((res) async {
-      if (res != null) {
-        res.data.map((e) {
-          consumedItem.add(e.uid);
-        }).toList();
-        Map<String, dynamic> body = {
-          "dietmapping_ids": consumedItem,
-        };
+    DietConsumed res =
+        await RestDatasource().dietConsumed(context: context, date: date);
+    if (res != null) {
+      res.data.map((e) {
+        consumedItem.add(e.uid);
+      }).toList();
+      Map<String, dynamic> body = {
+        "dietmapping_ids": consumedItem,
+      };
 
-        if (consumedItem != null) {
-          dynamic re2 =
-              await RestDatasource().dietRewards(context: context, body: body);
-          if (re2 != null) {
-            if (re2['coins'] != null) {
-              NavigationService.navigateToWithArgs(
-                  Routes.congratsScreen, {'coin': re2['coins'].toString()});
-            } else {
-              FlashHelper.informationBar(
-                context,
-                message: "You have already collected todays reward",
-              );
-            }
-
-            notifyListeners();
+      if (consumedItem != null) {
+        dynamic re2 =
+            await RestDatasource().dietRewards(context: context, body: body);
+        if (re2 != null) {
+          if (re2['coins'] != null) {
+            Navigator.pop(context);
+            NavigationService.goBack;
+            NavigationService.navigateToWithArgs(
+              Routes.congratsScreen,
+              {'coin': re2['coins'].toString()},
+            );
+          } else {
+            FlashHelper.informationBar(
+              context,
+              message: "You have already collected todays reward",
+            );
           }
+
+          notifyListeners();
         }
+      } else {
+        Navigator.pop(context);
       }
-    });
+    } else {
+      Navigator.pop(context);
+    }
   }
 }

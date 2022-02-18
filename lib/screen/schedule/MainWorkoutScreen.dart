@@ -12,12 +12,12 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
-import 'package:wtf/screen/test.dart';
+import 'package:wtf/screen/stopwatch.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class MainWorkoutScreen extends StatefulWidget {
   @override

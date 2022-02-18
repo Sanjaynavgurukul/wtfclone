@@ -4,12 +4,12 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/ui_helpers.dart';
-import 'package:wtf/screen/workout_complete/rate_session.dart';
-import 'package:wtf/screen/workout_complete/success_image.dart';
-import 'package:wtf/screen/workout_complete/workout_complete_buttons.dart';
-import 'package:wtf/screen/workout_complete/workout_complete_info.dart';
+import 'package:wtf/screen/schedule/workout_complete/rate_session.dart';
+import 'package:wtf/screen/schedule/workout_complete/success_image.dart';
+import 'package:wtf/screen/schedule/workout_complete/workout_complete_buttons.dart';
+import 'package:wtf/screen/schedule/workout_complete/workout_complete_info.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
 
 class WorkoutComplete extends StatefulWidget {
   const WorkoutComplete({Key key}) : super(key: key);

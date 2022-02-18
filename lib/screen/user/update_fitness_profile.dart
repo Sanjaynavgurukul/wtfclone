@@ -21,6 +21,7 @@ import 'package:wtf/screen/user/slide6.dart';
 import 'package:wtf/screen/user/slide7.dart';
 import 'package:wtf/screen/user/slide8.dart';
 import 'package:wtf/screen/user/slide9.dart';
+import 'package:wtf/widget/Shimmer/values/type.dart';
 
 class UpdateFitnessProfile extends StatefulWidget {
   @override
@@ -274,6 +275,36 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                                     key.currentState.showSnackBar(new SnackBar(
                                         content: new Text(
                                             'Select your target weight')));
+                                    return;
+                                  }
+                                }
+
+                                if (currentIndex == 8) {
+                                  context.read<GymStore>().getdietPref(
+                                      context: context,
+                                      type: DietPrefType.type1);
+                                  context.read<GymStore>().getdietPref(
+                                      context: context,
+                                      type: DietPrefType.type2);
+                                  if (user.existingDisease.length == null ||
+                                      user.existingDisease.length == 0) {
+                                    key.currentState.showSnackBar(
+                                      new SnackBar(
+                                        content: new Text('Select disease'),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                }
+
+                                if (currentIndex == 9) {
+                                  if (user.type1 == null ||
+                                      user.type2 == null) {
+                                    key.currentState.showSnackBar(
+                                      new SnackBar(
+                                        content: new Text('Select your diet'),
+                                      ),
+                                    );
                                     return;
                                   }
                                 }

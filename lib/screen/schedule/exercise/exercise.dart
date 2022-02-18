@@ -9,11 +9,11 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
-import 'package:wtf/screen/exercise/exercise_start/exercise_start.dart';
+import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
 import 'exersise_top_bar.dart';
 
 class ExerciseDetails extends StatefulWidget {

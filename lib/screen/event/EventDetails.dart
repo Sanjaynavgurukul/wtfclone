@@ -15,13 +15,12 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/main.dart';
+import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 import 'package:wtf/widget/slide_button.dart';
-
-import '../main.dart';
-import 'membership_page.dart';
 
 class EventDetails extends StatefulWidget {
   @override
@@ -282,16 +281,48 @@ class _EventButtonState extends State<EventButton> {
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
     bool isStarted = store.selectedEventData != null
-        ? Helper.stringForDatetime2(DateTime.now().toIso8601String()) ==
-                Helper.stringForDatetime2(store.selectedEventData.validFrom)
+        ? Helper.stringForDatetime2(DateTime.now().toIso8601String()).contains(
+                Helper.stringForDatetime2(store.selectedEventData.validFrom))
             ? true
             : DateTime.now()
                 .isAfter(DateTime.parse(store.selectedEventData.validFrom))
         : false;
+    if (isStarted == false) {
+      isStarted = store.selectedEventData != null
+          ? Helper.stringForDatetime2(DateTime.now().toIso8601String())
+                  .contains(
+                      Helper.stringForDatetime2(store.selectedEventData.date))
+              ? true
+              : DateTime.now()
+                  .isAfter(DateTime.parse(store.selectedEventData.date))
+          : false;
+    }
     bool isValid = store.selectedEventData != null
-        ? DateTime.now()
-            .isBefore(DateTime.parse(store.selectedEventData.validTo))
+        ? (DateTime.now()
+                    .isBefore(DateTime.parse(store.selectedEventData.date)) &&
+                !(store.selectedEventData.submissions == null)) ||
+            Helper.stringForDatetime2(DateTime.now().toIso8601String())
+                .contains(
+                    Helper.stringForDatetime2(store.selectedEventData.date))
         : false;
+    if (store.selectedEventData != null) {
+      if (DateTime.now()
+              .isBefore(DateTime.parse(store.selectedEventData.date)) ||
+          Helper.stringForDatetime2(DateTime.now().toIso8601String()).contains(
+              Helper.stringForDatetime2(store.selectedEventData.date))) {
+        isValid = true;
+      } else {
+        if (store.selectedEventData.submissions != null &&
+            store.selectedEventData.submissions.isNotEmpty) {
+          isValid = true;
+        } else {
+          isValid = false;
+        }
+      }
+    } else {
+      isValid = false;
+    }
+    log('isStarted: $isStarted   ---->>> isValid: $isValid');
     return Consumer<GymStore>(
       builder: (context, store, child) => store.selectedEventData != null &&
               !isStarted &&
@@ -345,7 +376,7 @@ class _EventButtonState extends State<EventButton> {
                                     if (Helper.formatDate2(
                                             DateTime.now().toIso8601String()) ==
                                         Helper.formatDate2(
-                                            store.selectedEventData.date)) {
+                                            store.selectedEventData.date)  || store.selectedEventData.submissions != null) {
                                       if (store.eventParticipation != null &&
                                           store.eventParticipation.data !=
                                               null &&
@@ -360,6 +391,13 @@ class _EventButtonState extends State<EventButton> {
                                             int.tryParse(store.selectedEventData
                                                     .submissions) >
                                                 0) {
+                                          store.getEventSubmission(
+                                            context: context,
+                                            eventId:
+                                                store.selectedEventData.uid,
+                                          );
+                                          NavigationService.navigateTo(
+                                              Routes.eventSubmissions);
                                         } else {
                                           FlashHelper.informationBar(
                                             context,
@@ -368,9 +406,9 @@ class _EventButtonState extends State<EventButton> {
                                         }
                                       } else {
                                         store.eventCheckIn(
-                                            context: context,
-                                            eventId:
-                                                store.selectedEventData.uid);
+                                          context: context,
+                                          eventId: store.selectedEventData.uid,
+                                        );
                                       }
                                     } else {
                                       FlashHelper.errorBar(
@@ -385,7 +423,7 @@ class _EventButtonState extends State<EventButton> {
                                   text: Helper.formatDate2(DateTime.now()
                                               .toIso8601String()) ==
                                           Helper.formatDate2(
-                                              store.selectedEventData.date)
+                                              store.selectedEventData.date) || store.selectedEventData.submissions != null
                                       ? store.eventParticipation != null &&
                                               store.eventParticipation.data !=
                                                   null &&

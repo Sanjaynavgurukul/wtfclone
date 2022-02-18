@@ -14,7 +14,7 @@ class ElapsedTime {
   });
 }
 
-class Dependencies {
+class StopwatchDependencies {
   final List<ValueChanged<ElapsedTime>> timerListeners =
       <ValueChanged<ElapsedTime>>[];
   final TextStyle textStyle = const TextStyle(
@@ -32,7 +32,7 @@ class TimerPage extends StatefulWidget {
 
 class TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin {
-  final Dependencies dependencies = Dependencies();
+  final StopwatchDependencies dependencies = StopwatchDependencies();
 
   @override
   void initState() {
@@ -91,14 +91,14 @@ class TimerPageState extends State<TimerPage>
 
 class TimerText extends StatefulWidget {
   TimerText({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
 
   TimerTextState createState() => TimerTextState(dependencies: dependencies);
 }
 
 class TimerTextState extends State<TimerText> {
   TimerTextState({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
   Timer timer;
   int milliseconds;
 
@@ -153,7 +153,7 @@ class TimerTextState extends State<TimerText> {
 
 class MinutesAndSeconds extends StatefulWidget {
   MinutesAndSeconds({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
 
   MinutesAndSecondsState createState() =>
       MinutesAndSecondsState(dependencies: dependencies);
@@ -161,7 +161,7 @@ class MinutesAndSeconds extends StatefulWidget {
 
 class MinutesAndSecondsState extends State<MinutesAndSeconds> {
   MinutesAndSecondsState({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
 
   int minutes = 0;
   int seconds = 0;
@@ -191,14 +191,14 @@ class MinutesAndSecondsState extends State<MinutesAndSeconds> {
 
 class Hundreds extends StatefulWidget {
   Hundreds({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
 
   HundredsState createState() => HundredsState(dependencies: dependencies);
 }
 
 class HundredsState extends State<Hundreds> {
   HundredsState({this.dependencies});
-  final Dependencies dependencies;
+  final StopwatchDependencies dependencies;
 
   int hundreds = 0;
 

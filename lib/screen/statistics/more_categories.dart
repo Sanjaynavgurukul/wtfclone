@@ -3,7 +3,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
-import 'package:wtf/screen/body_calculator/body_calculator.dart';
+import 'package:wtf/screen/calculators/body_calculator/body_calculator.dart';
 
 class MoreCategories extends StatelessWidget {
   const MoreCategories({Key key}) : super(key: key);

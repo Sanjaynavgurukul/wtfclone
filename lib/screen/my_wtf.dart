@@ -12,10 +12,11 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
-import 'package:wtf/screen/SidebarDrawer.dart';
+import 'package:wtf/screen/calculators/body_calculator/body_calculator.dart';
+import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 
 import '../main.dart';
-import 'body_calculator/body_calculator.dart';
+import 'home/body_stats.dart';
 
 class MyWtf extends StatefulWidget {
   @override
@@ -53,191 +54,191 @@ class _MyWtfState extends State<MyWtf> {
         backgroundColor: AppColors.BACK_GROUND_BG,
         body: Container(
           height: MediaQuery.of(context).size.height,
-          child: NestedScrollView(
-            headerSliverBuilder: (context, _) => [],
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 8.0,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => SidebarDrawer(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SidebarDrawer(),
+                              ),
+                            );
+                          },
+                          child: PreferenceBuilder<String>(
+                            preference: locator<AppPrefs>().avatar,
+                            builder: (context, snapshot) {
+                              return Container(
+                                width: 70.0,
+                                height: 70.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  child: Image.network(
+                                    snapshot,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
                               );
                             },
-                            child: PreferenceBuilder<String>(
-                              preference: locator<AppPrefs>().avatar,
-                              builder: (context, snapshot) {
-                                return Container(
-                                  width: 70.0,
-                                  height: 70.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.1),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    child: Image.network(
-                                      snapshot,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
                           ),
-                          UIHelper.horizontalSpace(12.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hi ${locator<AppPrefs>().userName.getValue()}',
-                                style: TextStyle(
-                                  fontFamily: 'VisbyCF-ExtraBold',
-                                  fontSize: 20.0,
-                                  color: const Color(0xffe6e6e6),
-                                  height: 1.2000000211927626,
-                                ),
-                                textHeightBehavior: TextHeightBehavior(
-                                    applyHeightToFirstAscent: false),
-                                textAlign: TextAlign.left,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "Welcome Back !",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 14.0,
-                                  color: const Color(0xffe6e6e6),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    UIHelper.verticalSpace(20.0),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text(
-                            'My',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          UIHelper.horizontalSpace(4.0),
-                          Image.asset('assets/images/wtf_2.png'),
-                          UIHelper.horizontalSpace(16.0),
-                          Expanded(
-                            child: Container(
-                              height: 1.0,
-                              color: Colors.white.withOpacity(0.4),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    UIHelper.verticalSpace(30.0),
-                    MyWtfCard(
-                      onTap: () {
-                        setState(() {
-                          store.myWorkoutSchedule = null;
-                        });
-                        NavigationService.navigateTo(Routes.mySchedule);
-                      },
-                      image: 'schedule',
-                      text: 'My Schedule',
-                    ),
-                    UIHelper.verticalSpace(20.0),
-                    MyWtfCard(
-                      onTap: () {
-                        NavigationService.navigateTo(Routes.myStats);
-                      },
-                      image: 'stats',
-                      text: 'My Stats    ',
-                    ),
-                    UIHelper.verticalSpace(20.0),
-                    MyWtfSubscriptionCard(
-                      onTap: () async {
-                        await context.read<GymStore>().getActiveSubscriptions(
-                              context: context,
-                            );
-                        if (store.activeSubscriptions != null &&
-                            store.activeSubscriptions.data != null) {
-                          context.read<GymStore>().getActiveSubscriptions(
-                                context: context,
-                              );
-                          NavigationService.navigateTo(
-                              Routes.activeSubscriptionScreen);
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: 'You don\'t have any active subscriptions',
-                            fontSize: 14.0,
-                            textColor: Colors.white,
-                            backgroundColor: AppConstants.primaryColor,
-                          );
-                        }
-                      },
-                    ),
-                    UIHelper.verticalSpace(35.0),
-                    Text(
-                      'Fitness Calculators',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    UIHelper.verticalSpace(25.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        OpenCalButon(
-                          onTap: () {
-                            NavigationService.navigateTo(Routes.bodyFatCal);
-                          },
-                          label: 'Body Fat %',
-                          image: 'bodyFat',
                         ),
-                        OpenCalButon(
-                          onTap: () {
-                            NavigationService.navigateTo(Routes.bmrCalculator);
-                          },
-                          label: 'Calorie Burnt',
-                          image: 'cal',
-                        ),
-                        OpenCalButon(
-                          onTap: () {
-                            NavigationService.navigateTo(Routes.calorieCounter);
-                          },
-                          label: 'Calorie Required',
-                          image: 'cal_req',
+                        UIHelper.horizontalSpace(12.0),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hi ${locator<AppPrefs>().userName.getValue()}',
+                              style: TextStyle(
+                                fontFamily: 'VisbyCF-ExtraBold',
+                                fontSize: 20.0,
+                                color: const Color(0xffe6e6e6),
+                                height: 1.2000000211927626,
+                              ),
+                              textHeightBehavior: TextHeightBehavior(
+                                  applyHeightToFirstAscent: false),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Welcome Back !",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 14.0,
+                                color: const Color(0xffe6e6e6),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  UIHelper.verticalSpace(20.0),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          'My',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        UIHelper.horizontalSpace(4.0),
+                        Image.asset('assets/images/wtf_2.png'),
+                        UIHelper.horizontalSpace(16.0),
+                        Expanded(
+                          child: Container(
+                            height: 1.0,
+                            color: Colors.white.withOpacity(0.4),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  UIHelper.verticalSpace(30.0),
+                  MyWtfCard(
+                    onTap: () {
+                      setState(() {
+                        store.myWorkoutSchedule = null;
+                      });
+                      NavigationService.navigateTo(Routes.mySchedule);
+                    },
+                    image: 'schedule',
+                    text: 'My Schedule',
+                  ),
+                  UIHelper.verticalSpace(20.0),
+                  MyWtfCard(
+                    onTap: () {
+                      NavigationService.navigateTo(Routes.myStats);
+                    },
+                    image: 'stats',
+                    text: 'My Stats    ',
+                  ),
+                  UIHelper.verticalSpace(20.0),
+                  MyWtfSubscriptionCard(
+                    onTap: () async {
+                      await context.read<GymStore>().getActiveSubscriptions(
+                            context: context,
+                          );
+                      if (store.activeSubscriptions != null &&
+                          store.activeSubscriptions.data != null) {
+                        context.read<GymStore>().getActiveSubscriptions(
+                              context: context,
+                            );
+                        NavigationService.navigateTo(
+                            Routes.activeSubscriptionScreen);
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: 'You don\'t have any active subscriptions',
+                          fontSize: 14.0,
+                          textColor: Colors.white,
+                          backgroundColor: AppConstants.primaryColor,
+                        );
+                      }
+                    },
+                  ),
+                  UIHelper.verticalSpace(35.0),
+                  Text(
+                    'Fitness Calculators',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  UIHelper.verticalSpace(25.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OpenCalButon(
+                        onTap: () {
+                          NavigationService.navigateTo(Routes.bodyFatCal);
+                        },
+                        label: 'Body Fat %',
+                        image: 'bodyFat',
+                      ),
+                      OpenCalButon(
+                        onTap: () {
+                          NavigationService.navigateTo(Routes.bmrCalculator);
+                        },
+                        label: 'Calorie Burnt',
+                        image: 'cal',
+                      ),
+                      OpenCalButon(
+                        onTap: () {
+                          NavigationService.navigateTo(Routes.calorieCounter);
+                        },
+                        label: 'Calorie Required',
+                        image: 'cal_req',
+                      ),
+                    ],
+                  ),
+                  UIHelper.verticalSpace(20.0),
+                  BodyStats(),
+                  UIHelper.verticalSpace(20.0),
+                ],
               ),
             ),
           ),
@@ -408,30 +409,35 @@ class MyWtfSubscriptionCard extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: SvgPicture.asset(
-                          'assets/svg/active.svg',
-                          color: AppConstants.white,
-                          height: 36.0,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: SvgPicture.asset(
+                            'assets/svg/active.svg',
+                            color: AppConstants.white,
+                            height: 36.0,
+                          ),
                         ),
                       ),
                       UIHelper.horizontalSpace(20.0),
                       Expanded(
                         flex: 1,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "No Active",
+                              "\nNo Active Subscription Found",
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18.0,
+                                height: 0.9,
                                 color: const Color(0xffe6e6e6),
                               ),
                             ),
                             UIHelper.verticalSpace(4.0),
                             Text(
-                              "Subscription Found",
+                              "",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 18.0,
@@ -441,6 +447,7 @@ class MyWtfSubscriptionCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      Spacer(),
                     ],
                   ),
           );

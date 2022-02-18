@@ -16,19 +16,6 @@ class ActiveSubscriptionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
-    // DateTime exp = DateTime(
-    //   int.tryParse(
-    //     store.activeSubscriptions.data.expireDate.substring(7, 11),
-    //   ),
-    //   int.tryParse(
-    //     store.activeSubscriptions.data.expireDate.substring(4, 6),
-    //   ),
-    //   int.tryParse(
-    //     store.activeSubscriptions.data.expireDate.substring(1, 3),
-    //   ),
-    // );
-    // Duration d = exp.difference(DateTime.now());
-    // print('days: ${d.inDays}');
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       appBar: AppBar(

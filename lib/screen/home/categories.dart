@@ -20,24 +20,43 @@ class _CategoriesState extends State<Categories> {
     //   'img': 'assets/images/wtf.png',
     //   // 'img': 'assets/images/mywtf.jpeg',
     // },
+    // {
+    //   'name': 'WTF\n Coins',
+    //   'img': 'assets/images/coins.png',
+    // },
+    // {
+    //   'name': 'My\n Schedule',
+    //   // 'img': 'assets/images/schedule.jpeg',
+    //   'img': 'assets/images/schedule.png',
+    // },
+    // {
+    //   'name': 'WTF\n Nutrition',
+    //   // 'img': 'assets/images/nutrition.jpeg',
+    //   'img': 'assets/images/nutrition.png',
+    // },
+    // {
+    //   'name': 'Active\n Subscription',
+    //   'img': 'assets/images/active_subscription.png',
+    //   // 'img': 'assets/images/wtf.png',
     {
-      'name': 'WTF\n Coins',
-      'img': 'assets/images/coins.png',
+      'name': 'Fitness',
+      'img': 'assets/images/fitness.png',
     },
     {
-      'name': 'My\n Schedule',
-      // 'img': 'assets/images/schedule.jpeg',
-      'img': 'assets/images/schedule.png',
+      'name': 'Live Class',
+      'img': 'assets/images/live_class.png',
     },
     {
-      'name': 'WTF\n Nutrition',
-      // 'img': 'assets/images/nutrition.jpeg',
-      'img': 'assets/images/nutrition.png',
+      'name': 'Nutrition',
+      'img': 'assets/images/nutrition_2.png',
     },
     {
-      'name': 'Active\n Subscription',
-      'img': 'assets/images/active_subscription.png',
-      // 'img': 'assets/images/wtf.png',
+      'name': 'Daily Schedule',
+      'img': 'assets/images/daily_schedule.png',
+    },
+    {
+      'name': 'Personal Training',
+      'img': 'assets/images/personal_training.png',
     },
   ];
 
@@ -47,10 +66,11 @@ class _CategoriesState extends State<Categories> {
     switch (index) {
       case 0:
         // store.changeNavigationTab(index: 2);
-        store.changeNavigationTab(index: 3);
+        // store.changeNavigationTab(index: 3);
+        NavigationService.navigateTo(Routes.mySchedule);
         break;
       case 1:
-        NavigationService.navigateTo(Routes.mySchedule);
+        NavigationService.navigateTo(Routes.allLiveAddons);
         break;
       // Navigator.pushNamed(context, Routes.mySubscription);
       // break;
@@ -73,7 +93,11 @@ class _CategoriesState extends State<Categories> {
         break;
       case 3:
         context.read<GymStore>().getActiveSubscriptions(context: context);
-        NavigationService.navigateTo(Routes.activeSubscriptionScreen);
+        NavigationService.navigateTo(Routes.mySchedule);
+        break;
+      case 4:
+        context.read<GymStore>().getActiveSubscriptions(context: context);
+        NavigationService.navigateTo(Routes.ptClassPage);
         break;
       // case 5:
       //   context.read<GymStore>().getMemberSubscriptions(context: context);
@@ -86,75 +110,21 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 5,
-          ),
-          // ListView.builder(
-          //   shrinkWrap: true,
-          //   itemCount: 4,
-          //   primary: false,
-          //   itemBuilder: (context, index) => Padding(
-          //     padding: const EdgeInsets.symmetric(vertical: 12.0),
-          //     child: InkWell(
-          //       onTap: () {
-          //         navigation(index, context);
-          //       },
-          //       child: Container(
-          //         width: double.infinity,
-          //         height: 150.0,
-          //         child: Stack(
-          //           children: [
-          //             GradientImageWidget(
-          //               // network: Images.mySchedule,
-          //               assets: _itemsList[index]['img'],
-          //               boxFit: BoxFit.fill,
-          //             ),
-          //             Positioned(
-          //               bottom: 12.0,
-          //               left: 0.0,
-          //               right: 0.0,
-          //               child: Text(
-          //                 _itemsList[index]['name'],
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: 26.0,
-          //                   fontWeight: FontWeight.bold,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          GridView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: _itemsList.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 2,
-            ),
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                navigation(index, context);
-              },
-              child: CategoriesItem(
-                itemName: _itemsList[index]['name'],
-                img: _itemsList[index]['img'],
-                // color: Colors.red,
+    return Center(
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        runSpacing: 0.0,
+        spacing: 12.0,
+        children: _itemsList
+            .map(
+              (e) => CategoriesItem(
+                itemName: e['name'],
+                img: e['img'],
               ),
-            ),
-          ),
-        ],
+            )
+            .toList(),
       ),
     );
   }

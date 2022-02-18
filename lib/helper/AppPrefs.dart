@@ -13,6 +13,8 @@ class AppPrefs {
             preferences.getBool(PrefsConstants.logging, defaultValue: false),
         isFirstOpen =
             preferences.getBool(PrefsConstants.firstOpen, defaultValue: true),
+        seeMorePt =
+            preferences.getBool(PrefsConstants.seeMorePt, defaultValue: false),
         token =
             preferences.getString(PrefsConstants.authToken, defaultValue: ''),
         avatar = preferences.getString(
@@ -63,6 +65,8 @@ class AppPrefs {
             .getString(PrefsConstants.selectedWorkoutDate, defaultValue: ''),
         phoneNumber =
             preferences.getString(PrefsConstants.phoneNumber, defaultValue: ''),
+        selectedSubmission = preferences
+            .getString(PrefsConstants.selectedSubmission, defaultValue: ''),
         selectedMySchedule = preferences
             .getString(PrefsConstants.selectedMySchedule, defaultValue: ''),
         selectedMyScheduleName = preferences
@@ -88,6 +92,7 @@ class AppPrefs {
 
   final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
+  final Preference<bool> seeMorePt;
 
   final Preference<String> token;
   final Preference<String> liveClassParticipantId;
@@ -102,6 +107,7 @@ class AppPrefs {
   final Preference<bool> updateMemberData;
   // final Preference<String> currentWorkoutDaySelected;
   final Preference<String> selectedMySchedule;
+  final Preference<String> selectedSubmission;
   final Preference<String> selectedMyScheduleName;
   final Preference<String> selectedWorkoutDate;
   final Preference<MyScheduleAddonData> selectedMyScheduleData;
@@ -157,6 +163,7 @@ class PrefsConstants {
   static const String logging = 'isLoggedIn';
   static const String firstOpen = 'isFirstOpen';
   static const String isReadOnlyModeActive = 'isReadOnlyModeActive';
+  static const String seeMorePt = 'seeMorePt';
   static const String addingClothToTrip = 'addingClothToTrip';
   static const String selectedMySchedule = 'selectedMySchedule';
   static const String selectedMyScheduleName = 'selectedMyScheduleName';
@@ -203,6 +210,7 @@ class PrefsConstants {
   static const String rainfall = 'rainfall';
   static const String place = 'place';
   static const String phoneNumber = 'phoneNumber';
+  static const String selectedSubmission = 'selectedSubmission';
   static const String otp = 'otp';
   static const String temperature = 'temperature';
   static const String userString = 'userString';

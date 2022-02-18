@@ -15,15 +15,15 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 import '../main.dart';
 import 'DiscoverScreen.dart';
-import 'SidebarDrawer.dart';
+import 'gym/membership_page.dart';
 import 'home/home.dart';
-import 'membership_page.dart';
 
 class ExplorePage extends StatefulWidget {
   @override
@@ -46,231 +46,173 @@ class _ExplorePageState extends State<ExplorePage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 6),
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // CommonAppBar(),
-                  // Container(
-                  //   alignment: Alignment.bottomLeft,
-                  //   padding: EdgeInsets.only(left: 5),
-                  //   child: Text(
-                  //     "Search WTF Fitness centers near you",
-                  //     textAlign: TextAlign.start,
-                  //     style: TextStyle(
-                  //       color: Colors.white.withOpacity(0.5),
-                  //       fontSize: 12.0,
-                  //       fontWeight: FontWeight.w700,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(padding: EdgeInsets.all(8.0)),
-                  // Row(
-                  //   children: [
-                  //     Icon(Icons.edit_location),
-                  //     UIHelper.horizontalSpace(8.0),
-                  //     Flexible(
-                  //       child: Text(
-                  //         '${store.currentAddressResult.formattedAddress}',
-                  //         maxLines: 2,
-                  //         overflow: TextOverflow.ellipsis,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  SearchBar(),
-                  SizedBox(
-                    height: 12.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: SearchBar(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  BannerWidget(
-                    isExplore: true,
+                ),
+                UIHelper.verticalSpace(10.0),
+                BannerWidget(
+                  isExplore: true,
+                ),
+                UIHelper.verticalSpace(30.0),
+                SectionHeader(
+                  subTitle: 'Explore Arena & Fitness Studios near you',
+                  title: 'Discover WTF Centers',
+                ),
+                SizedBox(
+                  height: 12.0,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    'Discover WTF Centers',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-
-                  Text(
-                    'Explore Arena & Fitness Studios near you',
-                    style: TextStyle(
-                      color: Colors.white60,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12.0,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 6.5,
-                    child: ListView.builder(
-                      itemCount: 2,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            if (index == 0) {
-                              context.read<GymStore>().getDiscoverNow(
-                                    context: context,
-                                    type: 'gym',
-                                  );
-                            } else {
-                              context.read<GymStore>().getDiscoverNow(
-                                    context: context,
-                                    type: 'studio',
-                                  );
-                            }
-                            NavigationService.navigateTo(Routes.discoverNow);
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.44,
-                            height: 120.0,
-                            margin: EdgeInsets.only(right: 15),
-                            child: Stack(
-                              children: [
-                                GradientImageWidget(
-                                  // assets: 'assets/images/gym_cover.png',
-                                  network:
-                                      index == 0 ? Images.arena : Images.studio,
+                  height: MediaQuery.of(context).size.height / 6.5,
+                  child: ListView.builder(
+                    itemCount: 2,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          if (index == 0) {
+                            context.read<GymStore>().getDiscoverNow(
+                                  context: context,
+                                  type: 'gym',
+                                );
+                          } else {
+                            context.read<GymStore>().getDiscoverNow(
+                                  context: context,
+                                  type: 'studio',
+                                );
+                          }
+                          NavigationService.navigateTo(Routes.discoverNow);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.44,
+                          height: 120.0,
+                          margin: EdgeInsets.only(right: 15),
+                          child: Stack(
+                            children: [
+                              GradientImageWidget(
+                                // assets: 'assets/images/gym_cover.png',
+                                network:
+                                    index == 0 ? Images.arena : Images.studio,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 10,
+                                  left: 10,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 10,
-                                    left: 10,
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Text(
-                                      index == 0 ? 'Arena' : 'Fitness Studio',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
-                                    ),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    index == 0 ? 'Arena' : 'Fitness Studio',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                  SizedBox(
-                    height: 20.0,
+                ),
+                UIHelper.verticalSpace(25.0),
+                LiveAddonWidget(),
+                UIHelper.verticalSpace(25.0),
+                AllAddonWidget(
+                  showHorizontalPadding: true,
+                  showOnlyPT: true,
+                ),
+                UIHelper.verticalSpace(25.0),
+                AllAddonWidget(
+                  showHorizontalPadding: true,
+                ),
+                UIHelper.verticalSpace(25.0),
+                SectionHeader(
+                  title: 'Challenges',
+                  subTitle: 'Explore Challenges happening near you',
+                ),
+                UIHelper.verticalSpace(12.0),
+                Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  LiveAddonWidget(),
-                  Text(
-                    'Challenges',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Consumer<GymStore>(
+                    builder: (context, store, child) =>
+                        store.allChallenges != null
+                            ? store.allChallenges.isNotEmpty
+                                ? ListView.builder(
+                                    itemCount: store.allChallenges.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return EventCard(
+                                        data: store.allChallenges[index],
+                                        isChallenge: true,
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'No Challenges present as of now.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                            : Loading(),
                   ),
-                  SizedBox(
-                    height: 5.0,
+                ),
+                UIHelper.verticalSpace(12.0),
+                SectionHeader(
+                  title: 'Events',
+                  subTitle: 'Explore Events happening near you',
+                ),
+                UIHelper.verticalSpace(12.0),
+                Container(
+                  height: 240.0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  Text(
-                    'Explore Challenges happening near you.',
-                    style: TextStyle(
-                      color: Colors.white60,
-                    ),
+                  child: Consumer<GymStore>(
+                    builder: (context, store, child) => store.allEvents != null
+                        ? store.allEvents.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: store.allEvents.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return EventCard(
+                                    data: store.allEvents[index],
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  'No Upcoming Events present as of now.',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                        : Loading(),
                   ),
-                  SizedBox(
-                    height: 12.0,
+                ),
+                UIHelper.verticalSpace(30.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    child: Consumer<GymStore>(
-                      builder: (context, store, child) =>
-                          store.allChallenges != null
-                              ? store.allChallenges.isNotEmpty
-                                  ? ListView.builder(
-                                      itemCount: store.allChallenges.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return EventCard(
-                                          data: store.allChallenges[index],
-                                          isChallenge: true,
-                                        );
-                                      },
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        'No Challenges present as of now.',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                              : Loading(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12.0,
-                  ),
-
-                  Text(
-                    'Events',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    'Explore Events happening near you.',
-                    style: TextStyle(
-                      color: Colors.white60,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12.0,
-                  ),
-                  Container(
-                    height: 240.0,
-                    child: Consumer<GymStore>(
-                      builder: (context, store, child) =>
-                          store.allEvents != null
-                              ? store.allEvents.isNotEmpty
-                                  ? ListView.builder(
-                                      itemCount: store.allEvents.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return EventCard(
-                                          data: store.allEvents[index],
-                                        );
-                                      },
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        'No Upcoming Events present as of now.',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                              : Loading(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
+                  child: Text(
                     'Explore more',
                     style: TextStyle(
                       color: Colors.white,
@@ -278,10 +220,13 @@ class _ExplorePageState extends State<ExplorePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    height: 12.0,
+                ),
+                UIHelper.verticalSpace(12.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
                   ),
-                  Consumer<GymStore>(
+                  child: Consumer<GymStore>(
                     builder: (context, store, child) => store.allGyms != null
                         ? store.allGyms.data != null &&
                                 store.allGyms.data.isNotEmpty
@@ -305,13 +250,52 @@ class _ExplorePageState extends State<ExplorePage> {
                               )
                         : Loader(),
                   ),
-                  UIHelper.verticalSpace(20.0),
-                  ComingSoonWidget(),
-                ],
-              ),
+                ),
+                UIHelper.verticalSpace(20.0),
+                ComingSoonWidget(),
+              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  const SectionHeader({
+    Key key,
+    this.subTitle,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          UIHelper.verticalSpace(5.0),
+          Text(
+            subTitle,
+            style: TextStyle(
+              color: Colors.white60,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -339,7 +323,7 @@ class EventCard extends StatelessWidget {
         },
         child: Container(
           width: isChallenge
-              ? MediaQuery.of(context).size.width / 2.2
+              ? MediaQuery.of(context).size.width / 1.6
               : MediaQuery.of(context).size.width / 1.6,
           height: MediaQuery.of(context).size.height / 3,
           margin: EdgeInsets.only(right: 15),
@@ -450,130 +434,357 @@ class EventCard extends StatelessWidget {
 
 class LiveCard extends StatelessWidget {
   final AddOnData data;
+  final bool isFullView;
+  final bool isLiveCard;
+  final bool showOnlyPt;
   const LiveCard({
     Key key,
     this.data,
+    this.isFullView = false,
+    this.isLiveCard = false,
+    this.showOnlyPt,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GymStore>(
-      builder: (context, store, child) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 1.6,
-            height: 160.0,
-            margin: EdgeInsets.only(right: 15),
-            child: Stack(
-              children: [
-                GradientImageWidget(
-                  // assets:
-                  //     'assets/images/challenge.png',
-                  network: data.image,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 10,
-                    left: 10.0,
+    return Container(
+      width: isFullView
+          ? MediaQuery.of(context).size.width
+          : isLiveCard
+              ? 270.0
+              : 220.0,
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(
+        left: isLiveCard ? 16 : 8.0,
+        right: isLiveCard ? 16 : 8.0,
+      ),
+      child: Consumer<GymStore>(
+        builder: (context, store, child) => isFullView
+            ? Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 250.0,
+                    child: Stack(
+                      children: [
+                        GradientImageWidget(
+                          // assets:
+                          //     'assets/images/challenge.png',
+                          network: data.image,
+                          stops: [0.3, 1.0],
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(2.0),
+                            topRight: Radius.circular(2.0),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 10,
+                            left: 10.0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Text(
+                              //   data.name ?? '',
+                              //   style: TextStyle(
+                              //     color: Colors.white,
+                              //     fontWeight: FontWeight.bold,
+                              //     fontSize: 14.0,
+                              //   ),
+                              // ),
+                              // UIHelper.verticalSpace(6.0),
+                              Text(
+                                data.gymName ?? '',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                              // UIHelper.verticalSpace(6.0),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        if (data.price == '0')
+                          Positioned(
+                            right: 16.0,
+                            top: 10.0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppConstants.primaryColor,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Text(
+                                'FREE',
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  UIHelper.verticalSpace(8.0),
+                  Row(
                     children: [
-                      Text(
-                        data.name ?? '',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Text(
+                            //   data.gymName ?? '',
+                            //   style: TextStyle(
+                            //     color: AppConstants.white,
+                            //     fontSize: 12.0,
+                            //     fontWeight: FontWeight.normal,
+                            //   ),
+                            // ),
+                            // UIHelper.verticalSpace(4.0),
+                            Text(
+                              'Class Name',
+                              style: TextStyle(
+                                color: AppConstants.white.withOpacity(0.8),
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            UIHelper.verticalSpace(4.0),
+                            Text(
+                              data.name ?? '',
+                              style: TextStyle(
+                                color: AppConstants.white.withOpacity(0.8),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                color: AppConstants.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      UIHelper.verticalSpace(6.0),
-                      Text(
-                        data.gymName ?? '',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.0,
+                      CustomGradientWidget(
+                        child: InkWell(
+                          onTap: () async {
+                            await store.getGymDetails(
+                              gymId: data.gymId,
+                              context: context,
+                            );
+                            store.setAddOnSlot(
+                              context: context,
+                              data: data,
+                              gymId: data.gymId,
+                            );
+                            NavigationService.navigateTo(
+                              Routes.chooseSlotScreen,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppConstants.buttonRed2,
+                                  AppConstants.buttonRed1.withOpacity(0.7),
+                                ],
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Book Now',
+                              style: TextStyle(
+                                color: AppConstants.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
+                        colors: [
+                          AppConstants.buttonRed2,
+                          Colors.black.withOpacity(0.7),
+                        ],
                       ),
-                      UIHelper.verticalSpace(6.0),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                if (data.price == '0')
-                  Positioned(
-                    right: 16.0,
-                    top: 10.0,
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 10.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppConstants.primaryColor,
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Text(
-                        'FREE',
-                        style: TextStyle(
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                      child: Stack(
+                        children: [
+                          GradientImageWidget(
+                            // assets:
+                            //     'assets/images/challenge.png',
+                            network: data.image,
+                            gragientColor: [
+                              Colors.transparent,
+                              Colors.black,
+                            ],
+                            stops: [0.7, 1.0],
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(2.0),
+                              topRight: Radius.circular(2.0),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 10,
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/images/wtf_2.png',
+                                  ),
+                                  UIHelper.verticalSpace(6.0),
+                                  Text(
+                                    data.gymName ?? '',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10.0,
+                                    ),
+                                  ),
+                                  UIHelper.verticalSpace(6.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          if (data.price == '0')
+                            Positioned(
+                              right: 16.0,
+                              top: 10.0,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 10.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppConstants.primaryColor,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Text(
+                                  'FREE',
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
-              ],
-            ),
-          ),
-          UIHelper.verticalSpace(8.0),
-          Ink(
-            decoration: BoxDecoration(
-              color: AppConstants.primaryColor,
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            child: InkWell(
-              onTap: () async {
-                await store.getGymDetails(
-                  gymId: data.gymId,
-                  context: context,
-                );
-                store.setAddOnSlot(
-                  context: context,
-                  data: data,
-                  gymId: data.gymId,
-                );
-                NavigationService.navigateTo(
-                  Routes.chooseSlotScreen,
-                );
-              },
-              child: Container(
-                height: 30.0,
-                padding: const EdgeInsets.all(
-                  6.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                width: MediaQuery.of(context).size.width / 1.8,
-                alignment: Alignment.center,
-                child: Text(
-                  'Book Now',
-                  style: TextStyle(
-                    color: AppConstants.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0,
+                  Stack(
+                    children: [
+                      CustomGradientWidget(
+                        child: InkWell(
+                          onTap: () async {
+                            await store.getGymDetails(
+                              gymId: data.gymId,
+                              context: context,
+                            );
+                            store.setAddOnSlot(
+                              context: context,
+                              data: data,
+                              gymId: data.gymId,
+                            );
+                            NavigationService.navigateTo(
+                              Routes.chooseSlotScreen,
+                            );
+                          },
+                          child: Container(
+                            height: 48.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(6.0),
+                                bottomRight: Radius.circular(6.0),
+                              ),
+                              gradient: LinearGradient(
+                                begin: FractionalOffset.centerLeft,
+                                end: FractionalOffset.centerRight,
+                                colors: [
+                                  AppConstants.buttonRed1,
+                                  AppConstants.buttonRed2,
+                                  AppConstants.buttonRed1,
+                                ],
+                                stops: [0.2, 0.5, 1.0],
+                              ),
+                              // color: Color(0xff9A0E0E),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '',
+                              style: TextStyle(
+                                color: AppConstants.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        colors: [
+                          // AppConstants.buttonRed1,
+                          AppConstants.red,
+                          AppConstants.buttonRed2,
+                          // AppConstants.red,
+                          // Colors.red,
+                          // Colors.black,
+                        ],
+                      ),
+                      Positioned(
+                        top: 14.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Center(
+                          child: Text(
+                            'Book Now',
+                            style: TextStyle(
+                              color: AppConstants.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
-            ),
-          ),
-        ],
       ),
     );
   }

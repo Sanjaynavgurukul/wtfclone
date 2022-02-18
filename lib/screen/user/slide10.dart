@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/screen/bmr_calculator/bmr_state.dart';
+import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
 
 import '../../main.dart';
 
@@ -52,7 +52,7 @@ class _Slide10State extends State<Slide10> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "To reach ${store.goalWeight.toStringAsFixed(2)} kg per 1 week you need to ?",
+                "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
                 style: TextStyle(
                   fontSize: 24.0,
                   color: Colors.white,
@@ -95,7 +95,7 @@ class _Slide10State extends State<Slide10> {
                   ),
                   children: [
                     TextSpan(
-                      text: '9',
+                      text: '4000 ml',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
@@ -103,7 +103,7 @@ class _Slide10State extends State<Slide10> {
                       ),
                     ),
                     TextSpan(
-                      text: ' glasses of water every day every day',
+                      text: ' of water every day',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.white.withOpacity(0.8),
@@ -122,7 +122,7 @@ class _Slide10State extends State<Slide10> {
                   ),
                   children: [
                     TextSpan(
-                      text: '3000',
+                      text: '8000',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
@@ -130,7 +130,7 @@ class _Slide10State extends State<Slide10> {
                       ),
                     ),
                     TextSpan(
-                      text: ' steps every day every day',
+                      text: ' steps every day',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.white.withOpacity(0.8),

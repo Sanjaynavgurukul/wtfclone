@@ -22,7 +22,8 @@ class APIHelper {
   static const String ADD_MEMBER = BASE_URL + 'member/add';
   static const String updateMember = BASE_URL + 'member/update';
   static const String whyChooseWtf = BASE_URL + 'terms';
-  static const String getAllLiveClasses = BASE_URL + 'addon?is_live=true';
+  static String getAllLiveClasses(bool isLive) =>
+      BASE_URL + 'addon?is_live=$isLive';
   static const String FORGOT_PASSWORD = BASE_URL + 'user/forgot';
   static const String RESET_PASSWORD = BASE_URL + 'user/reset';
   static const String GET_GYM = BASE_URL + 'gym/';

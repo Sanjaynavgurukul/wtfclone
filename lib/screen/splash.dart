@@ -11,7 +11,6 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
-import 'package:wtf/widget/Shimmer/values/type.dart';
 import 'package:wtf/widget/slide_to_move_widget.dart';
 
 import '../main.dart';
@@ -197,6 +196,7 @@ class SplashWidget extends StatelessWidget {
                       color: Colors.white,
                     ),
                     submittedIcon: Image.asset(Logos.WTF_DARK),
+                    sliderRotate: true,
                     // sliderButtonIconPadding: 0,
                     elevation: 0,
                   ),

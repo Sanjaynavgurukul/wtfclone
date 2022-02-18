@@ -13,10 +13,10 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/screen/stopwatch.dart';
 import 'package:wtf/widget/custom_button.dart';
 
-import '../../../main.dart';
-import '../../test.dart';
+import '../../../../../main.dart';
 import '../exercise_video.dart';
 import 'exercise_result.dart';
 import 'exercise_start_info.dart';
@@ -40,7 +40,7 @@ class _ExerciseStartState extends State<ExerciseStart> {
   int m = 0, s = 0, h = 0;
   Timer timer;
   VideoPlayerController _controller;
-  Dependencies localTimer;
+  StopwatchDependencies localTimer;
   bool timePaused = false;
 
   Exercise data;
@@ -50,7 +50,7 @@ class _ExerciseStartState extends State<ExerciseStart> {
   @override
   void initState() {
     super.initState();
-    localTimer = Dependencies();
+    localTimer = StopwatchDependencies();
     print('video:: ${context.read<GymStore>().workoutDetails.data.video}');
     _controller = VideoPlayerController.network(
       context.read<GymStore>().workoutDetails.data.video,

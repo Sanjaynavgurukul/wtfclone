@@ -261,14 +261,25 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                                   vertical: 16.0,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppConstants.primaryColor,
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppConstants.buttonRed2,
+                                      AppConstants.buttonRed1.withOpacity(0.7),
+                                    ],
+                                  ),
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(gymStore.selectedTrainer != null
-                                        ? gymStore.selectedTrainer.name
-                                        : 'Select a Trainer'),
+                                    Text(
+                                      gymStore.selectedTrainer != null
+                                          ? gymStore.selectedTrainer.name
+                                          : 'Select a Trainer',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     UIHelper.horizontalSpace(6.0),
                                     Icon(Icons.arrow_drop_down),
                                   ],

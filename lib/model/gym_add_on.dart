@@ -17,13 +17,20 @@ class GymAddOn {
   bool status;
   List<AddOnData> data;
 
-  factory GymAddOn.fromJson(Map<String, dynamic> json) => GymAddOn(
-        status: json["status"],
-        data: json.containsKey('data')
-            ? List<AddOnData>.from(
-                json["data"].map((x) => AddOnData.fromJson(x)))
-            : [],
-      );
+  factory GymAddOn.fromJson(Map<String, dynamic> json) {
+    List<AddOnData> temp = [];
+    if (json.containsKey('data') && json['data'] != null) {
+      for (var x in json['data']) {
+        if (x['status'] != 'inactive') {
+          temp.add(AddOnData.fromJson(x));
+        }
+      }
+    }
+    return GymAddOn(
+      status: json["status"],
+      data: json.containsKey('data') ? temp : [],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "status": status,

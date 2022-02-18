@@ -6,8 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
-import 'package:wtf/screen/body_calculator/bodyFat_state.dart';
-import 'package:wtf/screen/calories_counter/calories_counter.dart';
+import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
+import 'package:wtf/screen/calculators/calories_counter/calories_counter.dart';
 import 'package:wtf/widget/slide_button.dart';
 
 import '../calories_counter/CalorieCounterTextBox.dart';

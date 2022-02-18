@@ -8,7 +8,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/GymOffers.dart';
-import 'package:wtf/screen/booking_summary.dart';
+import 'package:wtf/screen/subscriptions/booking_summary.dart';
 import 'package:wtf/widget/app_button.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 

@@ -12,13 +12,16 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:wtf/controller/auth_controller.dart';
+import 'package:wtf/controller/dynamic_links.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/controller/user_store.dart';
 import 'package:wtf/helper/firebase_cloud_messaging_wapper.dart';
 import 'package:wtf/helper/network_utils.dart';
 import 'package:wtf/helper/strings.dart';
-import 'package:wtf/screen/body_calculator/bodyFat_state.dart';
+import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
+import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
+import 'package:wtf/screen/calculators/calories_counter/calorie_state.dart';
 
 import 'helper/AppPrefs.dart';
 import 'helper/NotificationHelper.dart';
@@ -26,8 +29,6 @@ import 'helper/app_constants.dart';
 import 'helper/colors.dart';
 import 'helper/navigation.dart';
 import 'helper/routes.dart';
-import 'screen/bmr_calculator/bmr_state.dart';
-import 'screen/calories_counter/calorie_state.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -79,6 +80,7 @@ class _MyAppState extends State<MyApp>
         ..init()
         ..delegate = this;
     });
+    locator<DynamicLinkService>().handleDynamicLinks();
     super.initState();
   }
 
@@ -266,6 +268,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<FirebaseCloudMessagagingWapper>(
       () => FirebaseCloudMessagagingWapper());
   locator.registerLazySingleton<NetworkUtil>(() => NetworkUtil());
+  locator.registerLazySingleton<DynamicLinkService>(() => DynamicLinkService());
   locator.registerFactory<GymStore>(() => GymStore());
 }
 

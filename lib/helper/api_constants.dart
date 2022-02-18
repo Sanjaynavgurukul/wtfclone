@@ -86,4 +86,8 @@ class Api {
       'dietcat/getbyId?uid=${locator<AppPrefs>().memberData.getValue().dietcategoryid}&day=$day&user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
   static String getConsumedDiet(String date) =>
       "dietmapping?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date";
+  static String eventSubmissionAdd() => "eventsubmission/add";
+  static String eventSubmissionUpdate() => "eventsubmission/update";
+  static String getEventSubmission(String eventId) =>
+      "eventsubmission/mobile?event_id=$eventId";
 }

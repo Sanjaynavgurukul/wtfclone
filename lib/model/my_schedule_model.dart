@@ -237,7 +237,7 @@ class MyScheduleAddonData {
         workoutStatus: json['workout_status'] ?? false,
         roomId: json['room_id'] ?? '',
         liveClassId: json['liveclass_id'] ?? '',
-        roomStatus: json['room_status'] ?? 'started');
+        roomStatus: json['room_status'] ?? 'scheduled');
   }
 
   Map<String, dynamic> toJson() => {

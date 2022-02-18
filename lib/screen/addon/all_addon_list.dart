@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/main.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
@@ -30,27 +32,33 @@ class _AllLiveAddonListState extends State<AllLiveAddonList> {
         centerTitle: false,
         backgroundColor: AppConstants.primaryColor,
       ),
-      body: Consumer<GymStore>(
-        builder: (context, store, child) => store.allLiveClasses != null
-            ? store.allLiveClasses.data != null &&
-                    store.allLiveClasses.data.isNotEmpty
-                ? ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: store.allLiveClasses.data.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) => Center(
-                      child: LiveCard(
-                        data: store.allLiveClasses.data[index],
-                        isFullView: true,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          store.getAllLiveClasses(context: context);
+        },
+        color: AppConstants.white,
+        child: Consumer<GymStore>(
+          builder: (context, store, child) => store.allLiveClasses != null
+              ? store.allLiveClasses.data != null &&
+                      store.allLiveClasses.data.isNotEmpty
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: store.allLiveClasses.data.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) => Center(
+                        child: LiveCard(
+                          data: store.allLiveClasses.data[index],
+                          isFullView: true,
+                        ),
                       ),
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      'No live Classes found',
-                    ),
-                  )
-            : Loading(),
+                    )
+                  : Center(
+                      child: Text(
+                        'No live Classes found',
+                      ),
+                    )
+              : Loading(),
+        ),
       ),
     );
   }
@@ -70,7 +78,7 @@ class _AllAddonListState extends State<AllAddonList> {
       backgroundColor: AppColors.BACK_GROUND_BG,
       appBar: AppBar(
         title: Text(
-          'WTF Powered Fitness Activities',
+          'WTF Powered ${locator<AppPrefs>().seeMorePt.getValue() ? 'Personal Training' : 'Fitness Activities'}',
           style: TextStyle(
             color: Colors.white,
             fontSize: 16.0,
@@ -80,29 +88,46 @@ class _AllAddonListState extends State<AllAddonList> {
         centerTitle: false,
         backgroundColor: AppConstants.primaryColor,
       ),
-      body: Consumer<GymStore>(
-        builder: (context, store, child) => store.allAddonClasses != null
-            ? store.allAddonClasses.data != null &&
-                    store.allAddonClasses.data.isNotEmpty
-                ? Center(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: store.allAddonClasses.data.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) => Center(
-                        child: LiveCard(
-                          data: store.allAddonClasses.data[index],
-                          isFullView: true,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          store.getAllAddonClasses(context: context);
+        },
+        color: AppConstants.white,
+        child: Consumer<GymStore>(
+          builder: (context, store, child) => store.allAddonClasses != null
+              ? store.allAddonClasses.data != null &&
+                      store.allAddonClasses.data.isNotEmpty
+                  ? Center(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: store.allAddonClasses.data
+                            .where((e) =>
+                                locator<AppPrefs>().seeMorePt.getValue()
+                                    ? int.tryParse(e.isPt) == 1
+                                    : int.tryParse(e.isPt) == 0)
+                            .toList()
+                            .length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) => Center(
+                          child: LiveCard(
+                            data: store.allAddonClasses.data
+                                .where((e) =>
+                                    locator<AppPrefs>().seeMorePt.getValue()
+                                        ? int.tryParse(e.isPt) == 1
+                                        : int.tryParse(e.isPt) == 0)
+                                .toList()[index],
+                            isFullView: true,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      'No live Classes found',
-                    ),
-                  )
-            : Loading(),
+                    )
+                  : Center(
+                      child: Text(
+                        'No live Classes found',
+                      ),
+                    )
+              : Loading(),
+        ),
       ),
     );
   }

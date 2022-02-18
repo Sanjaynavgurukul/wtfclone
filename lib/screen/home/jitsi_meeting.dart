@@ -9,7 +9,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/main.dart';
-import 'package:wtf/screen/test.dart';
+import 'package:wtf/screen/stopwatch.dart';
 
 class JitsiMeeting extends StatefulWidget {
   final String meetingSubject;
@@ -26,12 +26,12 @@ class _JitsiMeetingState extends State<JitsiMeeting> {
   bool isAudioMuted = true;
   GymStore gymStore;
   bool isVideoMuted = true;
-  Dependencies localTimer;
+  StopwatchDependencies localTimer;
 
   @override
   void initState() {
     super.initState();
-    localTimer = Dependencies();
+    localTimer = StopwatchDependencies();
 
     _joinMyMeeting();
   }

@@ -11,7 +11,7 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/gym_model.dart';
-import 'package:wtf/screen/membership_page.dart';
+import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';

@@ -1,60 +1,66 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:wtf/screen/ActiveSubscriptionScreen.dart';
-import 'package:wtf/screen/BookSession.dart';
-import 'package:wtf/screen/BookingSuccess.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
-import 'package:wtf/screen/EventDetails.dart';
-import 'package:wtf/screen/MainWorkoutScreen.dart';
-import 'package:wtf/screen/Slot/choose_slot_screen.dart';
-import 'package:wtf/screen/Slot/choose_slot_screen_addon.dart';
+import 'package:wtf/screen/addon/BookSession.dart';
+import 'package:wtf/screen/addon/BookingSuccess.dart';
+import 'package:wtf/screen/addon/Slot/choose_slot_screen.dart';
+import 'package:wtf/screen/addon/Slot/choose_slot_screen_addon.dart';
+import 'package:wtf/screen/addon/all_addon_list.dart';
+import 'package:wtf/screen/addon/buy_session.dart';
+import 'package:wtf/screen/addon/live_classes.dart';
+import 'package:wtf/screen/addon/powered_pages.dart';
+import 'package:wtf/screen/addon/pt_pages.dart';
+import 'package:wtf/screen/addon/schedule_slots_screen.dart';
 import 'package:wtf/screen/attendance/attendance.dart';
 import 'package:wtf/screen/attendance/qrScanner.dart';
 import 'package:wtf/screen/auth/forgot_password.dart';
 import 'package:wtf/screen/auth/login.dart';
 import 'package:wtf/screen/auth/login_email.dart';
 import 'package:wtf/screen/auth/register.dart';
-import 'package:wtf/screen/bmr_calculator/bmr_calculator.dart';
-import 'package:wtf/screen/bmr_calculator/bmr_calculator_result.dart';
-import 'package:wtf/screen/body_calculator/bodyFat_cal.dart';
-import 'package:wtf/screen/body_calculator/bodyFat_cal_result.dart';
-import 'package:wtf/screen/body_calculator/body_calculator.dart';
-import 'package:wtf/screen/booking_summary.dart';
-import 'package:wtf/screen/booking_summary_add_on.dart';
-import 'package:wtf/screen/booking_summary_events.dart';
-import 'package:wtf/screen/buy_session.dart';
-import 'package:wtf/screen/buy_subscription_screen.dart';
-import 'package:wtf/screen/calories_counter/calories_counter.dart';
-import 'package:wtf/screen/calories_counter/calories_counter_result.dart';
+import 'package:wtf/screen/calculators/bmr_calculator/bmr_calculator.dart';
+import 'package:wtf/screen/calculators/bmr_calculator/bmr_calculator_result.dart';
+import 'package:wtf/screen/calculators/body_calculator/bodyFat_cal.dart';
+import 'package:wtf/screen/calculators/body_calculator/bodyFat_cal_result.dart';
+import 'package:wtf/screen/calculators/body_calculator/body_calculator.dart';
+import 'package:wtf/screen/calculators/calories_counter/calories_counter.dart';
+import 'package:wtf/screen/calculators/calories_counter/calories_counter_result.dart';
 import 'package:wtf/screen/coin/allcoin_screen.dart';
 import 'package:wtf/screen/coin/coin_screen.dart';
 import 'package:wtf/screen/coin/point_history.dart';
 import 'package:wtf/screen/coin/redeem_history.dart';
 import 'package:wtf/screen/coin/shopping_screen.dart';
-import 'package:wtf/screen/congrats_screen.dart';
-import 'package:wtf/screen/diet_schedule.dart';
-import 'package:wtf/screen/exercise/exercise.dart';
-import 'package:wtf/screen/exercise/exercise_start/exercise_start.dart';
-import 'package:wtf/screen/gym_membership_plan_page.dart';
+import 'package:wtf/screen/event/EventDetails.dart';
+import 'package:wtf/screen/event/event_submissions.dart';
+import 'package:wtf/screen/event/submission_detail.dart';
+import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
+import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/screen/home/home.dart';
 import 'package:wtf/screen/home/notifications/notifications.dart';
 import 'package:wtf/screen/home_screen.dart';
 import 'package:wtf/screen/loader.dart';
-import 'package:wtf/screen/membership_page.dart';
-import 'package:wtf/screen/my_schedule.dart';
-import 'package:wtf/screen/my_subscription.dart';
-import 'package:wtf/screen/my_transaaction.dart';
 import 'package:wtf/screen/my_wtf.dart';
-import 'package:wtf/screen/profile.dart';
-import 'package:wtf/screen/schedule_slots_screen.dart';
+import 'package:wtf/screen/nutrition/congrats_screen.dart';
+import 'package:wtf/screen/nutrition/diet_schedule.dart';
+import 'package:wtf/screen/schedule/MainWorkoutScreen.dart';
+import 'package:wtf/screen/schedule/exercise/exercise.dart';
+import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
+import 'package:wtf/screen/schedule/my_schedule.dart';
+import 'package:wtf/screen/schedule/workout_complete/workout_complete.dart';
 import 'package:wtf/screen/search_screen.dart';
-import 'package:wtf/screen/shift_trainer.dart';
+import 'package:wtf/screen/side_bar_drawer/my_subscription.dart';
+import 'package:wtf/screen/side_bar_drawer/my_transaaction.dart';
+import 'package:wtf/screen/side_bar_drawer/profile.dart';
+import 'package:wtf/screen/side_bar_drawer/shift_trainer.dart';
 import 'package:wtf/screen/splash.dart';
 import 'package:wtf/screen/statistics/statistics.dart';
+import 'package:wtf/screen/subscriptions/ActiveSubscriptionScreen.dart';
+import 'package:wtf/screen/subscriptions/booking_summary.dart';
+import 'package:wtf/screen/subscriptions/booking_summary_add_on.dart';
+import 'package:wtf/screen/subscriptions/booking_summary_events.dart';
+import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
 import 'package:wtf/screen/user/update_fitness_profile.dart';
 import 'package:wtf/screen/user/user_details.dart';
-import 'package:wtf/screen/workout_complete/workout_complete.dart';
 
 class Routes {
   static const String loader = '/loader';
@@ -65,15 +71,18 @@ class Routes {
   static const String forgotPaswword = '/forgotPassword';
   static const String resetPaswword = '/resetPassword';
   static const String userDetail = '/userDetail';
-  static const String mainHome = '/mainHome';
   static const String homePage = '/homePage';
   static const String eventDetails = '/eventDetails';
+  static const String eventSubmissions = '/eventSubmissions';
+  static const String submissionDetail = '/submissionDetail';
   static const String discoverNow = '/discoverNow';
   static const String discover = '/discover';
   static const String searchScreen = '/searchPage';
   static const String buyMemberShipPage = '/buyMemberShipPage';
   static const String bookingSummaryEvent = '/bookingSummaryEvent';
   static const String membershipPlanPage = '/membershipPlanPage';
+  static const String allLiveAddons = '/allLiveAddons';
+  static const String allAddons = '/allAddons';
   static const String scheduleSlotPage = '/scheduleSlotPage';
   static const String chooseSlotScreen = '/chooseSlotScreen';
   static const String chooseSlotScreenAddon = '/chooseSlotScreenAddon';
@@ -81,6 +90,8 @@ class Routes {
   static const String bookingSummaryScreen = '/bookingSummaryScreen';
   static const String bookingSummaryAddOn = '/bookingSummaryAddOn';
   static const String mySchedule = '/mySchedule';
+  static const String ptClassPage = '/ptClassPage';
+  static const String poweredPages = '/poweredPages';
   static const String profile = '/profile';
   static const String myWtf = '/myWtf';
   static const String myTransaction = '/myTransaction';
@@ -196,6 +207,23 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => EventDetails(), settings: settings);
+      case Routes.eventSubmissions:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: EventSubmissionScreen(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => EventSubmissionScreen(),
+                settings: settings);
+      case Routes.submissionDetail:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: SubmissionDetail(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => SubmissionDetail(), settings: settings);
       case Routes.ptIntro:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
@@ -310,6 +338,44 @@ class RouteGenerator {
             : CupertinoPageRoute(
                 builder: (context) => GymMembershipPlanPage(),
                 settings: settings);
+      case Routes.allLiveAddons:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: LiveClasses(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => LiveClasses(),
+                settings: settings,
+              );
+      case Routes.ptClassPage:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: PTPages(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => PTPages(),
+                settings: settings,
+              );
+      case Routes.poweredPages:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: PoweredPages(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => PoweredPages(),
+                settings: settings,
+              );
+      case Routes.allAddons:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: AllAddonList(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => AllAddonList(), settings: settings);
       case Routes.scheduleSlotPage:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

@@ -18,31 +18,42 @@ class UserController extends ChangeNotifier {
       ? locator<AppPrefs>().memberData.getValue().location
       : null;
   int age = 25;
-  double heightFeet = locator<AppPrefs>().memberData.getValue().name != null
-      ? double.parse(locator<AppPrefs>().memberData.getValue().height)
+  double heightFeet = locator<AppPrefs>().memberData.getValue().height != null
+      ? double.parse(locator<AppPrefs>()
+              .memberData
+              .getValue()
+              .height
+              .contains("'")
+          ? '${locator<AppPrefs>().memberData.getValue().height.split("'")[0]}'
+          : locator<AppPrefs>().memberData.getValue().height)
       : 5.0;
-  int inches = 5;
-  int weight = locator<AppPrefs>().memberData.getValue().name != null
+  int inches = locator<AppPrefs>().memberData.getValue().height != null &&
+          locator<AppPrefs>().memberData.getValue().height.contains("'")
+      ? int.parse(
+          locator<AppPrefs>().memberData.getValue().height.split("'")[1])
+      : 5;
+  int weight = locator<AppPrefs>().memberData.getValue().weight != null
       ? int.parse(locator<AppPrefs>().memberData.getValue().weight)
       : 60;
   int targetWeight = locator<AppPrefs>().memberData.getValue().name != null
       ? int.parse(locator<AppPrefs>().memberData.getValue().targetWeight)
       : 75;
   var goalWeight = 0.25;
-  String bodyType = locator<AppPrefs>().memberData.getValue().name != null
+  String bodyType = locator<AppPrefs>().memberData.getValue().bodyType != null
       ? locator<AppPrefs>().memberData.getValue().bodyType
       : '';
-  String activeType = locator<AppPrefs>().memberData.getValue().name != null
-      ? locator<AppPrefs>().memberData.getValue().howActive
-      : '';
-  bool isSmoking = locator<AppPrefs>().memberData.getValue().name != null
+  String activeType =
+      locator<AppPrefs>().memberData.getValue().howActive != null
+          ? locator<AppPrefs>().memberData.getValue().howActive
+          : '';
+  bool isSmoking = locator<AppPrefs>().memberData.getValue().isSmoking != null
       ? locator<AppPrefs>().memberData.getValue().isSmoking == 'true'
       : false;
-  bool isDrinking = locator<AppPrefs>().memberData.getValue().name != null
+  bool isDrinking = locator<AppPrefs>().memberData.getValue().isDrinking != null
       ? locator<AppPrefs>().memberData.getValue().isDrinking == 'true'
       : false;
   List<String> existingDisease =
-      locator<AppPrefs>().memberData.getValue().name != null
+      locator<AppPrefs>().memberData.getValue().existingDisease != null
           ? locator<AppPrefs>()
               .memberData
               .getValue()
@@ -139,8 +150,10 @@ class UserController extends ChangeNotifier {
       'age': age,
       'gender': gender,
       'location': address,
-      'lat': context.read<GymStore>().currentPosition.latitude ?? '',
-      'long': context.read<GymStore>().currentPosition.longitude ?? '',
+      'lat': context.read<GymStore>().currentPosition?.latitude ??
+          locator<AppPrefs>().memberData.getValue().lat,
+      'long': context.read<GymStore>().currentPosition?.longitude ??
+          locator<AppPrefs>().memberData.getValue().long,
       'body_type': bodyType,
       "is_smoking": isSmoking,
       "is_drinking": isDrinking,

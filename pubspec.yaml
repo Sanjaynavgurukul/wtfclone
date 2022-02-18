@@ -94,6 +94,11 @@ dependencies:
   flutter_screenutil: ^5.0.2
   jitsi_meet: ^4.0.0
   rolling_nav_bar: ^0.0.4
+  status_change: ^2.0.0
+  easy_gradient_text: ^1.0.0
+  firebase_dynamic_links: ^2.0.10
+  uni_links: ^0.5.1
+  scaffold_gradient_background: ^1.0.3+1
   
   
 
@@ -115,6 +120,7 @@ flutter:
     - assets/svg/
     - assets/svg/male/
     - assets/svg/female/
+    - assets/svg/you_get/
 
   fonts:
     - family: Railway

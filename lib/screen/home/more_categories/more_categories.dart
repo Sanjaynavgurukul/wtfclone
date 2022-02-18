@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/app_constants.dart';
 
 import 'categories_item.dart';
 
@@ -13,7 +14,7 @@ class MoreCategories extends StatelessWidget {
       'img': 'assets/images/community.png',
     },
     {
-      'name': 'WTF\n Gurus',
+      'name': 'WTF\n Guru\'s Pro',
       'img': 'assets/images/guru.png',
     },
   ];
@@ -35,6 +36,23 @@ class MoreCategories extends StatelessWidget {
           Divider(
             thickness: 1.2,
             color: Colors.white10,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              color: AppConstants.primaryColor,
+              child: Text(
+                'Coming Soon Features',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
           ),
           SizedBox(
             height: 10,
@@ -72,6 +90,10 @@ class MoreCategories extends StatelessWidget {
                 img: _itemsList[index]['img'],
               ),
             ),
+          ),
+          Divider(
+            thickness: 1.2,
+            color: Colors.white10,
           ),
         ],
       ),

@@ -52,6 +52,7 @@ class Fonts {
 
 class Gif {
   static const String SPLASH_GIF = 'assets/gif/splash.gif';
+  static const String loader = 'assets/gif/loader.gif';
 }
 
 class Videos {

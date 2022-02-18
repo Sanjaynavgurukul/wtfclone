@@ -298,7 +298,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 //   Global.number,
                                 // ],
                                 keyboardType: TextInputType.text,
-                                hintText: 'Referral Code',
+                                hintText: 'Referral Code (optional)',
                                 controller: referralCodeController,
                                 maxLines: 1,
                               ),

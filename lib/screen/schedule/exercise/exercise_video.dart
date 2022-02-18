@@ -74,6 +74,13 @@ class _AutoVideoSliderWidgetState extends State<AutoVideoSliderWidget> {
   }
 
   @override
+  void dispose() {
+    _controller.pause();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: Get.height * 0.28,

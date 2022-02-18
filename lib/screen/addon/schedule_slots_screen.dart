@@ -19,7 +19,7 @@ import 'package:wtf/widget/progress_loader.dart';
 import 'package:wtf/widget/slide_button.dart';
 import 'package:wtf/widget/text_field.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class ScheduleSlotScreen extends StatefulWidget {
   @override

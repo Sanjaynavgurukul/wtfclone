@@ -4,7 +4,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
-import 'package:wtf/screen/body_calculator/bodyFat_state.dart';
+import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
 import 'package:wtf/widget/slide_button.dart';
 
 class BodyFatCalResult extends StatelessWidget {

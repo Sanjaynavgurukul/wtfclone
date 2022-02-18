@@ -24,6 +24,7 @@ import 'package:wtf/screen/user/slide6.dart';
 import 'package:wtf/screen/user/slide7.dart';
 import 'package:wtf/screen/user/slide8.dart';
 import 'package:wtf/screen/user/slide9.dart';
+import 'package:wtf/widget/Shimmer/values/type.dart';
 
 import '../../main.dart';
 
@@ -113,7 +114,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             case 12:
               currentIndex--;
               _controller.animateToPage(currentIndex,
-                  duration: Duration(milliseconds: 500),
+                  duration: Duration(milliseconds: 400),
                   curve: Curves.easeInCubic);
               return false;
             default:
@@ -342,6 +343,24 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                               'Select your target weight')));
                                       return;
                                     }
+                                  }
+
+                                  if (currentIndex == 10) {
+                                    if (user.existingDisease.length == null ||
+                                        user.existingDisease.length == 0) {
+                                      key.currentState.showSnackBar(
+                                        new SnackBar(
+                                          content: new Text('Select disease'),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    context.read<GymStore>().getdietPref(
+                                        context: context,
+                                        type: DietPrefType.type1);
+                                    context.read<GymStore>().getdietPref(
+                                        context: context,
+                                        type: DietPrefType.type2);
                                   }
 
                                   if (currentIndex == 11) {

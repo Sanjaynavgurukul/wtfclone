@@ -54,7 +54,17 @@ class BodyStats extends StatelessWidget {
                     )
                   : Container()
               : Loading(),
-        )
+        ),
+        Center(
+          child: Text(
+            'Note: Tap on any card to update.',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -63,7 +73,7 @@ class BodyStats extends StatelessWidget {
     List titles = [
       'Calories Burnt - Today',
       'How fat am I?',
-      'How many calories am I burning?',
+      'How many calories should I burn?',
       'My Goal'
     ];
     return [0, 1, 2, 3]
@@ -378,28 +388,28 @@ class MyCalories extends StatelessWidget {
                 ),
               ),
             ),
-            if (store.memberStats.data.weekcalories.isNotEmpty &&
-                store.memberStats.data.weekcalories.first.eCalories != null)
-              Positioned(
-                bottom: 20.0,
-                left: 0.0,
-                right: 0.0,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      UIHelper.verticalSpace(6.0),
-                      Center(
-                        child: Image.asset(
-                          'assets/images/calories.png',
-                          height: 120.0,
-                        ),
-                      ),
-                      UIHelper.verticalSpace(6.0),
-                    ],
-                  ),
-                ),
-              ),
+            // if (store.memberStats.data.weekcalories.isNotEmpty &&
+            //     store.memberStats.data.weekcalories.first.eCalories != null)
+            //   Positioned(
+            //     bottom: 20.0,
+            //     left: 0.0,
+            //     right: 0.0,
+            //     child: Center(
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.center,
+            //         children: [
+            //           UIHelper.verticalSpace(6.0),
+            //           Center(
+            //             child: Image.asset(
+            //               'assets/images/caloriess.jpeg',
+            //               height: 120.0,
+            //             ),
+            //           ),
+            //           UIHelper.verticalSpace(6.0),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
             Positioned(
               top: 100.0,
               left: 0.0,
@@ -536,8 +546,9 @@ class MyBmr extends StatelessWidget {
                           UIHelper.verticalSpace(8.0),
                           Text(
                             double.tryParse(store.memberStats.data.bmrCal.first
-                                        .bmrResult)
-                                    .toStringAsFixed(2) ??
+                                            .bmrResult)
+                                        .toStringAsFixed(2) +
+                                    ' Kcal' ??
                                 '',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
@@ -667,8 +678,9 @@ class MyBodyFat extends StatelessWidget {
                             ),
                             Text(
                               store.memberStats.data.bodyfatCal.first
-                                      .bodyFatResult
-                                      .toStringAsFixed(2) ??
+                                          .bodyFatResult
+                                          .toStringAsFixed(2) +
+                                      " %" ??
                                   '',
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,

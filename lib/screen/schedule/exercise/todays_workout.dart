@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wtf/screen/exercise/workout_items.dart';
+import 'package:wtf/screen/schedule/exercise/workout_items.dart';
 
 class TodaysWorkout extends StatelessWidget {
   const TodaysWorkout({Key key}) : super(key: key);

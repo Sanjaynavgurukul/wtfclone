@@ -18,10 +18,10 @@ import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
-import 'package:wtf/screen/buy_subscription_screen.dart';
+import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
 import 'package:wtf/widget/slide_button.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class BookingSummaryAddOn extends StatefulWidget {
   @override
@@ -253,7 +253,9 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                           width: 15,
                         ),
                         Text(
-                          gymStore.selectedGymDetail == null? "" : gymStore.selectedGymDetail.data.gymName ,
+                          gymStore.selectedGymDetail == null
+                              ? ""
+                              : gymStore.selectedGymDetail.data.gymName,
                           style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,

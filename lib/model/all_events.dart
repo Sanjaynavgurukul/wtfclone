@@ -68,6 +68,8 @@ class EventsData {
     this.timeTo,
     this.gymLat,
     this.gymLong,
+    this.rewardsSubmissions,
+    this.submissions,
   });
 
   String uid;
@@ -98,37 +100,40 @@ class EventsData {
   String gymCoverImage;
   String gymType;
   String gymName;
+  String submissions;
+  String rewardsSubmissions;
 
   factory EventsData.fromJson(Map<String, dynamic> json) => EventsData(
-        uid: json["uid"],
-        name: json["name"],
-        date: json["date"],
-        mode: json["mode"],
-        image: json["image"],
-        isPublic: json["is_public"],
-        description: json["description"],
-        price: json["price"],
-        status: json["status"],
-        dateAdded: json["date_added"],
-        lastUpdated: json["last_updated"],
-        validFrom: json["valid_from"],
-        validTo: json["valid_to"],
-        gymId: json["gym_id"],
-        gymUid: json["gym_uid"],
-        gymAddress1: json["gym_address1"],
-        gymAddress2: json["gym_address2"],
-        gymCity: json["gym_city"],
-        gymState: json["gym_state"],
-        gymPin: json["gym_pin"],
-        gymCountry: json["gym_country"],
-        gymCoverImage: json["gym_cover_image"],
-        gymType: json["gym_type"],
-        gymName: json["gym_name"],
-        timeFrom: json['time_from'] ?? '',
-        timeTo: json['time_to'] ?? '',
-        gymLat: json['gym_lat'] ?? '28.576639',
-        gymLong: json['gym_long'] ?? '77.388474',
-      );
+      uid: json["uid"],
+      name: json["name"],
+      date: json["date"],
+      mode: json["mode"],
+      image: json["image"],
+      isPublic: json["is_public"],
+      description: json["description"],
+      price: json["price"],
+      status: json["status"],
+      dateAdded: json["date_added"],
+      lastUpdated: json["last_updated"],
+      validFrom: json["valid_from"],
+      validTo: json["valid_to"],
+      gymId: json["gym_id"],
+      gymUid: json["gym_uid"],
+      gymAddress1: json["gym_address1"],
+      gymAddress2: json["gym_address2"],
+      gymCity: json["gym_city"],
+      gymState: json["gym_state"],
+      gymPin: json["gym_pin"],
+      gymCountry: json["gym_country"],
+      gymCoverImage: json["gym_cover_image"],
+      gymType: json["gym_type"],
+      gymName: json["gym_name"],
+      timeFrom: json['time_from'] ?? '',
+      timeTo: json['time_to'] ?? '',
+      gymLat: json['gym_lat'] ?? '28.576639',
+      gymLong: json['gym_long'] ?? '77.388474',
+      rewardsSubmissions: json['rewards_submissions'].toString() ?? '',
+      submissions: json['submissions'] ?? ',');
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
@@ -136,6 +141,8 @@ class EventsData {
         "date": date,
         "mode": mode,
         "image": image,
+        "submissions": submissions,
+        "rewards_submissions": rewardsSubmissions,
         "is_public": isPublic,
         "description": description,
         "price": price,

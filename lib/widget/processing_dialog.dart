@@ -25,6 +25,7 @@ class _ProcessingDialogState extends State<ProcessingDialog> {
       ),
       elevation: 5.0,
       contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      // content: Image.asset('assets/gif/loader.gif'),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

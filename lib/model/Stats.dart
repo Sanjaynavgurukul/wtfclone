@@ -141,7 +141,7 @@ class BodyfatCal {
 
   String uid;
   int weight;
-  int height;
+  num height;
   int age;
   double bmiResult;
   double bodyFatResult;

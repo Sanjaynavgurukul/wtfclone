@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wtf/screen/exercise/todays_workout.dart';
-import 'package:wtf/screen/exercise/white_button.dart';
+import 'package:wtf/screen/schedule/exercise/todays_workout.dart';
+import 'package:wtf/screen/schedule/exercise/white_button.dart';
 
 class ExerciseOverview extends StatelessWidget {
   const ExerciseOverview({Key key}) : super(key: key);

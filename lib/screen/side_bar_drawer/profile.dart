@@ -13,7 +13,7 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/text_field.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class Profile extends StatefulWidget {
   @override

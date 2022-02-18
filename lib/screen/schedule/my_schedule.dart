@@ -17,11 +17,11 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_schedule_model.dart';
-import 'package:wtf/screen/SidebarDrawer.dart';
+import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class MyScheduleScreen extends StatefulWidget {
   @override

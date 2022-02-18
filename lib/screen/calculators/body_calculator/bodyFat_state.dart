@@ -9,9 +9,8 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/main.dart';
 import 'package:wtf/widget/processing_dialog.dart';
-
-import '../../main.dart';
 
 class BodyState extends ChangeNotifier {
   String text = 'hello';

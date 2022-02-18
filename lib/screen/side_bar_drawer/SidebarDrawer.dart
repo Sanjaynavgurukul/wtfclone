@@ -18,9 +18,9 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/widget/custom_dialog.dart';
 
-import '../main.dart';
+import '../../main.dart';
+import '../home/notifications/notifications.dart';
 import 'Menu_item.dart';
-import 'home/notifications/notifications.dart';
 
 class SidebarDrawer extends StatefulWidget {
   @override

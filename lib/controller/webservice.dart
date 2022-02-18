@@ -7,7 +7,6 @@ import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:http/http.dart';
-import 'package:simple_html_css/simple_html_css.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/api_helper.dart';
@@ -15,6 +14,7 @@ import 'package:wtf/helper/network_utils.dart';
 import 'package:wtf/model/ActiveSubscriptions.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/model/AttendanceDetails.dart';
+import 'package:wtf/model/EventSubmissions.dart';
 import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/Stats.dart';
@@ -471,14 +471,14 @@ class RestDatasource {
     }
   }
 
-  Future<GymAddOn> getLiveClasses() async {
+  Future<GymAddOn> getLiveClasses({bool isLive = true}) async {
     try {
       String token = locator<AppPrefs>().token.getValue();
       Map<String, String> mapHeader = Map();
       mapHeader["Authorization"] = "Bearer " + token;
       mapHeader["Content-Type"] = "application/json";
       var res = await _netUtil.get(
-        APIHelper.getAllLiveClasses,
+        APIHelper.getAllLiveClasses(isLive),
         headers: mapHeader,
       );
       print("response getAllLiveClasses : " + res.toString());
@@ -688,7 +688,7 @@ class RestDatasource {
     return _netUtil
         .get(BASE_URL + Api.EVENTS, headers: mapHeader)
         .then((dynamic res) {
-      print("response of Get ALL Events : " + res.toString());
+      log("response of Get ALL Events : " + res.toString());
       AllEvents model = res != null
           ? AllEvents.fromJson(res)
           : AllEvents(
@@ -1281,7 +1281,7 @@ class RestDatasource {
     return _netUtil
         .get(BASE_URL + Api.getDietCat(day, date), headers: mapHeader)
         .then((dynamic res) {
-      print("response of pref : " + res.toString());
+      print("response of getDietCat : " + res.toString());
       DietItem model;
       if (res['status']) {
         model = DietItem.fromJson(res);
@@ -1311,7 +1311,65 @@ class RestDatasource {
     return complete;
   }
 
+  Future<dynamic> eventSubmissionAdd(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      BASE_URL + Api.eventSubmissionAdd(),
+      headers: mapHeader,
+      body: body,
+    );
+    //  log(body.toString());
+
+    print("response get Consumption : " + res.toString());
+    dynamic complete = res;
+    return complete;
+  }
+
+  Future<dynamic> eventSubmissionUpdate(
+      {BuildContext context, Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.put(
+      BASE_URL + Api.eventSubmissionUpdate(),
+      headers: mapHeader,
+      body: body,
+    );
+    //  log(body.toString());
+
+    print("response get Consumption : " + res.toString());
+    dynamic complete = res;
+    return complete;
+  }
+
   //diet consumed
+  Future<EventSubmissions> getEventSubmissions({
+    BuildContext context,
+    String eventId,
+  }) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(
+      BASE_URL + Api.getEventSubmission(eventId),
+      headers: mapHeader,
+    );
+    EventSubmissions complete;
+    print("response getEventSubmissions : " + res.toString());
+    if (res != null) {
+      complete = EventSubmissions.fromJson(res);
+    } else {
+      complete = null;
+    }
+    return complete;
+  }
+
   Future<DietConsumed> dietConsumed({BuildContext context, String date}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();

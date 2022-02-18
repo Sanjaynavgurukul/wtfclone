@@ -14,21 +14,29 @@ class AddOnSlotDetails {
   AddOnSlotDetails({
     this.status,
     this.data,
+    this.message,
   });
 
   bool status;
   List<AddOnSlotDetailsData> data;
+  String message;
 
   factory AddOnSlotDetails.fromJson(Map<String, dynamic> json) =>
       AddOnSlotDetails(
-        status: json["status"],
-        data: List<AddOnSlotDetailsData>.from(
-            json["data"].map((x) => AddOnSlotDetailsData.fromJson(x))),
-      );
+          status: json["status"],
+          data: json.containsKey('data')
+              ? List<AddOnSlotDetailsData>.from(
+                  json["data"].map(
+                    (x) => AddOnSlotDetailsData.fromJson(x),
+                  ),
+                )
+              : [],
+          message: json.containsKey('message') ? json['message'] : '');
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "message": message,
       };
 }
 

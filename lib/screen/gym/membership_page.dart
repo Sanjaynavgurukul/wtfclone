@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -11,13 +12,12 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/screen/event/EventDetails.dart';
 import 'package:wtf/widget/BenefitsSection.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/processing_dialog.dart';
 import 'package:wtf/widget/progress_loader.dart';
 import 'package:wtf/widget/slide_button.dart';
-
-import 'EventDetails.dart';
 
 class BuyMemberShipPage extends StatefulWidget {
   final String gymId;
@@ -1250,12 +1250,34 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
   }
 
   Widget whyChooseWTFItems(String text, String icon) {
+    return TextIconCard(text: text, icon: icon);
+  }
+}
+
+class TextIconCard extends StatelessWidget {
+  const TextIconCard({
+    Key key,
+    this.text,
+    this.icon,
+    this.bgColor = Colors.black,
+    this.textColor = Colors.white,
+    this.isSvg = false,
+  }) : super(key: key);
+
+  final String text;
+  final String icon;
+  final Color bgColor;
+  final Color textColor;
+  final bool isSvg;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 100.0,
       height: 100.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.black,
+        color: bgColor,
       ),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6.0),
       child: Column(
@@ -1264,12 +1286,18 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
-            child: Image.network(
-              icon,
-              color: Colors.white,
-              width: 36.0,
-              height: 36.0,
-            ),
+            child: isSvg
+                ? SvgPicture.asset(
+                    icon,
+                    width: 36.0,
+                    height: 36.0,
+                  )
+                : Image.network(
+                    icon,
+                    color: textColor,
+                    width: 36.0,
+                    height: 36.0,
+                  ),
           ),
           UIHelper.verticalSpace(6.0),
           Expanded(
@@ -1279,7 +1307,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
               textAlign: TextAlign.center,
               maxLines: 3,
               style: TextStyle(
-                color: Colors.white,
+                color: textColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 11.0,
               ),

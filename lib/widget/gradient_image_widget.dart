@@ -11,7 +11,7 @@ class GradientImageWidget extends StatelessWidget {
   final String network;
   final BoxFit boxFit;
   GradientImageWidget(
-      {this.borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+      {this.borderRadius: const BorderRadius.all(Radius.circular(4.0)),
       this.gragientColor,
       this.stops,
       this.assets,
@@ -27,17 +27,7 @@ class GradientImageWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: borderRadius,
-              // BorderRadius.all(Radius.circular(16.0)),
               color: Colors.transparent,
-              // image: DecorationImage(
-              //   fit: boxFit != null ? boxFit : BoxFit.cover,
-              //   image: assets != null
-              //       ? AssetImage(assets)
-              //       : CachedNetworkImageProvider(
-              //           network ??
-              //               'https://www.mensjournal.com/wp-content/uploads/2018/05/1380-dumbbell-curl1.jpg?quality=86&strip=all',
-              //         ),
-              // ),
             ),
             child: assets != null
                 ? Image.asset(

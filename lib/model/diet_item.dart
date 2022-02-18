@@ -79,7 +79,7 @@ class Datum {
         type1Name: json["type1_name"],
         type2Name: json["type2_name"],
         type3Name: json["type3_name"],
-        day: Day.fromJson(json["day"]),
+        day: json.containsKey('day') ? Day.fromJson(json["day"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -117,14 +117,22 @@ class Day {
   String toRawJson() => json.encode(toJson());
 
   factory Day.fromJson(Map<String, dynamic> json) => Day(
-        breakfast: List<Breakfast>.from(
-            json["breakfast"].map((x) => Breakfast.fromJson(x))),
-        lunch: List<Breakfast>.from(
-            json["lunch"].map((x) => Breakfast.fromJson(x))),
-        dinner: List<Breakfast>.from(
-            json["dinner"].map((x) => Breakfast.fromJson(x))),
-        snacks: List<Breakfast>.from(
-            json["snacks"].map((x) => Breakfast.fromJson(x))),
+        breakfast: json.containsKey('breakfast')
+            ? List<Breakfast>.from(
+                json["breakfast"].map((x) => Breakfast.fromJson(x)))
+            : [],
+        lunch: json.containsKey('lunch')
+            ? List<Breakfast>.from(
+                json["lunch"].map((x) => Breakfast.fromJson(x)))
+            : [],
+        dinner: json.containsKey('dinner')
+            ? List<Breakfast>.from(
+                json["dinner"].map((x) => Breakfast.fromJson(x)))
+            : [],
+        snacks: json.containsKey('snacks')
+            ? List<Breakfast>.from(
+                json["snacks"].map((x) => Breakfast.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {

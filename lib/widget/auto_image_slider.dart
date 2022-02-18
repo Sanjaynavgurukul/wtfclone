@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/screen/exercise/exercise_video.dart';
+import 'package:wtf/screen/schedule/exercise/exercise_video.dart';
 
 import 'Shimmer/widgets/rectangle.dart';
 import 'image_galery.dart';

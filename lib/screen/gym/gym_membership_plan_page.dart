@@ -10,7 +10,7 @@ import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
-import 'subscriptions/buy_subscription_screen.dart';
+import '../subscriptions/buy_subscription_screen.dart';
 
 class GymMembershipPlanPage extends StatefulWidget {
   @override

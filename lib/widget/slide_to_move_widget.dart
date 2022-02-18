@@ -324,7 +324,7 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                                     } else {
                                       await _resizeAnimation();
 
-                                      await _shrinkAnimation();
+                                      // await _shrinkAnimation();
 
                                       await _checkAnimation();
 
@@ -351,6 +351,7 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                                           width: 60,
                                           // padding: EdgeInsets.all(
                                           //     widget.sliderButtonIconPadding),
+                                          alignment: Alignment.centerRight,
                                           child: Transform.rotate(
                                             angle: widget.sliderRotate
                                                 ? -pi * _progress
