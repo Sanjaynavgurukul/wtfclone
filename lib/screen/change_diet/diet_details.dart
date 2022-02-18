@@ -3,6 +3,7 @@ import 'package:wtf/helper/app_constants.dart';
 
 class DietDetails extends StatefulWidget {
   const DietDetails({Key key}) : super(key: key);
+  static const String routeName = '/dietDetails';
 
   @override
   _DietDetailsState createState() => _DietDetailsState();

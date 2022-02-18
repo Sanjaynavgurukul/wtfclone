@@ -12,6 +12,7 @@ final List<String> imgList = [
 
 class ChoosePlan extends StatefulWidget {
   const ChoosePlan({Key key}) : super(key: key);
+  static const String routeName = '/choosePlan';
 
   @override
   _ChoosePlanState createState() => _ChoosePlanState();

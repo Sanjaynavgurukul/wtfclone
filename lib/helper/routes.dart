@@ -25,6 +25,9 @@ import 'package:wtf/screen/calculators/body_calculator/bodyFat_cal_result.dart';
 import 'package:wtf/screen/calculators/body_calculator/body_calculator.dart';
 import 'package:wtf/screen/calculators/calories_counter/calories_counter.dart';
 import 'package:wtf/screen/calculators/calories_counter/calories_counter_result.dart';
+import 'package:wtf/screen/change_diet/change_diet.dart';
+import 'package:wtf/screen/change_diet/choose_plan.dart';
+import 'package:wtf/screen/change_diet/diet_details.dart';
 import 'package:wtf/screen/coin/allcoin_screen.dart';
 import 'package:wtf/screen/coin/coin_screen.dart';
 import 'package:wtf/screen/coin/point_history.dart';
@@ -127,11 +130,38 @@ class Routes {
   static const String redeemHistory = '/redeemHistory';
   static const String shoppingScreen = '/shoppingScreen';
   static const String congratsScreen = '/congratsScreen';
+  static const String changeDietScreen = ChangeDiet.routeName;
+  static const String choosePlanScreen = ChoosePlan.routeName;
+  static const String dietDetailScreen = DietDetails.routeName;
 }
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.changeDietScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: ChangeDiet(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => ChangeDiet(), settings: settings);
+      case Routes.choosePlanScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: ChoosePlan(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => ChoosePlan(), settings: settings);
+      case Routes.dietDetailScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: DietDetails(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => DietDetails(), settings: settings);
       case Routes.loader:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

@@ -8,6 +8,7 @@ import 'package:wtf/screen/change_diet/widget/diet_item.dart';
 
 class ChangeDiet extends StatefulWidget {
   const ChangeDiet({Key key}) : super(key: key);
+  static const String routeName = '/changeDiet';
 
   @override
   _ChangeDietState createState() => _ChangeDietState();
