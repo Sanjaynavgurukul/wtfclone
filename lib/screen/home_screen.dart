@@ -8,6 +8,8 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';
@@ -155,203 +157,211 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
-          switch (store.currentIndex) {
-            case 0:
-              return Helper.onWillPop(context);
-            case 1:
-            case 2:
-            case 3:
-              setState(() {
-                store.currentIndex = 0;
-              });
-              return false;
-            default:
-              return false;
-          }
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          NavigationService.navigateTo(Routes.changeDietScreen);
         },
-        child: Scaffold(
-          backgroundColor: AppColors.PRIMARY_COLOR,
-          // bottomNavigationBar: Consumer<GymStore>(
-          //   builder: (context, store, child) {
-          //     return CustomBottomNavigation(
-          //       selectedIndex: store.currentIndex,
-          //       showElevation: true,
-          //       backgroundColor: AppColors.PRIMARY_COLOR,
-          //       curve: Curves.linearToEaseOut,
-          //       animationDuration: Duration(
-          //           milliseconds: 450), // use this to remove appBar's elevation
-          //       onItemSelected: (index) => setState(() {
-          //         switch (index) {
-          //           case 0:
-          //             context.read<GymStore>().getBanner(context: context);
-          //             context.read<GymStore>().getAllEvents(context: context);
-          //             break;
-          //           case 1:
-          //             context
-          //                 .read<GymStore>()
-          //                 .getActiveSubscriptions(context: context);
-          //             context
-          //                 .read<GymStore>()
-          //                 .getMemberSubscriptions(context: context);
-          //             context.read<GymStore>().getTerms();
-          //             context.read<GymStore>().getBanner(context: context);
-          //             context.read<GymStore>().getAllGyms(context: context);
-          //             context.read<GymStore>().getAllEvents(context: context);
-          //             break;
-          //           case 2:
-          //             break;
-          //           case 3:
-          //             context
-          //                 .read<GymStore>()
-          //                 .getWTFCoinBalance(context: context);
-          //             context.read<GymStore>().getCoinHistory(context: context);
-          //             context
-          //                 .read<GymStore>()
-          //                 .getRedeemHistory(context: context);
-          //             // context.read<GymStore>().getNotifications(
-          //             //       context: context,
-          //             //       type: 'new',
-          //             //     );
-          //             break;
-          //         }
-          //
-          //         setState(() {
-          //           store.currentIndex = index;
-          //         });
-          //         // _pageController.animateToPage(index,
-          //         //     duration: Duration(milliseconds: 300), curve: Curves.ease);
-          //       }),
-          //       items: [
-          //         CustomBottomBarItem(
-          //           icon: 'assets/images/dashboard.png',
-          //           title: Text('Dashboard'),
-          //           activeTextColor: Colors.white,
-          //         ),
-          //         CustomBottomBarItem(
-          //           icon: 'assets/images/explore.png',
-          //           title: Text('Explore'),
-          //           activeTextColor: Colors.white,
-          //         ),
-          //         CustomBottomBarItem(
-          //           icon: 'assets/images/my_wtf.png',
-          //           title: Text('MY WTF'),
-          //           activeTextColor: Colors.white,
-          //         ),
-          //         CustomBottomBarItem(
-          //           icon: 'assets/images/coins.png',
-          //           title: Text('Coin'),
-          //           activeTextColor: Colors.white,
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // ),
-          bottomNavigationBar: SizedBox(
-            height: 56.0,
-            width: MediaQuery.of(context).size.width,
-            child: Material(
-              elevation: 12.0,
-              child: RollingNavBar.iconData(
-                activeBadgeColors: <Color>[
-                  Colors.black,
-                ],
-                activeIndex: store.currentIndex,
-                animationCurve: Curves.linear,
-                animationType: AnimationType.spinOutIn,
-                baseAnimationSpeed: 250,
-                badges: badgeWidgets,
-                iconData: iconData,
-                iconColors: <Color>[Colors.white],
-                iconText: iconText,
-                indicatorColors: [
-                  AppConstants.primaryColor
+        child: Icon(Icons.add),
+      ),
+      body: SafeArea(
+        child: WillPopScope(
+          onWillPop: () async {
+            switch (store.currentIndex) {
+              case 0:
+                return Helper.onWillPop(context);
+              case 1:
+              case 2:
+              case 3:
+                setState(() {
+                  store.currentIndex = 0;
+                });
+                return false;
+              default:
+                return false;
+            }
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            // bottomNavigationBar: Consumer<GymStore>(
+            //   builder: (context, store, child) {
+            //     return CustomBottomNavigation(
+            //       selectedIndex: store.currentIndex,
+            //       showElevation: true,
+            //       backgroundColor: AppColors.PRIMARY_COLOR,
+            //       curve: Curves.linearToEaseOut,
+            //       animationDuration: Duration(
+            //           milliseconds: 450), // use this to remove appBar's elevation
+            //       onItemSelected: (index) => setState(() {
+            //         switch (index) {
+            //           case 0:
+            //             context.read<GymStore>().getBanner(context: context);
+            //             context.read<GymStore>().getAllEvents(context: context);
+            //             break;
+            //           case 1:
+            //             context
+            //                 .read<GymStore>()
+            //                 .getActiveSubscriptions(context: context);
+            //             context
+            //                 .read<GymStore>()
+            //                 .getMemberSubscriptions(context: context);
+            //             context.read<GymStore>().getTerms();
+            //             context.read<GymStore>().getBanner(context: context);
+            //             context.read<GymStore>().getAllGyms(context: context);
+            //             context.read<GymStore>().getAllEvents(context: context);
+            //             break;
+            //           case 2:
+            //             break;
+            //           case 3:
+            //             context
+            //                 .read<GymStore>()
+            //                 .getWTFCoinBalance(context: context);
+            //             context.read<GymStore>().getCoinHistory(context: context);
+            //             context
+            //                 .read<GymStore>()
+            //                 .getRedeemHistory(context: context);
+            //             // context.read<GymStore>().getNotifications(
+            //             //       context: context,
+            //             //       type: 'new',
+            //             //     );
+            //             break;
+            //         }
+            //
+            //         setState(() {
+            //           store.currentIndex = index;
+            //         });
+            //         // _pageController.animateToPage(index,
+            //         //     duration: Duration(milliseconds: 300), curve: Curves.ease);
+            //       }),
+            //       items: [
+            //         CustomBottomBarItem(
+            //           icon: 'assets/images/dashboard.png',
+            //           title: Text('Dashboard'),
+            //           activeTextColor: Colors.white,
+            //         ),
+            //         CustomBottomBarItem(
+            //           icon: 'assets/images/explore.png',
+            //           title: Text('Explore'),
+            //           activeTextColor: Colors.white,
+            //         ),
+            //         CustomBottomBarItem(
+            //           icon: 'assets/images/my_wtf.png',
+            //           title: Text('MY WTF'),
+            //           activeTextColor: Colors.white,
+            //         ),
+            //         CustomBottomBarItem(
+            //           icon: 'assets/images/coins.png',
+            //           title: Text('Coin'),
+            //           activeTextColor: Colors.white,
+            //         ),
+            //       ],
+            //     );
+            //   },
+            // ),
+            bottomNavigationBar: SizedBox(
+              height: 56.0,
+              width: MediaQuery.of(context).size.width,
+              child: Material(
+                elevation: 12.0,
+                child: RollingNavBar.iconData(
+                  activeBadgeColors: <Color>[
+                    Colors.black,
+                  ],
+                  activeIndex: store.currentIndex,
+                  animationCurve: Curves.linear,
+                  animationType: AnimationType.spinOutIn,
+                  baseAnimationSpeed: 250,
+                  badges: badgeWidgets,
+                  iconData: iconData,
+                  iconColors: <Color>[Colors.white],
+                  iconText: iconText,
+                  indicatorColors: [
+                    AppConstants.primaryColor
 //                Color(locator<AppPrefs>().selectedPrimaryColor2.getValue()),
 //                Color(locator<AppPrefs>().selectedPrimaryColor.getValue()),
 //                AppConstants.white
-                ],
-                iconSize: 24,
-                indicatorRadius: scaledHeight(context, 25),
-                onAnimate: _onAnimate,
-                onTap: (index) => setState(() {
-                  switch (index) {
-                    case 0:
-                      context.read<GymStore>().getBanner(context: context);
-                      context.read<GymStore>().getAllEvents(context: context);
-                      break;
-                    case 1:
-                      context
-                          .read<GymStore>()
-                          .getActiveSubscriptions(context: context);
-                      context
-                          .read<GymStore>()
-                          .getMemberSubscriptions(context: context);
-                      context.read<GymStore>().getTerms();
-                      context.read<GymStore>().getBanner(context: context);
-                      context.read<GymStore>().getAllGyms(context: context);
-                      context.read<GymStore>().getAllEvents(context: context);
-                      break;
-                    case 2:
-                      break;
-                    case 3:
-                      context
-                          .read<GymStore>()
-                          .getWTFCoinBalance(context: context);
-                      context.read<GymStore>().getCoinHistory(context: context);
-                      context
-                          .read<GymStore>()
-                          .getRedeemHistory(context: context);
-                      // context.read<GymStore>().getNotifications(
-                      //       context: context,
-                      //       type: 'new',
-                      //     );
-                      break;
-                  }
+                  ],
+                  iconSize: 24,
+                  indicatorRadius: scaledHeight(context, 25),
+                  onAnimate: _onAnimate,
+                  onTap: (index) => setState(() {
+                    switch (index) {
+                      case 0:
+                        context.read<GymStore>().getBanner(context: context);
+                        context.read<GymStore>().getAllEvents(context: context);
+                        break;
+                      case 1:
+                        context
+                            .read<GymStore>()
+                            .getActiveSubscriptions(context: context);
+                        context
+                            .read<GymStore>()
+                            .getMemberSubscriptions(context: context);
+                        context.read<GymStore>().getTerms();
+                        context.read<GymStore>().getBanner(context: context);
+                        context.read<GymStore>().getAllGyms(context: context);
+                        context.read<GymStore>().getAllEvents(context: context);
+                        break;
+                      case 2:
+                        break;
+                      case 3:
+                        context
+                            .read<GymStore>()
+                            .getWTFCoinBalance(context: context);
+                        context.read<GymStore>().getCoinHistory(context: context);
+                        context
+                            .read<GymStore>()
+                            .getRedeemHistory(context: context);
+                        // context.read<GymStore>().getNotifications(
+                        //       context: context,
+                        //       type: 'new',
+                        //     );
+                        break;
+                    }
 
-                  setState(() {
-                    store.currentIndex = index;
-                  });
-                  // _pageController.animateToPage(index,
-                  //     duration: Duration(milliseconds: 300), curve: Curves.ease);
-                }),
-                indicatorCornerRadius: 8.0,
-                indicatorSides: 6,
-                activeIconColors: [AppConstants.white],
-                navBarDecoration: BoxDecoration(
-                  color: AppConstants.cardBg1.withOpacity(0.01),
+                    setState(() {
+                      store.currentIndex = index;
+                    });
+                    // _pageController.animateToPage(index,
+                    //     duration: Duration(milliseconds: 300), curve: Curves.ease);
+                  }),
+                  indicatorCornerRadius: 8.0,
+                  indicatorSides: 6,
+                  activeIconColors: [AppConstants.white],
+                  navBarDecoration: BoxDecoration(
+                    color: AppConstants.cardBg1.withOpacity(0.01),
+                  ),
                 ),
               ),
             ),
-          ),
-          body: Column(
-            children: [
-              if (store.currentIndex != 2)
-                IntrinsicHeight(
-                  child: CommonAppBar(),
+            body: Column(
+              children: [
+                if (store.currentIndex != 2)
+                  IntrinsicHeight(
+                    child: CommonAppBar(),
+                  ),
+                if (store.currentIndex != 2)
+                  Divider(
+                    thickness: 1.2,
+                    color: Colors.white10,
+                  ),
+                Expanded(
+                  flex: 4,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 550),
+                    switchInCurve: Curves.easeInCubic,
+                    // switchOutCurve: Curves.fastOutSlowIn,
+                    child: _children[store.currentIndex],
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
                 ),
-              if (store.currentIndex != 2)
-                Divider(
-                  thickness: 1.2,
-                  color: Colors.white10,
-                ),
-              Expanded(
-                flex: 4,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 550),
-                  switchInCurve: Curves.easeInCubic,
-                  // switchOutCurve: Curves.fastOutSlowIn,
-                  child: _children[store.currentIndex],
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

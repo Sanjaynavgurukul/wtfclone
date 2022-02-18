@@ -1408,4 +1408,20 @@ class RestDatasource {
     dynamic complete = res;
     return complete;
   }
+
+  //Get All Diet category
+  Future<CoinBalance> getDietsCategory() async {
+    String token = locator<AppPrefs>().token.getValue();
+    // Map<String, String> mapHeader = Map();
+    // mapHeader["Authorization"] = "Bearer " + token;
+    // mapHeader["Content-Type"] = "application/json";
+    // return _netUtil
+    //     .get(BASE_URL + Api.getWTFCoinBalance(), headers: mapHeader)
+    //     .then((dynamic res) {
+    //   print("response of Get CURRENT WTF Balance : " + res.toString());
+    //   CoinBalance model = CoinBalance.fromJson(res);
+    //
+    //   return model;
+    // });
+  }
 }
