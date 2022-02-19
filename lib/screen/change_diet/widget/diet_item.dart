@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/screen/change_diet/change_diet.dart';
+import 'package:wtf/model/diet_model.dart';
+
 
 class DietItem extends StatelessWidget {
   const DietItem({Key key, this.data}) : super(key: key);
-  final Diet data;
+  final MealSlot data;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class DietItem extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text(data.title,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,
+                Text(data.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,
                       color: Colors.white,
                       fontStyle: FontStyle.normal),
                 ),
@@ -65,7 +66,7 @@ class DietItem extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(0),
               child: CircleAvatar(
-                backgroundImage: AssetImage(data.imageUrl),
+                backgroundImage: AssetImage(''),
               ),
             ),
           )

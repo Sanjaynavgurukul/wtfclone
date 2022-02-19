@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
-class Diet{
+class CategoryDietModel{
   String categoryLabel;
   List<DietModel> products;
-  Diet({@required this.products, @required this.categoryLabel});
+  CategoryDietModel({@required this.products, @required this.categoryLabel});
 }
 
 class DietModel {
@@ -19,7 +19,7 @@ class DietModel {
   String type1_name;
   String type2_name;
   String type3_name;
-  DietDayModel day;
+  WeeklyDietModel day;
 
   //Default Constructor :D
   DietModel();
@@ -37,28 +37,19 @@ class DietModel {
     type2_name = data["type2_name"];
     type3 = data["type3"];
     type3_name = data["type3_name"];
-    day = DietDayModel.fromJson(data: data);
+    day = WeeklyDietModel.fromJson(data: data);
   }
 }
 
-class DietDayModel {
+class WeeklyDietModel {
   List<DayWise> list;
 
   //Default constructor :d
-  DietDayModel();
+  WeeklyDietModel();
 
-  DietDayModel.fromJson({@required Map<String, dynamic> data}) {
-    print('class DietDayModel ---  $data');
-    print('class DietDayModel ---  ${data['type2_name']}');
-    for (String name in dayNames) {
-      // DayWise d = DayWise.fromJson(data: data[name], dayName: name)??new DayWise();
-      print('Day name ---- $name');
-      print('Day name data ---- ${data[name]}');
-      DayWise d =
-          DayWise.fromJson(data: data[name], dayName: name) ?? new DayWise();
-      print('Day name data after convert ---- ${d.meal}');
-      // list.add(d);
-    }
+  WeeklyDietModel.fromJson({@required Map<String, dynamic> data}) {
+    List<dynamic> l = dayNames.map((e) => data[e]).toList();
+    list = l.map((e) => DayWise.fromJson(data: e,)).toList();
   }
 
   List<String> dayNames = [
@@ -80,20 +71,29 @@ class DayWise {
   DayWise();
 
   DayWise.fromJson(
-      {@required Map<String, dynamic> data, @required String dayName}) {
-    print('class DayWise ---  $data');
-    for (String val in value()) {
-      dayLabel = dayName;
+      {@required Map<String, dynamic> data}) {
+    print('class DayWise ---  ${data["dinner"]}');
+    // for(var v in value){
+    //
+    // }
+    // List<dynamic> l = data.map((e) => data[e]).toList();
+    // list = l.map((e) => DayWise.fromJson(data: e,)).toList();
+
+    for (String val in value) {
+      List<dynamic> d = data[val];
+      meal = d.map((e) => MealSlot.fromJson(data: e,)).toList();
+
+      // dayLabel = '';
       // meal = MealSlot.fromJson(data: data[val]);
       //day is sunday
       // meal = MealSlot.fromJson(data: data[val]);
-      meal =
-          (data[val] as List).map((p) => MealSlot.fromJson(data: p)).toList();
+      // meal =
+      //     (data[val] as List).map((p) => MealSlot.fromJson(data: p)).toList();
       // meal = MealSlot.fromJson(data: data[val]);
     }
   }
 
-  List<String> value() =>
+  List<String> value =
       ['breakfast', 'lunch', 'dinner', 'snacks', 'mmsnacks'];
 }
 

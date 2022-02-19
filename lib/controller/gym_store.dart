@@ -99,7 +99,7 @@ class GymStore extends ChangeNotifier {
   DateTime selectedStartingDate;
 
   SlotData selectedSlotData;
-  List<Diet> diet = [];
+  List<CategoryDietModel> diet = [];
 
   AddOnSlotDetails selectedSlotDetails;
 
@@ -2145,31 +2145,18 @@ class GymStore extends ChangeNotifier {
 
 
   //diet consumed
-  Future<void> getAllDiet({BuildContext context}) async {
-    notifyListeners();
+  Future<void> getAllDiet({BuildContext context,String dietType}) async {
+    //notifyListeners();
     List<String> productId = ['Lean', 'Gain', 'Maintain'];
 
     List<DietModel> list =await RestDatasource().getAllDietsCategory();
-    List<Diet> data = productId.map((category) => Diet(
+    List<CategoryDietModel> data = productId.map((category) => CategoryDietModel(
         categoryLabel: category,
         products: list
-            .where((product) => product.type1_name == category)
+            .where((product) => product.type1_name == category && product.type2_name == dietType)
             .toList()))
         .toList();
     // log(res.toString());
     diet = data;
-    notifyListeners();
   }
-
-  //
-  // //diet consumed
-  //   Future<void> getAllDiet({BuildContext context}) async {
-  //     // notifyListeners();
-  //     RestDatasource().getAllDietsCategory();
-  //
-  //     // log(res.toString());
-  //     // dietConsumed = res;
-  //     // notifyListeners();
-  //   }
-
 }

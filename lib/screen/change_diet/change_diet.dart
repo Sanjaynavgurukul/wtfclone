@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/screen/change_diet/flexible_appbar.dart';
 import 'package:wtf/screen/change_diet/widget/custom_radio.dart';
 import 'package:wtf/screen/change_diet/widget/diet_item.dart';
@@ -50,23 +51,23 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   final _scrollController = ScrollController();
 
   List<TopBarModel> getList() => [
-    TopBarModel(
+        TopBarModel(
             label: 'Veg',
             color: Colors.green,
             selected: true,
             imageUrl: 'assets/images/veg_bg.png',
             fullLabel: 'Vegetarian'),
-    TopBarModel(
+        TopBarModel(
             label: 'Egg',
             color: Colors.orange,
             selected: false,
-        imageUrl: 'assets/images/egg_bg.png',
+            imageUrl: 'assets/images/egg_bg.png',
             fullLabel: 'Eggetarian'),
-    TopBarModel(
+        TopBarModel(
             label: 'Nonveg',
             color: Colors.red,
             selected: false,
-        imageUrl: 'assets/images/non_veg_bg.png',
+            imageUrl: 'assets/images/non_veg_bg.png',
             fullLabel: 'Non-Vegetarian')
       ];
 
@@ -75,6 +76,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     store = context.watch<GymStore>();
+    callData();
   }
 
   @override
@@ -83,214 +85,112 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
       print(_scrollController.position.pixels);
       showOrHide();
     });
-
     super.initState();
   }
 
-  void callData(){
-    context.read<GymStore>().getAllDiet(context: context);
+  void callData() {
+    context.read<GymStore>().getAllDiet(
+        context: context, dietType: getList()[selectedIndex].fullLabel);
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            callData();
+          },
+          child: Icon(Icons.add),
+        ),
         body: CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          centerTitle: false,
-          actions: [
-            Container(
-              margin: EdgeInsets.all(12),
-              padding: EdgeInsets.only(left: 8, right: 8),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: getList().length,
-                  itemBuilder: (context, index) {
-                    TopBarModel data = getList()[index];
-                    data.selected = selectedIndex == index;
-                    return CustomRadio(
-                      data: data,
-                      onClick: () {
-                        setState(() {
-                          selectedIndex = index;
-                        });
-                      },
-                    );
-                  }),
-            )
-          ],
-          pinned: false,
-          expandedHeight: 250.0,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(100.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+          slivers: [
+            SliverAppBar(
+              centerTitle: false,
+              actions: [
+                Container(
+                  margin: EdgeInsets.all(12),
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: getList().length,
+                      itemBuilder: (context, index) {
+                        TopBarModel data = getList()[index];
+                        data.selected = selectedIndex == index;
+                        return CustomRadio(
+                          data: data,
+                          onClick: () {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                          },
+                        );
+                      }),
+                )
+              ],
+              pinned: false,
+              expandedHeight: 250.0,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(100.0),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  child: Column(
                     children: [
-                      Image.asset(
-                        'assets/logo/wtf_light.png',
-                        height: 20,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/logo/wtf_light.png',
+                            height: 20,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Powered')
+                        ],
                       ),
-                      SizedBox(width: 8),
-                      Text('Powered')
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        'Nutrition From Kitchen',
+                        style: GoogleFonts.montserrat(
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: 0,
+                      ),
+                      Text(
+                        getList()[selectedIndex].fullLabel,
+                        style: GoogleFonts.lobster(
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 35,
+                            color: getList()[selectedIndex].color),
+                      )
                     ],
                   ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    'Nutrition From Kitchen',
-                    style: GoogleFonts.montserrat(
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w300,
-                        fontSize: 18,
-                        color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  Text(
-                    getList()[selectedIndex].fullLabel,
-                    style: GoogleFonts.lobster(
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 35,
-                        color: getList()[selectedIndex].color),
-                  )
-                ],
+                ),
               ),
-            ),
-          ),
-          flexibleSpace: FlexibleSpaceBar(
-            background: FlexibleAppBar(
-              image: getList()[selectedIndex].imageUrl,
-              color: null,
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-            child: Container(
-          child: mainView(),
-        )),
-      ],
-    ));
-  }
-
-  Widget coco() {
-    return Scaffold(
-      body: CustomScrollView(
-        physics:
-            isPreview == true ? const NeverScrollableScrollPhysics() : null,
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverAppBar(
-            centerTitle: false,
-            // backgroundColor: Constants.darkOrange,
-            // leading: InkWell(
-            //   onTap: () => Navigator.pop(context),
-            //   child: Container(
-            //     margin: const EdgeInsets.all(12),
-            //     decoration: BoxDecoration(
-            //       border: Border.all(
-            //           width: 1, color: Colors.white.withOpacity(0.3)),
-            //       shape: BoxShape.circle,
-            //       // color: glassyColor.withOpacity(0.3)
-            //     ),
-            //     child:
-            //     Icon(Icons.close, color: Colors.white.withOpacity(0.3)),
-            //   ),
-            // ),
-            actions: [
-              Container(
-                margin: EdgeInsets.all(12),
-                padding: EdgeInsets.only(left: 8, right: 8),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: getList().length,
-                    itemBuilder: (context, index) {
-                      TopBarModel data = getList()[index];
-                      data.selected = selectedIndex == index;
-                      return CustomRadio(
-                        data: data,
-                        onClick: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                      );
-                    }),
-              )
-            ],
-            pinned: false,
-            expandedHeight: 250.0,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(100.0),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/logo/wtf_light.png',
-                          height: 20,
-                        ),
-                        SizedBox(width: 8),
-                        Text('Powered')
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      'Nutrition From Kitchen',
-                      style: GoogleFonts.montserrat(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 18,
-                          color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 0,
-                    ),
-                    Text(
-                      getList()[selectedIndex].fullLabel,
-                      style: GoogleFonts.lobster(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 35,
-                          color: getList()[selectedIndex].color),
-                    )
-                  ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: FlexibleAppBar(
+                  image: getList()[selectedIndex].imageUrl,
+                  color: null,
                 ),
               ),
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: FlexibleAppBar(
-                image: '',
-                color: null,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(child: mainView()),
-        ],
-      ),
-    );
+            SliverToBoxAdapter(
+                child: Container(
+              child: mainView(),
+            )),
+          ],
+        ));
   }
 
   Widget mainView() {
@@ -335,54 +235,75 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
           ),
         ),
         Container(
-          child: Consumer<GymStore>(
-            builder: (context, store, child) =>
-            store.diet != null
-                ? store.diet.isNotEmpty
-                ? ListView.builder(
-                itemCount: DietModel.getList().length,
-                shrinkWrap: true,
-                padding: EdgeInsets.only(left: 12,right: 12),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  DietModel data = DietModel.getList()[index];
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        title:Text(
-                          data.title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18.0,
-                          ),
-                        ),dense: true,),
-
-                      SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: data.list
-                                .map((item) => DietItem(
-                              data: item,
-                            ))
-                                .toList(),
-                          ))
-                    ],
-                  );
-                })
-                : Center(
-              child: Text(
-                'No Challenges present as of now.',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-                : Loading(),
-          )
-        )
+            child: Consumer<GymStore>(
+          builder: (context, store, child) => store.diet != null
+              ? store.diet.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: store.diet.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 12, right: 12),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        CategoryDietModel data = store.diet[index];
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Text(
+                                data.categoryLabel,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              dense: true,
+                            ),
+                            SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: finalData(data.products)
+                                      .map((item) => DietItem(
+                                            data: item,
+                                          ))
+                                      .toList(),
+                                ))
+                          ],
+                        );
+                      })
+                  : Center(
+                      child: Text(
+                        'No Challenges present as of now.',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+              : Loading(),
+        ))
       ],
     );
+  }
+
+  List<MealSlot> finalData(List<DietModel> data) {
+    List<MealSlot> f = [];
+    for (DietModel dietModel in data) {
+      print('something dietModel ----- ${dietModel.name}');
+      if (dietModel.day.list != null) {
+        print('dietModel.day called not null');
+        print('something dietModel.day.list.length ----- ${dietModel.day.list.length}');
+        for (DayWise dayWise in dietModel.day.list) {
+          print('something dayWise --- ${dayWise.meal.length}');
+          for (MealSlot mealSlot in dayWise.meal) {
+            f.add(mealSlot);
+          }
+        }
+      }
+    }
+    return [];
+  }
+
+  List<DayWise> finalData2(DietModel data) {
+    return data.day.list.map((category) => category).toList();
   }
 }
 
@@ -393,47 +314,13 @@ class TopBarModel {
   String fullLabel;
   String imageUrl;
 
-  TopBarModel({this.selected, this.color, this.label, this.fullLabel,this.imageUrl});
+  TopBarModel(
+      {this.selected, this.color, this.label, this.fullLabel, this.imageUrl});
 }
 
-class DietModel {
-  String title;
-  List<Diet> list;
-
-  DietModel({this.title, this.list});
-
-  static List<DietModel> getList() => [
-        DietModel(title: 'Lean Body', list: [
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-        ]),
-        DietModel(title: 'Lean Body', list: [
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-        ]),
-        DietModel(title: 'Lean Body', list: [
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-          Diet(title: 'Fruity Reps', imageUrl: 'assets/images/veg_bg.png'),
-        ]),
-
-      ];
-}
-
-class Diet {
+class Di {
   String title;
   String imageUrl;
 
-  Diet({this.title, this.imageUrl});
+  Di({this.title, this.imageUrl});
 }
