@@ -5,7 +5,7 @@ import 'package:wtf/model/diet_model.dart';
 
 class DietItem extends StatelessWidget {
   const DietItem({Key key, this.data}) : super(key: key);
-  final MealSlot data;
+  final DietModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class DietItem extends StatelessWidget {
               radius: 18,
               child: ClipOval(
                 child: Image.network(
-                  data.co_image,
+                  'https://cdn.loveandlemons.com/wp-content/uploads/2021/04/green-salad.jpg',
                 ),
               ),
             ),

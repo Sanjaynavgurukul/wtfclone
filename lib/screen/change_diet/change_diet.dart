@@ -89,8 +89,8 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
   }
 
   void callData() {
-    context.read<GymStore>().getAllDiet(
-        context: context, dietType: getList()[selectedIndex].fullLabel);
+    print('current select index = $selectedIndex');
+    store.getAllDiet(context: context,dietType: getList()[selectedIndex].fullLabel);
   }
 
   @override
@@ -125,6 +125,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                           onClick: () {
                             setState(() {
                               selectedIndex = index;
+                              callData();
                             });
                           },
                         );
@@ -264,7 +265,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                             SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: store.getMealSlot(data.products)
+                                  children: data.products
                                       .map((item) => DietItem(
                                             data: item,
                                           ))
