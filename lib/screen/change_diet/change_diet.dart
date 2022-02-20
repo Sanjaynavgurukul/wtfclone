@@ -236,6 +236,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
         ),
         Container(
             child: Consumer<GymStore>(
+
           builder: (context, store, child) => store.diet != null
               ? store.diet.isNotEmpty
                   ? ListView.builder(
@@ -263,7 +264,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                             SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: finalData(data.products)
+                                  children: store.getMealSlot(data.products)
                                       .map((item) => DietItem(
                                             data: item,
                                           ))
@@ -282,28 +283,6 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
         ))
       ],
     );
-  }
-
-  List<MealSlot> finalData(List<DietModel> data) {
-    List<MealSlot> f = [];
-    for (DietModel dietModel in data) {
-      print('something dietModel ----- ${dietModel.name}');
-      if (dietModel.day.list != null) {
-        print('dietModel.day called not null');
-        print('something dietModel.day.list.length ----- ${dietModel.day.list.length}');
-        for (DayWise dayWise in dietModel.day.list) {
-          print('something dayWise --- ${dayWise.meal.length}');
-          for (MealSlot mealSlot in dayWise.meal) {
-            f.add(mealSlot);
-          }
-        }
-      }
-    }
-    return [];
-  }
-
-  List<DayWise> finalData2(DietModel data) {
-    return data.day.list.map((category) => category).toList();
   }
 }
 

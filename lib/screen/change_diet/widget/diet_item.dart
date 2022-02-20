@@ -63,10 +63,12 @@ class DietItem extends StatelessWidget {
             height: 80,
             decoration:
                 ShapeDecoration(shape: CircleBorder(), color: Colors.white),
-            child: Padding(
-              padding: EdgeInsets.all(0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage(''),
+            child: CircleAvatar(
+              radius: 18,
+              child: ClipOval(
+                child: Image.network(
+                  data.co_image,
+                ),
               ),
             ),
           )
@@ -74,4 +76,5 @@ class DietItem extends StatelessWidget {
       ),
     );
   }
+
 }

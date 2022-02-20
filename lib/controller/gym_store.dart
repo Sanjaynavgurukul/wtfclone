@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+
 // import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:provider/provider.dart';
@@ -99,7 +100,7 @@ class GymStore extends ChangeNotifier {
   DateTime selectedStartingDate;
 
   SlotData selectedSlotData;
-  List<CategoryDietModel> diet = [];
+  List<CategoryDietModel> diet;
 
   AddOnSlotDetails selectedSlotDetails;
 
@@ -335,6 +336,7 @@ class GymStore extends ChangeNotifier {
     getAllEvents(context: context);
     getTerms();
     getAllGyms(context: context);
+    getAllDiet(context: context);
 
     getWTFCoinBalance(context: context);
     getShoppingCategories(context: context);
@@ -2142,21 +2144,31 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-
-
   //diet consumed
-  Future<void> getAllDiet({BuildContext context,String dietType}) async {
-    //notifyListeners();
+  Future<void> getAllDiet({BuildContext context, String dietType}) async {
     List<String> productId = ['Lean', 'Gain', 'Maintain'];
-
-    List<DietModel> list =await RestDatasource().getAllDietsCategory();
-    List<CategoryDietModel> data = productId.map((category) => CategoryDietModel(
-        categoryLabel: category,
-        products: list
-            .where((product) => product.type1_name == category && product.type2_name == dietType)
-            .toList()))
+    List<DietModel> list = await RestDatasource().getAllDietsCategory();
+    List<CategoryDietModel> data = productId
+        .map((category) => CategoryDietModel(
+            categoryLabel: category,
+            products: list
+                .where((product) =>
+                    product.type1_name == category &&
+                    product.type2_name == dietType)
+                .toList()))
         .toList();
-    // log(res.toString());
     diet = data;
+  }
+
+  List<MealSlot> getMealSlot(List<DietModel> data) {
+    List<MealSlot> f = [];
+      for (DietModel dietModel in data ?? []) {
+        for (DayWise d in dietModel.day.list) {
+          for (MealSlot fn in d.meal) {
+            f.add(fn);
+          }
+        }
+      }
+    return f;
   }
 }

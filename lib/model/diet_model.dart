@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class CategoryDietModel{
+class CategoryDietModel {
   String categoryLabel;
   List<DietModel> products;
+
   CategoryDietModel({@required this.products, @required this.categoryLabel});
 }
 
@@ -49,7 +51,11 @@ class WeeklyDietModel {
 
   WeeklyDietModel.fromJson({@required Map<String, dynamic> data}) {
     List<dynamic> l = dayNames.map((e) => data[e]).toList();
-    list = l.map((e) => DayWise.fromJson(data: e,)).toList();
+    list = l
+        .map((e) => DayWise.fromJson(
+              data: e,
+            ))
+        .toList();
   }
 
   List<String> dayNames = [
@@ -65,36 +71,19 @@ class WeeklyDietModel {
 
 class DayWise {
   String dayLabel;
-  List<MealSlot> meal;
+  List<MealSlot> meal = [];
 
   //Default constructor :D
   DayWise();
 
-  DayWise.fromJson(
-      {@required Map<String, dynamic> data}) {
-    print('class DayWise ---  ${data["dinner"]}');
-    // for(var v in value){
-    //
-    // }
-    // List<dynamic> l = data.map((e) => data[e]).toList();
-    // list = l.map((e) => DayWise.fromJson(data: e,)).toList();
-
+  DayWise.fromJson({@required Map<String, dynamic> data}) {
     for (String val in value) {
-      List<dynamic> d = data[val];
-      meal = d.map((e) => MealSlot.fromJson(data: e,)).toList();
-
-      // dayLabel = '';
-      // meal = MealSlot.fromJson(data: data[val]);
-      //day is sunday
-      // meal = MealSlot.fromJson(data: data[val]);
-      // meal =
-      //     (data[val] as List).map((p) => MealSlot.fromJson(data: p)).toList();
-      // meal = MealSlot.fromJson(data: data[val]);
+      List<MealSlot> m =
+          ((data[val] as List).map((i) => MealSlot.fromJson(data: i)).toList());
+      meal.addAll(m);
     }
   }
-
-  List<String> value =
-      ['breakfast', 'lunch', 'dinner', 'snacks', 'mmsnacks'];
+  List<String> value = ['breakfast', 'lunch', 'dinner', 'snacks', 'mmsnacks'];
 }
 
 class MealSlot {
@@ -112,6 +101,7 @@ class MealSlot {
   MealSlot();
 
   MealSlot.fromJson({@required Map<String, dynamic> data}) {
+    print('code inside meal slot ---- $data');
     id = data['id'];
     uid = data['uid'];
     name = data['name'];
