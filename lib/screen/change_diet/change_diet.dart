@@ -64,6 +64,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // callData();
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -94,6 +95,7 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                           onClick: () {
                             setState(() {
                               selectedIndex = index;
+                              print('selected index of :: --- $selectedIndex');
                               callData();
                             });
                           },

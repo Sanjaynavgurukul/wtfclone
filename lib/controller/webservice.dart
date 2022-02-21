@@ -1431,4 +1431,25 @@ class RestDatasource {
     });
     return model;
   }
+
+  Future<void> getDietPlans()async{
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil
+        .get(BASE_URL + Api.getDietPlan(), headers: mapHeader)
+        .then((dynamic res) {
+
+      if (res['status']) {
+        // model = (res['data'] as List)
+        //     .map((p) => DietModel.fromJson(data: p))
+        //     .toList();
+        print('Diet plans --- ${res}');
+      } else {
+        // model = [];
+      }
+    });
+  }
+
 }

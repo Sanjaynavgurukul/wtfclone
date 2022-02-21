@@ -92,5 +92,6 @@ class Api {
       "eventsubmission/mobile?event_id=$eventId";
 
   static String getAllDietDetails()=>'dietcat/getall?page=1';
+  static String getDietPlan()=>'/dietpackage?page=1&limit=10&name=';
 
 }

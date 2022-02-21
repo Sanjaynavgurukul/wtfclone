@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 
 final List<String> imgList = [
@@ -21,6 +23,16 @@ class ChoosePlan extends StatefulWidget {
 class _ChoosePlanState extends State<ChoosePlan> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
+
+  GymStore store;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    store = context.watch<GymStore>();
+  }
+
 
   List<Widget> imageSliders = imgList.map((item) {
     double height = 150;
@@ -174,18 +186,23 @@ class _ChoosePlanState extends State<ChoosePlan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(
-        alignment: Alignment.center,
-        constraints: BoxConstraints(maxWidth: 250, maxHeight: 56),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
-            color: AppConstants.bgColor),
-        child: Text('Buy this',
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                color: Colors.white)),
+      floatingActionButton: InkWell(
+        onTap:(){
+          store.getDietPlan();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          constraints: BoxConstraints(maxWidth: 250, maxHeight: 56),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              color: AppConstants.bgColor),
+          child: Text('Buy this',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  color: Colors.white)),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(

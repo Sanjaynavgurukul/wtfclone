@@ -2147,6 +2147,7 @@ class GymStore extends ChangeNotifier {
   //diet consumed
   Future<void> getAllDiet({BuildContext context, String dietType}) async {
     List<String> productId = ['Lean', 'Gain', 'Maintain'];
+    print('selected index of in GymStore :: --- $dietType');
     List<DietModel> list = await RestDatasource().getAllDietsCategory();
     List<CategoryDietModel> data = productId
         .map((category) => CategoryDietModel(
@@ -2170,5 +2171,9 @@ class GymStore extends ChangeNotifier {
       }
       print('status length final --- ${d.length}');
       return d;
+  }
+
+  Future<void> getDietPlan()async{
+    await RestDatasource().getDietPlans();
   }
 }
