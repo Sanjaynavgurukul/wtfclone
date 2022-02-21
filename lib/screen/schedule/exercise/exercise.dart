@@ -347,6 +347,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   ) async {
     // _controller.pause();
     await store.setExercise(widget.data);
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ExerciseStart(

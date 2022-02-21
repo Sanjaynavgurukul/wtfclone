@@ -101,6 +101,7 @@ class GymStore extends ChangeNotifier {
 
   SlotData selectedSlotData;
   List<CategoryDietModel> diet;
+  List<DayWise> dayWiseDiet;
 
   AddOnSlotDetails selectedSlotDetails;
 
@@ -2165,11 +2166,10 @@ class GymStore extends ChangeNotifier {
   // List<DayWise> getss(List<DietModel> data)async=>data.forEach((element)=>element.day.list);
   List<DayWise> gettsss(List<DietModel> data){
       List<DayWise> d = [];
-      print('status length --- ${data.length}');
       for(var v in data){
         d.addAll(v.day.list);
       }
-      print('status length final --- ${d.length}');
+      // print('status length final --- ${d.length}');
       return d;
   }
 
