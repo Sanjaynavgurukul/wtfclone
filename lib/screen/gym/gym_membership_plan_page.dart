@@ -40,24 +40,16 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
       backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
         backgroundColor: AppConstants.primaryColor,
-        centerTitle: true,
-        title: Row(
-          children: [
-            // Image.asset('assets/images/wtf_2.png'),
-            // UIHelper.horizontalSpace(4.0),
-            Flexible(
-              child: Text(
-                store.selectedGymDetail.data.gymName,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+        centerTitle: false,
+        title: Text(
+          store.selectedGymDetail.data.gymName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: RefreshIndicator(

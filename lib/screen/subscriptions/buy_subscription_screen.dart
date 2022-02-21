@@ -245,53 +245,53 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                   color: Colors.white38,
                   thickness: 0.4,
                 ),
-                SizedBox(
-                  height: 25,
-                ),
-                if (gymStore.selectedGymPlan.planPrice != '0')
-                  OfferSection(
-                    onApplied: () {
-                      setState(() {});
-                    },
-                  ),
-                if (gymStore.selectedGymPlan.planPrice != '0')
-                  Consumer<GymStore>(
-                    builder: (context, store, child) =>
-                        store.chosenOffer != null
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0,
-                                  vertical: 12.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 18.0,
-                                    ),
-                                    UIHelper.horizontalSpace(8.0),
-                                    Text(
-                                      'Coupon Code Applied',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                padding: const EdgeInsets.all(10.0),
-                              ),
-                  ),
-                Divider(
-                  height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                // SizedBox(
+                //   height: 25,
+                // ),
+                // if (gymStore.selectedGymPlan.planPrice != '0')
+                //   OfferSection(
+                //     onApplied: () {
+                //       setState(() {});
+                //     },
+                //   ),
+                // if (gymStore.selectedGymPlan.planPrice != '0')
+                //   Consumer<GymStore>(
+                //     builder: (context, store, child) =>
+                //         store.chosenOffer != null
+                //             ? Padding(
+                //                 padding: const EdgeInsets.symmetric(
+                //                   horizontal: 6.0,
+                //                   vertical: 12.0,
+                //                 ),
+                //                 child: Row(
+                //                   children: [
+                //                     Icon(
+                //                       Icons.check,
+                //                       color: Colors.green,
+                //                       size: 18.0,
+                //                     ),
+                //                     UIHelper.horizontalSpace(8.0),
+                //                     Text(
+                //                       'Coupon Code Applied',
+                //                       style: TextStyle(
+                //                         color: Colors.green,
+                //                       ),
+                //                     ),
+                //                   ],
+                //                 ),
+                //               )
+                //             : Container(
+                //                 padding: const EdgeInsets.all(10.0),
+                //               ),
+                //   ),
+                // Divider(
+                //   height: 0.0,
+                //   color: Colors.white38,
+                //   thickness: 0.4,
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(horizontal: 15),
                 //   child: Row(
@@ -508,10 +508,10 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
     return Theme(
       data: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.dark(
-          primary: Colors.black,//yellow
+          primary: AppConstants.primaryColor,//yellow
           onPrimary: Colors.white,
           surface: Colors.grey.shade200,//white
-          onSurface: Colors.black,//black
+          onSurface: AppConstants.primaryColor,//black
         ),
         dialogBackgroundColor:Colors.white,//white
       ),child: child,
@@ -609,6 +609,7 @@ class OfferCard extends StatefulWidget {
 }
 
 class _OfferCardState extends State<OfferCard> {
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(

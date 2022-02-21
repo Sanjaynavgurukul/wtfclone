@@ -13,12 +13,14 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
+import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
+import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
 import 'package:wtf/widget/slide_button.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
@@ -30,6 +32,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     implements ExploreContract {
   ScrollController _controller = ScrollController();
   ExplorePresenter _presenter;
+
   // GymSearchModel _searchResultModel;
   bool isLoaded = true;
   bool _isChecked = false;
@@ -38,21 +41,22 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   int totalAmount = 0;
   int tax = 0;
   TextEditingController couponCodeController;
+
   // Map subscriptionBody;
-  bool couponApplied = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _presenter = new ExplorePresenter(this);
-    if (context.read<GymStore>().chosenOffer != null) {
-      couponApplied = true;
-    }
-    couponCodeController = TextEditingController(
-        text: context.read<GymStore>().chosenOffer != null
-            ? context.read<GymStore>().chosenOffer.code
-            : '');
+    // if (context.read<GymStore>().chosenOffer != null) {
+    //   couponApplied = true;
+    // }
+    couponCodeController = TextEditingController();
+    // couponCodeController = TextEditingController(
+    //     text: context.read<GymStore>().chosenOffer != null
+    //         ? context.read<GymStore>().chosenOffer.code
+    //         : '');
     // getGyms();
 
     calculateFinalPrice();
@@ -105,6 +109,63 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   void dispose() {
     super.dispose();
     // TODO: implement dispose
+  }
+
+  void applyCoupon() {
+
+      if (couponCodeController.text != '') {
+        context
+            .read<GymStore>()
+            .getCoupon(couponCodeController.text)
+            .then((value) {
+          if (value != null) {
+           setState(() {
+             gymStore.setOffer(context: context, data: value);
+             print('set');
+             calculateFinalPrice();
+           });
+          } else {
+            setState(() {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Offer does not exists!'),
+              ));
+              couponCodeController.text = '';
+            });
+          }
+        });
+      }
+  }
+
+  void removeCoupon() {
+    setState(() {
+      gymStore.chosenOffer = null;
+      couponCodeController.text = '';
+      calculateFinalPrice();
+    });
+  }
+
+  Widget suffix(String text) {
+    print('------- called ${text}');
+    return gymStore.chosenOffer != null
+      ? InkWell(
+        onTap: () {
+          removeCoupon();
+        },
+        child: Icon(
+          Icons.remove_circle,
+          color: Colors.red,
+        ),
+      )
+    : text.isNotEmpty?
+      InkWell(
+        onTap: () {
+          applyCoupon();
+        },
+        child: Icon(
+          Icons.check_circle,
+          color: Colors.grey,
+        ),
+      ):SizedBox(height: 0,);
   }
 
   @override
@@ -394,136 +455,59 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 UIHelper.verticalSpace(6.0),
                 if (totalAmount > 0)
                   Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 1),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.red,
-                          child: Icon(
-                            Icons.check_circle,
-                            size: 35,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            cursorColor: Colors.white,
-                            controller: couponCodeController,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                            onFieldSubmitted: (val) {
-                              setState(() {
-                                if (couponCodeController.text != '') {
-                                  context
-                                      .read<GymStore>()
-                                      .getCoupon(couponCodeController.text)
-                                      .then((value) {
-                                    if (value != null) {
-                                      gymStore.setOffer(
-                                          context: context, data: value);
-                                      print('set');
-                                      calculateFinalPrice();
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text('Offer does not exists!'),
-                                      ));
-                                      couponCodeController.clear();
-                                    }
-                                  });
-                                }
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: "ENTER YOUR COUPON CODE",
-                              hintStyle: TextStyle(
+                      padding: EdgeInsets.only(left: 6, right: 6),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: AppConstants.primaryColor, width: 2)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              cursorColor: Colors.white,
+                              controller: couponCodeController,
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 13,
+                                fontSize: 15,
                               ),
-                              border: InputBorder.none,
-                              suffix: gymStore.chosenOffer != null
-                                  ? InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          gymStore.chosenOffer = null;
-                                          couponCodeController.text = '';
-                                          calculateFinalPrice();
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        margin: const EdgeInsets.only(
-                                          right: 12.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.clear,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () async {
-                                        setState(() {
-                                          if (couponCodeController.text != '') {
-                                            context
-                                                .read<GymStore>()
-                                                .getCoupon(
-                                                    couponCodeController.text)
-                                                .then((value) {
-                                              if (value != null) {
-                                                gymStore.setOffer(
-                                                    context: context,
-                                                    data: value);
-                                                print('set');
-                                                calculateFinalPrice();
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'Offer does not exists!'),
-                                                ));
-                                                couponCodeController.clear();
-                                              }
-                                            });
-                                          }
-                                        });
-                                      },
-                                      child: Container(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        margin: const EdgeInsets.only(
-                                          right: 12.0,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.done,
-                                        ),
-                                      ),
-                                    ),
+                              onFieldSubmitted: (val) {
+                                applyCoupon();
+                              },
+                              onChanged: (String val) {
+                                setState(() {});
+                              },
+                              decoration: InputDecoration(
+                                hintText: "ENTER YOUR COUPON CODE",
+                                hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                ),
+                                border: InputBorder.none,
+                                //gymStore.chosenOffer
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          // we need add button at last friends row
+                          suffix(couponCodeController.text)
+                        ],
+                      )),
+                SizedBox(
+                  height: 12,
+                ),
+                if (gymStore.selectedGymPlan.planPrice != '0')
+                  OfferSection(
+                    onApplied: () {
+                      setState(() {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          calculateFinalPrice();
+                        });
+                      });
+                    },
                   ),
-                if (totalAmount > 0)
+                if (gymStore.selectedGymPlan.planPrice != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
                         store.chosenOffer != null
