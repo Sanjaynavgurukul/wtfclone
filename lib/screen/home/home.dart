@@ -13,7 +13,6 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/my_schedule_model.dart';
-import 'package:wtf/screen/addon/live_classes.dart';
 import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/upcoming_events.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
@@ -23,7 +22,6 @@ import 'package:wtf/widget/progress_loader.dart';
 
 import '../ExplorePage.dart';
 import '../event/EventDetails.dart';
-import 'more_categories/more_categories.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key key}) : super(key: key);
@@ -80,10 +78,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 showHorizontalPadding: true,
               ),
               UIHelper.verticalSpace(25.0),
-              MoreCategories(),
-              SizedBox(
-                height: 20,
-              ),
               // Trending(),
               // SizedBox(
               //   height: 20,
@@ -242,10 +236,10 @@ class BannerWidget extends StatelessWidget {
                                       .toList()
                                       .length >
                                   0
-                              ? 250.0
+                              ? 260.0
                               : 0.0
-                          : 250.0,
-                      viewportFraction: 0.7,
+                          : 260.0,
+                      viewportFraction: 0.8,
                       enlargeCenterPage: true,
                       autoPlay: true,
                       pageSnapping: true,
@@ -267,7 +261,7 @@ class BannerWidget extends StatelessWidget {
                                     }
                                     return Image.network(
                                       i.image,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
                                       width: double.infinity,
                                       height: double.infinity,
                                       loadingBuilder: (context, _, chunk) =>
@@ -296,7 +290,337 @@ class BannerWidget extends StatelessWidget {
                                     }
                                     return Image.network(
                                       i.image,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList(),
+                  );
+      },
+    );
+  }
+}
+
+class LiveBannerWidget extends StatelessWidget {
+  const LiveBannerWidget({
+    Key key,
+    this.showAll = false,
+  }) : super(key: key);
+  final bool showAll;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GymStore>(
+      builder: (context, value, child) {
+        print(
+            'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'LIVE_banner').toList()}');
+        return value.bannerList == null
+            ? Container(
+                height: 200,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            : value.bannerList.isEmpty
+                ? Container()
+                : CarouselSlider(
+                    options: CarouselOptions(
+                      height: showAll
+                          ? value.bannerList
+                                      .where((element) =>
+                                          element.type == 'LIVE_banner')
+                                      .toList()
+                                      .length >
+                                  0
+                              ? 260.0
+                              : 0.0
+                          : 260.0,
+                      viewportFraction: 0.8,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      pageSnapping: true,
+                    ),
+                    items: showAll
+                        ? value.bannerList
+                            .where((element) => element.type == 'LIVE_banner')
+                            .toList()
+                            .map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList()
+                        : value.bannerList.map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList(),
+                  );
+      },
+    );
+  }
+}
+
+class AddonBannerWidget extends StatelessWidget {
+  const AddonBannerWidget({
+    Key key,
+    this.showAll = false,
+  }) : super(key: key);
+  final bool showAll;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GymStore>(
+      builder: (context, value, child) {
+        print(
+            'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'ADDON_banner').toList()}');
+        return value.bannerList == null
+            ? Container(
+                height: 200,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            : value.bannerList.isEmpty
+                ? Container()
+                : CarouselSlider(
+                    options: CarouselOptions(
+                      height: showAll
+                          ? value.bannerList
+                                      .where((element) =>
+                                          element.type == 'ADDON_banner')
+                                      .toList()
+                                      .length >
+                                  0
+                              ? 260.0
+                              : 0.0
+                          : 260.0,
+                      viewportFraction: 0.8,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      pageSnapping: true,
+                    ),
+                    items: showAll
+                        ? value.bannerList
+                            .where((element) => element.type == 'ADDON_banner')
+                            .toList()
+                            .map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList()
+                        : value.bannerList.map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList(),
+                  );
+      },
+    );
+  }
+}
+
+class PTBannerWidget extends StatelessWidget {
+  const PTBannerWidget({
+    Key key,
+    this.showAll = false,
+  }) : super(key: key);
+  final bool showAll;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GymStore>(
+      builder: (context, value, child) {
+        print(
+            'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'PT_banner').toList()}');
+        return value.bannerList == null
+            ? Container(
+                height: 200,
+                width: 200,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            : value.bannerList.isEmpty
+                ? Container()
+                : CarouselSlider(
+                    options: CarouselOptions(
+                      height: showAll
+                          ? value.bannerList
+                                      .where((element) =>
+                                          element.type == 'PT_banner')
+                                      .toList()
+                                      .length >
+                                  0
+                              ? 260.0
+                              : 0.0
+                          : 260.0,
+                      viewportFraction: 0.8,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      pageSnapping: true,
+                    ),
+                    items: showAll
+                        ? value.bannerList
+                            .where((element) => element.type == 'PT_banner')
+                            .toList()
+                            .map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      loadingBuilder: (context, _, chunk) =>
+                                          chunk == null
+                                              ? _
+                                              : RectangleShimmering(
+                                                  width: double.infinity,
+                                                  height: 180.0,
+                                                ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList()
+                        : value.bannerList.map(
+                            (i) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    if (i.image == null) {
+                                      return Center(
+                                        child: Text("No image data"),
+                                      );
+                                    }
+                                    return Image.network(
+                                      i.image,
+                                      fit: BoxFit.fill,
                                       width: double.infinity,
                                       height: double.infinity,
                                       loadingBuilder: (context, _, chunk) =>
@@ -925,7 +1249,6 @@ class _LiveAddonWidgetState extends State<LiveAddonWidget> {
       // padding: EdgeInsets.symmetric(
       //   horizontal: widget.showHorizontalPadding ? 24.0 : 0.0,
       // ),
-      height: 380.0,
       child: Consumer<GymStore>(
         builder: (context, store, child) {
           return Column(
@@ -991,13 +1314,8 @@ class _LiveAddonWidgetState extends State<LiveAddonWidget> {
                               itemBuilder: (context, index) => index == 3
                                   ? SeeAll(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => LiveClasses(),
-                                          ),
-                                        );
-                                        // NavigationService.navigateTo(
-                                        //     Routes.allLiveAddons);
+                                        NavigationService.navigateTo(
+                                            Routes.allLiveAddons);
                                       },
                                     )
                                   : LiveCard(
@@ -1017,6 +1335,7 @@ class _LiveAddonWidgetState extends State<LiveAddonWidget> {
           );
         },
       ),
+      height: 380.0,
     );
   }
 }
@@ -1093,7 +1412,7 @@ class _AllAddonWidgetState extends State<AllAddonWidget> {
         left: widget.showHorizontalPadding ? 20.0 : 0.0,
         // right: widget.showHorizontalPadding ? 20.0 : 0.0,
       ),
-      height: 280.0,
+      height: 380.0,
       child: Consumer<GymStore>(
         builder: (context, store, child) {
           return Column(
@@ -1149,7 +1468,7 @@ class _AllAddonWidgetState extends State<AllAddonWidget> {
                                             .seeMorePt
                                             .setValue(widget.showOnlyPT);
                                         NavigationService.navigateTo(
-                                            Routes.allAddons);
+                                            Routes.ptClassPage);
                                       } else {
                                         NavigationService.navigateTo(
                                             Routes.poweredPages);

@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:otp_autofill/otp_autofill.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/global.dart';
@@ -96,6 +98,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         Container(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                         ),
+                        Image.asset(
+                          'assets/images/wtf_3.png',
+                          height: 80.0,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 30),
@@ -105,20 +111,24 @@ class _RegisterPageState extends State<RegisterPage> {
                             children: <Widget>[
                               Text(
                                 'Sign up',
-                                style: TextStyle(
-                                    fontSize: 24, color: Colors.white),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 'Create account and explore WTF managed world class Fitness Facilities, Events & Challenges near you.',
-                                style: TextStyle(color: AppColors.TEXT_DARK),
+                                style: GoogleFonts.poppins(
+                                  color: AppColors.TEXT_DARK,
+                                ),
                               ),
                               SizedBox(
                                 height: 30,
                               ),
-                              UnderlineTextField(
+                              OutlineTextField(
                                 hintText: 'Your Name',
                                 controller: name,
                                 maxLines: 1,
@@ -149,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 20),
-                              UnderlineTextField(
+                              OutlineTextField(
                                 hintText: 'Your Email Address',
                                 controller: emailAddress,
                                 maxLines: 1,
@@ -180,130 +190,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 20),
-                              if (auth.registerMethod == null)
-                                Column(
-                                  children: [
-                                    UnderlineTextField(
-                                      hintText: 'Enter Password',
-                                      controller: password,
-                                      maxLines: 1,
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter [password]';
-                                        } else if (value.length < 6) {
-                                          return 'Password should be of at least 6 characters';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        if (value.isEmpty || value == null) {
-                                          isPassword = false;
-                                        } else {
-                                          isPassword = true;
-                                        }
-                                        setState(() {});
-                                      },
-                                      observe: obscureText,
-                                      suffix: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                obscureText = !obscureText;
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                obscureText
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          UIHelper.horizontalSpace(16.0),
-                                          Icon(
-                                            Icons.check,
-                                            color: isPassword
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    UnderlineTextField(
-                                      hintText: 'Confirm Password',
-                                      controller: confirmPassword,
-                                      maxLines: 1,
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter [password]';
-                                        } else if (value.length < 6) {
-                                          return 'Password should be of at least 6 characters';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        if (value.isEmpty || value == null) {
-                                          isConfirmPassword = false;
-                                        } else {
-                                          isConfirmPassword = true;
-                                        }
-                                        setState(() {});
-                                      },
-                                      observe: obscureText,
-                                      suffix: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                obscureText = !obscureText;
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                obscureText
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          UIHelper.horizontalSpace(16.0),
-                                          Icon(
-                                            Icons.check,
-                                            color: isPassword
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                  ],
-                                ),
-                              UnderlineTextField(
-                                // inputFormatters: [
-                                //   Global.number,
-                                // ],
-                                keyboardType: TextInputType.text,
-                                hintText: 'Referral Code (optional)',
-                                controller: referralCodeController,
-                                maxLines: 1,
-                              ),
-                              SizedBox(height: 20),
-                              UnderlineTextField(
+                              OutlineTextField(
                                 // inputFormatters: [
                                 //   Global.number,
                                 // ],
@@ -338,8 +225,132 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 20),
+                              if (auth.registerMethod == null)
+                                Column(
+                                  children: [
+                                    OutlineTextField(
+                                      hintText: 'Enter Password',
+                                      controller: password,
+                                      maxLines: 1,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter [password]';
+                                        } else if (value.length < 6) {
+                                          return 'Password should be of at least 6 characters';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {
+                                        if (value.isEmpty || value == null) {
+                                          isPassword = false;
+                                        } else {
+                                          isPassword = true;
+                                        }
+                                        setState(() {});
+                                      },
+                                      obscureText: obscureText,
+                                      suffix: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                obscureText = !obscureText;
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                obscureText
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          UIHelper.horizontalSpace(16.0),
+                                          Icon(
+                                            Icons.check,
+                                            color: isPassword
+                                                ? Colors.red
+                                                : Colors.transparent,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    OutlineTextField(
+                                      hintText: 'Confirm Password',
+                                      controller: confirmPassword,
+                                      maxLines: 1,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter [password]';
+                                        } else if (value.length < 6) {
+                                          return 'Password should be of at least 6 characters';
+                                        }
+                                        return null;
+                                      },
+                                      onChanged: (value) {
+                                        if (value.isEmpty || value == null) {
+                                          isConfirmPassword = false;
+                                        } else {
+                                          isConfirmPassword = true;
+                                        }
+                                        setState(() {});
+                                      },
+                                      obscureText: obscureText,
+                                      suffix: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                obscureText = !obscureText;
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                obscureText
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          UIHelper.horizontalSpace(16.0),
+                                          Icon(
+                                            Icons.check,
+                                            color: isPassword
+                                                ? Colors.red
+                                                : Colors.transparent,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                  ],
+                                ),
+                              OutlineTextField(
+                                // inputFormatters: [
+                                //   Global.number,
+                                // ],
+                                keyboardType: TextInputType.text,
+                                hintText: 'Referral Code (optional)',
+                                controller: referralCodeController,
+                                maxLines: 1,
+                              ),
+                              SizedBox(height: 20),
+
                               isSend
-                                  ? UnderlineTextField(
+                                  ? OutlineTextField(
                                       fontFamily: Fonts.ROBOTO,
                                       enable: true,
                                       inputFormatters: [Global.amountValidator],
@@ -400,13 +411,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                       text: TextSpan(
                                         text:
                                             'By completing the sign-up process, you agree to our ',
-                                        style: TextStyle(
+                                        style: GoogleFonts.poppins(
                                             fontSize: 12.0,
                                             color: AppColors.TEXT_DARK),
                                         children: [
                                           TextSpan(
                                             text: 'terms',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                               color: AppColors.TEXT_DARK,
                                               fontSize: 12.0,
                                               decoration:
@@ -421,13 +432,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ),
                                           TextSpan(
                                             text: ', ',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                               color: AppColors.TEXT_DARK,
                                             ),
                                           ),
                                           TextSpan(
                                             text: 'privacy',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                               color: AppColors.TEXT_DARK,
                                               fontSize: 12.0,
                                               decoration:
@@ -442,14 +453,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ),
                                           TextSpan(
                                             text: ' and ',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                               fontSize: 12.0,
                                               color: AppColors.TEXT_DARK,
                                             ),
                                           ),
                                           TextSpan(
                                             text: 'refund policy',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                               fontSize: 12.0,
                                               color: AppColors.TEXT_DARK,
                                               decoration:
@@ -464,13 +475,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ),
                                           // TextSpan(
                                           //   text: ' ',
-                                          //   style: TextStyle(
+                                          //   style: GoogleFonts.poppins()(
                                           //     color: AppColors.TEXT_DARK,
                                           //   ),
                                           // ),
                                           TextSpan(
                                             text: '.',
-                                            style: TextStyle(
+                                            style: GoogleFonts.poppins(
                                                 color: AppColors.TEXT_DARK),
                                             // recognizer: TapGestureRecognizer()
                                             //   ..onTap = () {
@@ -487,7 +498,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               // Text(
                               //   'Also, you will automatically opt for WTF Emails, WhatsApp, and SMS.',
-                              //   style: TextStyle(
+                              //   style: GoogleFonts.poppins()(
                               //     fontSize: 12.0,
                               //     color: AppColors.TEXT_DARK,
                               //   ),
@@ -511,7 +522,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         alignment: Alignment.centerRight,
                                         child: Text(
                                           'Resend OTP?',
-                                          style: TextStyle(
+                                          style: GoogleFonts.poppins(
                                               fontSize: 16, color: Colors.red),
                                         ),
                                       ),
@@ -520,13 +531,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               SizedBox(height: 20),
                               AppOutlineButton(
                                 width: MediaQuery.of(context).size.width,
-                                height: 50,
-                                fontSize: 16,
-                                textColor: Colors.red,
+                                height: 48.0,
+                                fontSize: 14,
+                                textColor: Colors.black,
                                 label: isSend
                                     ? 'Create Account'
                                     : 'Send OTP & Continue',
-                                color: Colors.white,
                                 onPressed: () async {
                                   //remove
                                   // Future.delayed(
@@ -650,170 +660,37 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 30),
-                              // if (Platform.isAndroid)
-                              //   Row(
-                              //     mainAxisAlignment: MainAxisAlignment.center,
-                              //     children: [
-                              //       Text(
-                              //         'Sign up with : ',
-                              //         style: TextStyle(
-                              //             fontSize: 16,
-                              //             color: AppColors.TEXT_DARK),
-                              //       ),
-                              //       SizedBox(
-                              //         width: 10,
-                              //       ),
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           auth.socialLogin().then(
-                              //             (value) {
-                              //               if (value != null) {
-                              //                 if (value.isSuccessed) {
-                              //                   final res = value.data;
-                              //                   print(
-                              //                       'RESP DATA:: ${value.data}');
-                              //                   locator<AppPrefs>()
-                              //                       .memberId
-                              //                       .setValue(res['uid']);
-                              //                   locator<AppPrefs>()
-                              //                       .userName
-                              //                       .setValue(res['name']);
-                              //                   locator<AppPrefs>()
-                              //                       .phoneNumber
-                              //                       .setValue(res['mobile']);
-                              //                   locator<AppPrefs>()
-                              //                       .userEmail
-                              //                       .setValue(res['email']);
-                              //                   locator<AppPrefs>()
-                              //                       .token
-                              //                       .setValue(
-                              //                         res['token'],
-                              //                       );
-                              //                   locator<AppPrefs>()
-                              //                       .dateAdded
-                              //                       .setValue(
-                              //                           res['date_added']);
-                              //                   locator<AppPrefs>()
-                              //                       .isLoggedIn
-                              //                       .setValue(true);
-                              //                   context
-                              //                       .read<GymStore>()
-                              //                       .init(context: context);
-                              //                   NavigationService
-                              //                       .navigateToReplacement(
-                              //                           Routes.homePage);
-                              //                 } else {
-                              //                   setState(() {
-                              //                     emailAddress.text =
-                              //                         value.data[0].toString();
-                              //                     name.text =
-                              //                         value.data[1].toString();
-                              //                   });
-                              //                   FlashHelper.informationBar(
-                              //                       context,
-                              //                       message:
-                              //                           'Please Enter remaining data.');
-                              //                 }
-                              //               }
-                              //             },
-                              //           );
-                              //         },
-                              //         child: Image.asset(
-                              //           Images.GOOGLE,
-                              //           width: 40,
-                              //           height: 40,
-                              //         ),
-                              //       ),
-                              //       // SizedBox(
-                              //       //   width: 10,
-                              //       // ),
-                              //       // GestureDetector(
-                              //       //   onTap: () {
-                              //       //     auth
-                              //       //         .socialLogin(provider: 'facebook')
-                              //       //         .then((value) {
-                              //       //       print('data');
-                              //       //       if (value != null) {
-                              //       //         if (value.isSuccessed) {
-                              //       //           final res = value.data;
-                              //       //           print('RESP DATA:: ${value.data}');
-                              //       //           locator<AppPrefs>()
-                              //       //               .memberId
-                              //       //               .setValue(res['uid']);
-                              //       //           locator<AppPrefs>()
-                              //       //               .userName
-                              //       //               .setValue(res['name']);
-                              //       //           locator<AppPrefs>()
-                              //       //               .phoneNumber
-                              //       //               .setValue(res['mobile']);
-                              //       //           locator<AppPrefs>()
-                              //       //               .userEmail
-                              //       //               .setValue(res['email']);
-                              //       //           locator<AppPrefs>().token.setValue(
-                              //       //                 res['token'],
-                              //       //               );
-                              //       //           locator<AppPrefs>()
-                              //       //               .isLoggedIn
-                              //       //               .setValue(true);
-                              //       //
-                              //       //           NavigationService
-                              //       //               .navigateToReplacement(
-                              //       //                   Routes.homePage);
-                              //       //         } else {
-                              //       //           print('show error');
-                              //       //           setState(() {
-                              //       //             emailAddress.text =
-                              //       //                 value.data[0].toString();
-                              //       //             name.text =
-                              //       //                 value.data[1].toString();
-                              //       //           });
-                              //       //           ScaffoldMessenger.of(context)
-                              //       //               .showSnackBar(SnackBar(
-                              //       //                   content:
-                              //       //                       Text(value.message)));
-                              //       //         }
-                              //       //       }
-                              //       //     });
-                              //       //   },
-                              //       //   child: Image.asset(
-                              //       //     Images.FACEBOOK,
-                              //       //     width: 35,
-                              //       //     height: 35,
-                              //       //   ),
-                              //       // ),
-                              //     ],
-                              //   ),
                               Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: Center(
                                   child: RichText(
                                     text: TextSpan(
-                                      text: ' Login, ',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          NavigationService
-                                              .navigateToReplacement(
-                                                  Routes.login);
-                                        },
                                       children: [
                                         TextSpan(
-                                          text:
-                                              'If you already have an account! ',
+                                          text: "Already have an account? ",
                                           style: TextStyle(
-                                            color: AppColors.TEXT_DARK,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w300,
+                                            color:
+                                                Colors.white.withOpacity(0.7),
                                           ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              NavigationService
-                                                  .navigateToReplacement(
-                                                      Routes.login);
-                                            },
                                         ),
+                                        TextSpan(
+                                            text: "Sign In",
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                NavigationService
+                                                    .navigateToReplacement(
+                                                        Routes.login);
+                                              })
                                       ],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppConstants.buttonRed2,
+                                      ),
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),

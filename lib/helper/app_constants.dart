@@ -53,8 +53,8 @@ class AppConstants {
   static const Color lightBoxBgRed = Color(0xFFf8e1e1);
   static const Color dark_grey = Color(0xFF313A44);
   static const Color red = const Color(0xffe52f2f);
-  static const Color buttonRed1 = const Color(0xff9A0E0E);
-  static const Color buttonRed2 = const Color(0xffDE0000);
+  static const Color buttonRed1 = const Color(0xffDE0000);
+  static const Color buttonRed2 = const Color(0xff9A0E0E);
   static const Color buttonRed3 = const Color(0xff631B24);
   static const Color confirm = const Color(0xffe52f2f);
   static const Color lightConfirm = const Color(0xfffce5e5);

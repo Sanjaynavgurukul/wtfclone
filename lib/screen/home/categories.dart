@@ -67,7 +67,12 @@ class _CategoriesState extends State<Categories> {
       case 0:
         // store.changeNavigationTab(index: 2);
         // store.changeNavigationTab(index: 3);
-        NavigationService.navigateTo(Routes.mySchedule);
+        // NavigationService.navigateTo(Routes.mySchedule);
+        context.read<GymStore>().getDiscoverNow(
+              context: context,
+              type: 'gym',
+            );
+        NavigationService.navigateTo(Routes.discoverNow);
         break;
       case 1:
         NavigationService.navigateTo(Routes.allLiveAddons);
@@ -111,20 +116,24 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
     return Center(
-      child: Wrap(
-        alignment: WrapAlignment.start,
-        runAlignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        runSpacing: 0.0,
-        spacing: 12.0,
-        children: _itemsList
-            .map(
-              (e) => CategoriesItem(
-                itemName: e['name'],
-                img: e['img'],
-              ),
-            )
-            .toList(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          runAlignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 0.0,
+          spacing: 12.0,
+          children: _itemsList
+              .map(
+                (e) => CategoriesItem(
+                  itemName: e['name'],
+                  img: e['img'],
+                  onTap: () => navigation(_itemsList.indexOf(e), context),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }

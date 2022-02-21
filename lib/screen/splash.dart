@@ -3,10 +3,13 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
@@ -73,34 +76,49 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          SizedBox.expand(
-            child: FittedBox(
-              // If your background video doesn't look right, try changing the BoxFit property.
-              // BoxFit.fill created the look I was going for.
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: videoPlayerController.value.size.width,
-                height: videoPlayerController.value.size.height,
-                child: VideoPlayer(videoPlayerController),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            SizedBox.expand(
+              child: FittedBox(
+                // If your background video doesn't look right, try changing the BoxFit property.
+                // BoxFit.fill created the look I was going for.
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: videoPlayerController.value.size.width,
+                  height: videoPlayerController.value.size.height,
+                  child: VideoPlayer(videoPlayerController),
+                ),
               ),
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.redAccent.withOpacity(0.5), Colors.black],
+            // SizedBox.expand(
+            //   child: FittedBox(
+            //     // If your background video doesn't look right, try changing the BoxFit property.
+            //     // BoxFit.fill created the look I was going for.
+            //     fit: BoxFit.contain,
+            //     child: Image.asset('assets/images/splash_img.png'),
+            //   ),
+            // ),
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.2, 0.8, 0.9],
+                  colors: [
+                    Colors.redAccent.withOpacity(0.5),
+                    Colors.black,
+                    Colors.black,
+                  ],
+                ),
               ),
             ),
-          ),
-          SplashWidget()
-        ],
+            SplashWidget()
+          ],
+        ),
       ),
     );
   }
@@ -115,36 +133,48 @@ class SplashWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 60),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Hi there,",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Row(
+          Spacer(),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 150.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Welcome to ",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white70,
-                    ),
+                  // Text(
+                  //   "Hi there,",
+                  //   style: TextStyle(
+                  //     fontSize: 26,
+                  //     fontWeight: FontWeight.bold,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       "Welcome to ",
+                  //       style: TextStyle(
+                  //         fontSize: 24,
+                  //         fontWeight: FontWeight.w300,
+                  //         color: Colors.white70,
+                  //       ),
+                  //     ),
+                  //     Image.asset(Logos.WTF_LIGHT, height: 22),
+                  //   ],
+                  // ),
+                  Image.asset(
+                    'assets/images/wtf_3.png',
+                    height: 120.0,
                   ),
-                  Image.asset(Logos.WTF_LIGHT, height: 22),
+                  SvgPicture.asset('assets/svg/witness_the_fitness.svg'),
                 ],
               ),
-            ],
+            ),
           ),
+          Spacer(),
           Align(
             alignment: Alignment.bottomCenter,
             child: Column(
@@ -152,17 +182,17 @@ class SplashWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Swipe to unlock your fitness",
+                  "Swipe to unlock your Fitness",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                  style: GoogleFonts.poppins(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
                 ),
                 SizedBox(height: 20),
                 Container(
-                  height: 60,
+                  height: 50,
                   width: MediaQuery.of(context).size.width * 0.7,
                   padding: EdgeInsets.zero,
                   decoration: BoxDecoration(
@@ -189,12 +219,13 @@ class SplashWidget extends StatelessWidget {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
-                    text: "WITNESS THE FITNESS",
+                    text: "",
                     sliderButtonIcon: Icon(
                       Icons.navigate_next,
-                      size: 45,
+                      size: 35,
                       color: Colors.white,
                     ),
+                    sliderButtonIconSize: 48.0,
                     submittedIcon: Image.asset(Logos.WTF_DARK),
                     sliderRotate: true,
                     // sliderButtonIconPadding: 0,
@@ -216,7 +247,7 @@ class SplashWidget extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                          text: "Login",
+                          text: "Sign In",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               NavigationService.navigateToReplacement(
@@ -226,7 +257,7 @@ class SplashWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: AppConstants.buttonRed2,
                     ),
                   ),
                   textAlign: TextAlign.center,

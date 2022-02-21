@@ -166,29 +166,34 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                       children: <Widget>[
                         Stack(
                           children: [
-                            Shimmer.fromColors(
-                              baseColor: Colors.red,
-                              highlightColor: Colors.white,
-                              child: OutlineGradientButton(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [Colors.redAccent, Colors.white]),
-                                strokeWidth: 2.9,
-                                padding: EdgeInsets.zero,
-                                radius: Radius.circular(50),
-                                child: Builder(builder: (context) {
-                                  return Container(
-                                    // color: Colors.white,
-                                    height: widget.height,
-                                    width: _containerWidth,
-                                    constraints: _containerWidth != null
-                                        ? null
-                                        : BoxConstraints.expand(
-                                            height: widget.height),
-                                  );
-                                }),
+                            // Shimmer.fromColors(
+                            //   baseColor: Colors.red,
+                            //   highlightColor: Colors.black,
+                            //   child:
+                            // ),
+                            OutlineGradientButton(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.topRight,
+                                colors: [
+                                  Color(0xffBA1406),
+                                  Color(0xff490000),
+                                ],
                               ),
+                              strokeWidth: 2.9,
+                              padding: EdgeInsets.zero,
+                              radius: Radius.circular(50),
+                              child: Builder(builder: (context) {
+                                return Container(
+                                  // color: Colors.white,
+                                  height: widget.height,
+                                  width: _containerWidth,
+                                  constraints: _containerWidth != null
+                                      ? null
+                                      : BoxConstraints.expand(
+                                          height: widget.height),
+                                );
+                              }),
                             ),
                             Container(
                               // color: Colors.white,
@@ -257,7 +262,7 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                                 children: [
                                   Shimmer.fromColors(
                                     baseColor: Colors.red,
-                                    highlightColor: Colors.red[100],
+                                    highlightColor: Colors.red[900],
                                     child: AnimatedContainer(
                                       duration: widget.animationDuration,
                                       width:
@@ -333,48 +338,68 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                                   },
                                   child: OutlineGradientButton(
                                     gradient: LinearGradient(
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter,
-                                        colors: [
-                                          Colors.redAccent,
-                                          Colors.white
-                                        ]),
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xffBA1406),
+                                        Color(0xff490000),
+                                      ],
+                                    ),
                                     strokeWidth: 2.8,
                                     padding: EdgeInsets.zero,
-                                    radius: Radius.circular(50),
-                                    child: Builder(builder: (context) {
-                                      return Material(
-                                        borderRadius: BorderRadius.circular(
-                                            widget.borderRadius),
-                                        child: Container(
-                                          height: 60,
-                                          width: 60,
-                                          // padding: EdgeInsets.all(
-                                          //     widget.sliderButtonIconPadding),
-                                          alignment: Alignment.centerRight,
-                                          child: Transform.rotate(
-                                            angle: widget.sliderRotate
-                                                ? -pi * _progress
-                                                : 0,
-                                            child: Center(
-                                              child: widget.sliderButtonIcon ??
-                                                  Icon(
-                                                    Icons.arrow_forward,
-                                                    size: widget
-                                                        .sliderButtonIconSize,
-                                                    color: widget.outerColor ??
-                                                        Theme.of(context)
-                                                            .accentColor,
-                                                  ),
+                                    radius: Radius.circular(25),
+                                    child: Builder(
+                                      builder: (context) {
+                                        return Material(
+                                          borderRadius: BorderRadius.circular(
+                                            widget.borderRadius,
+                                          ),
+                                          child: Container(
+                                            height: 50,
+                                            width: 50,
+                                            // padding: EdgeInsets.all(
+                                            //     widget.sliderButtonIconPadding),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                widget.borderRadius,
+                                              ),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Color(0xffBA1406),
+                                                  Color(0xff490000),
+                                                ],
+                                              ),
+                                            ),
+                                            alignment: Alignment.centerRight,
+                                            child: Transform.rotate(
+                                              angle: widget.sliderRotate
+                                                  ? -pi * _progress
+                                                  : 0,
+                                              child: Center(
+                                                child:
+                                                    widget.sliderButtonIcon ??
+                                                        Icon(
+                                                          Icons.arrow_forward,
+                                                          size: widget
+                                                              .sliderButtonIconSize,
+                                                          color: widget
+                                                                  .outerColor ??
+                                                              Theme.of(context)
+                                                                  .accentColor,
+                                                        ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        color: widget.innerColor ??
-                                            Theme.of(context)
-                                                .primaryIconTheme
-                                                .color,
-                                      );
-                                    }),
+                                          color: widget.innerColor ??
+                                              Theme.of(context)
+                                                  .primaryIconTheme
+                                                  .color,
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),

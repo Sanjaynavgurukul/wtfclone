@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wtf/helper/colors.dart';
 
 class AppButton extends StatelessWidget {
@@ -72,7 +73,7 @@ class AppOutlineButton extends StatelessWidget {
       this.width,
       this.padding,
       this.fontSize,
-      this.color,
+      this.color = const Color(0xffE3E1E1),
       this.textColor,
       this.radius});
 
@@ -81,9 +82,9 @@ class AppOutlineButton extends StatelessWidget {
     return MaterialButton(
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: fontSize ?? 18,
-          fontWeight: FontWeight.w900,
+        style: GoogleFonts.poppins(
+          fontSize: fontSize ?? 14,
+          fontWeight: FontWeight.w500,
           letterSpacing: 1,
         ),
       ),
@@ -100,7 +101,7 @@ class AppOutlineButton extends StatelessWidget {
       highlightColor: Colors.white.withOpacity(0.2),
       shape: RoundedRectangleBorder(
           borderRadius:
-              new BorderRadius.circular(radius != null ? radius : 20)),
+              new BorderRadius.circular(radius != null ? radius : 4.0)),
       onPressed: onPressed,
     );
   }
