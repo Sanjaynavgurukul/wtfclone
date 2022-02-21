@@ -2161,15 +2161,14 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<MealSlot> getMealSlot(List<DietModel> data) {
-    List<MealSlot> f = [];
-      for (DietModel dietModel in data ?? []) {
-        for (DayWise d in dietModel.day.list) {
-          for (MealSlot fn in d.meal) {
-            f.add(fn);
-          }
-        }
+  // List<DayWise> getss(List<DietModel> data)async=>data.forEach((element)=>element.day.list);
+  List<DayWise> gettsss(List<DietModel> data){
+      List<DayWise> d = [];
+      print('status length --- ${data.length}');
+      for(var v in data){
+        d.addAll(v.day.list);
       }
-    return f;
+      print('status length final --- ${d.length}');
+      return d;
   }
 }

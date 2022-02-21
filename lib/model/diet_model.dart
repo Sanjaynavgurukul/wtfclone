@@ -50,11 +50,11 @@ class WeeklyDietModel {
   WeeklyDietModel();
 
   WeeklyDietModel.fromJson({@required Map<String, dynamic> data}) {
-    List<dynamic> l = dayNames.map((e) => data[e]).toList();
+    List<DynamicModel> l = dayNames
+        .map((e) => DynamicModel(value: data[e], listLabel: e))
+        .toList();
     list = l
-        .map((e) => DayWise.fromJson(
-              data: e,
-            ))
+        .map((e) => DayWise.fromJson(data: e.value, label: e.listLabel))
         .toList();
   }
 
@@ -69,6 +69,13 @@ class WeeklyDietModel {
   ];
 }
 
+class DynamicModel {
+  dynamic value;
+  String listLabel;
+
+  DynamicModel({this.value, this.listLabel});
+}
+
 class DayWise {
   String dayLabel;
   List<MealSlot> meal = [];
@@ -76,13 +83,17 @@ class DayWise {
   //Default constructor :D
   DayWise();
 
-  DayWise.fromJson({@required Map<String, dynamic> data}) {
+  DayWise.fromJson(
+      {@required Map<String, dynamic> data, @required String label}) {
+    print('label is here --- $label');
+    dayLabel = label;
     for (String val in value) {
       List<MealSlot> m =
           ((data[val] as List).map((i) => MealSlot.fromJson(data: i)).toList());
       meal.addAll(m);
     }
   }
+
   List<String> value = ['breakfast', 'lunch', 'dinner', 'snacks', 'mmsnacks'];
 }
 

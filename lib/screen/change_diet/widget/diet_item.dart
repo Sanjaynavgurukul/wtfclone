@@ -7,7 +7,7 @@ import 'package:wtf/screen/change_diet/arguments/diet_arguments.dart';
 
 class DietItem extends StatelessWidget {
   const DietItem({Key key, this.data}) : super(key: key);
-  final DietModel data;
+  final DayWise data;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class DietItem extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  data.name,
+                  data.dayLabel,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
@@ -41,7 +41,7 @@ class DietItem extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    NavigationService.pushName(Routes.dietDetailScreen,argument: DietArgument(data: data));
+                    // NavigationService.pushName(Routes.dietDetailScreen,argument: DietArgument(data: data));
                     // Navigator.pushNamed(context, Routes.dietDetailScreen,
                     //     arguments: DietArgument(data: data));
                   },

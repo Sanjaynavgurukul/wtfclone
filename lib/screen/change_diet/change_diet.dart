@@ -20,35 +20,8 @@ class ChangeDiet extends StatefulWidget {
 }
 
 class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
-  bool show = false;
-  bool scrollOrNot = true;
-  final bool isPreview = false;
   int selectedIndex = 0;
   GymStore store;
-
-  void showOrHide() {
-    if (_scrollController.position.pixels >= 141) {
-      setState(() {
-        show = true;
-      });
-    } else {
-      setState(() {
-        show = false;
-      });
-    }
-
-    if ((_scrollController.position.pixels ==
-                _scrollController.position.minScrollExtent ||
-            _scrollController.position.pixels ==
-                _scrollController.position.maxScrollExtent) &&
-        isPreview == true) {
-      setState(() {
-        scrollOrNot = false;
-      });
-    }
-  }
-
-  final _scrollController = ScrollController();
 
   List<TopBarModel> getList() => [
         TopBarModel(
@@ -80,16 +53,13 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _scrollController.addListener(() {
-      print(_scrollController.position.pixels);
-      showOrHide();
-    });
     super.initState();
   }
 
   void callData() {
     print('current select index = $selectedIndex');
-    store.getAllDiet(context: context,dietType: getList()[selectedIndex].fullLabel);
+    store.getAllDiet(
+        context: context, dietType: getList()[selectedIndex].fullLabel);
   }
 
   @override
@@ -236,7 +206,6 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
         ),
         Container(
             child: Consumer<GymStore>(
-
           builder: (context, store, child) => store.diet != null
               ? store.diet.isNotEmpty
                   ? ListView.builder(
@@ -260,14 +229,24 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
                                 ),
                               ),
                               dense: true,
+                              trailing: Text('Buy Now'),
                             ),
+                            // SingleChildScrollView(
+                            //     scrollDirection: Axis.horizontal,
+                            //     child: Row(
+                            //       children: data.products
+                            //           .map((item) => DietItem(
+                            //                 data: item,
+                            //               ))
+                            //           .toList(),
+                            //     ))
                             SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: data.products
+                                  children: store.gettsss(data.products)
                                       .map((item) => DietItem(
-                                            data: item,
-                                          ))
+                                    data: item,
+                                  ))
                                       .toList(),
                                 ))
                           ],
