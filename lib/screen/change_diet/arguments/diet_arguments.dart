@@ -1,6 +1,6 @@
 import 'package:wtf/model/diet_model.dart';
 
 class DietArgument{
-  DietModel data;
+  DayWise data;
   DietArgument({this.data});
 }

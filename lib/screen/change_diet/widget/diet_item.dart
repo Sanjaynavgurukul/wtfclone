@@ -41,7 +41,7 @@ class DietItem extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    // NavigationService.pushName(Routes.dietDetailScreen,argument: DietArgument(data: data));
+                    NavigationService.pushName(Routes.dietDetailScreen,argument: DietArgument(data: data));
                     // Navigator.pushNamed(context, Routes.dietDetailScreen,
                     //     arguments: DietArgument(data: data));
                   },
