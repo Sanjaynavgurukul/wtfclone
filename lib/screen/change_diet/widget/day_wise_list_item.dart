@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -25,9 +26,20 @@ class DayWiseListItem extends StatelessWidget {
           leading: Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(Radius.circular(12))),
+           child: CachedNetworkImage(
+             imageUrl: data.co_image,
+             imageBuilder: (context, imageProvider) => Container(
+               width: 50.0,
+               height: 50.0,
+               decoration: BoxDecoration(
+                 borderRadius: BorderRadius.all(Radius.circular(12)),
+                 image: DecorationImage(
+                     image: imageProvider, fit: BoxFit.cover),
+               ),
+             ),
+             placeholder: (context, url) => CircularProgressIndicator(),
+             errorWidget: (context, url, error) => Icon(Icons.error),
+           ),
           ),
           title: Text(
             '${data.name}',
@@ -41,4 +53,6 @@ class DayWiseListItem extends StatelessWidget {
       ),
     );
   }
+
+
 }

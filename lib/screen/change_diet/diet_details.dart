@@ -59,8 +59,8 @@ class _DietDetailsState extends State<DietDetails> {
             child: Image(image: AssetImage('assets/images/egg.png')),
           ),
           Padding(
-            padding: getPadding(),
-            child: Text('DayWise' ?? "EMPTY",
+            padding: EdgeInsets.only(left: 12, right: 12, bottom: 0),
+            child: Text(data.dayLabel ?? "EMPTY",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
@@ -70,20 +70,18 @@ class _DietDetailsState extends State<DietDetails> {
                     fontWeight: FontWeight.w700)),
           ),
 
-          Expanded(
-            child: ListView.builder(
-                itemCount: data.meal.length,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  MealSlot d = data.meal[index];
-                  bool blur = index == 0 || index == 1;
-                  return DayWiseListItem(
-                    blur: !blur,
-                    data: d,
-                  );
-                }),
-          )
+          ListView.builder(
+              itemCount: data.meal.length,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                MealSlot d = data.meal[index];
+                bool blur = index == 0 || index == 1;
+                return DayWiseListItem(
+                  blur: !blur,
+                  data: d,
+                );
+              })
         ],
       ),
     );
