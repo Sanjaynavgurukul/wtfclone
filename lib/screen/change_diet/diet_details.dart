@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/diet_model.dart';
 
 import 'arguments/diet_arguments.dart';
@@ -13,7 +15,6 @@ class DietDetails extends StatefulWidget {
 }
 
 class _DietDetailsState extends State<DietDetails> {
-
   DietModel data;
 
   @override
@@ -25,10 +26,11 @@ class _DietDetailsState extends State<DietDetails> {
   @override
   Widget build(BuildContext context) {
     final DietArgument args =
-    ModalRoute.of(context).settings.arguments as DietArgument;
-    if(args.data != null)
+        ModalRoute.of(context).settings.arguments as DietArgument;
+    if (args.data != null)
       data = args.data;
-    else data = new DietModel();
+    else
+      data = new DietModel();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -74,8 +76,7 @@ class _DietDetailsState extends State<DietDetails> {
                       color: Colors.white))),
           Padding(
             padding: getPadding(),
-            child: Text(
-                data.description ??'Nothing',
+            child: Text(data.description ?? 'Nothing',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 12,
@@ -86,7 +87,6 @@ class _DietDetailsState extends State<DietDetails> {
           SizedBox(
             height: 20,
           ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,18 +124,26 @@ class _DietDetailsState extends State<DietDetails> {
                     SizedBox(
                       height: 14,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      constraints: BoxConstraints(maxWidth: 250, maxHeight: 56),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                          color: AppConstants.bgColor),
-                      child: Text('Buy this',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              color: Colors.white)),
+                    InkWell(
+                      onTap: () {
+                        NavigationService.pushName(Routes.choosePlanScreen,
+                            argument: DietArgument(data: data));
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        constraints:
+                            BoxConstraints(maxWidth: 250, maxHeight: 56),
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            color: AppConstants.bgColor),
+                        child: Text('Buy this',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                color: Colors.white)),
+                      ),
                     )
                   ],
                 ),
