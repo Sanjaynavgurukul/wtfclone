@@ -45,7 +45,9 @@ class _DietDetailsState extends State<DietDetails> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          NavigationService.pushName(Routes.choosePlanScreen);
+        },
         label: Text('Buy This'),
         icon: Icon(Icons.lock),
       ),
