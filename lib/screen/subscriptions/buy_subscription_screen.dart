@@ -148,6 +148,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                       if (gymStore.isRenew) {
                         date = await showDatePicker(
                           context: context,
+
                           initialDate:
                               gymStore.activeSubscriptions.data.expireDate.add(
                             new Duration(days: 1),
@@ -160,6 +161,9 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                               gymStore.activeSubscriptions.data.expireDate.add(
                             new Duration(days: 180),
                           ),
+                            builder: (BuildContext context, Widget child) {
+                              return getDialogTheme(child);
+                            }
                         );
                       } else {
                         date = await showDatePicker(
@@ -168,6 +172,9 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                           firstDate: new DateTime.now(),
                           lastDate:
                               new DateTime.now().add(new Duration(days: 30)),
+                          builder: (BuildContext context, Widget child) {
+                            return getDialogTheme(child);
+                          }
                         );
                       }
                       if (date != null) {
@@ -494,6 +501,20 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Theme getDialogTheme(Widget child){
+    return Theme(
+      data: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.dark(
+          primary: Colors.black,//yellow
+          onPrimary: Colors.white,
+          surface: Colors.grey.shade200,//white
+          onSurface: Colors.black,//black
+        ),
+        dialogBackgroundColor:Colors.white,//white
+      ),child: child,
     );
   }
 }
