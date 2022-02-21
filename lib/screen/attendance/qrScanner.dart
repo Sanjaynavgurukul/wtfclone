@@ -153,7 +153,8 @@ class _QRScannerState extends State<QRScanner>
               ),
             ),
             UIHelper.verticalSpace(10.0),
-            if (store.attendanceDetails != null)
+            if (store.attendanceDetails != null &&
+                store.attendanceDetails.data != null)
               Text(
                 'You have been successfully checked into your Gym',
                 style: TextStyle(
@@ -162,7 +163,8 @@ class _QRScannerState extends State<QRScanner>
                 ),
               ),
             UIHelper.verticalSpace(10.0),
-            if (store.attendanceDetails != null)
+            if (store.attendanceDetails != null &&
+                store.attendanceDetails.data != null)
               RichText(
                 text: TextSpan(
                   text: 'Check ${store.attendanceDetails.data.mode} : ',
@@ -222,7 +224,8 @@ class _QRScannerState extends State<QRScanner>
         print('scanner data:: ${scanData.code}');
       });
       await this.controller.pauseCamera();
-      if (store.attendanceDetails != null) {
+      if (store.attendanceDetails != null &&
+          store.attendanceDetails.data != null) {
         if (store.attendanceDetails.data.mode == 'in') {
           setState(() {
             mode = 'out';

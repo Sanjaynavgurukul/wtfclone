@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -123,8 +124,11 @@ class _SearchBarState extends State<SearchBar> {
                   NavigationService.navigateTo(Routes.searchScreen);
                 },
                 decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.only(top: 0.0, bottom: 0.0, left: 17),
+                  contentPadding: EdgeInsets.only(
+                    top: 0.0,
+                    bottom: 0.0,
+                    left: 17,
+                  ),
                   hintText: 'Explore WTF fitness centers near you',
                   hintStyle: TextStyle(
                     color: Colors.white70,
@@ -137,16 +141,24 @@ class _SearchBarState extends State<SearchBar> {
                       //     Routes.searchScreen);
                     },
                     child: Container(
-                      margin: EdgeInsets.all(7),
+                      margin: EdgeInsets.all(5.0),
                       height: 25,
                       width: 25,
                       decoration: BoxDecoration(
-                          color: AppConstants.primaryColor,
-                          borderRadius: BorderRadius.circular(50.0)),
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xffBA1406),
+                              Color(0xff490000),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(4.0)),
                       child: Center(
                         child: Icon(
                           Icons.search,
                           color: Colors.white,
+                          size: 16.0,
                         ),
                       ),
                     ),
@@ -155,7 +167,7 @@ class _SearchBarState extends State<SearchBar> {
                   fillColor: Colors.black,
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(50.0),
+                    borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
               ),
@@ -188,19 +200,8 @@ class _SearchBarState extends State<SearchBar> {
                 });
               },
               child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppConstants.primaryColor,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
                 alignment: Alignment.center,
-                child: Center(
-                  child: Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.white,
-                    size: 16.0,
-                  ),
-                ),
+                child: SvgPicture.asset('assets/svg/change.svg'),
               ),
             ),
           ),

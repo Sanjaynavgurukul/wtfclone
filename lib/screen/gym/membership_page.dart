@@ -1292,12 +1292,19 @@ class TextIconCard extends StatelessWidget {
                     width: 36.0,
                     height: 36.0,
                   )
-                : Image.network(
-                    icon,
-                    color: textColor,
-                    width: 36.0,
-                    height: 36.0,
-                  ),
+                : icon.startsWith('http')
+                    ? Image.network(
+                        icon,
+                        color: textColor,
+                        width: 36.0,
+                        height: 36.0,
+                      )
+                    : Image.asset(
+                        icon,
+                        color: textColor,
+                        width: 36.0,
+                        height: 36.0,
+                      ),
           ),
           UIHelper.verticalSpace(6.0),
           Expanded(

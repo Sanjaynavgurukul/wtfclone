@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/strings.dart';
 
@@ -8,7 +8,7 @@ class OutlineTextField extends StatelessWidget {
   final String labelText;
   final bool obscureText;
   final TextInputType keyboardType;
-  final Function(String) onchanged;
+  final Function(String) onChanged;
   final Function(String) validator;
   final Function onTap;
   final String hintText;
@@ -22,6 +22,8 @@ class OutlineTextField extends StatelessWidget {
   final bool autoValidate;
   final EdgeInsets contentPadding;
   final TextInputAction textInputAction;
+  final bool enable;
+  final int maxLength;
   final String fontFamily;
 
   const OutlineTextField({
@@ -30,7 +32,7 @@ class OutlineTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.hintText,
     this.read,
-    this.onchanged,
+    this.onChanged,
     this.validator,
     this.onTap,
     @required this.controller,
@@ -43,73 +45,77 @@ class OutlineTextField extends StatelessWidget {
     this.contentPadding,
     this.textInputAction = TextInputAction.done,
     this.fontFamily,
+    this.enable,
+    this.maxLength,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          inputFormatters: inputFormatters ?? [],
-          maxLines: maxLines ?? 1,
-          controller: controller,
-          textAlign: textAlign,
-          style: TextStyle(
-              fontSize: 16,
-              letterSpacing: 0.8,
-              color: Colors.white,
-              fontFamily: fontFamily ?? Fonts.RALEWAY),
-          decoration: InputDecoration(
-              hintText: hintText,
-              contentPadding: contentPadding ??
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-              hintStyle: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontWeight: FontWeight.normal,
-              ),
-              labelText: labelText,
-              labelStyle: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-              ),
-              suffixIcon: suffix ?? null,
-              prefix: preffix ?? null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(width: 1, color: Colors.white),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(width: 1, color: Colors.white),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(width: 1, color: Colors.white),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(width: 1, color: Colors.red),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(width: 1, color: Colors.red),
-              ),
-              filled: true),
-          obscureText: obscureText ?? false,
-          readOnly: read ?? false,
-          keyboardType: keyboardType ?? TextInputType.text,
-          cursorColor: Colors.white,
-          enableInteractiveSelection: true,
-          textInputAction: textInputAction,
-          onChanged: onchanged ?? (val) {},
-          onTap: onTap ?? () {},
-          validator: validator,
-          autovalidateMode: autoValidate
-              ? AutovalidateMode.onUserInteraction
-              : AutovalidateMode.onUserInteraction,
+    return TextFormField(
+      inputFormatters: inputFormatters ?? [],
+      maxLines: maxLines ?? 1,
+      controller: controller,
+      textAlign: textAlign,
+      style: GoogleFonts.poppins(
+        fontSize: 14,
+        letterSpacing: 0.8,
+        color: Colors.white,
+      ),
+      decoration: InputDecoration(
+        hintText: hintText,
+        contentPadding: contentPadding ??
+            EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        hintStyle: TextStyle(
+          color: Colors.white.withOpacity(0.6),
+          fontWeight: FontWeight.normal,
         ),
-      ],
+        labelText: labelText,
+        labelStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+        ),
+        suffixIcon: suffix ?? null,
+        prefix: preffix ?? null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(width: 1, color: Colors.transparent),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(width: 0.5, color: Colors.red),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(
+            width: 0.5,
+            color: Colors.red,
+          ),
+        ),
+        filled: true,
+        counterText: '',
+      ),
+      obscureText: obscureText ?? false,
+      readOnly: read ?? false,
+      maxLength: maxLength,
+      enabled: enable,
+      keyboardType: keyboardType ?? TextInputType.text,
+      cursorColor: Colors.white,
+      enableInteractiveSelection: true,
+      textInputAction: textInputAction,
+      onChanged: onChanged ?? (val) {},
+      onTap: onTap ?? () {},
+      validator: validator,
+      autovalidateMode: autoValidate
+          ? AutovalidateMode.onUserInteraction
+          : AutovalidateMode.onUserInteraction,
     );
   }
 }

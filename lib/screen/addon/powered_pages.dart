@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/widget/glass_morphism.dart';
@@ -23,11 +24,10 @@ class _PoweredPagesState extends State<PoweredPages> {
   @override
   void initState() {
     controller = ScrollController();
-    controller.addListener(() {
-      
-    });
+    controller.addListener(() {});
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -51,32 +51,21 @@ class _PoweredPagesState extends State<PoweredPages> {
             ),
             Container(
               height: MediaQuery.of(context).size.height - 24,
-              // padding: const EdgeInsets.only(
-              //   top: 50.0,
-              //   left: 12.0,
-              //   right: 12.0,
-              // ),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Stack(
                       children: [
-                        // Image.asset(
-                        //   'assets/images/powered_bg.png',
-                        //   width: double.infinity,
-                        //   fit: BoxFit.fill,
-                        //   color: Color(0xff0d69ff).withOpacity(1.0),
-                        //   colorBlendMode: BlendMode.softLight,
-                        // ),
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             image: DecorationImage(
                               fit: BoxFit.fill,
                               colorFilter: ColorFilter.mode(
-                                  Color(0xff0d69ff).withOpacity(0.1),
-                                  BlendMode.softLight),
+                                Color(0xff046A58).withOpacity(0.5),
+                                BlendMode.dstIn,
+                              ),
                               image: AssetImage(
                                 'assets/images/powered_bg.png',
                               ),
@@ -137,7 +126,8 @@ class _PoweredPagesState extends State<PoweredPages> {
                     PagePriceTag(
                       text1: 'Start only from ',
                       text2: '199 Rs.',
-                      isBlue: true,
+                      image2: 'right_dot_blue',
+                      image1: 'left_dot_blue',
                     ),
                     UIHelper.verticalSpace(22.0),
                     PageSectionHeader(
@@ -187,61 +177,6 @@ class _PoweredPagesState extends State<PoweredPages> {
                 ),
               ),
             ),
-            // Positioned(
-            //   top: 0.0,
-            //   left: 0.0,
-            //   child: Container(
-            //     height: 100,
-            //     width: 100,
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       gradient: RadialGradient(
-            //           center: Alignment.center,
-            //           radius: 2.0,
-            //           colors: [
-            //             Color(0xff09C0E8).withOpacity(0.3),
-            //             Color(0xff09C0E8).withOpacity(0.8),
-            //             Color(0xff09C0E8).withOpacity(0.2),
-            //           ]),
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   top: 0.0,
-            //   right: 0.0,
-            //   child: Container(
-            //     height: 100,
-            //     width: 100,
-            //     decoration: BoxDecoration(
-            //       boxShadow: [
-            //         BoxShadow(color: Color(0xff093AE8), blurRadius: 2.0),
-            //       ],
-            //       // gradient: RadialGradient(
-            //       //   focalRadius: 0.5,
-            //       //   colors: [
-            //       //     Color(0xff093AE8).withOpacity(0.6),
-            //       //     Color(0xff093AE8).withOpacity(0.6),
-            //       //   ],
-            //       // ),
-            //     ),
-            //   ),
-            // ),
-            Container(
-              height: 350.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  end: Alignment.bottomCenter,
-                  begin: Alignment.topCenter,
-                  colors: [
-                    Color(0xff046A58).withOpacity(0.4),
-                    Color(0xff09C0E8).withOpacity(0.4),
-                    Color(0xff093AE8).withOpacity(0.4),
-                    Color(0xff046A58).withOpacity(0.4),
-                    Color(0xff046A58).withOpacity(0.4),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -252,12 +187,14 @@ class _PoweredPagesState extends State<PoweredPages> {
 class PagePriceTag extends StatelessWidget {
   final String text1;
   final String text2;
-  final bool isBlue;
+  final String image1;
+  final String image2;
   const PagePriceTag({
     Key key,
     this.text1,
     this.text2,
-    this.isBlue = false,
+    this.image1,
+    this.image2,
   }) : super(key: key);
 
   @override
@@ -277,8 +214,7 @@ class PagePriceTag extends StatelessWidget {
             left: -6.0,
             child: Opacity(
               opacity: 0.6,
-              child: SvgPicture.asset(
-                  'assets/svg/${isBlue ? 'left_dot_blue' : 'let_dot'}.svg'),
+              child: SvgPicture.asset('assets/svg/$image1.svg'),
             ),
           ),
           Positioned(
@@ -286,8 +222,7 @@ class PagePriceTag extends StatelessWidget {
             right: -10.0,
             child: Opacity(
               opacity: 0.6,
-              child: SvgPicture.asset(
-                  'assets/svg/${isBlue ? 'right_dot_blue' : 'right_dot'}.svg'),
+              child: SvgPicture.asset('assets/svg/$image2.svg'),
             ),
           ),
           Padding(
@@ -333,9 +268,11 @@ class PagePriceTag extends StatelessWidget {
 
 class PageAppBar extends StatelessWidget {
   final bool isLive;
+  final bool showText;
   const PageAppBar({
     Key key,
     this.isLive = false,
+    this.showText = true,
   }) : super(key: key);
 
   @override
@@ -346,52 +283,56 @@ class PageAppBar extends StatelessWidget {
         children: [
           Flexible(
             flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: AppConstants.white,
-                  size: 20.0,
+            child: InkWell(
+              onTap: () => NavigationService.goBack,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: AppConstants.white,
+                    size: 20.0,
+                  ),
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Image.asset('assets/images/wtf_2.png'),
-                    UIHelper.horizontalSpace(4.0),
-                    Text(
-                      'Powered',
+          if (showText)
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset('assets/images/wtf_2.png'),
+                      UIHelper.horizontalSpace(4.0),
+                      Text(
+                        'Powered',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 24.0,
+                          color: AppConstants.white.withOpacity(0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (isLive) ...{
+                    UIHelper.verticalSpace(2.0),
+                    GradientText(
+                      text: 'Live Class',
+                      colors: <Color>[Colors.redAccent, Colors.white],
                       style: TextStyle(
-                        fontWeight: FontWeight.normal,
                         fontSize: 24.0,
-                        color: AppConstants.white.withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
-                if (isLive) ...{
-                  UIHelper.verticalSpace(2.0),
-                  GradientText(
-                    text: 'Live Class',
-                    colors: <Color>[Colors.redAccent, Colors.white],
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                }
-              ],
+                  }
+                ],
+              ),
             ),
-          ),
           Flexible(
             flex: 1,
             child: Container(),

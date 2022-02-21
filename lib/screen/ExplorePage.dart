@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -53,6 +55,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: SearchBar(),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
+                    vertical: 6.0,
                   ),
                 ),
                 UIHelper.verticalSpace(10.0),
@@ -60,18 +63,53 @@ class _ExplorePageState extends State<ExplorePage> {
                   isExplore: true,
                 ),
                 UIHelper.verticalSpace(30.0),
-                SectionHeader(
-                  subTitle: 'Explore Arena & Fitness Studios near you',
-                  title: 'Discover WTF Centers',
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 1.0,
+                        color: AppConstants.white,
+                      ),
+                    ),
+                    UIHelper.horizontalSpace(4.0),
+                    Text(
+                      'Discover',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 22.0,
+                        color: AppConstants.white,
+                      ),
+                    ),
+                    UIHelper.horizontalSpace(4.0),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 1.0,
+                        color: AppConstants.white,
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'WTF Powered Gyms & Studios',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
+                      color: AppConstants.white.withOpacity(0.8),
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  height: 12.0,
+                  height: 20.0,
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                   ),
-                  height: MediaQuery.of(context).size.height / 6.5,
+                  height: 220.0,
                   child: ListView.builder(
                     itemCount: 2,
                     scrollDirection: Axis.horizontal,
@@ -93,8 +131,8 @@ class _ExplorePageState extends State<ExplorePage> {
                           NavigationService.navigateTo(Routes.discoverNow);
                         },
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.44,
-                          height: 120.0,
+                          width: MediaQuery.of(context).size.width * 0.46,
+                          height: 220.0,
                           margin: EdgeInsets.only(right: 15),
                           child: Stack(
                             children: [
@@ -102,6 +140,10 @@ class _ExplorePageState extends State<ExplorePage> {
                                 // assets: 'assets/images/gym_cover.png',
                                 network:
                                     index == 0 ? Images.arena : Images.studio,
+                                gragientColor: [
+                                  Color(0xffB0C9D6).withOpacity(0.2),
+                                  Colors.black.withOpacity(0.9),
+                                ],
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -110,14 +152,9 @@ class _ExplorePageState extends State<ExplorePage> {
                                 ),
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    index == 0 ? 'Arena' : 'Fitness Studio',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13),
-                                  ),
+                                  child: SvgPicture.asset(index == 0
+                                      ? 'assets/svg/you_get/gyms.svg'
+                                      : 'assets/svg/you_get/studios.svg'),
                                 ),
                               ),
                               SizedBox(
@@ -452,7 +489,7 @@ class LiveCard extends StatelessWidget {
           ? MediaQuery.of(context).size.width
           : isLiveCard
               ? 270.0
-              : 220.0,
+              : 270.0,
       alignment: Alignment.center,
       margin: EdgeInsets.only(
         left: isLiveCard ? 16 : 8.0,
@@ -466,7 +503,7 @@ class LiveCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    height: 250.0,
+                    height: 220.0,
                     child: Stack(
                       children: [
                         GradientImageWidget(
@@ -474,39 +511,13 @@ class LiveCard extends StatelessWidget {
                           //     'assets/images/challenge.png',
                           network: data.image,
                           stops: [0.3, 1.0],
+                          gragientColor: [
+                            Colors.transparent,
+                            Colors.transparent
+                          ],
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(2.0),
                             topRight: Radius.circular(2.0),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 10,
-                            left: 10.0,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Text(
-                              //   data.name ?? '',
-                              //   style: TextStyle(
-                              //     color: Colors.white,
-                              //     fontWeight: FontWeight.bold,
-                              //     fontSize: 14.0,
-                              //   ),
-                              // ),
-                              // UIHelper.verticalSpace(6.0),
-                              Text(
-                                data.gymName ?? '',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14.0,
-                                ),
-                              ),
-                              // UIHelper.verticalSpace(6.0),
-                            ],
                           ),
                         ),
                         SizedBox(
@@ -557,11 +568,11 @@ class LiveCard extends StatelessWidget {
                             // ),
                             // UIHelper.verticalSpace(4.0),
                             Text(
-                              'Class Name',
-                              style: TextStyle(
-                                color: AppConstants.white.withOpacity(0.8),
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
+                              data.gymName ?? '',
+                              style: GoogleFonts.montserrat(
+                                color: AppConstants.white.withOpacity(0.9),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                             UIHelper.verticalSpace(4.0),
@@ -601,23 +612,30 @@ class LiveCard extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 14.0,
+                            ),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
+                              borderRadius: BorderRadius.circular(2.0),
                               gradient: LinearGradient(
+                                end: Alignment.topLeft,
+                                begin: Alignment.topRight,
                                 colors: [
-                                  AppConstants.buttonRed2,
-                                  AppConstants.buttonRed1.withOpacity(0.7),
+                                  Color(0xffDE0000),
+                                  Color(0xff9A0E0E),
+                                  // AppConstants.buttonRed2,
+                                  // AppConstants.buttonRed1.withOpacity(0.7),
                                 ],
                               ),
                             ),
                             alignment: Alignment.center,
                             child: Text(
                               'Book Now',
-                              style: TextStyle(
+                              style: GoogleFonts.montserrat(
                                 color: AppConstants.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                           ),
@@ -656,27 +674,37 @@ class LiveCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(
                               bottom: 10,
+                              left: 8.0,
                             ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/wtf_2.png',
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/images/wtf_2.png',
+                                ),
+                                UIHelper.verticalSpace(6.0),
+                                Text(
+                                  data.gymName ?? '',
+                                  textAlign: TextAlign.start,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15.0,
                                   ),
-                                  UIHelper.verticalSpace(6.0),
-                                  Text(
-                                    data.gymName ?? '',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10.0,
-                                    ),
+                                ),
+                                UIHelper.verticalSpace(6.0),
+                                Text(
+                                  data.name ?? '',
+                                  textAlign: TextAlign.start,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
                                   ),
-                                  UIHelper.verticalSpace(6.0),
-                                ],
-                              ),
+                                ),
+                                UIHelper.verticalSpace(6.0),
+                              ],
                             ),
                           ),
                           SizedBox(
@@ -735,14 +763,12 @@ class LiveCard extends StatelessWidget {
                                 bottomRight: Radius.circular(6.0),
                               ),
                               gradient: LinearGradient(
-                                begin: FractionalOffset.centerLeft,
-                                end: FractionalOffset.centerRight,
+                                end: Alignment.topLeft,
+                                begin: Alignment.bottomLeft,
                                 colors: [
-                                  AppConstants.buttonRed1,
                                   AppConstants.buttonRed2,
                                   AppConstants.buttonRed1,
                                 ],
-                                stops: [0.2, 0.5, 1.0],
                               ),
                               // color: Color(0xff9A0E0E),
                             ),
@@ -773,10 +799,10 @@ class LiveCard extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'Book Now',
-                            style: TextStyle(
-                              color: AppConstants.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.normal,
+                            style: GoogleFonts.montserrat(
+                              color: AppConstants.white.withOpacity(0.95),
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -797,7 +823,7 @@ class CommonAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    var old = Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
         right: 16.0,
@@ -920,6 +946,160 @@ class CommonAppBar extends StatelessWidget {
               ),
             ),
           ),
+          VerticalDivider(
+            width: 1.0,
+            color: Colors.white,
+          ),
+          UIHelper.horizontalSpace(10.0),
+          PreferenceBuilder<String>(
+            preference: locator<AppPrefs>().dateAdded,
+            builder: (context, snapshot) {
+              return snapshot != null
+                  ? Text(
+                      // '',
+                      'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11.0,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Container();
+            },
+          ),
+        ],
+      ),
+    );
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        bottom: 12.0,
+        top: 20.0,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  // builder: (context) => MyProfileXd(),
+                  builder: (context) => SidebarDrawer(),
+                ),
+              );
+            },
+            child: PreferenceBuilder<String>(
+              preference: locator<AppPrefs>().avatar,
+              builder: (context, snapshot) {
+                print('user image: $snapshot');
+                String img = snapshot;
+                if (img.startsWith(
+                    'https://wtfupme-images-1435.s3.ap-south-1.amazonaws.com')) {
+                  img.replaceFirst(
+                      'https://wtfupme-images-1435.s3.ap-south-1.amazonaws.com',
+                      AppConstants.cloudFrontImage);
+                }
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.network(
+                      img,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          UIHelper.horizontalSpace(10.0),
+          Expanded(
+            child: Consumer<GymStore>(
+              builder: (context, store, child) => InkWell(
+                onTap: () async {
+                  context.read<GymStore>().getGymDetails(
+                        context: context,
+                        gymId: store.activeSubscriptions.data.gymId,
+                      );
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (_) => BuyMemberShipPage(
+                        gymId: store.activeSubscriptions.data.gymId,
+                      ),
+                    ),
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PreferenceBuilder<String>(
+                        preference: locator<AppPrefs>().userName,
+                        builder: (context, name) {
+                          return Text(
+                            'Hi! ${name.isNotEmpty ? name.capitalize() : ""}',
+                            style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14.0,
+                              color: Colors.white,
+                            ),
+                          );
+                        }),
+                    UIHelper.verticalSpace(4.0),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Welcome to   ',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: Colors.white,
+                        ),
+                        children: [
+                          if (store.activeSubscriptions == null &&
+                              store.activeSubscriptions.data == null)
+                            WidgetSpan(
+                              child: Image.asset(
+                                'assets/images/wtf_2.png',
+                                height: 18.0,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    UIHelper.verticalSpace(4.0),
+                    if (store.activeSubscriptions != null &&
+                        store.activeSubscriptions.data != null)
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/wtf_2.png',
+                            height: 14.0,
+                          ),
+                          UIHelper.horizontalSpace(6.0),
+                          Text(
+                            store.activeSubscriptions.data.gymName
+                                    .split(':')[1]
+                                    .trim() ??
+                                'n/a',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16.0,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          UIHelper.horizontalSpace(10.0),
           VerticalDivider(
             width: 1.0,
             color: Colors.white,

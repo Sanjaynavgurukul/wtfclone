@@ -8,10 +8,12 @@ class CategoriesItem extends StatelessWidget {
     this.color = AppConstants.primaryColor,
     this.itemName,
     this.img,
+    this.onTap,
   }) : super(key: key);
   final color;
   final String itemName;
   final String img;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +133,10 @@ class CategoriesItem extends StatelessWidget {
     );
     var latest = Container(
       width: MediaQuery.of(context).size.width * 0.28,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 2.0,
+        vertical: 6.0,
+      ),
       height: 150.0,
       child: Column(
         children: [
@@ -157,6 +163,9 @@ class CategoriesItem extends StatelessWidget {
         ],
       ),
     );
-    return latest;
+    return InkWell(
+      onTap: onTap,
+      child: latest,
+    );
   }
 }

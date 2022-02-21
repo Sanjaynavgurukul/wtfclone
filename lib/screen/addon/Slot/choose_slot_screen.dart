@@ -264,7 +264,7 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                                   gradient: LinearGradient(
                                     colors: [
                                       AppConstants.buttonRed2,
-                                      AppConstants.buttonRed1.withOpacity(0.7),
+                                      AppConstants.buttonRed1,
                                     ],
                                   ),
                                 ),
