@@ -2158,6 +2158,7 @@ class GymStore extends ChangeNotifier {
                 .toList()))
         .toList();
     diet = data;
+    notifyListeners();
   }
 
   List<MealSlot> getMealSlot(List<DietModel> data) {

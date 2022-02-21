@@ -76,7 +76,6 @@ class _ChangeDietState extends State<ChangeDiet> with TickerProviderStateMixin {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     store = context.watch<GymStore>();
-    callData();
   }
 
   @override

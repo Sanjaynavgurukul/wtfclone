@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/diet_model.dart';
-
+import 'package:wtf/screen/change_diet/arguments/diet_arguments.dart';
 
 class DietItem extends StatelessWidget {
   const DietItem({Key key, this.data}) : super(key: key);
@@ -16,8 +18,8 @@ class DietItem extends StatelessWidget {
         children: <Widget>[
           Container(
             //replace this Container with your Card
-            padding: EdgeInsets.only(top: 50,left: 20,right: 20,bottom: 16),
-            margin: EdgeInsets.only(top: 80/2),
+            padding: EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 16),
+            margin: EdgeInsets.only(top: 80 / 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               color: Colors.grey.withOpacity(
@@ -26,7 +28,11 @@ class DietItem extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text(data.name,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400,
+                Text(
+                  data.name,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
                       color: Colors.white,
                       fontStyle: FontStyle.normal),
                 ),
@@ -34,18 +40,23 @@ class DietItem extends StatelessWidget {
                   height: 14,
                 ),
                 InkWell(
-                  onTap: (){
-
+                  onTap: () {
+                    NavigationService.pushName(Routes.dietDetailScreen,argument: DietArgument(data: data));
+                    // Navigator.pushNamed(context, Routes.dietDetailScreen,
+                    //     arguments: DietArgument(data: data));
                   },
                   child: Container(
-                    padding: EdgeInsets.only(left: 8,right: 8,top: 8,bottom: 8),
+                    padding:
+                        EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
                     decoration: BoxDecoration(
                         color: AppConstants.bgColor,
                         borderRadius: BorderRadius.all(Radius.circular(100))),
                     child: Row(
                       children: [
                         Text('Customize'),
-                        SizedBox(width: 4,),
+                        SizedBox(
+                          width: 4,
+                        ),
                         Icon(
                           Icons.lock_rounded,
                           color: Colors.white,
@@ -76,5 +87,4 @@ class DietItem extends StatelessWidget {
       ),
     );
   }
-
 }

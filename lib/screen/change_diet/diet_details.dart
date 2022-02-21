@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/model/diet_model.dart';
+
+import 'arguments/diet_arguments.dart';
 
 class DietDetails extends StatefulWidget {
   const DietDetails({Key key}) : super(key: key);
@@ -10,8 +13,23 @@ class DietDetails extends StatefulWidget {
 }
 
 class _DietDetailsState extends State<DietDetails> {
+
+  DietModel data;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final DietArgument args =
+    ModalRoute.of(context).settings.arguments as DietArgument;
+    if(args.data != null)
+      data = args.data;
+    else data = new DietModel();
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -32,7 +50,7 @@ class _DietDetailsState extends State<DietDetails> {
           ),
           Padding(
             padding: getPadding(),
-            child: Text('Omelete Brunch',
+            child: Text(data.name ?? "EMPTY",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
@@ -57,7 +75,7 @@ class _DietDetailsState extends State<DietDetails> {
           Padding(
             padding: getPadding(),
             child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fermentum a, dis lacus, erat. Penatibus egestas bibendum mi eu, scelerisque ultrices nisl eu, amet. Nam vestibulum risus viverra morbi proin. Cursus facilisi accumsan aliquam euismod placerat. Aliquam facilisis erat nec quis.',
+                data.description ??'Nothing',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontSize: 12,
@@ -124,39 +142,6 @@ class _DietDetailsState extends State<DietDetails> {
               ),
             ],
           )
-
-          // Expanded(
-          //   flex: 5,
-          //   child: Container(),
-          // ),
-          // Expanded(
-          //   flex: 3,
-          //   child: Stack(
-          //     children: [
-          //       Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Padding(
-          //               padding: EdgeInsets.only(left: 12, right: 12),
-          //               child: Text('Ingredients')),
-          //           Expanded(
-          //             child: Container(
-          //               margin: EdgeInsets.only(top: 6),
-          //               color: AppConstants.primaryColor,
-          //             ),
-          //           )
-          //         ],
-          //       ),
-          //       Container(
-          //         alignment: Alignment.topCenter,
-          //         child: Icon(
-          //           Icons.lock,
-          //           size: 40,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
