@@ -22,6 +22,7 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
 import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
 import 'package:wtf/screen/calculators/calories_counter/calorie_state.dart';
+import 'package:wtf/screen/landing/landing_screen.dart';
 
 import 'helper/AppPrefs.dart';
 import 'helper/NotificationHelper.dart';
@@ -194,7 +195,8 @@ class _MyAppState extends State<MyApp>
             fontFamily: Fonts.RALEWAY,
           ),
           themeMode: ThemeMode.dark,
-          initialRoute: Routes.loader,
+          // initialRoute: Routes.loader,
+          home: LandingScreen(),
           // Routes.splash,
           navigatorKey: NavigationService.navigatorKey,
           onGenerateRoute: RouteGenerator.generateRoute,
