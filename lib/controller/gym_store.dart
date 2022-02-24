@@ -570,6 +570,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //TODO Check later
   GymStore() {
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
@@ -577,7 +578,7 @@ class GymStore extends ChangeNotifier {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  Future<void> processPayment({
+  Future<bool> processPayment({
     BuildContext context,
     String price,
     Map<String, dynamic> body,
@@ -714,10 +715,6 @@ class GymStore extends ChangeNotifier {
                 'Failed to subscribe, Please contact support for resolution');
       }
     }
-    // await addSubscription(
-    //   gymStore.selectedGymPlan.planPrice,
-    //   {},
-    // );
   }
 
   Future<bool> addSubscription({
@@ -739,9 +736,9 @@ class GymStore extends ChangeNotifier {
       Navigator.pop(context);
     }
     if (model.status) {
-      return Future.value(true);
+      return true;
     } else {
-      return Future.value(false);
+      return false;
     }
   }
 
@@ -2164,16 +2161,16 @@ class GymStore extends ChangeNotifier {
   }
 
   // List<DayWise> getss(List<DietModel> data)async=>data.forEach((element)=>element.day.list);
-  List<DayWise> gettsss(List<DietModel> data){
-      List<DayWise> d = [];
-      for(var v in data){
-        d.addAll(v.day.list);
-      }
-      // print('status length final --- ${d.length}');
-      return d;
+  List<DayWise> gettsss(List<DietModel> data) {
+    List<DayWise> d = [];
+    for (var v in data) {
+      d.addAll(v.day.list);
+    }
+    // print('status length final --- ${d.length}');
+    return d;
   }
 
-  Future<void> getDietPlan()async{
+  Future<void> getDietPlan() async {
     await RestDatasource().getDietPlans();
   }
 }

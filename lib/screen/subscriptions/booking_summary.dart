@@ -66,34 +66,69 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     tax = 0;
     totalAmount = 0;
     discountAmount = 0;
-    if (context.read<GymStore>().chosenOffer != null) {
-      if (context.read<GymStore>().chosenOffer.type == 'flat') {
+    if (context
+        .read<GymStore>()
+        .chosenOffer != null) {
+      if (context
+          .read<GymStore>()
+          .chosenOffer
+          .type == 'flat') {
         int couponValue =
-            int.tryParse(context.read<GymStore>().chosenOffer.value);
+        int.tryParse(context
+            .read<GymStore>()
+            .chosenOffer
+            .value);
         discountAmount = couponValue >
-                int.tryParse(context.read<GymStore>().selectedEventData.price)
-            ? int.tryParse(context.read<GymStore>().selectedEventData.price)
+            int.tryParse(context
+                .read<GymStore>()
+                .selectedEventData
+                .price)
+            ? int.tryParse(context
+            .read<GymStore>()
+            .selectedEventData
+            .price)
             : couponValue;
       } else {
-        print('price: ${context.read<GymStore>().selectedGymPlan.planPrice}');
-        print('offer val: ${context.read<GymStore>().chosenOffer.value}');
+        print('price: ${context
+            .read<GymStore>()
+            .selectedGymPlan
+            .planPrice}');
+        print('offer val: ${context
+            .read<GymStore>()
+            .chosenOffer
+            .value}');
         discountAmount =
-            (int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) *
-                    int.tryParse(context.read<GymStore>().chosenOffer.value) /
-                    100)
+            (int.tryParse(context
+                .read<GymStore>()
+                .selectedGymPlan
+                .planPrice) *
+                int.tryParse(context
+                    .read<GymStore>()
+                    .chosenOffer
+                    .value) /
+                100)
                 .truncate();
       }
     }
     totalAmount =
-        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
+        int.tryParse(context
+            .read<GymStore>()
+            .selectedGymPlan
+            .planPrice) -
             discountAmount;
     tax = (totalAmount *
-            int.tryParse(
-                context.read<GymStore>().selectedGymPlan.taxPercentage) /
-            100)
+        int.tryParse(
+            context
+                .read<GymStore>()
+                .selectedGymPlan
+                .taxPercentage) /
+        100)
         .truncate();
     totalAmount = tax +
-        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
+        int.tryParse(context
+            .read<GymStore>()
+            .selectedGymPlan
+            .planPrice) -
         discountAmount;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) setState(() {});
@@ -112,28 +147,27 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   }
 
   void applyCoupon() {
-
-      if (couponCodeController.text != '') {
-        context
-            .read<GymStore>()
-            .getCoupon(couponCodeController.text)
-            .then((value) {
-          if (value != null) {
-           setState(() {
-             gymStore.setOffer(context: context, data: value);
-             print('set');
-             calculateFinalPrice();
-           });
-          } else {
-            setState(() {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Offer does not exists!'),
-              ));
-              couponCodeController.text = '';
-            });
-          }
-        });
-      }
+    if (couponCodeController.text != '') {
+      context
+          .read<GymStore>()
+          .getCoupon(couponCodeController.text)
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            gymStore.setOffer(context: context, data: value);
+            print('set');
+            calculateFinalPrice();
+          });
+        } else {
+          setState(() {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Offer does not exists!'),
+            ));
+            couponCodeController.text = '';
+          });
+        }
+      });
+    }
   }
 
   void removeCoupon() {
@@ -147,25 +181,25 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   Widget suffix(String text) {
     print('------- called ${text}');
     return gymStore.chosenOffer != null
-      ? InkWell(
-        onTap: () {
-          removeCoupon();
-        },
-        child: Icon(
-          Icons.remove_circle,
-          color: Colors.red,
-        ),
-      )
-    : text.isNotEmpty?
-      InkWell(
-        onTap: () {
-          applyCoupon();
-        },
-        child: Icon(
-          Icons.check_circle,
-          color: Colors.grey,
-        ),
-      ):SizedBox(height: 0,);
+        ? InkWell(
+      onTap: () {
+        removeCoupon();
+      },
+      child: Icon(
+        Icons.remove_circle,
+        color: Colors.red,
+      ),
+    )
+        : text.isNotEmpty ?
+    InkWell(
+      onTap: () {
+        applyCoupon();
+      },
+      child: Icon(
+        Icons.check_circle,
+        color: Colors.grey,
+      ),
+    ) : SizedBox(height: 0,);
   }
 
   @override
@@ -190,66 +224,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       ),
       bottomNavigationBar: SlideButton(
         "Proceed to buy",
-        () async {
-          Map<String, dynamic> body = {
-            "gym_id": gymStore.selectedGymDetail.data.userId,
-            "user_id": locator<AppPrefs>().memberId.getValue(),
-            "price": totalAmount.toString(),
-            "tax_percentage": gymStore.selectedGymPlan.taxPercentage,
-            "tax_amount": tax.toString(),
-            "type": 'regular',
-            "slot_id": '',
-            "addon": "",
-            "start_date": Helper.stringForDatetime3(
-                    gymStore.selectedStartingDate.toIso8601String())
-                .trim(),
-            "expire_date":
-                Helper.stringForDatetime3(gymStore.selectedStartingDate
-                        .add(
-                          Duration(
-                            days:
-                                int.tryParse(gymStore.selectedGymPlan.duration),
-                          ),
-                        )
-                        .toIso8601String())
-                    .trim(),
-            "plan_id": gymStore.selectedGymPlan.uid,
-            "isWhatsapp": !_isChecked,
-          };
-          // setState(() {
-          //   subscriptionBody = body;
-          // });
-
-          // if (_isChecked) {
-          //   body['isWhatsapp'] = true;
-          // }
-
-          if (gymStore.chosenOffer != null) {
-            body['coupon'] = gymStore.chosenOffer.uid;
-          }
-          print("RazoyPayStarting");
-          if (totalAmount != 0) {
-            await gymStore.processPayment(
-              context: context,
-              body: body,
-              price: (totalAmount * 100).toString(),
-            );
-          } else {
-            body['trx_id'] = 'discount_applied';
-            body['trx_status'] = 'done';
-            body['order_status'] = 'done';
-            bool isDone = await gymStore.addSubscription(
-              body: body,
-              context: context,
-              showLoader: true,
-            );
-            if (isDone) {
-              gymStore.init(context: context);
-              NavigationService.navigateTo(Routes.purchaseDone);
-            } else {
-              FlashHelper.errorBar(context, message: 'Please Try again!');
-            }
-          }
+            () async {
+          processToBuy();
         },
       ),
       body: SafeArea(
@@ -423,13 +399,14 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           width: 15,
                         ),
                         Text(
-                          "${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
-                                Duration(
-                                  days: int.tryParse(
-                                    gymStore.selectedGymPlan.duration,
-                                  ),
-                                ),
-                              ).toIso8601String())}",
+                          "${Helper.stringForDatetime2(gymStore
+                              .selectedStartingDate.add(
+                            Duration(
+                              days: int.tryParse(
+                                gymStore.selectedGymPlan.duration,
+                              ),
+                            ),
+                          ).toIso8601String())}",
                           style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,
@@ -510,32 +487,32 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 if (gymStore.selectedGymPlan.planPrice != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
-                        store.chosenOffer != null
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0,
-                                  vertical: 12.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 18.0,
-                                    ),
-                                    UIHelper.horizontalSpace(8.0),
-                                    Text(
-                                      'Coupon Code Applied',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                padding: const EdgeInsets.all(10.0),
-                              ),
+                    store.chosenOffer != null
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6.0,
+                        vertical: 12.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check,
+                            color: Colors.green,
+                            size: 18.0,
+                          ),
+                          UIHelper.horizontalSpace(8.0),
+                          Text(
+                            'Coupon Code Applied',
+                            style: TextStyle(
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : Container(
+                      padding: const EdgeInsets.all(10.0),
+                    ),
                   ),
                 SizedBox(
                   height: 20,
@@ -623,18 +600,19 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('CGST 9%'),
-                                Text('SGST 9%'),
-                                Text(
-                                    'Tax acknowledgement will be emailed to you after subscription.'),
-                              ],
-                            ),
-                          ),
+                          builder: (context) =>
+                              AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('CGST 9%'),
+                                    Text('SGST 9%'),
+                                    Text(
+                                        'Tax acknowledgement will be emailed to you after subscription.'),
+                                  ],
+                                ),
+                              ),
                         );
                         // FlashHelper.informationBar(context,
                         //     message:
@@ -825,5 +803,69 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       body,
       gymStore.selectedGymPlan.uid,
     );
+  }
+
+  void processToBuy() async {
+    Map<String, dynamic> body = {};
+    // setState(() {
+    //   subscriptionBody = body;
+    // });
+
+    // if (_isChecked) {
+    //   body['isWhatsapp'] = true;
+    // }
+
+    // Default Key Values
+    body["gym_id"] = gymStore.selectedGymDetail.data.userId;
+    body["user_id"] = locator<AppPrefs>().memberId.getValue();
+    body["price"] = totalAmount.toString();
+    body["tax_percentage"] = gymStore.selectedGymPlan.taxPercentage;
+    body["tax_amount"] = tax.toString();
+    body["type"] = 'regular';
+    body["slot_id"] = '';
+    body["addon"] = "";
+    body["start_date"] = Helper.stringForDatetime3(gymStore.selectedStartingDate.toIso8601String().trim());
+    body["expire_date"] =
+        Helper.stringForDatetime3(gymStore.selectedStartingDate
+            .add(
+          Duration(
+            days:
+            int.tryParse(gymStore.selectedGymPlan.duration),
+          ),
+        )
+            .toIso8601String())
+            .trim();
+    body["plan_id"] = gymStore.selectedGymPlan.uid;
+    body["isWhatsapp"] = !_isChecked;
+
+    if (gymStore.chosenOffer != null) {
+      body['coupon'] = gymStore.chosenOffer.uid;
+    }
+
+    print('Starting Razor Pay Library ---- ');
+
+    if (totalAmount != 0) {
+      await gymStore.processPayment(
+        context: context,
+        body: body,
+        price: (totalAmount * 100).toString(),
+      );
+    } else {
+      //100% discount applied :D
+      body['trx_id'] = 'discount_applied';
+      body['trx_status'] = 'done';
+      body['order_status'] = 'done';
+      bool isDone = await gymStore.addSubscription(
+        body: body,
+        context: context,
+        showLoader: true,
+      );
+      if (isDone) {
+        gymStore.init(context: context);
+        NavigationService.navigateTo(Routes.purchaseDone);
+      } else {
+        FlashHelper.errorBar(context, message: 'Please Try again!');
+      }
+    }
   }
 }

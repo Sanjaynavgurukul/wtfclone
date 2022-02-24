@@ -12,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    print('Home Page Called again');
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 54),
@@ -79,7 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Center(child: Text('Dashboard')),
+      body: Column(
+        children: [
+
+        ],
+      ),
     );
   }
 }
