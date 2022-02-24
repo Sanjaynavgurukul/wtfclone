@@ -605,8 +605,8 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                         gymId: widget.gymId,
                                                       )
                                                     : SlideButton(
-                                                        "Buy your membership",
-                                                        () async {
+                                                        text:"Buy your membership",
+                                                        onTap:() async {
                                                           if (gymStore.activeSubscriptions ==
                                                                   null ||
                                                               (gymStore.activeSubscriptions !=
@@ -1124,8 +1124,8 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                     .gymId,
                                                               )
                                                             : SlideButton(
-                                                                "Buy your membership",
-                                                                () async {
+                                                                text:"Buy your membership",
+                                                                onTap:() async {
                                                                   if (gymStore.activeSubscriptions ==
                                                                           null ||
                                                                       (gymStore.activeSubscriptions !=
@@ -1301,7 +1301,6 @@ class TextIconCard extends StatelessWidget {
                       )
                     : Image.asset(
                         icon,
-                        color: textColor,
                         width: 36.0,
                         height: 36.0,
                       ),

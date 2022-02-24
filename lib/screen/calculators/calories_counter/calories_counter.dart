@@ -94,8 +94,8 @@ class _CaloriesCounterState extends State<CaloriesCounter> {
         ),
       ),
       bottomNavigationBar: SlideButton(
-        'Calculate',
-        () {
+        text:'Calculate',
+        onTap:() {
           if (ageController.text.isEmpty ||
               weightController.text.isEmpty ||
               heightController.text.isEmpty ||

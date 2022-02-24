@@ -9,7 +9,7 @@ class SlideButton extends StatelessWidget {
   final String text;
   final Function onTap;
 
-  SlideButton(this.text, this.onTap);
+  SlideButton({this.text, this.onTap});
 
   @override
   Widget build(BuildContext context) {

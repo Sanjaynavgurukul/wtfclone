@@ -61,7 +61,6 @@ class _ExplorePageState extends State<ExplorePage> {
                 ),
                 UIHelper.verticalSpace(10.0),
                 CommonBanner(bannerType: "WTF_banner",),
-
                 UIHelper.verticalSpace(30.0),
                 Row(
                   children: [

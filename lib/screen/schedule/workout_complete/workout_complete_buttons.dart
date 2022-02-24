@@ -49,8 +49,8 @@ class WorkoutCompleteButtons extends StatelessWidget {
             // ),
             UIHelper.verticalSpace(12.0),
             SlideButton(
-              'Continue',
-              () {
+              text:'Continue',
+              onTap:() {
                 //TODO SAVE PROGRESS
                 if (store.sessionRating > 0.0 && store.trainerRating > 0.0) {
                   store.submitRating(context: context);

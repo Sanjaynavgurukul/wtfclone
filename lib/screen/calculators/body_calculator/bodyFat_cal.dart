@@ -104,8 +104,8 @@ class _BodyFatCalculatorState extends State<BodyFatCalculator> {
           ),
         ),
         bottomNavigationBar: SlideButton(
-          'Calculate',
-          () {
+          text:'Calculate',
+          onTap:() {
             if (ageController.text.isEmpty ||
                 weightController.text.isEmpty ||
                 heightController.text.isEmpty ||

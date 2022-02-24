@@ -87,8 +87,8 @@ class _BMRCalculatorState extends State<BMRCalculator> {
           ),
         ),
         bottomNavigationBar: SlideButton(
-          'Calculate',
-          () {
+          text:'Calculate',
+          onTap:() {
             if (ageController.text.isEmpty ||
                 weightController.text.isEmpty ||
                 heightController.text.isEmpty ||

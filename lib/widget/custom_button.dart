@@ -45,6 +45,9 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           child: InkWell(
             onTap: onTap,
+            // onTap:(){
+            //   print('Button pressed in slidess----');
+            // },
             child: Ink(
               decoration: BoxDecoration(
                 color: bgColor,

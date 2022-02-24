@@ -34,8 +34,8 @@ class _CaloriesCounterResultState extends State<CaloriesCounterResult> {
         centerTitle: true,
       ),
       bottomNavigationBar: SlideButton(
-        'Continue',
-        () async {
+        text:'Continue',
+        onTap:() async {
           Navigator.of(context).popUntil((route) => route.isFirst);
         },
       ),

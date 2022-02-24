@@ -445,10 +445,10 @@ class _EventButtonState extends State<EventButton> {
                                       : 'Events starts on: ${Helper.stringForDatetime2(store?.selectedEventData?.date) ?? ''}',
                                 )
                               : SlideButton(
-                                  store.selectedEventData != null
+                                 text: store.selectedEventData != null
                                       ? "Book now for Rs. ${store.selectedEventData.price}"
                                       : 'Book now',
-                                  () async {
+                                  onTap:() async {
                                     if (int.tryParse(
                                             store.selectedEventData.price) >
                                         0) {

@@ -565,7 +565,7 @@ class _ScheduleSlotScreenState extends State<ScheduleSlotScreen>
                         height: 30,
                       ),
                       // Buy memberShip button
-                      SlideButton("Proceed to buy", () {
+                      SlideButton(text:"Proceed to buy", onTap:() {
                         LocalValue.SLOT_ID =
                             _gymSlotModel.data[_selectedSlotIndex].uid;
                         print("Slot id is ${LocalValue.SLOT_ID}");

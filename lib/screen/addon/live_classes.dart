@@ -7,6 +7,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/addon/powered_pages.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/screen/home/home.dart';
 import 'package:wtf/widget/gradient_scaffold.dart';
@@ -134,7 +135,7 @@ class _LiveClassesState extends State<LiveClasses> {
                 //     ],
                 //   ),
                 // ),
-                LiveBannerWidget(),
+                CommonBanner(bannerType: "LIVE_banner",),
                 UIHelper.verticalSpace(24.0),
                 PagePriceTag(
                   text1: 'Start only from ',

@@ -27,8 +27,8 @@ class BodyFatCalResult extends StatelessWidget {
         centerTitle: true,
       ),
       bottomNavigationBar: SlideButton(
-        'Continue',
-        () async {
+        text:'Continue',
+        onTap:() async {
           // await bodyState.saveProgress(context: context);
           Navigator.of(context).popUntil((route) => route.isFirst);
         },

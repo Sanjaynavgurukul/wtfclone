@@ -222,12 +222,16 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           ),
         ),
       ),
-      bottomNavigationBar: SlideButton(
-        "Proceed to buy",
-            () async {
-          processToBuy();
-        },
-      ),
+      // bottomNavigationBar: Container(
+      //   child: SlideButton(
+      //     text: "Proceed to buy",
+      //     onTap: (){
+      //       print('Button pressed in slide----');
+      //       // print('method called------some');
+      //       // processToBuy();
+      //     },
+      //   ),
+      // ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
@@ -806,6 +810,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   }
 
   void processToBuy() async {
+    print('method called------');
     Map<String, dynamic> body = {};
     // setState(() {
     //   subscriptionBody = body;

@@ -119,8 +119,8 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
           children: [
             SubscriptionConditions(),
             SlideButton(
-              "Pay Now",
-              () async {
+              text:"Pay Now",
+              onTap:() async {
                 var body = {
                   "gym_id": gymStore.selectedEventData.gymId,
                   "user_id": locator<AppPrefs>().memberId.getValue(),

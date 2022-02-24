@@ -147,81 +147,9 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
         ),
       ),
       bottomNavigationBar: SlideButton(
-        "Proceed to buy",
-        () async {
-          var body = {
-            "gym_id": gymStore.selectedGymDetail.data.userId,
-            "user_id": locator<AppPrefs>().memberId.getValue(),
-            "price": totalAmount,
-            "type": gymStore.selectedAddOnSlot.isPt == '1'
-                ? 'addon_pt'
-                : gymStore.selectedAddOnSlot.isLive
-                    ? 'addon_live'
-                    : 'addon',
-            "tax_percentage": "18",
-            "tax_amount": tax,
-            "slot_id": gymStore.selectedSlotData.uid,
-            "addon": gymStore.selectedAddOnSlot.uid,
-            "start_date": Helper.stringForDatetime3(
-                    gymStore.selectedSlotData.date.toIso8601String())
-                .trim(),
-            "expire_date": gymStore.isFreeSession
-                ? Helper.stringForDatetime3(
-                        gymStore.selectedSlotData.date.toIso8601String())
-                    .trim()
-                : Helper.stringForDatetime3(gymStore.selectedSlotData.date
-                        .add(
-                          Duration(
-                              days: int.tryParse(
-                                  gymStore.selectedSession.duration)),
-                        )
-                        .toIso8601String())
-                    .trim(),
-            "isWhatsapp": !_isChecked,
-          };
-          if (gymStore.chosenOffer != null) {
-            body['coupon'] = gymStore.chosenOffer.uid;
-          }
-          if (gymStore.selectedSession != null) {
-            body['session_id'] = gymStore.selectedSession.uid;
-            body['remark'] =
-                '${gymStore.selectedSession.uid} - ${gymStore.selectedSession.nSession}';
-          }
-          if (gymStore.isFreeSession) {
-            body['trx_id'] = 'pay_free';
-            body['trx_status'] = 'done';
-            body['order_status'] = 'done';
-            bool isSubscribed =
-                await gymStore.addSubscription(context: context, body: body);
-            if (isSubscribed) {
-              NavigationService.navigateTo(Routes.purchaseDone);
-            } else {
-              FlashHelper.errorBar(context, message: 'Please Try again!');
-            }
-          } else {
-            if (totalAmount != 0) {
-              await gymStore.processPayment(
-                context: context,
-                body: body,
-                price: (totalAmount * 100).toString(),
-              );
-            } else {
-              body['trx_id'] = 'discount_applied';
-              body['trx_status'] = 'done';
-              body['order_status'] = 'done';
-              bool isDone = await gymStore.addSubscription(
-                body: body,
-                context: context,
-                showLoader: true,
-              );
-              if (isDone) {
-                gymStore.init(context: context);
-                NavigationService.navigateTo(Routes.purchaseDone);
-              } else {
-                FlashHelper.errorBar(context, message: 'Please Try again!');
-              }
-            }
-          }
+        text:"Proceed to buy",
+        onTap:() {
+          processToBuy();
         },
       ),
       body: SafeArea(
@@ -235,33 +163,24 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 15,
+                    ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      dense: true,
+                      leading: Text(
+                        "Booked at:",
+                        style: TextStyle(
+                            fontSize: 15,
+                            // fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),title: Text(
+                      gymStore.selectedGymDetail == null
+                          ? ""
+                          : gymStore.selectedGymDetail.data.gymName,
+                      style: TextStyle(
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Booked at:",
-                          style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          gymStore.selectedGymDetail == null
-                              ? ""
-                              : gymStore.selectedGymDetail.data.gymName,
-                          style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
                     ),
                     SizedBox(height: 4.0),
                     Divider(
@@ -868,5 +787,83 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
       body,
       '',
     );
+  }
+
+  void processToBuy()async{
+    print('processToBuy method called');
+    Map<String,dynamic> body = {
+      "gym_id": gymStore.selectedGymDetail.data.userId,
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "price": totalAmount,
+      "type": gymStore.selectedAddOnSlot.isPt == '1'
+          ? 'addon_pt'
+          : gymStore.selectedAddOnSlot.isLive
+          ? 'addon_live'
+          : 'addon',
+      "tax_percentage": "18",
+      "tax_amount": tax,
+      "slot_id": gymStore.selectedSlotData.uid,
+      "addon": gymStore.selectedAddOnSlot.uid,
+      "start_date": Helper.stringForDatetime3(
+          gymStore.selectedSlotData.date.toIso8601String())
+          .trim(),
+      "expire_date": gymStore.isFreeSession
+          ? Helper.stringForDatetime3(
+          gymStore.selectedSlotData.date.toIso8601String())
+          .trim()
+          : Helper.stringForDatetime3(gymStore.selectedSlotData.date
+          .add(
+        Duration(
+            days: int.tryParse(
+                gymStore.selectedSession.duration)),
+      )
+          .toIso8601String())
+          .trim(),
+      "isWhatsapp": !_isChecked,
+    };
+    if (gymStore.chosenOffer != null) {
+      body['coupon'] = gymStore.chosenOffer.uid;
+    }
+    if (gymStore.selectedSession != null) {
+      body['session_id'] = gymStore.selectedSession.uid;
+      body['remark'] =
+      '${gymStore.selectedSession.uid} - ${gymStore.selectedSession.nSession}';
+    }
+    if (gymStore.isFreeSession) {
+      body['trx_id'] = 'pay_free';
+      body['trx_status'] = 'done';
+      body['order_status'] = 'done';
+      bool isSubscribed =
+      await gymStore.addSubscription(context: context, body: body);
+      if (isSubscribed) {
+        print('Done ');
+        NavigationService.navigateTo(Routes.purchaseDone);
+      } else {
+        FlashHelper.errorBar(context, message: 'Please Try again!');
+      }
+    } else {
+      if (totalAmount != 0) {
+        await gymStore.processPayment(
+          context: context,
+          body: body,
+          price: (totalAmount * 100).toString(),
+        );
+      } else {
+        body['trx_id'] = 'discount_applied';
+        body['trx_status'] = 'done';
+        body['order_status'] = 'done';
+        bool isDone = await gymStore.addSubscription(
+          body: body,
+          context: context,
+          showLoader: true,
+        );
+        if (isDone) {
+          gymStore.init(context: context);
+          NavigationService.navigateTo(Routes.purchaseDone);
+        } else {
+          FlashHelper.errorBar(context, message: 'Please Try again!');
+        }
+      }
+    }
   }
 }

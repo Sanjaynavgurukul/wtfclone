@@ -36,8 +36,8 @@ class PurchaseDone extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: SlideButton(
-          "Let\'s WTF",
-          () {
+          text:"Let\'s WTF",
+          onTap:() {
             Navigator.of(NavigationService.navigatorKey.currentContext)
                 .popUntil((route) => route.settings.name == Routes.homePage);
             NavigationService.navigatorKey.currentContext
@@ -577,8 +577,8 @@ class EventPurchaseDone extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: SlideButton(
-          "Let\'s WTF",
-          () {
+          text:"Let\'s WTF",
+          onTap:() {
             Navigator.of(NavigationService.navigatorKey.currentContext)
                 .popUntil((route) => route.isFirst);
             NavigationService.navigatorKey.currentContext

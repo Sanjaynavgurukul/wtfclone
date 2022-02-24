@@ -80,8 +80,8 @@ class _OtpVerifySheetState extends State<OtpVerifySheet> {
                   ),
                   UIHelper.verticalSpace(14.0),
                   SlideButton(
-                    'Verify OTP',
-                    () async {
+                    text:'Verify OTP',
+                    onTap:() async {
                       if (otpController.text.isNotEmpty) {
                         setState(() {
                           isLoading = true;
