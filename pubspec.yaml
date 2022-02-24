@@ -102,6 +102,7 @@ dependencies:
   scaffold_gradient_background: ^1.0.3+1
   flutter_bloc: ^8.0.1
   blur: ^3.0.0
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:

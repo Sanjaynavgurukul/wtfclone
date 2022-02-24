@@ -1313,7 +1313,7 @@ class RestDatasource {
   }
 
   Future<dynamic> eventSubmissionAdd(
-      {BuildContext context, Map<String, dynamic> body}) async {
+      {BuildContext context, Map<String,dynamic> body}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;

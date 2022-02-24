@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return Scaffold(
       backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
+        elevation: 0,
         title: Text(
           ' Discover WTF ${store.discoverType == 'gym' ? 'Arena' : 'Fitness Studios'}',
           overflow: TextOverflow.ellipsis,
@@ -42,49 +44,85 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         ),
         backgroundColor: AppConstants.primaryColor,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 15.0,
-                ),
-                SearchBar(),
-                SizedBox(
-                  height: 25.0,
-                ),
-                Expanded(
-                  child: store.selectedGymTypes == null
-                      ? LoadingWithBackground()
-                      : store.selectedGymTypes != null &&
-                              store.selectedGymTypes.data.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: store.selectedGymTypes.data.length,
-                              itemBuilder: (context, index) {
-                                var item = store.selectedGymTypes.data[index];
-                                return GymCard(item: item);
-                              },
-                            )
-                          : Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'No Record Found',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                ),
-                UIHelper.verticalSpace(20.0),
-                ComingSoonWidget(),
-              ],
-            ),
+      body: Column(
+        children: [
+          //Search Bar :D
+          Container(
+            color: AppConstants.primaryColor,
+            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            child: SearchBar(),
           ),
+          //ListView
+          Expanded(
+            child: store.selectedGymTypes == null
+                ? LoadingWithBackground()
+                : store.selectedGymTypes != null &&
+                        store.selectedGymTypes.data.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: store.selectedGymTypes.data.length,
+                        padding: EdgeInsets.only(top: 24, left: 16, right: 16),
+                        itemBuilder: (context, index) {
+                          var item = store.selectedGymTypes.data[index];
+                          return GymCard(item: item);
+                        },
+                      )
+                    : Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No Record Found',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget abd() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 15.0,
+            ),
+            SearchBar(),
+            SizedBox(
+              height: 25.0,
+            ),
+            Expanded(
+              child: store.selectedGymTypes == null
+                  ? LoadingWithBackground()
+                  : store.selectedGymTypes != null &&
+                          store.selectedGymTypes.data.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: store.selectedGymTypes.data.length,
+                          itemBuilder: (context, index) {
+                            var item = store.selectedGymTypes.data[index];
+                            return GymCard(item: item);
+                          },
+                        )
+                      : Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'No Record Found',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+            ),
+            UIHelper.verticalSpace(20.0),
+            ComingSoonWidget(),
+          ],
         ),
       ),
     );
@@ -221,9 +259,282 @@ class GymCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 24),
+      decoration: BoxDecoration(
+          color: Color(0xff272727),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      child: Column(
+        children: [
+          Container(
+            height: 176,
+            width: MediaQuery.of(context).size.width,
+            // margin: EdgeInsets.only(right: 15),
+            child: Stack(
+              children: [
+                GradientImageWidget(
+                  network: item.coverImage,
+                  gragientColor: [
+                    Colors.transparent,
+                    Color(0xff272727)
+                  ],
+                ),
+                // Padding(
+                //   padding:
+                //   const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                //   child: Align(
+                //     alignment: Alignment.bottomLeft,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       crossAxisAlignment: CrossAxisAlignment.end,
+                //       children: [
+                //         Flexible(
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             mainAxisAlignment: MainAxisAlignment.end,
+                //             children: [
+                //               Text(
+                //                 item.type?.capitalize() ?? '',
+                //                 style: TextStyle(
+                //                   color: Colors.white,
+                //                   fontSize: 12.5,
+                //                 ),
+                //               ),
+                //               SizedBox(
+                //                 height: 5,
+                //               ),
+                //               Text(
+                //                 item.gymName ?? '',
+                //                 style: TextStyle(
+                //                   color: Colors.white,
+                //                   fontSize: 20,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //               SizedBox(
+                //                 height: 5,
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //         Flexible(
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.end,
+                //             crossAxisAlignment: CrossAxisAlignment.end,
+                //             children: [
+                //               Flexible(
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.end,
+                //                   crossAxisAlignment:
+                //                   CrossAxisAlignment.center,
+                //                   children: [
+                //                     Icon(
+                //                       Icons.access_time,
+                //                       color: Colors.white,
+                //                       size: 16,
+                //                     ),
+                //                     SizedBox(
+                //                       width: 4,
+                //                     ),
+                //                     Text(
+                //                       '9 am-11 am',
+                //                       style: TextStyle(
+                //                         color: Colors.white,
+                //                         fontSize: 12.5,
+                //                       ),
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 5.0,
+                // ),
+                // if (item.rating != 0)
+                //   Positioned(
+                //     top: 12.0,
+                //     right: 12.0,
+                //     child: Container(
+                //       padding: const EdgeInsets.symmetric(
+                //         vertical: 4.0,
+                //         horizontal: 6.0,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         color: item.rating <= 2
+                //             ? Colors.red
+                //             : item.rating > 2 && item.rating <= 3
+                //             ? Colors.orange
+                //             : Colors.green,
+                //         borderRadius: BorderRadius.circular(6.0),
+                //       ),
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           Text(
+                //             item.rating.toString() + ' ',
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontSize: 14.0,
+                //               fontWeight: FontWeight.w500,
+                //             ),
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color: Colors.white,
+                //             size: 14.0,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                Container(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 12,right: 12,top: 6,bottom: 6),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(8)
+                      )
+                    ),
+                    child: Wrap(
+                      direction: Axis.vertical,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Text('Live Class ',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,color: Colors.black)),
+                            Container(
+                              width: 12,height: 12,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                                  border: Border.all(color: Color(0xffBA1406),width: 3)
+                              ),
+                            )
+                          ],
+                        ),
+                        Text('Available @ 99',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,color: Colors.black))
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ListTile(
+                    title: Text(item.gymName ?? '',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            fontStyle: FontStyle.normal)),
+                    subtitle: Text(item.address1),
+                    trailing: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RatingBar(
+                            initialRating: 3.5,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 16,
+                            ratingWidget: RatingWidget(
+                              full: Icon(
+                                Icons.star,
+                                color: AppConstants.boxBorderColor,
+                              ),
+                              half: Icon(
+                                Icons.star_half,
+                                color: AppConstants.boxBorderColor,
+                              ),
+                              empty: Icon(
+                                Icons.star_border,
+                                color: AppConstants.white,
+                              ),
+                            ),
+                            itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            }),
+                        RichText(
+                          text: TextSpan(
+                            text: '',
+                            style: DefaultTextStyle.of(context).style,
+                            children: const <WidgetSpan>[
+                              WidgetSpan(
+                                  child: Icon(
+                                Icons.directions_car,
+                                size: 16,
+                                color: AppConstants.green,
+                              )),
+                              WidgetSpan(
+                                  child: Text(' 15 Mins away | ',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400))),
+                              WidgetSpan(
+                                  child: Text('1 Km',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400)))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+
+              ],
+            ),
+          ),
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.only(left: 12, right: 12),
+            title: Text('\u{20B9}1500 for 3 months',
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    fontStyle: FontStyle.normal,
+                    color: Color(0XFFE2B411))),
+            trailing: Container(
+              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xff490000),
+                      Color(0xffBA1406),
+                    ],
+                  )),
+              child: Text("Book Now"),
+            ),
+          ),
+          SizedBox(
+            height: 12,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget abc(BuildContext context) {
     return InkWell(
       onTap: () {
-        print('gym details: ${item.toJson()}');
         context.read<GymStore>().getGymDetails(
               context: context,
               gymId: item.userId,
