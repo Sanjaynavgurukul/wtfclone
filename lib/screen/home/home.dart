@@ -13,6 +13,7 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/my_schedule_model.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/upcoming_events.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
@@ -48,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              BannerWidget(),
+              CommonBanner(bannerType: "WTF_banner",),
               SizedBox(
                 height: 16.0,
               ),
@@ -202,115 +203,115 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-class BannerWidget extends StatelessWidget {
-  const BannerWidget({
-    Key key,
-    this.isExplore = false,
-  }) : super(key: key);
-  final bool isExplore;
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<GymStore>(
-      builder: (context, value, child) {
-        print(
-            'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'WTF_banner').toList()}');
-        return value.bannerList == null
-            ? Container(
-                height: 200,
-                width: 200,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            : value.bannerList.isEmpty
-                ? Container()
-                : CarouselSlider(
-                    options: CarouselOptions(
-                      height: isExplore
-                          ? value.bannerList
-                                      .where((element) =>
-                                          element.type == 'WTF_banner')
-                                      .toList()
-                                      .length >
-                                  0
-                              ? 260.0
-                              : 0.0
-                          : 260.0,
-                      viewportFraction: 0.8,
-                      enlargeCenterPage: true,
-                      autoPlay: true,
-                      pageSnapping: true,
-                    ),
-                    items: isExplore
-                        ? value.bannerList
-                            .where((element) => element.type == 'WTF_banner')
-                            .toList()
-                            .map(
-                            (i) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: Builder(
-                                  builder: (BuildContext context) {
-                                    if (i.image == null) {
-                                      return Center(
-                                        child: Text("No image data"),
-                                      );
-                                    }
-                                    return Image.network(
-                                      i.image,
-                                      fit: BoxFit.fill,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      loadingBuilder: (context, _, chunk) =>
-                                          chunk == null
-                                              ? _
-                                              : RectangleShimmering(
-                                                  width: double.infinity,
-                                                  height: 180.0,
-                                                ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ).toList()
-                        : value.bannerList.map(
-                            (i) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(12.0),
-                                child: Builder(
-                                  builder: (BuildContext context) {
-                                    if (i.image == null) {
-                                      return Center(
-                                        child: Text("No image data"),
-                                      );
-                                    }
-                                    return Image.network(
-                                      i.image,
-                                      fit: BoxFit.fill,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      loadingBuilder: (context, _, chunk) =>
-                                          chunk == null
-                                              ? _
-                                              : RectangleShimmering(
-                                                  width: double.infinity,
-                                                  height: 180.0,
-                                                ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ).toList(),
-                  );
-      },
-    );
-  }
-}
+// class BannerWidget extends StatelessWidget {
+//   const BannerWidget({
+//     Key key,
+//     this.isExplore = false,
+//   }) : super(key: key);
+//   final bool isExplore;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<GymStore>(
+//       builder: (context, value, child) {
+//         print(
+//             'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'WTF_banner').toList()}');
+//         return value.bannerList == null
+//             ? Container(
+//                 height: 200,
+//                 width: 200,
+//                 child: Center(
+//                   child: CircularProgressIndicator(
+//                     color: Colors.red,
+//                   ),
+//                 ),
+//               )
+//             : value.bannerList.isEmpty
+//                 ? Container()
+//                 : CarouselSlider(
+//                     options: CarouselOptions(
+//                       height: isExplore
+//                           ? value.bannerList
+//                                       .where((element) =>
+//                                           element.type == 'WTF_banner')
+//                                       .toList()
+//                                       .length >
+//                                   0
+//                               ? 260.0
+//                               : 0.0
+//                           : 260.0,
+//                       viewportFraction: 0.8,
+//                       enlargeCenterPage: true,
+//                       autoPlay: true,
+//                       pageSnapping: true,
+//                     ),
+//                     items: isExplore
+//                         ? value.bannerList
+//                             .where((element) => element.type == 'WTF_banner')
+//                             .toList()
+//                             .map(
+//                             (i) {
+//                               return ClipRRect(
+//                                 borderRadius: BorderRadius.circular(12.0),
+//                                 child: Builder(
+//                                   builder: (BuildContext context) {
+//                                     if (i.image == null) {
+//                                       return Center(
+//                                         child: Text("No image data"),
+//                                       );
+//                                     }
+//                                     return Image.network(
+//                                       i.image,
+//                                       fit: BoxFit.fill,
+//                                       width: double.infinity,
+//                                       height: double.infinity,
+//                                       loadingBuilder: (context, _, chunk) =>
+//                                           chunk == null
+//                                               ? _
+//                                               : RectangleShimmering(
+//                                                   width: double.infinity,
+//                                                   height: 180.0,
+//                                                 ),
+//                                     );
+//                                   },
+//                                 ),
+//                               );
+//                             },
+//                           ).toList()
+//                         : value.bannerList.map(
+//                             (i) {
+//                               return ClipRRect(
+//                                 borderRadius: BorderRadius.circular(12.0),
+//                                 child: Builder(
+//                                   builder: (BuildContext context) {
+//                                     if (i.image == null) {
+//                                       return Center(
+//                                         child: Text("No image data"),
+//                                       );
+//                                     }
+//                                     return Image.network(
+//                                       i.image,
+//                                       fit: BoxFit.fill,
+//                                       width: double.infinity,
+//                                       height: double.infinity,
+//                                       loadingBuilder: (context, _, chunk) =>
+//                                           chunk == null
+//                                               ? _
+//                                               : RectangleShimmering(
+//                                                   width: double.infinity,
+//                                                   height: 180.0,
+//                                                 ),
+//                                     );
+//                                   },
+//                                 ),
+//                               );
+//                             },
+//                           ).toList(),
+//                   );
+//       },
+//     );
+//   }
+// }
 
 class LiveBannerWidget extends StatelessWidget {
   const LiveBannerWidget({

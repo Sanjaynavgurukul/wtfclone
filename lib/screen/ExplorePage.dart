@@ -17,6 +17,7 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
@@ -59,9 +60,8 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                 ),
                 UIHelper.verticalSpace(10.0),
-                BannerWidget(
-                  isExplore: true,
-                ),
+                CommonBanner(bannerType: "WTF_banner",),
+
                 UIHelper.verticalSpace(30.0),
                 Row(
                   children: [
