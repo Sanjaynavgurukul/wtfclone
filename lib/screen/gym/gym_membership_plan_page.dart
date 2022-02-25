@@ -41,6 +41,143 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
       appBar: AppBar(
         backgroundColor: AppConstants.primaryColor,
         centerTitle: false,
+        title: Text('Choose Your Plan'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          store.getGymPlans(context: context);
+        },
+        backgroundColor: Colors.white,
+        child: Container(
+          child: ListView(
+            children: [
+              ListTile(title: Text('One Membership for all your fitness need')),
+              ListView.builder(
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  padding:
+                      EdgeInsets.only(left: 32, right: 32, top: 54, bottom: 54),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    bool r = index == 1;
+                    return prizeItem(recomended: r);
+                  })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget prizeItem({bool recomended = false}) {
+    return Container(
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(top: recomended ? 16 : 0, bottom: 23),
+            padding: EdgeInsets.only(
+                left: 12, right: 12, top: recomended ? 24 : 12, bottom: 12),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff6FAF81),
+                    Color(0xff598966),
+                  ],
+                )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('PLAN 1'),
+                ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.all(0),
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'assets/logo/wtf_light.png',
+                        width: 40,
+                        height: 40,
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text('Consistent',
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800))
+                    ],
+                  ),
+                  trailing: Container(
+                    padding:
+                        EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                    decoration: BoxDecoration(
+                        color: Color(0xff6FAF81),
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Text(
+                      '\u{20B9}999',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontStyle: FontStyle.normal),
+                    ),
+                  ),
+                ),
+                ListTile(
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    title: Text(
+                      'Best for person who frequently travel',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    subtitle: Padding(
+                      padding: EdgeInsets.only(left: 12,top: 12,bottom: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('• 1 Month membership'),
+                          Text('• Trainer Support'),
+                          Text('• Access to free diet plans'),
+                        ],
+                      ),
+                    ),)
+              ],
+            ),
+          ),
+          if (recomended)
+            Container(
+              padding: EdgeInsets.only(left: 60, top: 6, bottom: 6, right: 12),
+              constraints: BoxConstraints(minWidth: 134),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(6),
+                      bottomRight: Radius.circular(6))),
+              child: Text(
+                'Recommended',
+                style: TextStyle(
+                    color: AppConstants.black,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget oldUi() {
+    return Scaffold(
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppConstants.primaryColor,
+        centerTitle: false,
         title: Text(
           store.selectedGymDetail.data.gymName,
           maxLines: 2,
