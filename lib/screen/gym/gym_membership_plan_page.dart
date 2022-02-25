@@ -36,37 +36,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   @override
   Widget build(BuildContext context) {
     store = context.read<GymStore>();
-    return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      appBar: AppBar(
-        backgroundColor: AppConstants.primaryColor,
-        centerTitle: false,
-        title: Text('Choose Your Plan'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          store.getGymPlans(context: context);
-        },
-        backgroundColor: Colors.white,
-        child: Container(
-          child: ListView(
-            children: [
-              ListTile(title: Text('One Membership for all your fitness need')),
-              ListView.builder(
-                  itemCount: 4,
-                  shrinkWrap: true,
-                  padding:
-                      EdgeInsets.only(left: 32, right: 32, top: 54, bottom: 54),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    bool r = index == 1;
-                    return prizeItem(recomended: r);
-                  })
-            ],
-          ),
-        ),
-      ),
-    );
+    return oldUi();
   }
 
   Widget prizeItem({bool recomended = false}) {
@@ -377,6 +347,40 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                         ),
                       )
                 : Loading(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget newUi(){
+    return Scaffold(
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppConstants.primaryColor,
+        centerTitle: false,
+        title: Text('Choose Your Plan'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          store.getGymPlans(context: context);
+        },
+        backgroundColor: Colors.white,
+        child: Container(
+          child: ListView(
+            children: [
+              ListTile(title: Text('One Membership for all your fitness need')),
+              ListView.builder(
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  padding:
+                  EdgeInsets.only(left: 32, right: 32, top: 54, bottom: 54),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    bool r = index == 1;
+                    return prizeItem(recomended: r);
+                  })
+            ],
           ),
         ),
       ),

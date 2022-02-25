@@ -58,7 +58,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: AppConstants.primaryColor,
+      statusBarColor: AppConstants.bgColor,
       statusBarBrightness:
           Platform.isAndroid ? Brightness.light : Brightness.dark,
     ),
@@ -183,15 +183,15 @@ class _MyAppState extends State<MyApp>
             scaffoldBackgroundColor: AppColors.BACK_GROUND_BG,
             brightness: Brightness.dark,
             dividerColor: Color(0xff1d1f20),
-            accentColor: AppConstants.primaryColor,
-            splashColor: AppConstants.primaryColor,
+            accentColor: AppConstants.bgColor,
+            splashColor: AppConstants.bgColor,
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
                 primary: AppColors.PRIMARY_COLOR,
               ),
             ),
             primarySwatch:
-                AppColors.generateMaterialColor(AppConstants.primaryColor),
+                AppColors.generateMaterialColor(AppConstants.bgColor),
             fontFamily: Fonts.RALEWAY,
           ),
           themeMode: ThemeMode.dark,

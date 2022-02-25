@@ -66,69 +66,34 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     tax = 0;
     totalAmount = 0;
     discountAmount = 0;
-    if (context
-        .read<GymStore>()
-        .chosenOffer != null) {
-      if (context
-          .read<GymStore>()
-          .chosenOffer
-          .type == 'flat') {
+    if (context.read<GymStore>().chosenOffer != null) {
+      if (context.read<GymStore>().chosenOffer.type == 'flat') {
         int couponValue =
-        int.tryParse(context
-            .read<GymStore>()
-            .chosenOffer
-            .value);
+            int.tryParse(context.read<GymStore>().chosenOffer.value);
         discountAmount = couponValue >
-            int.tryParse(context
-                .read<GymStore>()
-                .selectedEventData
-                .price)
-            ? int.tryParse(context
-            .read<GymStore>()
-            .selectedEventData
-            .price)
+                int.tryParse(context.read<GymStore>().selectedEventData.price)
+            ? int.tryParse(context.read<GymStore>().selectedEventData.price)
             : couponValue;
       } else {
-        print('price: ${context
-            .read<GymStore>()
-            .selectedGymPlan
-            .planPrice}');
-        print('offer val: ${context
-            .read<GymStore>()
-            .chosenOffer
-            .value}');
+        print('price: ${context.read<GymStore>().selectedGymPlan.planPrice}');
+        print('offer val: ${context.read<GymStore>().chosenOffer.value}');
         discountAmount =
-            (int.tryParse(context
-                .read<GymStore>()
-                .selectedGymPlan
-                .planPrice) *
-                int.tryParse(context
-                    .read<GymStore>()
-                    .chosenOffer
-                    .value) /
-                100)
+            (int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) *
+                    int.tryParse(context.read<GymStore>().chosenOffer.value) /
+                    100)
                 .truncate();
       }
     }
     totalAmount =
-        int.tryParse(context
-            .read<GymStore>()
-            .selectedGymPlan
-            .planPrice) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
             discountAmount;
     tax = (totalAmount *
-        int.tryParse(
-            context
-                .read<GymStore>()
-                .selectedGymPlan
-                .taxPercentage) /
-        100)
+            int.tryParse(
+                context.read<GymStore>().selectedGymPlan.taxPercentage) /
+            100)
         .truncate();
     totalAmount = tax +
-        int.tryParse(context
-            .read<GymStore>()
-            .selectedGymPlan
-            .planPrice) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
         discountAmount;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) setState(() {});
@@ -182,29 +147,299 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     print('------- called ${text}');
     return gymStore.chosenOffer != null
         ? InkWell(
-      onTap: () {
-        removeCoupon();
-      },
-      child: Icon(
-        Icons.remove_circle,
-        color: Colors.red,
-      ),
-    )
-        : text.isNotEmpty ?
-    InkWell(
-      onTap: () {
-        applyCoupon();
-      },
-      child: Icon(
-        Icons.check_circle,
-        color: Colors.grey,
-      ),
-    ) : SizedBox(height: 0,);
+            onTap: () {
+              removeCoupon();
+            },
+            child: Icon(
+              Icons.remove_circle,
+              color: Colors.red,
+            ),
+          )
+        : text.isNotEmpty
+            ? InkWell(
+                onTap: () {
+                  applyCoupon();
+                },
+                child: Icon(
+                  Icons.check_circle,
+                  color: Colors.grey,
+                ),
+              )
+            : SizedBox(
+                height: 0,
+              );
   }
 
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppConstants.bgColor,
+        leading: BackButton(
+          color: Colors.white,
+        ),
+        title: Text(
+          "Booking summary",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 16,right: 16,top: 6,bottom: 6),
+        constraints: BoxConstraints(
+            minHeight: 54,maxHeight: 60
+        ),
+        child: InkWell(
+          onTap:()async{
+          },
+          child: Container(
+              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xff490000),
+                      Color(0xffBA1406),
+                    ],
+                  )),
+              alignment: Alignment.center,
+              child:Text('Proceed')
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    color: Color(0xff292929)),
+                child: Column(
+                  children: [
+                    detailsSection(heading: 'Booked at', value: 'Mass Monster'),
+                    detailsSection(heading: 'Workout', value: 'Gym Membership'),
+                    detailsSection(heading: 'Plan', value: 'WTF Active'),
+                    detailsSection(
+                        heading: 'Subscription Start date',
+                        value: '26 feb 2022'),
+                    detailsSection(
+                        heading: 'Subscription End date', value: '26 feb 2022'),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(right: 19, left: 18, bottom: 8, top: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    color: Color(0xff292929),
+                    border: Border.all(width: 1, color: Colors.white)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              hintText: 'Enter Coupon Code',
+                              hintStyle: TextStyle(
+                                  color: Color(0xffC4C4C4),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.all(0)),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Text('Apply',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600)),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+              Text(
+                "Payment Mode",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Radio(
+                              value: 1,
+                              groupValue: 'null',
+                              onChanged: (index) {}),
+                          Text('Full Payment',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w400))
+                        ],
+                      ),
+                      flex: 1,
+                    ),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Radio(
+                              value: 1,
+                              groupValue: 'null',
+                              onChanged: (index) {}),
+                          Text('Partial',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w400))
+                        ],
+                      ),
+                      flex: 1,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    color: AppConstants.bgColor),
+                child: Column(
+                  children: [
+                    Text(
+                        'Pay 2999 now and choose EMI date for your next payment',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400)),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 12, bottom: 12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          color: Color(0xffAF4949)),
+                      child: Row(
+                        children: [
+                          Text('Select EMI date',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400)),
+                          Spacer(),
+                          Icon(Icons.date_range)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+              Text(
+                "Payment Details",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xff438373),
+                        Color(0xff3E74B4),
+                      ],
+                    )),
+                child: Column(
+                  children: [
+                    amountLabel(label: 'Plan Price',value: '2999'),
+                    SizedBox(height:6),
+                    amountLabel(label: 'GST(0%)',value: '0'),
+                    Divider(thickness: 1,color: Colors.white,),
+                    SizedBox(height:6),
+                    amountLabel(label: 'Total Amount',value: '2999'),
+                  ],
+                ),
+              ),SizedBox(
+                height: 45,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget amountLabel({String label, String value}) {
+    return Row(
+      children: [
+        Text(label ?? '',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+        Spacer(),
+        Text('\u{20B9}${value ?? ''}')
+      ],
+    );
+  }
+
+  Widget detailsSection({String heading, String value}) {
+    return ListTile(
+        dense: true,
+        title: Text(
+          heading ?? '',
+          style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal),
+        ),
+        trailing: Text(value ?? '',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal)));
+  }
+
+  Widget oldUi() {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.PRIMARY_COLOR,
@@ -403,14 +638,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           width: 15,
                         ),
                         Text(
-                          "${Helper.stringForDatetime2(gymStore
-                              .selectedStartingDate.add(
-                            Duration(
-                              days: int.tryParse(
-                                gymStore.selectedGymPlan.duration,
-                              ),
-                            ),
-                          ).toIso8601String())}",
+                          "${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
+                                Duration(
+                                  days: int.tryParse(
+                                    gymStore.selectedGymPlan.duration,
+                                  ),
+                                ),
+                              ).toIso8601String())}",
                           style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,
@@ -491,32 +725,32 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 if (gymStore.selectedGymPlan.planPrice != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
-                    store.chosenOffer != null
-                        ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6.0,
-                        vertical: 12.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 18.0,
-                          ),
-                          UIHelper.horizontalSpace(8.0),
-                          Text(
-                            'Coupon Code Applied',
-                            style: TextStyle(
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                        : Container(
-                      padding: const EdgeInsets.all(10.0),
-                    ),
+                        store.chosenOffer != null
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6.0,
+                                  vertical: 12.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                      size: 18.0,
+                                    ),
+                                    UIHelper.horizontalSpace(8.0),
+                                    Text(
+                                      'Coupon Code Applied',
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                padding: const EdgeInsets.all(10.0),
+                              ),
                   ),
                 SizedBox(
                   height: 20,
@@ -604,19 +838,18 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) =>
-                              AlertDialog(
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('CGST 9%'),
-                                    Text('SGST 9%'),
-                                    Text(
-                                        'Tax acknowledgement will be emailed to you after subscription.'),
-                                  ],
-                                ),
-                              ),
+                          builder: (context) => AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('CGST 9%'),
+                                Text('SGST 9%'),
+                                Text(
+                                    'Tax acknowledgement will be emailed to you after subscription.'),
+                              ],
+                            ),
+                          ),
                         );
                         // FlashHelper.informationBar(context,
                         //     message:
@@ -829,16 +1062,16 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     body["type"] = 'regular';
     body["slot_id"] = '';
     body["addon"] = "";
-    body["start_date"] = Helper.stringForDatetime3(gymStore.selectedStartingDate.toIso8601String().trim());
+    body["start_date"] = Helper.stringForDatetime3(
+        gymStore.selectedStartingDate.toIso8601String().trim());
     body["expire_date"] =
         Helper.stringForDatetime3(gymStore.selectedStartingDate
-            .add(
-          Duration(
-            days:
-            int.tryParse(gymStore.selectedGymPlan.duration),
-          ),
-        )
-            .toIso8601String())
+                .add(
+                  Duration(
+                    days: int.tryParse(gymStore.selectedGymPlan.duration),
+                  ),
+                )
+                .toIso8601String())
             .trim();
     body["plan_id"] = gymStore.selectedGymPlan.uid;
     body["isWhatsapp"] = !_isChecked;
