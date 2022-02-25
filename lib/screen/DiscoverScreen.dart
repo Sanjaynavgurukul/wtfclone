@@ -133,6 +133,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     store.setGymTypes(data: null);
     super.dispose();
   }
+
 }
 
 class SearchBar extends StatefulWidget {
@@ -256,6 +257,7 @@ class GymCard extends StatelessWidget {
   }) : super(key: key);
 
   final GymData item;
+
 
   @override
   Widget build(BuildContext context) {
@@ -509,19 +511,34 @@ class GymCard extends StatelessWidget {
                     fontSize: 18,
                     fontStyle: FontStyle.normal,
                     color: Color(0XFFE2B411))),
-            trailing: Container(
-              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xff490000),
-                      Color(0xffBA1406),
-                    ],
-                  )),
-              child: Text("Book Now"),
+            trailing: InkWell(
+              onTap: (){
+                context.read<GymStore>().getGymDetails(
+                  context: context,
+                  gymId: item.userId,
+                );
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                    builder: (_) => BuyMemberShipPage(
+                      gymId: item.userId,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xff490000),
+                        Color(0xffBA1406),
+                      ],
+                    )),
+                child: Text("Book Now"),
+              ),
             ),
           ),
           SizedBox(

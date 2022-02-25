@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -12,8 +14,10 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/screen/event/EventDetails.dart';
 import 'package:wtf/widget/BenefitsSection.dart';
+import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/processing_dialog.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -29,11 +33,460 @@ class BuyMemberShipPage extends StatefulWidget {
 }
 
 class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
+  // Local Variables :D
+  bool show = false;
+  bool scrollOrNot = true;
+  final bool isPreview = false;
   GymStore gymStore;
+
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    gymStore.setGymDetails(data: null);
+  }
 
   @override
   Widget build(BuildContext context) {
-    gymStore = context.watch<GymStore>();
+    return Scaffold(
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 16,right: 16,top: 6,bottom: 6),
+        constraints: BoxConstraints(
+          minHeight: 54,maxHeight: 60
+        ),
+        child: Row(
+            children: [
+              Expanded(child: Container(
+                  padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xff490000),
+                          Color(0xffBA1406),
+                        ],
+                      )),
+                alignment: Alignment.center,
+                child:Text('Buy Membership')
+              ),),SizedBox(width:12),
+              Expanded(child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  border:Border.all(width:2,color: AppConstants.tabBg)
+                ),
+                  alignment: Alignment.center,
+                  child:Text('Book Free Trial',style:TextStyle(color:AppConstants.whitish))
+              ),),
+            ],
+        ),
+      ),
+      body: Consumer<GymStore>(
+        builder: (context, gymStore, child) => gymStore.selectedGymDetail ==
+                null
+            ? LoadingWithBackground()
+            : gymStore.selectedGymDetail.status
+                ? RefreshIndicator(
+                    onRefresh: () async {
+                      await context.read<GymStore>().getGymDetails(
+                            context: context,
+                            gymId: widget.gymId,
+                          );
+                    },
+                    color: AppConstants.primaryColor,
+                    backgroundColor: Colors.white,
+                    child: CustomScrollView(
+                      physics: isPreview == true
+                          ? const NeverScrollableScrollPhysics()
+                          : null,
+                      controller: _scrollController,
+                      slivers: <Widget>[
+                        SliverAppBar(
+                          centerTitle: false,
+                          backgroundColor: AppConstants.primaryColor,
+                          leading: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              margin: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1,
+                                    color: Colors.white.withOpacity(0.3)),
+                                shape: BoxShape.circle,
+                                // color: glassyColor.withOpacity(0.3)
+                              ),
+                              child: Icon(Icons.close,
+                                  color: Colors.white.withOpacity(0.3)),
+                            ),
+                          ),
+                          pinned: false,
+                          expandedHeight: 300.0,
+                          bottom: PreferredSize(
+                            preferredSize: const Size.fromHeight(50.0),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    bottom: 14, right: 16, top: 16),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        begin: FractionalOffset.topCenter,
+                                        end: FractionalOffset.bottomCenter,
+                                        colors: [
+                                      Colors.transparent,
+                                      Color(0xff272727)
+                                    ])),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    RichText(
+                                      text: TextSpan(
+                                        text: '',
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: const <WidgetSpan>[
+                                          WidgetSpan(
+                                              child: Icon(
+                                            Icons.directions_car,
+                                            size: 18,
+                                            color: AppConstants.green,
+                                          )),
+                                          WidgetSpan(
+                                              child: Text(
+                                                  ' 15 Mins away | 1 Km',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold))),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: 8,
+                                          bottom: 8,
+                                          left: 12,
+                                          right: 12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4)),
+                                        color: Color(0xffBA1406),
+                                      ),
+                                      child: Text('Direction',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontStyle: FontStyle.normal)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: MyFlexiableAppBar(
+                              images: gymStore.selectedGymDetail.data.gallery,
+                              color: AppConstants.primaryColor,
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                            child: Padding(
+                          padding: EdgeInsets.only(left: 16, right: 16,bottom: 70),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              //Name and rating section :D
+                              ListTile(
+                                contentPadding: EdgeInsets.all(0),
+                                title: Text('Mass Monster',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        fontStyle: FontStyle.normal)),
+                                subtitle: Text('Noida Sector 8, C Bloc'),
+                                trailing: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Rating',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600)),
+                                    SizedBox(height: 6),
+                                    RatingBar(
+                                        initialRating: 4,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 16,
+                                        ratingWidget: RatingWidget(
+                                          full: Icon(
+                                            Icons.star,
+                                            color: AppConstants.boxBorderColor,
+                                          ),
+                                          half: Icon(
+                                            Icons.star_half,
+                                            color: AppConstants.boxBorderColor,
+                                          ),
+                                          empty: Icon(
+                                            Icons.star_border,
+                                            color: AppConstants.white,
+                                          ),
+                                        ),
+                                        itemPadding: EdgeInsets.symmetric(
+                                            horizontal: 0.0),
+                                        onRatingUpdate: (rating) {
+                                          print(rating);
+                                        }),
+                                  ],
+                                ),
+                              ),
+                              //Divider :D
+                              Divider(
+                                thickness: 2,
+                                color: AppConstants.headingTextColor,
+                              ),
+                              //Description :D
+                              ListTile(
+                                contentPadding: EdgeInsets.all(0),
+                                title: Text('Description',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.normal)),
+                                subtitle: Text(
+                                    '\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis enim lacus curabitur massa sed. At maecenas nibh aliquet ipsum gravida massa turpis. Id duis consequat urna, pulvinar erat fusce sed lacus, eu. Ornare ullamcorper dictum diam ipsum volutpat dignissim purus, varius at. A, commodo amet sed mattis augue luctus quam.'),
+                              ),
+                              SizedBox(height: 24),
+                              //Facility Section :D
+                              Text('Facilities',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.normal)),
+                              SizedBox(height: 12),
+                              //Facility List :D
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 12, bottom: 12, left: 8, right: 8),
+                                decoration: BoxDecoration(
+                                    color: AppConstants.bgColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8))),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: facilityItems(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 24),
+                              Text('Why to choose WTF',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.normal)),
+                              SizedBox(height: 12),
+                              GridView.count(
+                                primary: false,
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.all(20),
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                physics: NeverScrollableScrollPhysics(),
+                                crossAxisCount: 2,
+                                children: <Widget>[
+                                  whyWTF('Earn WTF rewards coin'),
+                                  whyWTF('Fully Vaccinated Staff'),
+                                  whyWTF('Track Fitness Journey'),
+                                  whyWTF('Pocket Friendly Membership'),
+                                  whyWTF('Free diet Support'),
+                                  whyWTF('Top Class Ambiance'),
+                                ],
+                              ),
+                              SizedBox(height: 24),
+                              Text('Train Live from Yout co_space',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.normal)),
+                              SizedBox(height: 12),
+                              Container(
+                                color: Color(0xff277B30),
+                                padding: EdgeInsets.all(8),
+                                child: Text('Starting only at 99',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white)),
+                              ),
+                              SizedBox(height: 16),
+                              //CoSpace section :D
+                              Container(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: coSpaceWidget(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 24),
+                              Text('Fun Session at GYM',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.normal)),
+                              SizedBox(height: 12),
+                              Container(
+                                color: Color(0xff27447B),
+                                padding: EdgeInsets.all(8),
+                                child: Text('Starting only at 99',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white)),
+                              ),
+                              SizedBox(height: 16),
+                              //CoSpace section :D
+                              Container(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: coSpaceWidget(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 12),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Gym not Found',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+      ),
+    );
+  }
+
+  Widget whyWTF(String label) {
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xff490000),
+              Color(0xffBA1406),
+            ],
+          )),
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/images/my_wtf.png',
+            width: 60,
+            height: 60,
+          ),
+          SizedBox(height: 18),
+          Text(
+            label,
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal),
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
+  }
+
+  //Facility List Widget :D
+  List<Widget> facilityItems() => FacilityModel.getList()
+      .map((item) => Container(
+            padding: EdgeInsets.only(left: 8, right: 8),
+            child: Column(
+              children: [
+                Image.asset(item.imagePath),
+                Text(
+                  item.label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                )
+              ],
+            ),
+          ))
+      .toList();
+
+  List<Widget> coSpaceWidget()=> CoSpaceModel.getList()
+      .map((item) => Container(
+    padding: EdgeInsets.only(left: 8, right: 8),
+    child: Column(
+      children: [
+        Container(
+          width: 118,
+            height: 76,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+                  color: Colors.transparent,
+                ),
+                child: Image.network(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                  height: double.infinity,
+                  loadingBuilder: (context, _, chunk) => chunk == null
+                      ? _
+                      : RectangleShimmering(
+                    width: double.infinity,
+                    radius: 16.0,
+                  ),
+                ),
+                // height: 350.0,
+              ),
+            ),
+        ),
+        SizedBox(height:6),
+        InkWell(
+          onTap:(){},
+          child: Container(
+            padding: EdgeInsets.only(left:14,right:14,bottom: 6,top: 6),
+            decoration: BoxDecoration(
+              color: AppConstants.boxBorderColor,
+              borderRadius:BorderRadius.all(Radius.circular(8))
+            ),
+            child: Text('Book now'),
+          ),
+        )
+      ],
+    ),
+  ))
+      .toList();
+
+  Widget abc() {
     return Scaffold(
       backgroundColor: AppColors.PRIMARY_COLOR,
       body: SafeArea(
@@ -605,8 +1058,9 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                         gymId: widget.gymId,
                                                       )
                                                     : SlideButton(
-                                                        text:"Buy your membership",
-                                                        onTap:() async {
+                                                        text:
+                                                            "Buy your membership",
+                                                        onTap: () async {
                                                           if (gymStore.activeSubscriptions ==
                                                                   null ||
                                                               (gymStore.activeSubscriptions !=
@@ -1124,8 +1578,10 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                                                     .gymId,
                                                               )
                                                             : SlideButton(
-                                                                text:"Buy your membership",
-                                                                onTap:() async {
+                                                                text:
+                                                                    "Buy your membership",
+                                                                onTap:
+                                                                    () async {
                                                                   if (gymStore.activeSubscriptions ==
                                                                           null ||
                                                                       (gymStore.activeSubscriptions !=
@@ -1244,13 +1700,105 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
     );
   }
 
-  dispose() {
-    super.dispose();
-    gymStore.setGymDetails(data: null);
-  }
-
   Widget whyChooseWTFItems(String text, String icon) {
     return TextIconCard(text: text, icon: icon);
+  }
+}
+
+//Facility Model
+class FacilityModel {
+  String label;
+  String imagePath;
+
+  FacilityModel({this.label, this.imagePath});
+
+  static List<FacilityModel> getList() => [
+        FacilityModel(
+            label: 'Modern\nEqipments',
+            imagePath: 'assets/images/active_subscription.png'),
+        FacilityModel(
+            label: 'Modern\nEqipments',
+            imagePath: 'assets/images/active_subscription.png'),
+        FacilityModel(
+            label: 'Modern\nEqipments',
+            imagePath: 'assets/images/active_subscription.png'),
+        FacilityModel(
+            label: 'Modern\nEqipments',
+            imagePath: 'assets/images/active_subscription.png'),
+        FacilityModel(
+            label: 'Modern\nEqipments',
+            imagePath: 'assets/images/active_subscription.png'),
+      ];
+}
+
+class CoSpaceModel{
+  String imageUrl;
+  CoSpaceModel();
+  static List<CoSpaceModel> getList()=>[CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel()];
+}
+
+class MyFlexiableAppBar extends StatelessWidget {
+  final List<Gallery> images;
+  final Color color;
+
+  final double appBarHeight = 66.0;
+
+  const MyFlexiableAppBar({this.images, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+
+    return Container(
+      padding: EdgeInsets.only(top: statusBarHeight),
+      height: statusBarHeight + appBarHeight,
+      color: color,
+      child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: CarouselSlider(
+            options: CarouselOptions(
+              height: 300.0,
+              viewportFraction: 1,
+              enlargeCenterPage: false,
+              autoPlay: true,
+              pageSnapping: true,
+              autoPlayInterval: Duration(seconds: 3),
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+            ),
+            items: images.map(
+              (i) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(0.0),
+                  child: Builder(
+                    builder: (BuildContext context) {
+                      if (i.images == null) {
+                        return Center(
+                          child: Text("No image data"),
+                        );
+                      }
+                      return Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(0))),
+                        child: Image.network(
+                          i.images,
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          height: double.infinity,
+                          loadingBuilder: (context, _, chunk) => chunk == null
+                              ? _
+                              : RectangleShimmering(
+                                  width: double.infinity,
+                                  height: 180.0,
+                                ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ).toList()),
+      ),
+    );
   }
 }
 
@@ -1867,6 +2415,7 @@ class GymLiveWidget extends StatelessWidget {
 
 class AddonCard extends StatelessWidget {
   final AddOnData data;
+
   const AddonCard({Key key, this.data}) : super(key: key);
 
   @override
