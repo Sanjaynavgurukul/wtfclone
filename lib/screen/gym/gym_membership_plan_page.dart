@@ -5,7 +5,11 @@ import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/model/gym_plan_model.dart';
+import 'package:wtf/screen/gym/arguments/plan_page_argument.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -36,70 +40,130 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   @override
   Widget build(BuildContext context) {
     store = context.read<GymStore>();
-    return oldUi();
+    return Scaffold(
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppConstants.bgColor,
+        centerTitle: false,
+        title: Text('Choose Your Plan'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          store.getGymPlans(context: context);
+        },
+        backgroundColor: Colors.white,
+        child: Consumer<GymStore>(
+          builder: (context, store, child) => store.selectedGymPlans != null
+              ? store.selectedGymPlans.data != null &&
+                      store.selectedGymPlans.data.isNotEmpty
+                  ? Container(
+                      child: ListView(
+                        children: [
+                          ListTile(
+                              title: Text(
+                                  'One Membership for all your fitness need')),
+                          ListView.builder(
+                              itemCount: store.selectedGymPlans.data.length,
+                              shrinkWrap: true,
+                              padding: EdgeInsets.only(
+                                  left: 32, right: 32, top: 18, bottom: 54),
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                GymPlanData data =
+                                    store.selectedGymPlans.data[index];
+                                bool r = index == 1;
+                                PlanColor color =
+                                    PlanColor.getColorList()[index];
+                                return prizeItem(
+                                    recomended: r,
+                                    color: color,
+                                    data: data,
+                                    index: index);
+                              })
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        'No Plans found',
+                      ),
+                    )
+              : Loading(),
+        ),
+      ),
+    );
   }
 
-  Widget prizeItem({bool recomended = false}) {
-    return Container(
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(top: recomended ? 16 : 0, bottom: 23),
-            padding: EdgeInsets.only(
-                left: 12, right: 12, top: recomended ? 24 : 12, bottom: 12),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xff6FAF81),
-                    Color(0xff598966),
-                  ],
-                )),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('PLAN 1'),
-                ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.all(0),
-                  title: Row(
-                    children: [
-                      Image.asset(
-                        'assets/logo/wtf_light.png',
-                        width: 40,
-                        height: 40,
+
+  Widget prizeItem(
+      {bool recomended = false, PlanColor color, GymPlanData data, int index}) {
+    return InkWell(
+      onTap: () {
+        onPressBook(index);
+      },
+      child: Container(
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(top: recomended ? 16 : 0, bottom: 23),
+              padding: EdgeInsets.only(
+                  left: 12, right: 12, top: recomended ? 24 : 12, bottom: 12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [color.leftColor, color.rightColor],
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('PLAN ${index + 1}'),
+                  ListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.all(0),
+                    title: Row(
+                      children: [
+                        Image.asset(
+                          'assets/logo/wtf_light.png',
+                          width: 40,
+                          height: 40,
+                        ),
+                        // SizedBox(
+                        //   width: 6,
+                        // ),
+                        // Text('${data.planName ?? ''}',
+                        //     maxLines: 1,
+                        //     style: TextStyle(
+                        //         color: Colors.white,
+                        //         fontSize: 22,
+                        //         fontWeight: FontWeight.w800))
+                      ],
+                    ),
+                    subtitle: Text('${data.planName ?? ''}',
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800)),
+                    trailing: Container(
+                      padding: EdgeInsets.only(
+                          top: 8, bottom: 8, left: 12, right: 12),
+                      decoration: BoxDecoration(
+                          color: color.leftColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: Text(
+                        '\u{20B9}${data.planPrice ?? 0}',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontStyle: FontStyle.normal),
                       ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text('Consistent',
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800))
-                    ],
-                  ),
-                  trailing: Container(
-                    padding:
-                        EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-                    decoration: BoxDecoration(
-                        color: Color(0xff6FAF81),
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Text(
-                      '\u{20B9}999',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontStyle: FontStyle.normal),
                     ),
                   ),
-                ),
-                ListTile(
+                  ListTile(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
                     title: Text(
@@ -107,7 +171,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                       style: TextStyle(fontSize: 12),
                     ),
                     subtitle: Padding(
-                      padding: EdgeInsets.only(left: 12,top: 12,bottom: 16),
+                      padding: EdgeInsets.only(left: 12, top: 12, bottom: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -116,30 +180,59 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                           Text('• Access to free diet plans'),
                         ],
                       ),
-                    ),)
-              ],
-            ),
-          ),
-          if (recomended)
-            Container(
-              padding: EdgeInsets.only(left: 60, top: 6, bottom: 6, right: 12),
-              constraints: BoxConstraints(minWidth: 134),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(6),
-                      bottomRight: Radius.circular(6))),
-              child: Text(
-                'Recommended',
-                style: TextStyle(
-                    color: AppConstants.black,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal),
+                    ),
+                  )
+                ],
               ),
             ),
-        ],
+            if (recomended)
+              Container(
+                padding:
+                    EdgeInsets.only(left: 60, top: 6, bottom: 6, right: 12),
+                constraints: BoxConstraints(minWidth: 134),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(6),
+                        bottomRight: Radius.circular(6))),
+                child: Text(
+                  'Recommended',
+                  style: TextStyle(
+                      color: AppConstants.black,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal),
+                ),
+              ),
+          ],
+        ),
       ),
     );
+  }
+
+  void onPressBook(int index) async {
+    print('press called -----');
+    context.read<GymStore>().selectedStartingDate = null;
+    // int days = e.planName ==
+    //         'Half yearly'
+    //     ? 6 * 30 + 3
+    //     : e.planName == 'Yearly'
+    //         ? 365
+    //         : 30;
+    setState(() {
+      context.read<GymStore>().selectedGymPlan =
+          store.selectedGymPlans.data[index];
+    });
+
+    // NavigationService.navigateTo(Routes.searchScreen);
+    NavigationService.pushName(Routes.buySubscriptionScreen,
+        argument: PlanPageArgument(planColor: PlanColor.getColorList()[index]));
+
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) =>
+    //         BuySubscriptionScreen(),
+    //   ),
+    // );
   }
 
   Widget oldUi() {
@@ -353,7 +446,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
     );
   }
 
-  Widget newUi(){
+  Widget newUi() {
     return Scaffold(
       backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
@@ -374,7 +467,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                   itemCount: 4,
                   shrinkWrap: true,
                   padding:
-                  EdgeInsets.only(left: 32, right: 32, top: 54, bottom: 54),
+                      EdgeInsets.only(left: 32, right: 32, top: 54, bottom: 54),
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     bool r = index == 1;
@@ -392,4 +485,18 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
     store.selectedGymPlans = null;
     super.dispose();
   }
+}
+
+class PlanColor {
+  Color leftColor;
+  Color rightColor;
+
+  PlanColor({this.leftColor, this.rightColor});
+
+  static List<PlanColor> getColorList() => [
+        PlanColor(leftColor: Color(0xff6FAF81), rightColor: Color(0xff598966)),
+        PlanColor(leftColor: Color(0xffB9789B), rightColor: Color(0xff89506D)),
+        PlanColor(leftColor: Color(0xff965651), rightColor: Color(0xffB43B3B)),
+        PlanColor(leftColor: Color(0xff438373), rightColor: Color(0xff3E74B4)),
+      ];
 }
