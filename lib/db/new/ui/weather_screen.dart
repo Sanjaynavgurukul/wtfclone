@@ -42,8 +42,8 @@ class WeatherScreenState extends State<WeatherScreen> {
         itemCount: data.data.length,
           itemBuilder: (context,index){
             GymData s = data.data[index];
-            if(s.uid == 'S1WMD3RbeE0t4'){
-              return Center(child:Text(s.gymName ?? ''));
+            if(s.gym_id == 'S1WMD3RbeE0t4'){
+              return Center(child:Text(s.gym_name ?? ''));
             }else return Container();
       })
     );

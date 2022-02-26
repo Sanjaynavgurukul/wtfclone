@@ -838,7 +838,8 @@ class RestDatasource {
     return complete;
   }
 
-  Future<GymTypes> getDiscoverNow({String type, String lat, String lng}) async {
+  //TODO Cehck This method Later :D
+  Future<GymTypes> getDiscoverNows({String type, String lat, String lng}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -849,6 +850,25 @@ class RestDatasource {
         .get(BASE_URL + Api.getGymTypes(type, lat, lng), headers: mapHeader)
         .then((dynamic res) {
       print("response getDiscoverNow : " + res.toString());
+      GymTypes model = res != null && res['status']
+          ? GymTypes.fromJson(res)
+          : GymTypes(
+              data: [],
+            );
+      return model;
+    });
+  }
+  Future<GymTypes> getDiscoverNow({String type, String lat, String lng}) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    print("get Gym types by id 4");
+    return _netUtil
+        .get(BASE_URL + Api.getNearByGym(lat, lng), headers: mapHeader)
+        .then((dynamic res) {
+      print("response get nearBy Gym : " + res.toString());
       GymTypes model = res != null && res['status']
           ? GymTypes.fromJson(res)
           : GymTypes(

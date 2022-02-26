@@ -275,7 +275,8 @@ class GymCard extends StatelessWidget {
             child: Stack(
               children: [
                 GradientImageWidget(
-                  network: item.coverImage,
+                  //TODO Gym Cover image missing
+                  network: 'https://media.istockphoto.com/photos/gym-background-fitness-weight-equipment-on-empty-dark-floor-picture-id1213615970?k=20&m=1213615970&s=612x612&w=0&h=S2Ny5JNrAlcpZ_0mt76CKAwARqvJN5glvHpB9fD3DA0=',
                   gragientColor: [
                     Colors.transparent,
                     Color(0xff272727)
@@ -396,7 +397,7 @@ class GymCard extends StatelessWidget {
                 //       ),
                 //     ),
                 //   ),
-                Container(
+               if((item.text1 ?? '').isNotEmpty || (item.text2??'').isNotEmpty) Container(
                   alignment: Alignment.topRight,
                   child: Container(
                     padding: EdgeInsets.only(left: 12,right: 12,top: 6,bottom: 6),
@@ -409,22 +410,26 @@ class GymCard extends StatelessWidget {
                     child: Wrap(
                       direction: Axis.vertical,
                       children: <Widget>[
-                        Row(
-                          children: [
-                            Text('Live Class ',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,color: Colors.black)),
-                            Container(
-                              width: 12,height: 12,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                                  border: Border.all(color: Color(0xffBA1406),width: 3)
-                              ),
-                            )
-                          ],
-                        ),
-                        Text('Available @ 99',
+                        // Row(
+                        //   children: [
+                        //     Text('Live Class ',
+                        //         style: TextStyle(
+                        //             fontSize: 14,
+                        //             fontWeight: FontWeight.w400,color: Colors.black)),
+                        //     Container(
+                        //       width: 12,height: 12,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.all(Radius.circular(100)),
+                        //           border: Border.all(color: Color(0xffBA1406),width: 3)
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        if((item.text1??'').isNotEmpty)Text('${item.text1}',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,color: Colors.black)),
+                        if((item.text2??'').isNotEmpty)Text('${item.text2}',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,color: Colors.black))
@@ -435,19 +440,19 @@ class GymCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: ListTile(
-                    title: Text(item.gymName ?? '',
+                    title: Text(item.gym_name ?? '',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                             fontStyle: FontStyle.normal)),
-                    subtitle: Text(item.address1),
+                    subtitle: Text(item.address1 +' ' +item.address2),
                     trailing: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         RatingBar(
-                            initialRating: 3.5,
+                            initialRating: (item.rating??0).toDouble(),
                             direction: Axis.horizontal,
                             allowHalfRating: true,
                             itemCount: 5,
@@ -474,7 +479,7 @@ class GymCard extends StatelessWidget {
                           text: TextSpan(
                             text: '',
                             style: DefaultTextStyle.of(context).style,
-                            children: const <WidgetSpan>[
+                            children:  <WidgetSpan>[
                               WidgetSpan(
                                   child: Icon(
                                 Icons.directions_car,
@@ -482,15 +487,10 @@ class GymCard extends StatelessWidget {
                                 color: AppConstants.green,
                               )),
                               WidgetSpan(
-                                  child: Text(' 15 Mins away | ',
+                                  child: Text(' ${item.duration_text??''}',
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400))),
-                              WidgetSpan(
-                                  child: Text('1 Km',
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400)))
                             ],
                           ),
                         )
@@ -498,14 +498,13 @@ class GymCard extends StatelessWidget {
                     ),
                   ),
                 )
-
               ],
             ),
           ),
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.only(left: 12, right: 12),
-            title: Text('\u{20B9}1500 for 3 months',
+            title: Text('\u{20B9}${item.plan_text??''}',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18,
@@ -515,12 +514,12 @@ class GymCard extends StatelessWidget {
               onTap: (){
                 context.read<GymStore>().getGymDetails(
                   context: context,
-                  gymId: item.userId,
+                  gymId: item.gym_id,
                 );
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (_) => BuyMemberShipPage(
-                      gymId: item.userId,
+                      gymId: item.gym_id,
                     ),
                   ),
                 );
@@ -548,6 +547,7 @@ class GymCard extends StatelessWidget {
       ),
     );
   }
+
 
   // Widget abc(BuildContext context) {
   //   return InkWell(
