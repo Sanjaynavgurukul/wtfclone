@@ -114,7 +114,15 @@ class GymData {
   String coverImage;
   String dateAdded;
   String lateUpdated;
-  int rating;
+
+  // //New Variables :D
+  // String text1;
+  // String text2;
+  double rating;
+  // String duration_text;
+  // String duration;
+  // String distanct_text;
+  // String distance;
 
   GymData({
     this.uid,
@@ -138,8 +146,16 @@ class GymData {
     this.lateUpdated,
     this.coverImage,
     this.type,
-    this.rating,
     this.status,
+
+    // //New variables
+    // this.text1,
+    // this.text2,
+    // this.rating,
+    // this.duration_text,
+    // this.duration,
+    // this.distanct_text,
+    // this.distance,
   });
 
   GymData.fromJson(Map<String, dynamic> json) {
@@ -164,10 +180,18 @@ class GymData {
     dateAdded = json['date_added'];
     coverImage = json['cover_image'];
     lateUpdated = json['late_updated'] != null ? json['late_updated'] : '';
-    rating = int.tryParse(json['rating'].toString()) ?? 0;
     type = json.containsKey('type') && json['type'].isNotEmpty
         ? json['type']
         : 'Gym';
+    //
+    // //New Variables :D
+    // text1 = json['text1'] ?? '';
+    // text2 = json['text2'] ?? '';
+    // rating = json['rating'] ?? 0;
+    // duration_text = json['duration_text'] ?? '';
+    // duration = json['duration'] ?? '';
+    // distanct_text = json['distanct_text'] ?? '';
+    // distance = json['distance'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -193,6 +217,15 @@ class GymData {
     data['date_added'] = this.dateAdded;
     data['late_updated'] = this.lateUpdated;
     data['cover_image'] = this.coverImage;
+
+    // //New Variables :D
+    // data['text1'] = this.rating;
+    // data['text2'] = this.text2;
+    // data['rating'] = this.rating;
+    // data['duration_text'] = this.duration_text;
+    // data['duration'] = this.duration;
+    // data['distanct_text'] = this.distanct_text;
+    // data['distance'] = this.distance;
     return data;
   }
 }

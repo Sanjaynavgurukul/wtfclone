@@ -6,6 +6,7 @@ import 'package:wtf/db/new/model/main_model.dart';
 import 'package:wtf/db/new/model/sys_model.dart';
 import 'package:wtf/db/new/model/weather_response_model.dart';
 import 'package:wtf/db/new/model/wind_model.dart';
+import 'package:wtf/model/gym_model.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
       body: StreamBuilder(
           stream: weatherBloc.weather,
-          builder: (context, AsyncSnapshot<WeatherResponse> snapshot) {
+          builder: (context, AsyncSnapshot<GymModel> snapshot) {
             print('rebuild data');
             if (snapshot.hasData) {
               return _buildWeatherScreen(snapshot.data);
@@ -31,19 +32,20 @@ class WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  Container _buildWeatherScreen(WeatherResponse data) {
+  // GymData d(List<GymData> df){
+  //   df.where((element) => element.uid == 'S1WMD3RbeE0t4');
+
+  Container _buildWeatherScreen(GymModel data) {
     return Container(
       padding: const EdgeInsets.all(17.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildTitle(data.name),
-          _buildCoord(data.coord),
-          _buildMain(data.main),
-          _buildWindInfo(data.wind),
-          _buildSys(data.sys),
-        ],
-      ),
+      child: ListView.builder(
+        itemCount: data.data.length,
+          itemBuilder: (context,index){
+            GymData s = data.data[index];
+            if(s.uid == 'S1WMD3RbeE0t4'){
+              return Center(child:Text(s.gymName ?? ''));
+            }else return Container();
+      })
     );
   }
 

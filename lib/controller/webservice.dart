@@ -68,7 +68,7 @@ class RestDatasource {
   Future<GymModel> getGym({String lat, String lng}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
-
+    print('Curent lat and long --- ' + lat + " " + lng);
     mapHeader["Authorization"] = "Bearer " + token;
     String url = BASE_URL + Api.getGyms(lat, lng);
     log('URL: $url');
