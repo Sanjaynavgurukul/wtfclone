@@ -16,6 +16,7 @@ import 'package:wtf/controller/dynamic_links.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/controller/user_store.dart';
+import 'package:wtf/db/new/ab/view/chuck_categories_view.dart';
 import 'package:wtf/db/new/ui/weather_screen.dart';
 import 'package:wtf/helper/firebase_cloud_messaging_wapper.dart';
 import 'package:wtf/helper/network_utils.dart';
@@ -198,7 +199,7 @@ class _MyAppState extends State<MyApp>
           ),
           themeMode: ThemeMode.dark,
           initialRoute: Routes.loader,
-          // home: WeatherScreen(),
+          // home: GetChuckCategories(),
           // Routes.splash,
           navigatorKey: NavigationService.navigatorKey,
           onGenerateRoute: RouteGenerator.generateRoute,

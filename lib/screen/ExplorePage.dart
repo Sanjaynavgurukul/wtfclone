@@ -8,7 +8,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:wtf/controller/gym_store.dart';
-import 'package:wtf/db/new/ui/weather_screen.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -128,11 +127,11 @@ class _ExplorePageState extends State<ExplorePage> {
                                   type: 'studio',
                                 );
                           }
-                          // NavigationService.navigateTo(Routes.discoverNow);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => WeatherScreen()),
-                          );
+                          NavigationService.navigateTo(Routes.discoverNow);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => WeatherScreen()),
+                          // );
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.46,
