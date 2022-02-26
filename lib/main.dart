@@ -16,6 +16,7 @@ import 'package:wtf/controller/dynamic_links.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/controller/user_store.dart';
+import 'package:wtf/db/new/ui/weather_screen.dart';
 import 'package:wtf/helper/firebase_cloud_messaging_wapper.dart';
 import 'package:wtf/helper/network_utils.dart';
 import 'package:wtf/helper/strings.dart';
@@ -24,6 +25,7 @@ import 'package:wtf/screen/calculators/body_calculator/bodyFat_state.dart';
 import 'package:wtf/screen/calculators/calories_counter/calorie_state.dart';
 import 'package:wtf/screen/landing/landing_screen.dart';
 
+import 'db/demo_screen.dart';
 import 'helper/AppPrefs.dart';
 import 'helper/NotificationHelper.dart';
 import 'helper/app_constants.dart';
@@ -196,7 +198,7 @@ class _MyAppState extends State<MyApp>
           ),
           themeMode: ThemeMode.dark,
           initialRoute: Routes.loader,
-          // home: LandingScreen(),
+          // home: WeatherScreen(),
           // Routes.splash,
           navigatorKey: NavigationService.navigatorKey,
           onGenerateRoute: RouteGenerator.generateRoute,

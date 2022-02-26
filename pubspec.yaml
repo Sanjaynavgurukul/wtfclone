@@ -103,6 +103,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   blur: ^3.0.0
   flutter_rating_bar: ^4.0.0
+  rxdart: any
 
 dev_dependencies:
   flutter_test:

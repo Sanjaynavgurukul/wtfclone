@@ -25,7 +25,7 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   GymStore store;
-
+  //
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -42,13 +42,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: AppConstants.primaryColor,
+        backgroundColor: AppConstants.bgColor,
       ),
       body: Column(
         children: [
           //Search Bar :D
           Container(
-            color: AppConstants.primaryColor,
+            color: AppConstants.bgColor,
             padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: SearchBar(),
           ),
