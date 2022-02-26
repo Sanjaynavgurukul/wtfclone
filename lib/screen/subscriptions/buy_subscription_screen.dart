@@ -61,7 +61,23 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
         padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
         constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
         child: InkWell(
-          onTap: () async {},
+          onTap: () async {
+            if (gymStore.selectedStartingDate != null) {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => BookingSummaryScreen(),
+                ),
+              );
+            } else {
+              Toast(
+                text: 'Please select a date first',
+                textColor: Colors.red,
+                bgColor: Colors.white,
+                textFontSize: 14.0,
+              ).showDialog(context);
+            }
+          },
           child: Container(
               padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
               decoration: BoxDecoration(
