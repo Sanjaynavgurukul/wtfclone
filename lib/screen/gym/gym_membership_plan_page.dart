@@ -71,7 +71,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                               itemBuilder: (context, index) {
                                 GymPlanData data =
                                     store.selectedGymPlans.data[index];
-                                bool r = index == 1;
+                                bool r = data.is_recomended == 1;
                                 PlanColor color =
                                     PlanColor.getColorList()[index];
                                 return prizeItem(
@@ -141,7 +141,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                         //         fontWeight: FontWeight.w800))
                       ],
                     ),
-                    subtitle: Text('${data.planName ?? ''}',
+                    subtitle: Text('${data.plan_name ?? ''}',
                         maxLines: 1,
                         style: TextStyle(
                             color: Colors.white,
@@ -154,7 +154,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                           color: color.leftColor,
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: Text(
-                        '\u{20B9}${data.planPrice ?? 0}',
+                        '\u{20B9}${data.price ?? '0'}',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -327,7 +327,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                                             UIHelper.verticalSpace(20.0),
                                             Text(
                                               store.selectedGymPlans.data[index]
-                                                  .planName,
+                                                  .plan_name,
                                               style: TextStyle(
                                                 color:
                                                     AppConstants.offPinkColor,
@@ -337,7 +337,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                                             ),
                                             UIHelper.verticalSpace(6.0),
                                             Text(
-                                              '₹ ${store.selectedGymPlans.data[index].planPrice}',
+                                              '₹ ${store.selectedGymPlans.data[index].price}',
                                               style: TextStyle(
                                                 color:
                                                     AppConstants.offPinkColor,

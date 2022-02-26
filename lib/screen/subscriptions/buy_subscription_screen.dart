@@ -204,7 +204,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                         ],
                       ),
                       subtitle: Text(
-                          '${gymStore.selectedGymPlan.planName ?? ''}',
+                          '${gymStore.selectedGymPlan.plan_name ?? ''}',
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
@@ -602,7 +602,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(gymStore.selectedGymPlan.planName,
+                                  Text(gymStore.selectedGymPlan.plan_name,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 40,
@@ -625,7 +625,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '\u20B9 ${gymStore.selectedGymPlan.planPrice}',
+                                    '\u20B9 ${gymStore.selectedGymPlan.price}',
                                     style: TextStyle(
                                       color: AppConstants.red,
                                       fontSize: 30,

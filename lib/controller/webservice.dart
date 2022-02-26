@@ -1115,6 +1115,7 @@ class RestDatasource {
   Future<GymPlanModel> getGymPlans({BuildContext context, String gymId}) async {
     String token = locator<AppPrefs>().token.getValue();
     String url = BASE_URL + Api.GET_GYM_PLAN;
+    print('Apli String --- ${url+gymId}');
     var headers = {
       'content-type': 'application/json',
       'Authorization': 'Bearer $token'

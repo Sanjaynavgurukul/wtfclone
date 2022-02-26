@@ -66,7 +66,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
     price = context.read<GymStore>().selectedSession != null
         ? int.tryParse(context.read<GymStore>().selectedSession.price)
         : context.read<GymStore>().selectedGymPlan != null
-            ? int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice)
+            ? int.tryParse(context.read<GymStore>().selectedGymPlan.price)
             : int.tryParse(context.read<GymStore>().selectedAddOnSlot.price) ??
                 0;
     if (context.read<GymStore>().chosenOffer != null) {
@@ -99,7 +99,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
     price = gymStore.selectedSession != null
         ? int.tryParse(gymStore.selectedSession.price)
         : gymStore.selectedGymPlan != null
-            ? int.tryParse(gymStore.selectedGymPlan.planPrice)
+            ? int.tryParse(gymStore.selectedGymPlan.price)
             : int.tryParse(gymStore.selectedAddOnSlot.price) ?? 0;
     if (gymStore.chosenOffer != null) {
       if (gymStore.chosenOffer.type == 'flat') {

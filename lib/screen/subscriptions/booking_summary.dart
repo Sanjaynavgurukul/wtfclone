@@ -75,25 +75,25 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             ? int.tryParse(context.read<GymStore>().selectedEventData.price)
             : couponValue;
       } else {
-        print('price: ${context.read<GymStore>().selectedGymPlan.planPrice}');
+        print('price: ${context.read<GymStore>().selectedGymPlan.price}');
         print('offer val: ${context.read<GymStore>().chosenOffer.value}');
         discountAmount =
-            (int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) *
+            (int.tryParse(context.read<GymStore>().selectedGymPlan.price) *
                     int.tryParse(context.read<GymStore>().chosenOffer.value) /
                     100)
                 .truncate();
       }
     }
     totalAmount =
-        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.price) -
             discountAmount;
     tax = (totalAmount *
             int.tryParse(
-                context.read<GymStore>().selectedGymPlan.taxPercentage) /
+                context.read<GymStore>().selectedGymPlan.tax_percentage) /
             100)
         .truncate();
     totalAmount = tax +
-        int.tryParse(context.read<GymStore>().selectedGymPlan.planPrice) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.price) -
         discountAmount;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) setState(() {});
@@ -569,7 +569,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           width: 15,
                         ),
                         Text(
-                          gymStore.selectedGymPlan.planName ?? '',
+                          gymStore.selectedGymPlan.plan_name ?? '',
                           style: TextStyle(
                             fontSize: 15,
                             // fontWeight: FontWeight.bold,
@@ -711,7 +711,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 SizedBox(
                   height: 12,
                 ),
-                if (gymStore.selectedGymPlan.planPrice != '0')
+                if (gymStore.selectedGymPlan.price != '0')
                   OfferSection(
                     onApplied: () {
                       setState(() {
@@ -722,7 +722,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       });
                     },
                   ),
-                if (gymStore.selectedGymPlan.planPrice != '0')
+                if (gymStore.selectedGymPlan.price != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
                         store.chosenOffer != null
@@ -777,7 +777,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           color: Colors.white),
                     ),
                     Text(
-                      '₹ ${gymStore.selectedGymPlan.planPrice}',
+                      '₹ ${gymStore.selectedGymPlan.price}',
                       // "RS. 499",
                       style: TextStyle(
                           fontSize: 15,
@@ -858,7 +858,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       child: Row(
                         children: [
                           Text(
-                            "GST (${gymStore.selectedGymPlan.taxPercentage} %)",
+                            "GST (${gymStore.selectedGymPlan.tax_percentage} %)",
                             style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,
@@ -875,7 +875,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     ),
                     Text(
                       '₹ $tax',
-                      // (int.parse(widget.selectedGymPlanModel.planPrice) +
+                      // (int.parse(widget.selectedGymPlanModel.price) +
                       //         (int.parse(widget
                       //                 .selectedGymPlanModel.taxPercentage
                       //                 .split("%")
@@ -912,7 +912,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     ),
                     Text(
                       '₹ ${totalAmount ?? ''}',
-                      // (int.parse(widget.selectedGymPlanModel.planPrice) +
+                      // (int.parse(widget.selectedGymPlanModel.price) +
                       //         (int.parse(widget
                       //                 .selectedGymPlanModel.taxPercentage
                       //                 .split("%")
@@ -1057,7 +1057,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     body["gym_id"] = gymStore.selectedGymDetail.data.userId;
     body["user_id"] = locator<AppPrefs>().memberId.getValue();
     body["price"] = totalAmount.toString();
-    body["tax_percentage"] = gymStore.selectedGymPlan.taxPercentage;
+    body["tax_percentage"] = gymStore.selectedGymPlan.tax_percentage;
     body["tax_amount"] = tax.toString();
     body["type"] = 'regular';
     body["slot_id"] = '';

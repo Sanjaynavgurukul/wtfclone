@@ -81,7 +81,7 @@ class PurchaseDone extends StatelessWidget {
                     builder: (context, store, child) => Text(
                       isFromAddon
                           ? 'Your ${gymStore.selectedAddOnSlot.name ?? ''} sessions at the ${gymStore.selectedGymDetail.data.gymName ?? ''} is confirmed on ${gymStore.selectedSlotData.startTime}'
-                          : 'Your ${gymStore.selectedGymPlan.planName ?? ''} subscription at the ${gymStore.selectedGymDetail.data.gymName ?? ''} is confirmed on ${Helper.formatDate(gymStore.selectedStartingDate.toIso8601String())}',
+                          : 'Your ${gymStore.selectedGymPlan.plan_name ?? ''} subscription at the ${gymStore.selectedGymDetail.data.gymName ?? ''} is confirmed on ${Helper.formatDate(gymStore.selectedStartingDate.toIso8601String())}',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -187,7 +187,7 @@ class PurchaseDone extends StatelessWidget {
                                   height: 15,
                                 ),
                                 Text(
-                                  gymStore.selectedGymPlan.planName ?? '',
+                                  gymStore.selectedGymPlan.plan_name ?? '',
                                   style: TextStyle(
                                     fontSize: 15,
                                     // fontWeight: FontWeight.bold,
