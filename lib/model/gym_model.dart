@@ -95,6 +95,13 @@ class GymModel {
   }
 }
 
+
+class Facility{
+  String label;
+  String imageUrl;
+  Facility({this.label,this.imageUrl});
+}
+
 class GymData {
   String gym_id;
   String gym_name;
@@ -115,6 +122,11 @@ class GymData {
   String text2 = '';
   String plan_text;
 
+  String description;
+  List<String> gallery;
+  String coverImage;
+  List<Facility> facility = [];
+
   GymData({
     this.gym_id,
     this.gym_name,
@@ -134,6 +146,11 @@ class GymData {
     this.text1,
     this.text2,
     this.plan_text,
+
+    this.description,
+    this.gallery,
+    this.coverImage,
+    this.facility,
   });
 
   GymData.fromJson(Map<String, dynamic> json) {
@@ -155,6 +172,12 @@ class GymData {
     text1 = json['text1'] ?? '';
     text2 = json['text2'] ?? '';
     plan_text = json['plan_text'];
+    description = json['description'];
+    gallery = json['gallery'];
+    coverImage = json['coverImage'];
+    //TODO Uncomment this code after impletemnt api facility = json['facility'];
+
+
     // uid = json['uid'];
     // gymId = json['gym_id'];
     // description = json['description'];
@@ -210,6 +233,13 @@ class GymData {
     data['text1'] = this.text1;
     data['text2'] = this.text2;
     data['plan_text'] = this.plan_text;
+
+    data['description'] = this.description ??'';
+    data['gallery'] = this.gallery ??'';
+    data['coverImage'] = this.coverImage??'';
+    //TODO Uncomment this code after impletemnt api facility = json['facility'];
+    // data['plan_text'] = this.plan_text;
+
     // data['uid'] = this.uid;
     // data['gym_id'] = this.gymId;
     // data['description'] = this.description;

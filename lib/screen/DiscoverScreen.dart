@@ -218,7 +218,8 @@ class _SearchBarState extends State<SearchBar> {
               onTap: () async {
                 LocationResult result = await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PlacePicker(
+                    builder: (context) => PlacePicker
+                      (
                       Helper.googleMapKey,
                       displayLocation: store.selectedNewLocation != null
                           ? LatLng(store.selectedNewLocation.latLng.latitude,
@@ -257,7 +258,6 @@ class GymCard extends StatelessWidget {
   }) : super(key: key);
 
   final GymData item;
-
 
   @override
   Widget build(BuildContext context) {
