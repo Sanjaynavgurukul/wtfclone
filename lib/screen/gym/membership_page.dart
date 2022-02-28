@@ -312,7 +312,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                     fontSize: 18,
                                     fontStyle: FontStyle.normal)),
                             subtitle: Text('${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
-                            trailing: Column(
+                            trailing: gymStore.selectedGymDetail.data.rating.toDouble() != null && gymStore.selectedGymDetail.data.rating.toDouble() >0 ? Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -348,7 +348,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                       print(rating);
                                     }),
                               ],
-                            ),
+                            ):Text('Newly Opened'),
                           ),
                           //Divider :D
                           Divider(

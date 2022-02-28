@@ -276,7 +276,7 @@ class GymCard extends StatelessWidget {
               children: [
                 GradientImageWidget(
                   //TODO Gym Cover image missing
-                  network: 'https://media.istockphoto.com/photos/gym-background-fitness-weight-equipment-on-empty-dark-floor-picture-id1213615970?k=20&m=1213615970&s=612x612&w=0&h=S2Ny5JNrAlcpZ_0mt76CKAwARqvJN5glvHpB9fD3DA0=',
+                  network: item.cover_image??'https://media.istockphoto.com/photos/gym-background-fitness-weight-equipment-on-empty-dark-floor-picture-id1213615970?k=20&m=1213615970&s=612x612&w=0&h=S2Ny5JNrAlcpZ_0mt76CKAwARqvJN5glvHpB9fD3DA0=',
                   gragientColor: [
                     Colors.transparent,
                     Color(0xff272727)
@@ -451,7 +451,7 @@ class GymCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RatingBar(
+                        if(item.rating != null && item.rating >0)RatingBar(
                             initialRating: (item.rating??0).toDouble(),
                             direction: Axis.horizontal,
                             allowHalfRating: true,
@@ -475,6 +475,19 @@ class GymCard extends StatelessWidget {
                             onRatingUpdate: (rating) {
                               print(rating);
                             }),
+                        if(item.rating == null || item.rating <=0) RichText(
+                          text: TextSpan(
+                            text: '',
+                            style: DefaultTextStyle.of(context).style,
+                            children:  <WidgetSpan>[
+                              WidgetSpan(
+                                  child: Text('Newly Opened',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400))),
+                            ],
+                          ),
+                        ),
                         RichText(
                           text: TextSpan(
                             text: '',

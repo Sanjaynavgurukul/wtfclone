@@ -127,6 +127,7 @@ class GymModelData {
   dynamic lastUpdated;
   String status;
   String planType;
+  String cover_image;
 
   //New Variables :D
   String distance;
@@ -162,6 +163,7 @@ class GymModelData {
     this.longitude,
     this.leaseAgreement,
     this.electricityBill,
+    this.cover_image,
     this.bankStatement,
     this.dateAdded,
     this.lastUpdated,
@@ -195,6 +197,7 @@ class GymModelData {
     state: json["state"],
     country: json["country"],
     pin: json["pin"],
+    cover_image: json["cover_image"],
     latitude: json["lat"],
     longitude: json["long"],
     leaseAgreement: json["lease_agreement"],
@@ -236,6 +239,7 @@ class GymModelData {
     "state": state,
     "country": country,
     "pin": pin,
+    "cover_image": cover_image,
     "latitude": latitude,
     "longitude": longitude,
     "lease_agreement": leaseAgreement,
