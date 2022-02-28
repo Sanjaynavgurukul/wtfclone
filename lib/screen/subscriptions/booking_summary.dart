@@ -38,6 +38,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   int discountAmount = 0;
   int totalAmount = 0;
   int tax = 0;
+  int _radioValue = 0;
   TextEditingController couponCodeController;
 
   // Map subscriptionBody;
@@ -52,8 +53,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     // }
     couponCodeController = TextEditingController();
     couponCodeController = TextEditingController(
-        text: context.read<GymStore>().chosenOffer != null
-            ? context.read<GymStore>().chosenOffer.code
+        text: context
+            .read<GymStore>()
+            .chosenOffer != null
+            ? context
+            .read<GymStore>()
+            .chosenOffer
+            .code
             : '');
     // getGyms();
 
@@ -64,34 +70,69 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     tax = 0;
     totalAmount = 0;
     discountAmount = 0;
-    if (context.read<GymStore>().chosenOffer != null) {
-      if (context.read<GymStore>().chosenOffer.type == 'flat') {
+    if (context
+        .read<GymStore>()
+        .chosenOffer != null) {
+      if (context
+          .read<GymStore>()
+          .chosenOffer
+          .type == 'flat') {
         int couponValue =
-            int.tryParse(context.read<GymStore>().chosenOffer.value);
+        int.tryParse(context
+            .read<GymStore>()
+            .chosenOffer
+            .value);
         discountAmount = couponValue >
-                int.tryParse(context.read<GymStore>().selectedEventData.price)
-            ? int.tryParse(context.read<GymStore>().selectedEventData.price)
+            int.tryParse(context
+                .read<GymStore>()
+                .selectedEventData
+                .price)
+            ? int.tryParse(context
+            .read<GymStore>()
+            .selectedEventData
+            .price)
             : couponValue;
       } else {
-        print('price: ${context.read<GymStore>().selectedGymPlan.plan_price}');
-        print('offer val: ${context.read<GymStore>().chosenOffer.value}');
+        print('price: ${context
+            .read<GymStore>()
+            .selectedGymPlan
+            .plan_price}');
+        print('offer val: ${context
+            .read<GymStore>()
+            .chosenOffer
+            .value}');
         discountAmount =
-            (int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) *
-                    int.tryParse(context.read<GymStore>().chosenOffer.value) /
-                    100)
+            (int.tryParse(context
+                .read<GymStore>()
+                .selectedGymPlan
+                .plan_price) *
+                int.tryParse(context
+                    .read<GymStore>()
+                    .chosenOffer
+                    .value) /
+                100)
                 .truncate();
       }
     }
     totalAmount =
-        int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
+        int.tryParse(context
+            .read<GymStore>()
+            .selectedGymPlan
+            .plan_price) -
             discountAmount;
     tax = (totalAmount *
-            int.tryParse(
-                context.read<GymStore>().selectedGymPlan.tax_percentage) /
-            100)
+        int.tryParse(
+            context
+                .read<GymStore>()
+                .selectedGymPlan
+                .tax_percentage) /
+        100)
         .truncate();
     totalAmount = tax +
-        int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
+        int.tryParse(context
+            .read<GymStore>()
+            .selectedGymPlan
+            .plan_price) -
         discountAmount;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) setState(() {});
@@ -145,25 +186,27 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     print('------- called ${text}');
     return gymStore.chosenOffer != null
         ? InkWell(
-            onTap: () {
-              removeCoupon();
-            },
-            child: Text('Remove',
-                style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w600,color: AppConstants.boxBorderColor)),
-          )
+      onTap: () {
+        removeCoupon();
+      },
+      child: Text('Remove',
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppConstants.boxBorderColor)),
+    )
         : text.isNotEmpty
-            ? InkWell(
-                onTap: () {
-                  applyCoupon();
-                },
-                child: Text('Apply',
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600))
-              )
-            : SizedBox(
-                height: 0,
-              );
+        ? InkWell(
+        onTap: () {
+          applyCoupon();
+        },
+        child: Text('Apply',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w600))
+    )
+        : SizedBox(
+      height: 0,
+    );
   }
 
   @override
@@ -187,13 +230,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.only(left: 16,right: 16,top: 6,bottom: 6),
+        padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
         constraints: BoxConstraints(
-            minHeight: 54,maxHeight: 60
+            minHeight: 54, maxHeight: 60
         ),
         child: InkWell(
-          onTap:()async{
-          },
+          onTap: () async {},
           child: Container(
               padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
               decoration: BoxDecoration(
@@ -207,7 +249,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     ],
                   )),
               alignment: Alignment.center,
-              child:Text('Proceed')
+              child: Text('Proceed')
           ),
         ),
       ),
@@ -223,21 +265,25 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     color: Color(0xff292929)),
                 child: Column(
                   children: [
-                    detailsSection(heading: 'Booked at', value: gymStore.selectedGymDetail.data.gymName??''),
+                    detailsSection(heading: 'Booked at',
+                        value: gymStore.selectedGymDetail.data.gymName ?? ''),
                     detailsSection(heading: 'Workout', value: 'Gym Membership'),
-                    detailsSection(heading: 'Plan', value: gymStore.selectedGymPlan.plan_name ?? ''),
+                    detailsSection(heading: 'Plan',
+                        value: gymStore.selectedGymPlan.plan_name ?? ''),
                     detailsSection(
                         heading: 'Subscription Start date',
                         value: Helper.stringForDatetime2(
                             gymStore.selectedStartingDate.toIso8601String())),
                     detailsSection(
-                        heading: 'Subscription End date', value: Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
-                      Duration(
-                        days: int.tryParse(
-                          gymStore.selectedGymPlan.duration,
-                        ),
-                      ),
-                    ).toIso8601String())),
+                        heading: 'Subscription End date',
+                        value: Helper.stringForDatetime2(
+                            gymStore.selectedStartingDate.add(
+                              Duration(
+                                days: int.tryParse(
+                                  gymStore.selectedGymPlan.duration,
+                                ),
+                              ),
+                            ).toIso8601String())),
                   ],
                 ),
               ),
@@ -291,7 +337,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
               SizedBox(
                 height: 45,
               ),
-             if(gymStore.selectedGymPlan.is_recomended == 1) Column(
+              if(gymStore.selectedGymPlan.is_recomended == 1) Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -309,34 +355,29 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Radio(
-                                  value: 1,
-                                  groupValue: 'null',
-                                  onChanged: (index) {}),
-                              Text('Full Payment',
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w400))
-                            ],
+                          child: RadioListTile(
+                            value: 0,
+                            groupValue: _radioValue,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _radioValue = newValue;
+
+                              });
+                            },
+                            title: Text('Full Payment'),
                           ),
                           flex: 1,
                         ),
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Radio(
-                                  value: 1,
-                                  groupValue: 'null',
-                                  onChanged: (index) {}),
-                              Text('Partial',
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w400))
-                            ],
+                          child: RadioListTile(
+                            value: 1,
+                            groupValue: _radioValue,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _radioValue = newValue;
+                              });
+                            },
+                            title: Text('Partial'),
                           ),
                           flex: 1,
                         ),
@@ -346,7 +387,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                   SizedBox(
                     height: 24,
                   ),
-                  Container(
+
+                  if(!isFullPayment())Container(
                     padding:
                     EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
                     decoration: BoxDecoration(
@@ -365,13 +407,15 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           padding: EdgeInsets.only(
                               left: 20, right: 20, top: 12, bottom: 12),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(8)),
                               color: Color(0xffAF4949)),
                           child: Row(
                             children: [
                               Text('Select EMI date',
                                   style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w400)),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400)),
                               Spacer(),
                               Icon(Icons.date_range)
                             ],
@@ -380,7 +424,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       ],
                     ),
                   ),
-                  SizedBox(
+                  if(!isFullPayment()) SizedBox(
                     height: 45,
                   ),
                 ],
@@ -397,7 +441,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
               ),
               Container(
                 padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     gradient: LinearGradient(
@@ -410,12 +454,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     )),
                 child: Column(
                   children: [
-                    amountLabel(label: 'Plan Price',value: '2999'),
-                    SizedBox(height:6),
-                    amountLabel(label: 'GST(0%)',value: '0'),
-                    Divider(thickness: 1,color: Colors.white,),
-                    SizedBox(height:6),
-                    amountLabel(label: 'Total Amount',value: '2999'),
+                    amountLabel(label: 'Plan Price', value: '2999'),
+                    SizedBox(height: 6),
+                    amountLabel(label: 'GST(0%)', value: '0'),
+                    Divider(thickness: 1, color: Colors.white,),
+                    SizedBox(height: 6),
+                    amountLabel(label: 'Total Amount', value: '2999'),
                   ],
                 ),
               ),
@@ -428,6 +472,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       ),
     );
   }
+
+   bool isFullPayment(){
+    return _radioValue == 0;
+   }
 
   Widget amountLabel({String label, String value}) {
     return Row(
@@ -656,13 +704,14 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           width: 15,
                         ),
                         Text(
-                          "${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
-                                Duration(
-                                  days: int.tryParse(
-                                    gymStore.selectedGymPlan.duration,
-                                  ),
-                                ),
-                              ).toIso8601String())}",
+                          "${Helper.stringForDatetime2(gymStore
+                              .selectedStartingDate.add(
+                            Duration(
+                              days: int.tryParse(
+                                gymStore.selectedGymPlan.duration,
+                              ),
+                            ),
+                          ).toIso8601String())}",
                           style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,
@@ -743,32 +792,32 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 if (gymStore.selectedGymPlan.plan_price != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
-                        store.chosenOffer != null
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0,
-                                  vertical: 12.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 18.0,
-                                    ),
-                                    UIHelper.horizontalSpace(8.0),
-                                    Text(
-                                      'Coupon Code Applied',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                padding: const EdgeInsets.all(10.0),
-                              ),
+                    store.chosenOffer != null
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6.0,
+                        vertical: 12.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check,
+                            color: Colors.green,
+                            size: 18.0,
+                          ),
+                          UIHelper.horizontalSpace(8.0),
+                          Text(
+                            'Coupon Code Applied',
+                            style: TextStyle(
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : Container(
+                      padding: const EdgeInsets.all(10.0),
+                    ),
                   ),
                 SizedBox(
                   height: 20,
@@ -856,18 +905,19 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('CGST 9%'),
-                                Text('SGST 9%'),
-                                Text(
-                                    'Tax acknowledgement will be emailed to you after subscription.'),
-                              ],
-                            ),
-                          ),
+                          builder: (context) =>
+                              AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('CGST 9%'),
+                                    Text('SGST 9%'),
+                                    Text(
+                                        'Tax acknowledgement will be emailed to you after subscription.'),
+                                  ],
+                                ),
+                              ),
                         );
                         // FlashHelper.informationBar(context,
                         //     message:
@@ -876,7 +926,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       child: Row(
                         children: [
                           Text(
-                            "GST (${gymStore.selectedGymPlan.tax_percentage} %)",
+                            "GST (${gymStore.selectedGymPlan
+                                .tax_percentage} %)",
                             style: TextStyle(
                               fontSize: 15,
                               // fontWeight: FontWeight.bold,
@@ -1084,12 +1135,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         gymStore.selectedStartingDate.toIso8601String().trim());
     body["expire_date"] =
         Helper.stringForDatetime3(gymStore.selectedStartingDate
-                .add(
-                  Duration(
-                    days: int.tryParse(gymStore.selectedGymPlan.duration),
-                  ),
-                )
-                .toIso8601String())
+            .add(
+          Duration(
+            days: int.tryParse(gymStore.selectedGymPlan.duration),
+          ),
+        )
+            .toIso8601String())
             .trim();
     body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
     body["isWhatsapp"] = !_isChecked;

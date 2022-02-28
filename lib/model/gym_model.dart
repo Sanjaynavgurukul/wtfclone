@@ -138,6 +138,15 @@ class GymModelData {
   String plan_text;
   int rating;
 
+  //Static Variable
+  bool isFullPayment = true;
+  int first_payment;
+  num first_payment_amount;
+  int second_payment;
+  num second_payment_amount;
+  int third_payment;
+  num third_payment_amount;
+
   GymModelData({
     this.uid,
     this.description,
