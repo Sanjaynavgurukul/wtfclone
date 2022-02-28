@@ -132,6 +132,21 @@ class Helper {
     return dateString;
   }
 
+  static String convertDate(String dt) {
+    if (dt == null) {
+      return 'N/A';
+    }
+    var dtInLocal = DateTime.parse(dt);
+    //DateTime.fromMillisecondsSinceEpoch( 1490489845  * 1000).toLocal(); //year:  1490489845 //>day: 1556152819  //month:  1553561845  //<day: 1556174419
+    var dateString = " ";
+
+    var yearFormat = DateFormat("dd-MM-yyyy");
+    dateString += yearFormat.format(dtInLocal);
+
+    return dateString;
+  }
+
+
   static String stringWeekDay(String dt) {
     var dtInLocal = DateTime.parse(dt);
     //DateTime.fromMillisecondsSinceEpoch( 1490489845  * 1000).toLocal(); //year:  1490489845 //>day: 1556152819  //month:  1553561845  //<day: 1556174419

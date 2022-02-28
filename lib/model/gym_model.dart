@@ -140,12 +140,12 @@ class GymModelData {
 
   //Static Variable
   bool isFullPayment = true;
-  int first_payment;
-  num first_payment_amount;
-  int second_payment;
-  num second_payment_amount;
-  int third_payment;
-  num third_payment_amount;
+  String first_payment;
+  String first_payment_amount;
+  String second_payment;
+  String second_payment_amount;
+  String third_payment;
+  String third_payment_amount;
 
   GymModelData({
     this.uid,

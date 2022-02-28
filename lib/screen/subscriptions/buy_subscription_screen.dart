@@ -1104,6 +1104,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
       ),
     );
   }
+
 }
 
 class OfferSection extends StatefulWidget {
