@@ -13,7 +13,6 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
-import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
@@ -21,7 +20,6 @@ import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
 import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
-import 'package:wtf/widget/slide_button.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   @override
@@ -53,10 +51,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     //   couponApplied = true;
     // }
     couponCodeController = TextEditingController();
-    // couponCodeController = TextEditingController(
-    //     text: context.read<GymStore>().chosenOffer != null
-    //         ? context.read<GymStore>().chosenOffer.code
-    //         : '');
+    couponCodeController = TextEditingController(
+        text: context.read<GymStore>().chosenOffer != null
+            ? context.read<GymStore>().chosenOffer.code
+            : '');
     // getGyms();
 
     calculateFinalPrice();
@@ -150,20 +148,18 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             onTap: () {
               removeCoupon();
             },
-            child: Icon(
-              Icons.remove_circle,
-              color: Colors.red,
-            ),
+            child: Text('Remove',
+                style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w600,color: AppConstants.boxBorderColor)),
           )
         : text.isNotEmpty
             ? InkWell(
                 onTap: () {
                   applyCoupon();
                 },
-                child: Icon(
-                  Icons.check_circle,
-                  color: Colors.grey,
-                ),
+                child: Text('Apply',
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600))
               )
             : SizedBox(
                 height: 0,
@@ -227,146 +223,167 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     color: Color(0xff292929)),
                 child: Column(
                   children: [
-                    detailsSection(heading: 'Booked at', value: 'Mass Monster'),
+                    detailsSection(heading: 'Booked at', value: gymStore.selectedGymDetail.data.gymName??''),
                     detailsSection(heading: 'Workout', value: 'Gym Membership'),
-                    detailsSection(heading: 'Plan', value: 'WTF Active'),
+                    detailsSection(heading: 'Plan', value: gymStore.selectedGymPlan.plan_name ?? ''),
                     detailsSection(
                         heading: 'Subscription Start date',
-                        value: '26 feb 2022'),
+                        value: Helper.stringForDatetime2(
+                            gymStore.selectedStartingDate.toIso8601String())),
                     detailsSection(
-                        heading: 'Subscription End date', value: '26 feb 2022'),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 45,
-              ),
-              Container(
-                padding:
-                    EdgeInsets.only(right: 19, left: 18, bottom: 8, top: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: Color(0xff292929),
-                    border: Border.all(width: 1, color: Colors.white)),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              hintText: 'Enter Coupon Code',
-                              hintStyle: TextStyle(
-                                  color: Color(0xffC4C4C4),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w300),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.all(0)),
+                        heading: 'Subscription End date', value: Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
+                      Duration(
+                        days: int.tryParse(
+                          gymStore.selectedGymPlan.duration,
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text('Apply',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
-                    )
+                    ).toIso8601String())),
                   ],
                 ),
               ),
               SizedBox(
                 height: 45,
               ),
-              Text(
-                "Payment Mode",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+              if (totalAmount > 0)
+                Container(
+                    padding:
+                    EdgeInsets.only(right: 19, left: 18, bottom: 8, top: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: Color(0xff292929),
+                        border: Border.all(width: 1, color: Colors.white)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            cursorColor: Colors.white,
+                            controller: couponCodeController,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                            onFieldSubmitted: (val) {
+                              applyCoupon();
+                            },
+                            onChanged: (String val) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Enter Coupon Code',
+                                hintStyle: TextStyle(
+                                    color: Color(0xffC4C4C4),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w300),
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                contentPadding: EdgeInsets.all(0)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        // we need add button at last friends row
+                        suffix(couponCodeController.text)
+                      ],
+                    )),
               SizedBox(
-                height: 24,
+                height: 45,
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Radio(
-                              value: 1,
-                              groupValue: 'null',
-                              onChanged: (index) {}),
-                          Text('Full Payment',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w400))
-                        ],
-                      ),
-                      flex: 1,
+             if(gymStore.selectedGymPlan.is_recomended == 1) Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Payment Mode",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Radio(
+                                  value: 1,
+                                  groupValue: 'null',
+                                  onChanged: (index) {}),
+                              Text('Full Payment',
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w400))
+                            ],
+                          ),
+                          flex: 1,
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Radio(
+                                  value: 1,
+                                  groupValue: 'null',
+                                  onChanged: (index) {}),
+                              Text('Partial',
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w400))
+                            ],
+                          ),
+                          flex: 1,
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Radio(
-                              value: 1,
-                              groupValue: 'null',
-                              onChanged: (index) {}),
-                          Text('Partial',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w400))
-                        ],
-                      ),
-                      flex: 1,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              Container(
-                padding:
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Container(
+                    padding:
                     EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: AppConstants.bgColor),
-                child: Column(
-                  children: [
-                    Text(
-                        'Pay 2999 now and choose EMI date for your next payment',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400)),
-                    SizedBox(
-                      height: 16,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: AppConstants.bgColor),
+                    child: Column(
+                      children: [
+                        Text(
+                            'Pay 2999 now and choose EMI date for your next payment',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400)),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 20, right: 20, top: 12, bottom: 12),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              color: Color(0xffAF4949)),
+                          child: Row(
+                            children: [
+                              Text('Select EMI date',
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w400)),
+                              Spacer(),
+                              Icon(Icons.date_range)
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 12, bottom: 12),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: Color(0xffAF4949)),
-                      child: Row(
-                        children: [
-                          Text('Select EMI date',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400)),
-                          Spacer(),
-                          Icon(Icons.date_range)
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 45,
+                  ),
+                  SizedBox(
+                    height: 45,
+                  ),
+                ],
               ),
               Text(
                 "Payment Details",
