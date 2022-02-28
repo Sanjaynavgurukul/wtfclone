@@ -138,6 +138,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     }
   }
 
+  String validateEmiPayment() {
+    var data = gymStore.selectedGymDetail.data;
+    if (data.first_payment == null || data.first_payment_amount == null)
+      return 'First EMI Data Invalid';
+    else if (data.second_payment == null || data.second_payment_amount == null)
+      return 'Second EMI Data Invalid';
+    else if(data.third_payment == null || data.third_payment_amount == null)
+      return 'Third EMI Data Invalid';
+    else return null;
+  }
+
   void removeCoupon() {
     setState(() {
       gymStore.chosenOffer = null;
@@ -176,6 +187,71 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     return 0;
   }
 
+  void processToBuy() async {
+    print('method called------');
+    Map<String, dynamic> body = {};
+    // setState(() {
+    //   subscriptionBody = body;
+    // });
+
+    // if (_isChecked) {
+    //   body['isWhatsapp'] = true;
+    // }
+
+    // Default Key Values
+    body["gym_id"] = gymStore.selectedGymDetail.data.userId;
+    body["user_id"] = locator<AppPrefs>().memberId.getValue();
+    body["price"] = totalAmount.toString();
+    body["tax_percentage"] = gymStore.selectedGymPlan.tax_percentage;
+    body["tax_amount"] = tax.toString();
+    body["type"] = 'regular';
+    body["slot_id"] = '';
+    body["addon"] = "";
+    body["start_date"] = Helper.stringForDatetime3(
+        gymStore.selectedStartingDate.toIso8601String().trim());
+    body["expire_date"] =
+        Helper.stringForDatetime3(gymStore.selectedStartingDate
+            .add(
+          Duration(
+            days: int.tryParse(gymStore.selectedGymPlan.duration),
+          ),
+        )
+            .toIso8601String())
+            .trim();
+    body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
+    body["isWhatsapp"] = !_isChecked;
+
+    if (gymStore.chosenOffer != null) {
+      body['coupon'] = gymStore.chosenOffer.uid;
+    }
+
+    print('Starting Razor Pay Library ---- ');
+
+    if (totalAmount != 0) {
+      await gymStore.processPayment(
+        context: context,
+        body: body,
+        price: (totalAmount * 100).toString(),
+      );
+    } else {
+      //100% discount applied :D
+      body['trx_id'] = 'discount_applied';
+      body['trx_status'] = 'done';
+      body['order_status'] = 'done';
+      bool isDone = await gymStore.addSubscription(
+        body: body,
+        context: context,
+        showLoader: true,
+      );
+      if (isDone) {
+        gymStore.init(context: context);
+        NavigationService.navigateTo(Routes.purchaseDone);
+      } else {
+        FlashHelper.errorBar(context, message: 'Please Try again!');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
@@ -196,18 +272,22 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          _showDialog(context);
-        },
-        child: Icon(Icons.add),
-      ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
         constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
         child: InkWell(
-          onTap: () async {},
+          onTap: () async {
+            if(!isFullPayment()){
+              print('something happendeddd -- partial condition');
+              if(validateEmiPayment() == null){
+                showBottomDialog();
+              }else{
+                FlashHelper.errorBar(context, message: validateEmiPayment());
+              }
+            }else{
+              print('something happendeddd -- Not a partial condition');
+            }
+          },
           child: Container(
               padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
               decoration: BoxDecoration(
@@ -1264,71 +1344,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     );
   }
 
-  void processToBuy() async {
-    print('method called------');
-    Map<String, dynamic> body = {};
-    // setState(() {
-    //   subscriptionBody = body;
-    // });
-
-    // if (_isChecked) {
-    //   body['isWhatsapp'] = true;
-    // }
-
-    // Default Key Values
-    body["gym_id"] = gymStore.selectedGymDetail.data.userId;
-    body["user_id"] = locator<AppPrefs>().memberId.getValue();
-    body["price"] = totalAmount.toString();
-    body["tax_percentage"] = gymStore.selectedGymPlan.tax_percentage;
-    body["tax_amount"] = tax.toString();
-    body["type"] = 'regular';
-    body["slot_id"] = '';
-    body["addon"] = "";
-    body["start_date"] = Helper.stringForDatetime3(
-        gymStore.selectedStartingDate.toIso8601String().trim());
-    body["expire_date"] =
-        Helper.stringForDatetime3(gymStore.selectedStartingDate
-                .add(
-                  Duration(
-                    days: int.tryParse(gymStore.selectedGymPlan.duration),
-                  ),
-                )
-                .toIso8601String())
-            .trim();
-    body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
-    body["isWhatsapp"] = !_isChecked;
-
-    if (gymStore.chosenOffer != null) {
-      body['coupon'] = gymStore.chosenOffer.uid;
-    }
-
-    print('Starting Razor Pay Library ---- ');
-
-    if (totalAmount != 0) {
-      await gymStore.processPayment(
-        context: context,
-        body: body,
-        price: (totalAmount * 100).toString(),
-      );
-    } else {
-      //100% discount applied :D
-      body['trx_id'] = 'discount_applied';
-      body['trx_status'] = 'done';
-      body['order_status'] = 'done';
-      bool isDone = await gymStore.addSubscription(
-        body: body,
-        context: context,
-        showLoader: true,
-      );
-      if (isDone) {
-        gymStore.init(context: context);
-        NavigationService.navigateTo(Routes.purchaseDone);
-      } else {
-        FlashHelper.errorBar(context, message: 'Please Try again!');
-      }
-    }
-  }
-
   Theme getDialogTheme(Widget child) {
     return Theme(
       data: ThemeData.dark().copyWith(
@@ -1367,40 +1382,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       return null;
   }
 
-  void _showDialog(BuildContext context) {
-    showBottomDialog(
-      context: context,
-      allowBackNavigation: true,
-      title: 'Do you wish to purchase add-ons?',
-      content:
-          'Add-ons help you save some extra money when you purchase them along with our original products. Plus, they help your chances of winning as well.',
-      actions: [
-        RaisedButton(
-          child: Text('YES, GO AHEAD'),
-          onPressed: () {},
-        ),
-        FlatButton(
-          child: Text('SKIP'),
-          onPressed: () {},
-        )
-      ],
-    );
-  }
-
-  Future<T> showBottomDialog<T>({
-    @required BuildContext context,
-    String title,
-    String content,
-    Widget titleWidget,
-    Widget contentWidget,
-    List<Widget> actions,
-    bool allowBackNavigation = false,
-  }) {
-    assert(title != null || titleWidget != null,
-        'title and titleWidget both must not be null');
-    assert(content != null || contentWidget != null,
-        'content and contentWidget both must not be null');
-    final theme = Theme.of(context);
+  Future<bool> showBottomDialog() {
     final _formKey = GlobalKey<FormState>();
     final _controller = TextEditingController();
 
@@ -1417,13 +1399,16 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       isScrollControlled: true,
       backgroundColor: Colors.white,
       builder: (context) => WillPopScope(
-          onWillPop: () async => allowBackNavigation,
+          onWillPop: () async => true,
           child: StatefulBuilder(
             builder: (BuildContext ctx, StateSetter setState) {
               return SingleChildScrollView(
                 child: Container(
-                  padding:
-                      EdgeInsets.only(top: 16, bottom: MediaQuery.of(context).viewInsets.bottom, right: 12, left: 12),
+                  padding: EdgeInsets.only(
+                      top: 16,
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      right: 12,
+                      left: 12),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1481,18 +1466,19 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           controller: _controller,
                           maxLines: 1,
                           validator: (value) {
-                            if(value == null)
+                            if (value == null)
                               return "Please enter OTP";
-                            else if (value.length <6){
+                            else if (value.length < 6) {
                               return 'Please enter 6 character otp';
-                            }else return null;
+                            } else
+                              return null;
                           },
                           onChanged: (value) {},
                         ),
                       ),
                       SizedBox(height: 12),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           final formState = _formKey.currentState;
                           if (formState.validate()) {
                             formState.save();
@@ -1503,12 +1489,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           padding: EdgeInsets.all(20),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            borderRadius:BorderRadius.all(Radius.circular(8)),
-                            color: AppConstants.bgColor
-                          ),
-                          child: Text('Verify OTP',style:TextStyle(color: Colors.white,fontWeight:FontWeight.w600,fontSize: 14)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                              color: AppConstants.bgColor),
+                          child: Text('Verify OTP',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14)),
                         ),
-                      ),SizedBox(height: 30),
+                      ),
+                      SizedBox(height: 30),
                     ],
                   ),
                 ),
