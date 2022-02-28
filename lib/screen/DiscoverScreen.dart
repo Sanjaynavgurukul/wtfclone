@@ -257,7 +257,7 @@ class GymCard extends StatelessWidget {
     @required this.item,
   }) : super(key: key);
 
-  final GymData item;
+  final GymModelData item;
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +440,7 @@ class GymCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: ListTile(
-                    title: Text(item.gym_name ?? '',
+                    title: Text(item.gymName ?? '',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
@@ -514,12 +514,12 @@ class GymCard extends StatelessWidget {
               onTap: (){
                 context.read<GymStore>().getGymDetails(
                   context: context,
-                  gymId: item.gym_id,
+                  gymId: item.userId,
                 );
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (_) => BuyMemberShipPage(
-                      gymId: item.gym_id,
+                      gymId: item.userId,
                     ),
                   ),
                 );

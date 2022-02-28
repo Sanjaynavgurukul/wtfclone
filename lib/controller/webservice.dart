@@ -864,9 +864,9 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    print("get Gym types by id 4");
+    print('checking type of gym : $type');
     return _netUtil
-        .get(BASE_URL + Api.getNearByGym(lat, lng), headers: mapHeader)
+        .get(BASE_URL + Api.getNearByGym(lat, lng,type), headers: mapHeader)
         .then((dynamic res) {
       print("response get nearBy Gym : " + res.toString());
       GymTypes model = res != null && res['status']

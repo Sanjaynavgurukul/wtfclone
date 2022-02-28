@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:wtf/model/gym_details_model.dart';
+
 GymTypes gymTypesFromJson(String str) => GymTypes.fromJson(json.decode(str));
 
 String gymTypesToJson(GymTypes data) => json.encode(data.toJson());
@@ -17,7 +19,7 @@ class GymTypes {
 
   bool status;
   List<Pagination> pagination;
-  List<GymData> data;
+  List<GymModelData> data;
 
   factory GymTypes.fromJson(Map<String, dynamic> json) =>
       GymTypes(
@@ -27,7 +29,7 @@ class GymTypes {
             json["pagination"].map((x) => Pagination.fromJson(x)))
             : null,
         data: json.containsKey('data')
-            ? List<GymData>.from(json["data"].map((x) => GymData.fromJson(x)))
+            ? List<GymModelData>.from(json["data"].map((x) => GymModelData.fromJson(x)))
             : [],
       );
 
@@ -72,7 +74,7 @@ class Pagination {
 class GymModel {
   bool status;
   String message;
-  List<GymData> data;
+  List<GymModelData> data;
 
   GymModel({this.status, this.message, this.data});
 
@@ -80,7 +82,7 @@ class GymModel {
     return GymModel(
         status: json['status'],
         data: json.containsKey('data') && json['data'] != null
-            ? List<GymData>.from(json["data"].map((x) => GymData.fromJson(x)))
+            ? List<GymModelData>.from(json["data"].map((x) => GymModelData.fromJson(x)))
             : []);
   }
 
@@ -95,225 +97,51 @@ class GymModel {
   }
 }
 
-
 class Facility{
   String label;
   String imageUrl;
   Facility({this.label,this.imageUrl});
 }
 
-class GymData {
-  String gym_id;
-  String gym_name;
+class GymModelData {
+
+  String uid;
+  String userId;
+  String description;
+  String name;
+  String gymName;
   String address1;
   String address2;
   String city;
   String state;
-  String lat;
-  String long;
-  String pin;
   String country;
+  String pin;
+  String latitude = '';
+  String longitude = '';
+  String leaseAgreement;
+  String electricityBill;
+  String bankStatement;
+  String dateAdded;
+  List<Gallery> gallery;
+  List<Benfit> benefits;
+  dynamic lastUpdated;
+  String status;
+  String planType;
+
+  //New Variables :D
   String distance;
   String distance_text;
   String duration;
   String duration_text;
-  int rating;
   String text1 = '';
   String text2 = '';
   String plan_text;
+  int rating;
 
-  String description;
-  List<String> gallery;
-  String coverImage;
-  List<Facility> facility = [];
-
-  GymData({
-    this.gym_id,
-    this.gym_name,
-    this.address1,
-    this.address2,
-    this.city,
-    this.state,
-    this.lat,
-    this.long,
-    this.pin,
-    this.country,
-    this.distance,
-    this.distance_text,
-    this.duration,
-    this.duration_text,
-    this.rating,
-    this.text1,
-    this.text2,
-    this.plan_text,
-
-    this.description,
-    this.gallery,
-    this.coverImage,
-    this.facility,
-  });
-
-  GymData.fromJson(Map<String, dynamic> json) {
-    gym_id = json['gym_id'];
-    gym_name = json['gym_name'];
-    address1 = json['address1'];
-    address2 = json['address2'];
-    city = json['city'];
-    state = json['state'];
-    lat = json['lat'];
-    long = json['long'];
-    pin = json['pin'];
-    country = json['country'];
-    distance = json['distance'].toString();
-    distance_text = json['distance_text'];
-    duration = json['duration'].toString();
-    duration_text = json['duration_text'];
-    rating = json['rating'] ?? 0;
-    text1 = json['text1'] ?? '';
-    text2 = json['text2'] ?? '';
-    plan_text = json['plan_text'];
-    description = json['description'];
-    gallery = json['gallery'];
-    coverImage = json['coverImage'];
-    //TODO Uncomment this code after impletemnt api facility = json['facility'];
-
-
-    // uid = json['uid'];
-    // gymId = json['gym_id'];
-    // description = json['description'];
-    // name = json['name'];
-    // userId = json['user_id'];
-    // gymName = json['gym_name'];
-    // address1 = json['address1'];
-    // address2 = json['address2'];
-    // city = json['city'];
-    // status = json['status'] ?? '';
-    // state = json['state'];
-    // country = json['country'];
-    // pin = json['pin'];
-    // latitude = json['latitude'];
-    // longitude = json['longitude'];
-    // leaseAgreement = json['lease_agreement'];
-    // electricityBill = json['electricity_bill'];
-    // bankStatement = json['bank_statement'] ?? '';
-    // dateAdded = json['date_added'];
-    // coverImage = json['cover_image'];
-    // lateUpdated = json['late_updated'] != null ? json['late_updated'] : '';
-    // type = json.containsKey('type') && json['type'].isNotEmpty
-    //     ? json['type']
-    //     : 'Gym';
-    //
-    // //New Variables :D
-    // text1 = json['text1'] ?? '';
-    // text2 = json['text2'] ?? '';
-    // rating = json['rating'] ?? 0;
-    // duration_text = json['duration_text'] ?? '';
-    // duration = json['duration'] ?? '';
-    // distanct_text = json['distanct_text'] ?? '';
-    // distance = json['distance'] ?? 0;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['gym_id'] = this.gym_id;
-    data['gym_name'] = this.gym_name;
-    data['address1'] = this.address1;
-    data['address2'] = this.address2;
-    data['city'] = this.city;
-    data['state'] = this.state;
-    data['lat'] = this.lat;
-    data['long'] = this.long;
-    data['pin'] = this.pin;
-    data['country'] = this.country;
-    data['distance'] = this.distance;
-    data['distance_text'] = this.distance_text;
-    data['duration'] = this.duration;
-    data['duration_text'] = this.duration_text;
-    data['rating'] = this.rating;
-    data['text1'] = this.text1;
-    data['text2'] = this.text2;
-    data['plan_text'] = this.plan_text;
-
-    data['description'] = this.description ??'';
-    data['gallery'] = this.gallery ??'';
-    data['coverImage'] = this.coverImage??'';
-    //TODO Uncomment this code after impletemnt api facility = json['facility'];
-    // data['plan_text'] = this.plan_text;
-
-    // data['uid'] = this.uid;
-    // data['gym_id'] = this.gymId;
-    // data['description'] = this.description;
-    // data['name'] = this.name;
-    // data['user_id'] = this.userId;
-    // data['gym_name'] = this.gymName;
-    // data['address1'] = this.address1;
-    // data['address2'] = this.address2;
-    // data['city'] = this.city;
-    // data['state'] = this.state;
-    // data['status'] = this.status;
-    // data['country'] = this.country;
-    // data['pin'] = this.pin;
-    // data['latitude'] = this.latitude;
-    // data['longitude'] = this.longitude;
-    // data['lease_agreement'] = this.leaseAgreement;
-    // data['electricity_bill'] = this.electricityBill;
-    // data['bank_statement'] = this.bankStatement;
-    // data['date_added'] = this.dateAdded;
-    // data['late_updated'] = this.lateUpdated;
-    // data['cover_image'] = this.coverImage;
-
-    // //New Variables :D
-    // data['text1'] = this.rating;
-    // data['text2'] = this.text2;
-    // data['rating'] = this.rating;
-    // data['duration_text'] = this.duration_text;
-    // data['duration'] = this.duration;
-    // data['distanct_text'] = this.distanct_text;
-    // data['distance'] = this.distance;
-    return data;
-  }
-}
-
-class GymDataa {
-  String uid;
-  String gymId;
-  String description;
-  String name;
-  String userId;
-  String gymName;
-  String type;
-  String status;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String country;
-  String pin;
-  String latitude;
-  String longitude;
-  String leaseAgreement;
-  String electricityBill;
-  String bankStatement;
-  String coverImage;
-  String dateAdded;
-  String lateUpdated;
-
-  // //New Variables :D
-  // String text1;
-  // String text2;
-  double rating;
-
-  // String duration_text;
-  // String duration;
-  // String distanct_text;
-  // String distance;
-
-  GymDataa({
+  GymModelData({
     this.uid,
-    this.gymId,
     this.description,
     this.name,
-    this.userId,
     this.gymName,
     this.address1,
     this.address2,
@@ -327,89 +155,98 @@ class GymDataa {
     this.electricityBill,
     this.bankStatement,
     this.dateAdded,
-    this.lateUpdated,
-    this.coverImage,
-    this.type,
+    this.lastUpdated,
     this.status,
-
-    // //New variables
-    // this.text1,
-    // this.text2,
-    // this.rating,
-    // this.duration_text,
-    // this.duration,
-    // this.distanct_text,
-    // this.distance,
+    this.planType,
+    this.userId,
+    this.benefits,
+    this.gallery,
+    //New Variables :D
+    this.distance,
+    this.distance_text,
+    this.duration,
+    this.duration_text,
+    this.text1,
+    this.text2,
+    this.plan_text,
+    this.rating,
   });
 
-  GymDataa.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    gymId = json['gym_id'];
-    description = json['description'];
-    name = json['name'];
-    userId = json['user_id'];
-    gymName = json['gym_name'];
-    address1 = json['address1'];
-    address2 = json['address2'];
-    city = json['city'];
-    status = json['status'] ?? '';
-    state = json['state'];
-    country = json['country'];
-    pin = json['pin'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    leaseAgreement = json['lease_agreement'];
-    electricityBill = json['electricity_bill'];
-    bankStatement = json['bank_statement'] ?? '';
-    dateAdded = json['date_added'];
-    coverImage = json['cover_image'];
-    lateUpdated = json['late_updated'] != null ? json['late_updated'] : '';
-    type = json.containsKey('type') && json['type'].isNotEmpty
-        ? json['type']
-        : 'Gym';
-    //
-    // //New Variables :D
-    // text1 = json['text1'] ?? '';
-    // text2 = json['text2'] ?? '';
-    // rating = json['rating'] ?? 0;
-    // duration_text = json['duration_text'] ?? '';
-    // duration = json['duration'] ?? '';
-    // distanct_text = json['distanct_text'] ?? '';
-    // distance = json['distance'] ?? 0;
-  }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['gym_id'] = this.gymId;
-    data['description'] = this.description;
-    data['name'] = this.name;
-    data['user_id'] = this.userId;
-    data['gym_name'] = this.gymName;
-    data['address1'] = this.address1;
-    data['address2'] = this.address2;
-    data['city'] = this.city;
-    data['state'] = this.state;
-    data['status'] = this.status;
-    data['country'] = this.country;
-    data['pin'] = this.pin;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['lease_agreement'] = this.leaseAgreement;
-    data['electricity_bill'] = this.electricityBill;
-    data['bank_statement'] = this.bankStatement;
-    data['date_added'] = this.dateAdded;
-    data['late_updated'] = this.lateUpdated;
-    data['cover_image'] = this.coverImage;
 
-    // //New Variables :D
-    // data['text1'] = this.rating;
-    // data['text2'] = this.text2;
-    // data['rating'] = this.rating;
-    // data['duration_text'] = this.duration_text;
-    // data['duration'] = this.duration;
-    // data['distanct_text'] = this.distanct_text;
-    // data['distance'] = this.distance;
-    return data;
-  }
+  factory GymModelData.fromJson(Map<String, dynamic> json) => GymModelData(
+    uid: json["uid"],
+    userId: json["user_id"],
+    description: json["description"],
+    name: json["name"],
+    gymName: json["gym_name"],
+    address1: json["address1"],
+    address2: json["address2"],
+    city: json["city"],
+    state: json["state"],
+    country: json["country"],
+    pin: json["pin"],
+    latitude: json["lat"],
+    longitude: json["long"],
+    leaseAgreement: json["lease_agreement"],
+    electricityBill: json["electricity_bill"],
+    bankStatement: json["bank_statement"],
+    dateAdded: json["date_added"],
+    lastUpdated: json["last_updated"],
+    status: json["status"],
+    planType: json["plan_type"],
+    gallery: json.containsKey('gallery') && json['gallery'] != null
+        ? List<Gallery>.from(
+        json["gallery"].map((x) => Gallery.fromJson(x)))
+        : [],
+    // equipment: List<Equipment>.from(
+    //     json["equipment"].map((x) => Equipment.fromJson(x))),
+    benefits: json.containsKey('benefits') && json['benefits'] != null
+        ? List<Benfit>.from(json["benefits"].map((x) => Benfit.fromJson(x)))
+        : [],
+
+    //New Variables :D
+    distance: json["distance"],
+    distance_text: json["distance_text"],
+    duration: json["duration"],
+    duration_text: json["duration_text"],
+    text1: json["text1"],
+    text2: json["text2"],
+    plan_text: json["plan_text"],
+    rating: json["rating"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "uid": uid,
+    "description": description,
+    "name": name,
+    "gym_name": gymName,
+    "address1": address1,
+    "address2": address2,
+    "city": city,
+    "state": state,
+    "country": country,
+    "pin": pin,
+    "latitude": latitude,
+    "longitude": longitude,
+    "lease_agreement": leaseAgreement,
+    "electricity_bill": electricityBill,
+    "bank_statement": bankStatement,
+    "date_added": dateAdded,
+    "last_updated": lastUpdated,
+    "status": status,
+    "plan_type": planType,
+    "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
+    "benefits": List<dynamic>.from(benefits.map((x) => x.toJson())),
+    //New Variables :D
+    "distance": distance,
+    "distance_text": distance_text,
+    "duration": duration,
+    "duration_text": duration_text,
+    "text1": text1,
+    "text2": text2,
+    "plan_text": plan_text,
+    "rating": rating,
+  };
 }
+

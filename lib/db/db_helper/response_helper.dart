@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 enum DbResponse{
   RESPONSE_FAILED,
-  RESPONSE_SUCCESS
+  RESPONSE_SUCCESS,
+  RESPONSE_NETWORK_ERROR
 }
 
 class ResponseHelper{

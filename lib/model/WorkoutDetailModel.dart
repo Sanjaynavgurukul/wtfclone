@@ -6,11 +6,11 @@ class WorkoutDetailModel {
   });
 
   bool status;
-  Data data;
+  WorkoutData data;
 
   factory WorkoutDetailModel.fromJson(Map<String, dynamic> json) => WorkoutDetailModel(
     status: json["status"],
-    data: json.containsKey('data') ? Data.fromJson(json["data"]) : [],
+    data: json.containsKey('data') ? WorkoutData.fromJson(json["data"]) : [],
   );
 
   Map<String, dynamic> toJson() => {
@@ -19,8 +19,8 @@ class WorkoutDetailModel {
   };
 }
 
-class Data {
-  Data({
+class WorkoutData {
+  WorkoutData({
     this.uid,
     this.woName,
     this.category,
@@ -44,7 +44,7 @@ class Data {
   String status;
   dynamic eDuration;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory WorkoutData.fromJson(Map<String, dynamic> json) => WorkoutData(
     uid: json["uid"],
     woName: json["wo_name"],
     category: json["category"],

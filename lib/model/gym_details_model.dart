@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'WorkoutDetailModel.dart';
+import 'gym_model.dart';
+
 GymDetailsModel gymDetailsModelFromJson(String str) =>
     GymDetailsModel.fromJson(json.decode(str));
 
@@ -22,7 +25,7 @@ class GymDetailsModel {
   });
 
   bool status;
-  Data data;
+  GymModelData data;
   // List<Gallery> gallery;
   // List<Equipment> equipment;
   // List<Benfit> benefits;
@@ -35,7 +38,7 @@ class GymDetailsModel {
     print('json in model--- $json');
     return GymDetailsModel(
       status: json["status"],
-      data: Data.fromJson(json["data"]),
+      data: GymModelData.fromJson(json["data"]),
 
       // addon: List<Addon>.from(json["addon"].map((x) => Addon.fromJson(x))),
       // offer: List<dynamic>.from(json["offer"].map((x) => x)),
@@ -175,112 +178,6 @@ class Benfit {
         "breif": breif,
         "image": image == null ? null : image,
         "status": status,
-      };
-}
-
-class Data {
-  Data({
-    this.uid,
-    this.description,
-    this.name,
-    this.gymName,
-    this.address1,
-    this.address2,
-    this.city,
-    this.state,
-    this.country,
-    this.pin,
-    this.latitude,
-    this.longitude,
-    this.leaseAgreement,
-    this.electricityBill,
-    this.bankStatement,
-    this.dateAdded,
-    this.lastUpdated,
-    this.status,
-    this.planType,
-    this.userId,
-    this.benefits,
-    this.gallery,
-  });
-
-  String uid;
-  String userId;
-  String description;
-  String name;
-  String gymName;
-  String address1;
-  String address2;
-  String city;
-  String state;
-  String country;
-  String pin;
-  String latitude;
-  String longitude;
-  String leaseAgreement;
-  String electricityBill;
-  String bankStatement;
-  String dateAdded;
-  List<Gallery> gallery;
-  List<Benfit> benefits;
-  dynamic lastUpdated;
-  String status;
-  String planType;
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        uid: json["uid"],
-        userId: json["user_id"],
-        description: json["description"],
-        name: json["name"],
-        gymName: json["gym_name"],
-        address1: json["address1"],
-        address2: json["address2"],
-        city: json["city"],
-        state: json["state"],
-        country: json["country"],
-        pin: json["pin"],
-        latitude: json["lat"],
-        longitude: json["long"],
-        leaseAgreement: json["lease_agreement"],
-        electricityBill: json["electricity_bill"],
-        bankStatement: json["bank_statement"],
-        dateAdded: json["date_added"],
-        lastUpdated: json["last_updated"],
-        status: json["status"],
-        planType: json["plan_type"],
-        gallery: json.containsKey('gallery') && json['gallery'] != null
-            ? List<Gallery>.from(
-                json["gallery"].map((x) => Gallery.fromJson(x)))
-            : [],
-        // equipment: List<Equipment>.from(
-        //     json["equipment"].map((x) => Equipment.fromJson(x))),
-        benefits: json.containsKey('benefits') && json['benefits'] != null
-            ? List<Benfit>.from(json["benefits"].map((x) => Benfit.fromJson(x)))
-            : [],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "uid": uid,
-        "description": description,
-        "name": name,
-        "gym_name": gymName,
-        "address1": address1,
-        "address2": address2,
-        "city": city,
-        "state": state,
-        "country": country,
-        "pin": pin,
-        "latitude": latitude,
-        "longitude": longitude,
-        "lease_agreement": leaseAgreement,
-        "electricity_bill": electricityBill,
-        "bank_statement": bankStatement,
-        "date_added": dateAdded,
-        "last_updated": lastUpdated,
-        "status": status,
-        "plan_type": planType,
-        "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
-        "benefits": List<dynamic>.from(benefits.map((x) => x.toJson())),
       };
 }
 

@@ -4,5 +4,10 @@ class DBRepository {
   //Private Variable :D
   DBProvider _dbProvider = DBProvider();
 
-  // Stream<ResponseHelper> getData()=>_dbProvider.getDemoData();
+  Future<ResponseHelper> getNearByGym(
+          {@required String latitude,
+          @required String longitude,
+          @required String gymType}) =>
+      _dbProvider.getNearByGym(
+          latitude: latitude, longitude: longitude, gymType: gymType);
 }

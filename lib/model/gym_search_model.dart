@@ -3,14 +3,14 @@ import 'package:wtf/model/gym_model.dart';
 class GymSearchModel {
   bool status;
   String message;
-  List<GymData> data;
+  List<GymModelData> data;
 
   GymSearchModel({this.status, this.message, this.data});
 
   GymSearchModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = List<GymData>.from(json["data"].map((x) => GymData.fromJson(x)));
+      data = List<GymModelData>.from(json["data"].map((x) => GymModelData.fromJson(x)));
     }
     message = json['message'];
   }
