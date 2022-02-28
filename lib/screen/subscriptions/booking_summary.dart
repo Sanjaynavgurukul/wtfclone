@@ -418,7 +418,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     amountLabel(label: 'Total Amount',value: '2999'),
                   ],
                 ),
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 45,
               ),
             ],
