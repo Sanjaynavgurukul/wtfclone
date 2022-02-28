@@ -55,6 +55,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('gym iD --- ${widget.gymId}');
     return Scaffold(
       body: Consumer<GymStore>(
         builder: (context, gymStore, child) => gymStore.selectedGymDetail ==
@@ -226,7 +227,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                 text: '',
                                 style:
                                 DefaultTextStyle.of(context).style,
-                                children: const <WidgetSpan>[
+                                children: <WidgetSpan>[
                                   WidgetSpan(
                                       child: Icon(
                                         Icons.directions_car,
@@ -235,7 +236,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                       )),
                                   WidgetSpan(
                                       child: Text(
-                                          ' 15 Mins away | 1 Km',
+                                          ' ${gymStore.selectedGymDetail.data.distance_text ?? ''} | ${gymStore.selectedGymDetail.data.distance} Km',
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight:
@@ -282,12 +283,12 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                           //Name and rating section :D
                           ListTile(
                             contentPadding: EdgeInsets.all(0),
-                            title: Text('Mass Monster',
+                            title: Text('${gymStore.selectedGymDetail.data.gymName ?? ''}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 18,
                                     fontStyle: FontStyle.normal)),
-                            subtitle: Text('Noida Sector 8, C Bloc'),
+                            subtitle: Text('${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
                             trailing: Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -299,7 +300,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                         fontWeight: FontWeight.w600)),
                                 SizedBox(height: 6),
                                 RatingBar(
-                                    initialRating: 4,
+                                    initialRating: gymStore.selectedGymDetail.data.rating.toDouble() ?? 0.0,
                                     direction: Axis.horizontal,
                                     allowHalfRating: true,
                                     itemCount: 5,
@@ -340,7 +341,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                     fontSize: 14,
                                     fontStyle: FontStyle.normal)),
                             subtitle: Text(
-                                '\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis enim lacus curabitur massa sed. At maecenas nibh aliquet ipsum gravida massa turpis. Id duis consequat urna, pulvinar erat fusce sed lacus, eu. Ornare ullamcorper dictum diam ipsum volutpat dignissim purus, varius at. A, commodo amet sed mattis augue luctus quam.'),
+                                '${gymStore.selectedGymDetail.data.description ??''}'),
                           ),
                           SizedBox(height: 24),
                           //Facility Section :D
@@ -361,7 +362,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: facilityItems(),
+                                children: facilityItems(data : gymStore.selectedGymDetail.data.benefits ?? []),
                               ),
                             ),
                           ),
@@ -390,7 +391,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                             ],
                           ),
                           SizedBox(height: 24),
-                          Text('Train Live from Yout co_space',
+                          Text('Train Live from Your co_space',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -407,6 +408,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                           ),
                           SizedBox(height: 16),
                           //CoSpace section :D
+                          GymLiveWidget(),
                           Container(
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -415,6 +417,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                               ),
                             ),
                           ),
+
                           SizedBox(height: 24),
                           Text('Fun Session at GYM',
                               style: TextStyle(
@@ -441,6 +444,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                               ),
                             ),
                           ),
+                          GymAddonWidget(),
                           SizedBox(height: 12),
                         ],
                       ),
@@ -496,7 +500,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
   }
 
   //Facility List Widget :D
-  List<Widget> facilityItems() => FacilityModel.getList()
+  List<Widget> facilityItems({List<Benfit> data}) => data.isNotEmpty ? FacilityModel.getList()
       .map((item) => Container(
             padding: EdgeInsets.only(left: 8, right: 8),
             child: Column(
@@ -510,7 +514,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
               ],
             ),
           ))
-      .toList();
+      .toList():[Center(child: Text("No facility Available"))];
 
   List<Widget> coSpaceWidget()=> CoSpaceModel.getList()
       .map((item) => Container(
@@ -1811,7 +1815,6 @@ class CoSpaceModel{
   static List<CoSpaceModel> getList()=>[CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel()];
 }
 
-
 class TextIconCard extends StatelessWidget {
   const TextIconCard({
     Key key,
@@ -2331,94 +2334,113 @@ class GymLiveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ExpansionTile(
-          collapsedIconColor: Colors.white,
-          collapsedTextColor: Colors.white,
-          collapsedBackgroundColor: Colors.grey[800],
-          iconColor: Colors.white,
-          // tilePadding: EdgeInsets.zero,
-          initiallyExpanded: true,
-          controlAffinity: ListTileControlAffinity.platform,
-          children: [
-            Consumer<GymStore>(
-              builder: (context, gymStore, child) =>
-                  gymStore.selectedGymAddOns != null
-                      ? gymStore.selectedGymAddOns.data != null &&
-                              gymStore.selectedGymAddOns.data.isNotEmpty &&
-                              gymStore.selectedGymAddOns.data
-                                      .where((e) => e.isLive)
-                                      .toList()
-                                      .length >
-                                  0
-                          ? Container(
-                              height: 120,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount:
-                                    gymStore.selectedGymAddOns.data.length,
-                                itemBuilder: (context, index) {
-                                  return gymStore
-                                          .selectedGymAddOns.data[index].isLive
-                                      ? AddonCard(
-                                          data: gymStore
-                                              .selectedGymAddOns.data[index],
-                                        )
-                                      : Container();
-                                },
-                              ),
-                            )
-                          : Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 6.0),
-                                child: Text(
-                                  'No ADDON Available',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15.0,
-                                  ),
-                                ),
-                              ),
-                            )
-                      : Loading(),
-            ),
-          ],
-          title: Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                // mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      'Book ${context.read<GymStore>().selectedGymDetail.data.gymName} Live Sessions',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  // Icon(
-                  //   Icons.keyboard_arrow_up_sharp,
-                  //   color: Colors.white,
-                  //   size: 30,
-                  // )
-                ],
-              ),
+    return Consumer<GymStore>(
+      builder: (context, gymStore, child) =>
+      gymStore.selectedGymAddOns != null
+          ? gymStore.selectedGymAddOns.data != null &&
+          gymStore.selectedGymAddOns.data.isNotEmpty &&
+          gymStore.selectedGymAddOns.data
+              .where((e) => e.isLive)
+              .toList()
+              .length >
+              0
+          ? Container(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount:
+          gymStore.selectedGymAddOns.data.length,
+          itemBuilder: (context, index) {
+            return gymStore
+                .selectedGymAddOns.data[index].isLive
+                ? AddonCard(
+              data: gymStore
+                  .selectedGymAddOns.data[index],
+            )
+                : Container();
+          },
+        ),
+      )
+          : Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: Text(
+            'No ADDON Available',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.0,
             ),
           ),
         ),
-        SizedBox(
-          height: 15,
-        ),
-      ],
+      )
+          : Loading(),
+    );
+  }
+  Widget ab(){
+    return Container(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount:
+        gymStore.selectedGymAddOns.data.length,
+        itemBuilder: (context, index) {
+          return gymStore
+              .selectedGymAddOns.data[index].isLive
+              ? AddonCard(
+            data: gymStore
+                .selectedGymAddOns.data[index],
+          )
+              : Container();
+        },
+      ),
+    );
+  }
+
+  Widget ge(){
+    return Container(
+      padding: EdgeInsets.only(left: 8, right: 8),
+      child: Column(
+        children: [
+          Container(
+            width: 118,
+            height: 76,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+                  color: Colors.transparent,
+                ),
+                child: Image.network(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                  height: double.infinity,
+                  loadingBuilder: (context, _, chunk) => chunk == null
+                      ? _
+                      : RectangleShimmering(
+                    width: double.infinity,
+                    radius: 16.0,
+                  ),
+                ),
+                // height: 350.0,
+              ),
+            ),
+          ),
+          SizedBox(height:6),
+          InkWell(
+            onTap:(){},
+            child: Container(
+              padding: EdgeInsets.only(left:14,right:14,bottom: 6,top: 6),
+              decoration: BoxDecoration(
+                  color: AppConstants.boxBorderColor,
+                  borderRadius:BorderRadius.all(Radius.circular(8))
+              ),
+              child: Text('Book now'),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -516,6 +516,7 @@ class GymCard extends StatelessWidget {
                   context: context,
                   gymId: item.userId,
                 );
+                print('gym iD --- from nav ${item.userId}');
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (_) => BuyMemberShipPage(

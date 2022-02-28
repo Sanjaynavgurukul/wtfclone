@@ -665,7 +665,7 @@ class RestDatasource {
   //get Gym Details
   ///@Gaurav
   Future<GymDetailsModel> getGymDetails(String gymID) async {
-    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;

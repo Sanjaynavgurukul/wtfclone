@@ -128,11 +128,11 @@ class _ExplorePageState extends State<ExplorePage> {
                                   type: 'studio',
                                 );
                           }
-                          // NavigationService.navigateTo(Routes.discoverNow);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => GymListScreen()),
-                          );
+                          NavigationService.navigateTo(Routes.discoverNow);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => GymListScreen()),
+                          // );
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.46,
