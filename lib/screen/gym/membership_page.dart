@@ -15,6 +15,7 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
+import 'package:wtf/screen/common_widgets/flexible_app_bar.dart';
 import 'package:wtf/screen/event/EventDetails.dart';
 import 'package:wtf/widget/BenefitsSection.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
@@ -266,7 +267,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                     ),
                   ),
                   flexibleSpace: FlexibleSpaceBar(
-                    background: MyFlexiableAppBar(
+                    background: FlexibleAppBar(
                       images: gymStore.selectedGymDetail.data.gallery,
                       color: AppConstants.primaryColor,
                     ),
@@ -1810,70 +1811,6 @@ class CoSpaceModel{
   static List<CoSpaceModel> getList()=>[CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel(),CoSpaceModel()];
 }
 
-class MyFlexiableAppBar extends StatelessWidget {
-  final List<Gallery> images;
-  final Color color;
-
-  final double appBarHeight = 66.0;
-
-  const MyFlexiableAppBar({this.images, this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-
-    return Container(
-      padding: EdgeInsets.only(top: statusBarHeight),
-      height: statusBarHeight + appBarHeight,
-      color: color,
-      child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: CarouselSlider(
-            options: CarouselOptions(
-              height: 300.0,
-              viewportFraction: 1,
-              enlargeCenterPage: false,
-              autoPlay: true,
-              pageSnapping: true,
-              autoPlayInterval: Duration(seconds: 3),
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
-            ),
-            items: images.map(
-              (i) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(0.0),
-                  child: Builder(
-                    builder: (BuildContext context) {
-                      if (i.images == null) {
-                        return Center(
-                          child: Text("No image data"),
-                        );
-                      }
-                      return Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(0))),
-                        child: Image.network(
-                          i.images,
-                          fit: BoxFit.fill,
-                          width: double.infinity,
-                          height: double.infinity,
-                          loadingBuilder: (context, _, chunk) => chunk == null
-                              ? _
-                              : RectangleShimmering(
-                                  width: double.infinity,
-                                  height: 180.0,
-                                ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ).toList()),
-      ),
-    );
-  }
-}
 
 class TextIconCard extends StatelessWidget {
   const TextIconCard({
