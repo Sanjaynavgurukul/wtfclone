@@ -94,5 +94,6 @@ class Api {
   static String getAllDietDetails()=>'dietcat/getall?page=1';
   static String getDietPlan()=>'/dietpackage?page=1&limit=10&name=';
   static String getNearByGym(String lat,String lng,String type)=>'gym/nearestgym?lat=$lat&long=$lng=type=$type=';
+  static String sendOtpToGymOwner()=>'subscription/sendotp';
 
 }

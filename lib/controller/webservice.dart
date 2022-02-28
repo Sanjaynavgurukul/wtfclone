@@ -1473,4 +1473,27 @@ class RestDatasource {
     });
   }
 
+  Future<bool> sendGymOwnerOtp({@required String gymId})async{
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.post(
+        BASE_URL+Api.sendOtpToGymOwner(),
+        body: {
+          "user_id":"$token",
+          "gym_id":"$gymId"
+        },
+        headers: mapHeader,
+      );
+      print("response send otp : " + res.toString());
+      if(res != null) return true;
+      else return false;
+    } catch (e) {
+      print('add member error: $e');
+      return false;
+    }
+  }
+
 }

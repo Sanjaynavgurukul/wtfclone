@@ -2173,4 +2173,10 @@ class GymStore extends ChangeNotifier {
   Future<void> getDietPlan() async {
     await RestDatasource().getDietPlans();
   }
+
+  Future<bool> sendOtpToGymOwner({String gymId})async{
+    // sendGymOwnerOtp
+    bool response = await RestDatasource().sendGymOwnerOtp(gymId: gymId);
+    return response;
+  }
 }

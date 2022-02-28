@@ -278,14 +278,18 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         child: InkWell(
           onTap: () async {
             if(!isFullPayment()){
-              print('something happendeddd -- partial condition');
               if(validateEmiPayment() == null){
-                showBottomDialog();
+                gymStore.sendOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId).then((value){
+                  if(value){
+                    showBottomDialog();
+                  }else{
+                    FlashHelper.errorBar(context, message: 'Something went wrong while sending otp');
+                  }
+                });
               }else{
                 FlashHelper.errorBar(context, message: validateEmiPayment());
               }
             }else{
-              print('something happendeddd -- Not a partial condition');
             }
           },
           child: Container(
@@ -1416,13 +1420,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     children: [
                       ListTile(
                         title: Text(
-                          'Verification',
+                          'Verification Required\n',
                           textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          style: TextStyle(fontSize: 18, color: Colors.black,fontWeight:FontWeight.bold),
                         ),
                         subtitle: Text(
-                          'We send an otp to GYM Owner please verify',
-                          style: TextStyle(fontSize: 14, color: Colors.black45),
+                          'We have sent an OTP to ${gymStore.selectedGymDetail.data.gymName} , ${gymStore.selectedGymDetail.data.name} to authenticate this transaction\, Please ask the OTP from ${gymStore.selectedGymDetail.data.name} to proceed',
+                          style: TextStyle(fontSize: 14, color: Colors.black),
                         ),
                         trailing: IconButton(
                           onPressed: () {

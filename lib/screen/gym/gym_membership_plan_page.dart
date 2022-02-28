@@ -160,19 +160,8 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
                     title: Text(
-                      'Best for person who frequently travel',
+                      '${data.description ??'Best for person who frequently travel'}',
                       style: TextStyle(fontSize: 12),
-                    ),
-                    subtitle: Padding(
-                      padding: EdgeInsets.only(left: 12, top: 12, bottom: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('• 1 Month membership'),
-                          Text('• Trainer Support'),
-                          Text('• Access to free diet plans'),
-                        ],
-                      ),
                     ),
                   )
                 ],
