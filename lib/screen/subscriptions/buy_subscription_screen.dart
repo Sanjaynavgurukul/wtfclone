@@ -122,11 +122,11 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.only(left: 12, right: 0, bottom: 0),
-                          title: Text('Mass Monster',
+                          title: Text('${gymStore.selectedGymDetail.data.gymName}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 28, fontWeight: FontWeight.w600)),
-                          subtitle: Text('Noida Sector 8 C Bloc',
+                          subtitle: Text('${gymStore.selectedGymDetail.data.address1} ${gymStore.selectedGymDetail.data.address2}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w400)),
