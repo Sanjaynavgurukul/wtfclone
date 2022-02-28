@@ -47,53 +47,46 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
         centerTitle: false,
         title: Text('Choose Your Plan'),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          store.getGymPlans(context: context);
-        },
-        backgroundColor: Colors.white,
-        child: Consumer<GymStore>(
-          builder: (context, store, child) => store.selectedGymPlans != null
-              ? store.selectedGymPlans.data != null &&
-                      store.selectedGymPlans.data.isNotEmpty
-                  ? Container(
-                      child: ListView(
-                        children: [
-                          ListTile(
-                              title: Text(
-                                  'One Membership for all your fitness need')),
-                          ListView.builder(
-                              itemCount: store.selectedGymPlans.data.length,
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(
-                                  left: 32, right: 32, top: 18, bottom: 54),
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                GymPlanData data =
-                                    store.selectedGymPlans.data[index];
-                                bool r = data.is_recomended == 1;
-                                PlanColor color =
-                                    PlanColor.getColorList()[index];
-                                return prizeItem(
-                                    recomended: r,
-                                    color: color,
-                                    data: data,
-                                    index: index);
-                              })
-                        ],
-                      ),
-                    )
-                  : Center(
-                      child: Text(
-                        'No Plans found',
-                      ),
-                    )
-              : Loading(),
-        ),
+      body: Consumer<GymStore>(
+        builder: (context, store, child) => store.selectedGymPlans != null
+            ? store.selectedGymPlans.data != null &&
+            store.selectedGymPlans.data.isNotEmpty
+            ? Container(
+          child: ListView(
+            children: [
+              ListTile(
+                  title: Text(
+                      'One Membership for all your fitness need')),
+              ListView.builder(
+                  itemCount: store.selectedGymPlans.data.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(
+                      left: 32, right: 32, top: 18, bottom: 54),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    GymPlanData data =
+                    store.selectedGymPlans.data[index];
+                    bool r = data.is_recomended == 1;
+                    PlanColor color =
+                    PlanColor.getColorList()[index];
+                    return prizeItem(
+                        recomended: r,
+                        color: color,
+                        data: data,
+                        index: index);
+                  })
+            ],
+          ),
+        )
+            : Center(
+          child: Text(
+            'No Plans found',
+          ),
+        )
+            : Loading(),
       ),
     );
   }
-
 
   Widget prizeItem(
       {bool recomended = false, PlanColor color, GymPlanData data, int index}) {
@@ -154,7 +147,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                           color: color.leftColor,
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                       child: Text(
-                        '\u{20B9}${data.price ?? '0'}',
+                        '\u{20B9}${data.plan_price ?? '0'}',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -337,7 +330,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                                             ),
                                             UIHelper.verticalSpace(6.0),
                                             Text(
-                                              '₹ ${store.selectedGymPlans.data[index].price}',
+                                              '₹ ${store.selectedGymPlans.data[index].plan_price}',
                                               style: TextStyle(
                                                 color:
                                                     AppConstants.offPinkColor,
@@ -494,6 +487,10 @@ class PlanColor {
   PlanColor({this.leftColor, this.rightColor});
 
   static List<PlanColor> getColorList() => [
+        PlanColor(leftColor: Color(0xff6FAF81), rightColor: Color(0xff598966)),
+        PlanColor(leftColor: Color(0xffB9789B), rightColor: Color(0xff89506D)),
+        PlanColor(leftColor: Color(0xff965651), rightColor: Color(0xffB43B3B)),
+        PlanColor(leftColor: Color(0xff438373), rightColor: Color(0xff3E74B4)),
         PlanColor(leftColor: Color(0xff6FAF81), rightColor: Color(0xff598966)),
         PlanColor(leftColor: Color(0xffB9789B), rightColor: Color(0xff89506D)),
         PlanColor(leftColor: Color(0xff965651), rightColor: Color(0xffB43B3B)),

@@ -75,17 +75,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             ? int.tryParse(context.read<GymStore>().selectedEventData.price)
             : couponValue;
       } else {
-        print('price: ${context.read<GymStore>().selectedGymPlan.price}');
+        print('price: ${context.read<GymStore>().selectedGymPlan.plan_price}');
         print('offer val: ${context.read<GymStore>().chosenOffer.value}');
         discountAmount =
-            (int.tryParse(context.read<GymStore>().selectedGymPlan.price) *
+            (int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) *
                     int.tryParse(context.read<GymStore>().chosenOffer.value) /
                     100)
                 .truncate();
       }
     }
     totalAmount =
-        int.tryParse(context.read<GymStore>().selectedGymPlan.price) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
             discountAmount;
     tax = (totalAmount *
             int.tryParse(
@@ -93,7 +93,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             100)
         .truncate();
     totalAmount = tax +
-        int.tryParse(context.read<GymStore>().selectedGymPlan.price) -
+        int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
         discountAmount;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) setState(() {});
@@ -711,7 +711,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 SizedBox(
                   height: 12,
                 ),
-                if (gymStore.selectedGymPlan.price != '0')
+                if (gymStore.selectedGymPlan.plan_price != '0')
                   OfferSection(
                     onApplied: () {
                       setState(() {
@@ -722,7 +722,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       });
                     },
                   ),
-                if (gymStore.selectedGymPlan.price != '0')
+                if (gymStore.selectedGymPlan.plan_price != '0')
                   Consumer<GymStore>(
                     builder: (context, store, child) =>
                         store.chosenOffer != null
@@ -777,7 +777,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           color: Colors.white),
                     ),
                     Text(
-                      '₹ ${gymStore.selectedGymPlan.price}',
+                      '₹ ${gymStore.selectedGymPlan.plan_price}',
                       // "RS. 499",
                       style: TextStyle(
                           fontSize: 15,
@@ -1038,7 +1038,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     await _presenter.addSubscription(
       price,
       body,
-      gymStore.selectedGymPlan.uid,
+      gymStore.selectedGymPlan.plan_uid,
     );
   }
 
@@ -1073,7 +1073,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 )
                 .toIso8601String())
             .trim();
-    body["plan_id"] = gymStore.selectedGymPlan.uid;
+    body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
     body["isWhatsapp"] = !_isChecked;
 
     if (gymStore.chosenOffer != null) {

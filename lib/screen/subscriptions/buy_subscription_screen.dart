@@ -625,7 +625,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '\u20B9 ${gymStore.selectedGymPlan.price}',
+                                    '\u20B9 ${gymStore.selectedGymPlan.plan_price}',
                                     style: TextStyle(
                                       color: AppConstants.red,
                                       fontSize: 30,
