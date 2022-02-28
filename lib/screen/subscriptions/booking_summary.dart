@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/explore_controller_presenter.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -10,8 +11,10 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/common_function.dart';
 import 'package:wtf/helper/flash_helper.dart';
+import 'package:wtf/helper/global.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/common_model.dart';
@@ -173,8 +176,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     return 0;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
@@ -194,6 +195,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          _showDialog(context);
+        },
+        child: Icon(Icons.add),
       ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
@@ -422,12 +430,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                   color: Color(0xffAF4949)),
                               child: ListTile(
                                 onTap: () {
-                                  _selectEmiDate(emiType: 1).then((value){
-                                    if(value != null){
-                                      gymStore.selectedGymDetail.data.second_payment = value;
-                                      gymStore.selectedGymDetail.data.second_payment_amount = getHalfPaymentAmount(gymStore.selectedGymDetail.data.first_payment_amount);
-                                      setState(() {
-                                      });
+                                  _selectEmiDate(emiType: 1).then((value) {
+                                    if (value != null) {
+                                      gymStore.selectedGymDetail.data
+                                          .second_payment = value;
+                                      gymStore.selectedGymDetail.data
+                                              .second_payment_amount =
+                                          getHalfPaymentAmount(gymStore
+                                              .selectedGymDetail
+                                              .data
+                                              .first_payment_amount);
+                                      setState(() {});
                                     }
                                   });
                                 },
@@ -459,12 +472,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                               child: ListTile(
                                 enabled: isEnableThirdEmi(),
                                 onTap: () {
-                                  _selectEmiDate(emiType: 1).then((value){
-                                    if(value != null){
-                                      gymStore.selectedGymDetail.data.third_payment = value;
-                                      gymStore.selectedGymDetail.data.third_payment_amount = getHalfPaymentAmount(gymStore.selectedGymDetail.data.first_payment_amount);
-                                      setState(() {
-                                      });
+                                  _selectEmiDate(emiType: 1).then((value) {
+                                    if (value != null) {
+                                      gymStore.selectedGymDetail.data
+                                          .third_payment = value;
+                                      gymStore.selectedGymDetail.data
+                                              .third_payment_amount =
+                                          getHalfPaymentAmount(gymStore
+                                              .selectedGymDetail
+                                              .data
+                                              .first_payment_amount);
+                                      setState(() {});
                                     }
                                   });
                                 },
@@ -517,36 +535,47 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     )),
                 child: Column(
                   children: [
-                    amountLabel(label: 'Plan Price', value: gymStore.selectedGymPlan.plan_price??''),
+                    amountLabel(
+                        label: 'Plan Price',
+                        value: gymStore.selectedGymPlan.plan_price ?? ''),
                     SizedBox(height: 6),
                     if (gymStore.chosenOffer != null)
-                      amountLabel(label: "Discount",value: discountAmount != null ?discountAmount.toString(): ''),
+                      amountLabel(
+                          label: "Discount",
+                          value: discountAmount != null
+                              ? discountAmount.toString()
+                              : ''),
                     if (gymStore.chosenOffer != null) SizedBox(height: 6),
                     InkWell(
-                      onTap: (){
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('CGST 9%'),
-                                Text('SGST 9%'),
-                                Text(
-                                    'Tax acknowledgement will be emailed to you after subscription.'),
-                              ],
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('CGST 9%'),
+                                  Text('SGST 9%'),
+                                  Text(
+                                      'Tax acknowledgement will be emailed to you after subscription.'),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                        child: amountLabel(label: 'GST(0%)', value: tax != null ? tax.toString():'')),
+                          );
+                        },
+                        child: amountLabel(
+                            label: 'GST(0%)',
+                            value: tax != null ? tax.toString() : '')),
                     Divider(
                       thickness: 1,
                       color: Colors.white,
                     ),
                     SizedBox(height: 6),
-                    amountLabel(label: 'Total Amount', value: totalAmount != null ? totalAmount.toString(): ''),
+                    amountLabel(
+                        label: 'Total Amount',
+                        value:
+                            totalAmount != null ? totalAmount.toString() : ''),
                   ],
                 ),
               ),
@@ -577,7 +606,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     String formattedDate = formatter.format(now);
     return formattedDate; // 2016-01-25
   }
-
 
   String getEmiLabel(int emiType) {
     switch (emiType) {
@@ -1319,64 +1347,174 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   Future<String> _selectEmiDate({int emiType}) async {
     final DateTime picked = await showDatePicker(
         context: context,
-
-        initialDate: gymStore
-            .activeSubscriptions.data.expireDate
-            .add(
+        initialDate: gymStore.activeSubscriptions.data.expireDate.add(
           new Duration(days: 1),
         ),
-        firstDate: gymStore
-            .activeSubscriptions.data.expireDate
-            .add(
+        firstDate: gymStore.activeSubscriptions.data.expireDate.add(
           new Duration(days: 1),
         ),
-        lastDate: gymStore
-            .activeSubscriptions.data.expireDate
-            .add(
+        lastDate: gymStore.activeSubscriptions.data.expireDate.add(
           new Duration(days: 180),
         ),
         builder: (BuildContext context, Widget child) {
           return getDialogTheme(child);
         });
 
-    if(picked != null ){
+    if (picked != null) {
       String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
       return formattedDate;
-    }else return null;
+    } else
+      return null;
   }
 
+  void _showDialog(BuildContext context) {
+    showBottomDialog(
+      context: context,
+      allowBackNavigation: true,
+      title: 'Do you wish to purchase add-ons?',
+      content:
+          'Add-ons help you save some extra money when you purchase them along with our original products. Plus, they help your chances of winning as well.',
+      actions: [
+        RaisedButton(
+          child: Text('YES, GO AHEAD'),
+          onPressed: () {},
+        ),
+        FlatButton(
+          child: Text('SKIP'),
+          onPressed: () {},
+        )
+      ],
+    );
+  }
 
-// Future<bool> showPartialDialog() {
-//   return showModalBottomSheet(
-//       shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-//       backgroundColor: Colors.white,
-//       context: context,
-//       isScrollControlled: true,
-//       builder: (context) => Padding(
-//             padding: const EdgeInsets.symmetric(horizontal: 18),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisSize: MainAxisSize.min,
-//               children: <Widget>[
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
-//                   child: Text('Enter your address'),
-//                 ),
-//                 SizedBox(
-//                   height: 8.0,
-//                 ),
-//                 Padding(
-//                   padding: EdgeInsets.only(
-//                       bottom: MediaQuery.of(context).viewInsets.bottom),
-//                   child: TextField(
-//                     decoration: InputDecoration(hintText: 'adddrss'),
-//                     autofocus: true,
-//                   ),
-//                 ),
-//                 SizedBox(height: 10),
-//               ],
-//             ),
-//           ));
-// }
+  Future<T> showBottomDialog<T>({
+    @required BuildContext context,
+    String title,
+    String content,
+    Widget titleWidget,
+    Widget contentWidget,
+    List<Widget> actions,
+    bool allowBackNavigation = false,
+  }) {
+    assert(title != null || titleWidget != null,
+        'title and titleWidget both must not be null');
+    assert(content != null || contentWidget != null,
+        'content and contentWidget both must not be null');
+    final theme = Theme.of(context);
+    final _formKey = GlobalKey<FormState>();
+    final _controller = TextEditingController();
+
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      builder: (context) => WillPopScope(
+          onWillPop: () async => allowBackNavigation,
+          child: StatefulBuilder(
+            builder: (BuildContext ctx, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding:
+                      EdgeInsets.only(top: 16, bottom: MediaQuery.of(context).viewInsets.bottom, right: 12, left: 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'Verification',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                        subtitle: Text(
+                          'We send an otp to GYM Owner please verify',
+                          style: TextStyle(fontSize: 14, color: Colors.black45),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 40),
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          inputFormatters: [Global.amountValidator],
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: false,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: "Enter OTP",
+                            labelText: "Enter OTP",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            enabledBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                          style: TextStyle(color: Colors.black),
+                          maxLength: 6,
+                          autofocus: true,
+                          controller: _controller,
+                          maxLines: 1,
+                          validator: (value) {
+                            if(value == null)
+                              return "Please enter OTP";
+                            else if (value.length <6){
+                              return 'Please enter 6 character otp';
+                            }else return null;
+                          },
+                          onChanged: (value) {},
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      InkWell(
+                        onTap: (){
+                          final formState = _formKey.currentState;
+                          if (formState.validate()) {
+                            formState.save();
+                            // then do something
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius:BorderRadius.all(Radius.circular(8)),
+                            color: AppConstants.bgColor
+                          ),
+                          child: Text('Verify OTP',style:TextStyle(color: Colors.white,fontWeight:FontWeight.w600,fontSize: 14)),
+                        ),
+                      ),SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )),
+    );
+  }
 }
