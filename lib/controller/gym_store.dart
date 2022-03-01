@@ -2179,4 +2179,9 @@ class GymStore extends ChangeNotifier {
     bool response = await RestDatasource().sendGymOwnerOtp(gymId: gymId);
     return response;
   }
+  Future<bool> verifyOtpToGymOwner({@required String gymId,@required String otp})async{
+    // sendGymOwnerOtp
+    bool response = await RestDatasource().verifyGymOwnerOtp(gymId: gymId,otp: otp);
+    return response;
+  }
 }

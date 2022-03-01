@@ -130,7 +130,7 @@ class GymModelData {
   String cover_image;
 
   //New Variables :D
-  String distance;
+  int distance;
   String distance_text;
   String duration;
   String duration_text;

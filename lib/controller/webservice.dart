@@ -57,6 +57,7 @@ class RestDatasource {
   NetworkUtil _netUtil = new NetworkUtil();
 
   static const String BASE_URL = APIHelper.BASE_URL;
+
   // static const String BASE_URL = 'http://13.232.102.139:9000/';
 
   static Map<String, String> header = {
@@ -665,7 +666,6 @@ class RestDatasource {
   //get Gym Details
   ///@Gaurav
   Future<GymDetailsModel> getGymDetails(String gymID) async {
-
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
@@ -839,7 +839,8 @@ class RestDatasource {
   }
 
   //TODO Cehck This method Later :D
-  Future<GymTypes> getDiscoverNows({String type, String lat, String lng}) async {
+  Future<GymTypes> getDiscoverNows(
+      {String type, String lat, String lng}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -858,6 +859,7 @@ class RestDatasource {
       return model;
     });
   }
+
   Future<GymTypes> getDiscoverNow({String type, String lat, String lng}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
@@ -866,7 +868,7 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
     print('checking type of gym : $type');
     return _netUtil
-        .get(BASE_URL + Api.getNearByGym(lat, lng,type), headers: mapHeader)
+        .get(BASE_URL + Api.getNearByGym(lat, lng, type), headers: mapHeader)
         .then((dynamic res) {
       print("response get nearBy Gym : " + res.toString());
       GymTypes model = res != null && res['status']
@@ -1135,7 +1137,7 @@ class RestDatasource {
   Future<GymPlanModel> getGymPlans({BuildContext context, String gymId}) async {
     String token = locator<AppPrefs>().token.getValue();
     String url = BASE_URL + Api.GET_GYM_PLAN;
-    print('Apli String --- ${url+gymId}');
+    print('Apli String --- ${url + gymId}');
     var headers = {
       'content-type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -1334,7 +1336,7 @@ class RestDatasource {
   }
 
   Future<dynamic> eventSubmissionAdd(
-      {BuildContext context, Map<String,dynamic> body}) async {
+      {BuildContext context, Map<String, dynamic> body}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
@@ -1441,7 +1443,6 @@ class RestDatasource {
     var res = await _netUtil
         .get(BASE_URL + Api.getAllDietDetails(), headers: mapHeader)
         .then((dynamic res) {
-
       if (res['status']) {
         model = (res['data'] as List)
             .map((p) => DietModel.fromJson(data: p))
@@ -1453,7 +1454,7 @@ class RestDatasource {
     return model;
   }
 
-  Future<void> getDietPlans()async{
+  Future<void> getDietPlans() async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
@@ -1461,7 +1462,6 @@ class RestDatasource {
     var res = await _netUtil
         .get(BASE_URL + Api.getDietPlan(), headers: mapHeader)
         .then((dynamic res) {
-
       if (res['status']) {
         // model = (res['data'] as List)
         //     .map((p) => DietModel.fromJson(data: p))
@@ -1473,27 +1473,55 @@ class RestDatasource {
     });
   }
 
-  Future<bool> sendGymOwnerOtp({@required String gymId})async{
+  Future<bool> sendGymOwnerOtp({@required String gymId}) async {
+    //GLKdIYAWDS2Q8
     try {
       String token = locator<AppPrefs>().token.getValue();
+      // String userId = locator<AppPrefs>().userData.key;
+      String userId = locator<AppPrefs>().memberId.getValue();
       Map<String, String> mapHeader = Map();
       mapHeader["Authorization"] = "Bearer " + token;
       mapHeader["Content-Type"] = "application/json";
+
+      print('User Id -- $userId gym id - $gymId');
+
       var res = await _netUtil.post(
-        BASE_URL+Api.sendOtpToGymOwner(),
-        body: {
-          "user_id":"$token",
-          "gym_id":"$gymId"
-        },
+        BASE_URL + Api.sendOtpToGymOwner(),
+        body: {"user_id": "$userId", "gym_id": "$gymId"},
         headers: mapHeader,
       );
       print("response send otp : " + res.toString());
-      if(res != null) return true;
-      else return false;
+      if (res != null)
+        return true;
+      else
+        return false;
     } catch (e) {
       print('add member error: $e');
       return false;
     }
   }
 
+  Future<bool> verifyGymOwnerOtp(
+      {@required String gymId, @required String otp}) async {
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      String userId = locator<AppPrefs>().memberId.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.get(
+          BASE_URL +
+              Api.verifyOtpToGymOwner(gymId: gymId, otp: otp, userId: userId),
+          headers: mapHeader);
+      if (res['status']) {
+        print('Verify otp response --- ${res}');
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('add member error: $e');
+      return false;
+    }
+  }
 }

@@ -144,9 +144,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       return 'First EMI Data Invalid';
     else if (data.second_payment == null || data.second_payment_amount == null)
       return 'Second EMI Data Invalid';
-    else if(data.third_payment == null || data.third_payment_amount == null)
+    else if (data.third_payment == null || data.third_payment_amount == null)
       return 'Third EMI Data Invalid';
-    else return null;
+    else
+      return null;
   }
 
   void removeCoupon() {
@@ -211,12 +212,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         gymStore.selectedStartingDate.toIso8601String().trim());
     body["expire_date"] =
         Helper.stringForDatetime3(gymStore.selectedStartingDate
-            .add(
-          Duration(
-            days: int.tryParse(gymStore.selectedGymPlan.duration),
-          ),
-        )
-            .toIso8601String())
+                .add(
+                  Duration(
+                    days: int.tryParse(gymStore.selectedGymPlan.duration),
+                  ),
+                )
+                .toIso8601String())
             .trim();
     body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
     body["isWhatsapp"] = !_isChecked;
@@ -277,20 +278,23 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
         child: InkWell(
           onTap: () async {
-            if(!isFullPayment()){
-              if(validateEmiPayment() == null){
-                gymStore.sendOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId).then((value){
-                  if(value){
+            if (!isFullPayment()) {
+              if (validateEmiPayment() == null) {
+                gymStore
+                    .sendOtpToGymOwner(
+                        gymId: gymStore.selectedGymDetail.data.userId)
+                    .then((value) {
+                  if (value) {
                     showBottomDialog();
-                  }else{
-                    FlashHelper.errorBar(context, message: 'Something went wrong while sending otp');
+                  } else {
+                    FlashHelper.errorBar(context,
+                        message: 'Something went wrong while sending otp');
                   }
                 });
-              }else{
+              } else {
                 FlashHelper.errorBar(context, message: validateEmiPayment());
               }
-            }else{
-            }
+            } else {}
           },
           child: Container(
               padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
@@ -1388,8 +1392,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
 
   Future<bool> showBottomDialog() {
     final _formKey = GlobalKey<FormState>();
-    final _controller = TextEditingController();
-
+    final _otpController = TextEditingController();
+    bool wrongOtp = false;
+    String otpMessage = 'Wrong OTP';
+    bool loading = false;
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -1405,7 +1411,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       builder: (context) => WillPopScope(
           onWillPop: () async => true,
           child: StatefulBuilder(
-            builder: (BuildContext ctx, StateSetter setState) {
+            builder: (BuildContext ctx, StateSetter setModelState) {
               return SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.only(
@@ -1422,7 +1428,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                         title: Text(
                           'Verification Required\n',
                           textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 18, color: Colors.black,fontWeight:FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
                           'We have sent an OTP to ${gymStore.selectedGymDetail.data.gymName} , ${gymStore.selectedGymDetail.data.name} to authenticate this transaction\, Please ask the OTP from ${gymStore.selectedGymDetail.data.name} to proceed',
@@ -1465,9 +1474,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                             ),
                           ),
                           style: TextStyle(color: Colors.black),
-                          maxLength: 6,
+                          maxLength: 7,
                           autofocus: true,
-                          controller: _controller,
+                          controller: _otpController,
                           maxLines: 1,
                           validator: (value) {
                             if (value == null)
@@ -1480,15 +1489,36 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           onChanged: (value) {},
                         ),
                       ),
+                      if(wrongOtp)SizedBox(height: 8),
+                      if(wrongOtp)Align(
+                          alignment: Alignment.center,
+                          child: Text('$otpMessage',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppConstants.boxBorderColor))),
                       SizedBox(height: 12),
                       InkWell(
-                        onTap: () {
+                        onTap: !loading ? () {
                           final formState = _formKey.currentState;
                           if (formState.validate()) {
                             formState.save();
                             // then do something
+                            setModelState((){
+                              loading = true;
+                            });
+                            gymStore.verifyOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId, otp: _otpController.text.trim()).then((value){
+                              if(value){
+                                Navigator.pop(context);
+                                FlashHelper.errorBar(context, message: 'OTP verified');
+                              }else{
+                                setModelState((){
+                                  wrongOtp = true;
+                                  _otpController.text = null;
+                                });
+                              }
+                            });
                           }
-                        },
+                        }:null,
                         child: Container(
                           padding: EdgeInsets.all(20),
                           alignment: Alignment.center,
@@ -1496,7 +1526,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                               color: AppConstants.bgColor),
-                          child: Text('Verify OTP',
+                          child: loading ? CupertinoActivityIndicator(): Text('Verify OTP',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
