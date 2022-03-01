@@ -219,8 +219,30 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 )
                 .toIso8601String())
             .trim();
+
     body["plan_id"] = gymStore.selectedGymPlan.plan_uid;
     body["isWhatsapp"] = !_isChecked;
+
+    //Partial Payment Details :D
+    body["is_partial"] = isPartialPayment();
+    if(isPartialPayment())
+      body['payment'] = [
+        {
+          "amount":gymStore.selectedGymDetail.data.first_payment_amount,
+          "date":gymStore.selectedGymDetail.data.first_payment,
+          "status":"completed"
+        },
+        {
+          "amount":gymStore.selectedGymDetail.data.second_payment_amount,
+          "date":gymStore.selectedGymDetail.data.second_payment,
+          "status":"pending"
+        },
+        {
+          "amount":gymStore.selectedGymDetail.data.third_payment_amount,
+          "date":gymStore.selectedGymDetail.data.third_payment,
+          "status":"pending"
+        },
+      ];
 
     if (gymStore.chosenOffer != null) {
       body['coupon'] = gymStore.chosenOffer.uid;
@@ -457,7 +479,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                   gymStore.selectedGymDetail.data
                                           .first_payment_amount =
                                       getHalfPaymentAmount(
-                                          gymStore.selectedGymPlan.plan_price);
+                                          totalAmount.toString());
                                 });
                               },
                               title: Text('Partial'),
@@ -480,7 +502,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                         child: Column(
                           children: [
                             Text(
-                                'Pay 2999 now and choose EMI date for your next payment',
+                                'Pay \u{20B9}${getHalfPaymentAmount(totalAmount.toString())} now and choose EMI date for your next payment',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w400)),
                             SizedBox(
@@ -719,6 +741,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
 
   bool isFullPayment() {
     return _radioValue == 0;
+  }
+
+  bool isPartialPayment() {
+    return _radioValue == 1;
   }
 
   Widget amountLabel({String label, String value}) {
