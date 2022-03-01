@@ -1509,7 +1509,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                             gymStore.verifyOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId, otp: _otpController.text.trim()).then((value){
                               if(value){
                                 Navigator.pop(context);
-                                FlashHelper.errorBar(context, message: 'OTP verified');
+                                FlashHelper.successBar(context, message: 'OTP verified');
+                                processToBuy();
                               }else{
                                 setModelState((){
                                   wrongOtp = true;

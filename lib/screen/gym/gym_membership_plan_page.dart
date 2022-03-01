@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
@@ -159,9 +160,8 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                   ListTile(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
-                    title: Text(
-                      '${data.description ??'Best for person who frequently travel'}',
-                      style: TextStyle(fontSize: 12),
+                    title: Html(
+                      data:'${data.description ??'Best for person who frequently travel'}',
                     ),
                   )
                 ],
