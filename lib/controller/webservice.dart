@@ -666,11 +666,12 @@ class RestDatasource {
   //get Gym Details
   ///@Gaurav
   Future<GymDetailsModel> getGymDetails(String gymID) async {
+
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    var res = await _netUtil.get(BASE_URL + Api.GYM_DETAILS + gymID,
+    var res = await _netUtil.get(BASE_URL + Api.GYM_DETAILS+gymID,
         headers: mapHeader);
     print("response of Get GYM DETAILS : " + res.toString());
     // print('ben---- ${res['gallery']}');

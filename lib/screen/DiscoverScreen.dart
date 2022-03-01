@@ -259,6 +259,13 @@ class GymCard extends StatelessWidget {
 
   final GymModelData item;
 
+  bool isRecommended(String value){
+    return value != null;
+  }
+
+  String convertToMonth(String value){
+    return (int.parse(value)/30).round().toString();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -517,12 +524,12 @@ class GymCard extends StatelessWidget {
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.only(left: 12, right: 12),
-            title: Text('\u{20B9}${item.plan_text??''}',
+            title: isRecommended(item.plan_price) ? Text('\u{20B9}${item.plan_price} for ${convertToMonth(item.plan_duration)} months',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18,
                     fontStyle: FontStyle.normal,
-                    color: Color(0XFFE2B411))),
+                    color: Color(0XFFE2B411))):null,
             trailing: InkWell(
               onTap: (){
                 context.read<GymStore>().getGymDetails(
@@ -561,7 +568,6 @@ class GymCard extends StatelessWidget {
       ),
     );
   }
-
 
   // Widget abc(BuildContext context) {
   //   return InkWell(

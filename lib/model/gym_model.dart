@@ -130,7 +130,7 @@ class GymModelData {
   String cover_image;
 
   //New Variables :D
-  int distance;
+  String distance;
   String distance_text;
   String duration;
   String duration_text;
@@ -138,6 +138,11 @@ class GymModelData {
   String text2 = '';
   String plan_text;
   int rating;
+
+  String plan_name;
+  String plan_duration;
+  String plan_price='';
+  String plan_description;
 
   //Static Variable
   bool isFullPayment = true;
@@ -181,6 +186,19 @@ class GymModelData {
     this.text2,
     this.plan_text,
     this.rating,
+
+    this.plan_name,
+    this.plan_duration,
+    this.plan_price,
+    this.plan_description,
+
+    //Static Variable
+    this.first_payment,
+    this.first_payment_amount,
+    this.second_payment,
+    this.second_payment_amount,
+    this.third_payment,
+    this.third_payment_amount,
   });
 
 
@@ -218,14 +236,26 @@ class GymModelData {
         : [],
 
     //New Variables :D
-    distance: json["distance"],
+    distance: json["distance"] != 'N/A' ? json["distance"].toString():json["distance"],
     distance_text: json["distance_text"],
-    duration: json["duration"],
+    duration: json["duration"].toString(),
     duration_text: json["duration_text"],
     text1: json["text1"],
     text2: json["text2"],
     plan_text: json["plan_text"],
     rating: json["rating"],
+
+    plan_name: json["plan_name"],
+    plan_duration: json["plan_duration"],
+    plan_price: json["plan_price"],
+    plan_description: json["plan_description"],
+
+    first_payment: json["first_payment"],
+    first_payment_amount: json["first_payment_amount"],
+    second_payment: json["second_payment"],
+    second_payment_amount: json["second_payment_amount"],
+    third_payment: json["third_payment"],
+    third_payment_amount: json["third_payment_amount"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -260,6 +290,18 @@ class GymModelData {
     "text2": text2,
     "plan_text": plan_text,
     "rating": rating,
+
+    "plan_name": plan_name,
+    "plan_duration": plan_duration,
+    "plan_price": plan_price,
+    "plan_description": plan_description,
+
+    "first_payment": first_payment,
+    "first_payment_amount": first_payment_amount,
+    "second_payment": second_payment,
+    "second_payment_amount": second_payment_amount,
+    "third_payment": third_payment,
+    "third_payment_amount": third_payment_amount,
   };
 }
 

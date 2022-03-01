@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -363,8 +364,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     fontStyle: FontStyle.normal)),
-                            subtitle: Text(
-                                '${gymStore.selectedGymDetail.data.description ??''}'),
+                            subtitle: Html(data: gymStore.selectedGymDetail.data.description,),
                           ),
                           SizedBox(height: 24),
                           //Facility Section :D
@@ -376,6 +376,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                           SizedBox(height: 12),
                           //Facility List :D
                           Container(
+                            width: double.infinity,
                             padding: EdgeInsets.only(
                                 top: 12, bottom: 12, left: 8, right: 8),
                             decoration: BoxDecoration(
@@ -453,7 +454,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
             padding: EdgeInsets.only(left: 8, right: 8),
             child: Column(
               children: [
-                Image.asset(item.image),
+                Image.network(item.image,width: 60,height: 60,),SizedBox(height: 8,),
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
