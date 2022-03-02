@@ -1025,7 +1025,7 @@ class CommonAppBar extends StatelessWidget {
           UIHelper.horizontalSpace(10.0),
           Expanded(
             child: Consumer<GymStore>(
-              builder: (context, store, child) => InkWell(
+              builder: (context, store, child) => store.activeSubscriptions != null?InkWell(
                 onTap: () async {
                   context.read<GymStore>().getGymDetails(
                         context: context,
@@ -1100,7 +1100,7 @@ class CommonAppBar extends StatelessWidget {
                       )
                   ],
                 ),
-              ),
+              ):Loader(),
             ),
           ),
           UIHelper.horizontalSpace(10.0),

@@ -210,6 +210,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     body["addon"] = "";
     body["start_date"] = Helper.stringForDatetime3(
         gymStore.selectedStartingDate.toIso8601String().trim());
+    print('Checking date : ----  ${Helper.stringForDatetime3(
+        gymStore.selectedStartingDate.toIso8601String().trim())}');
     body["expire_date"] =
         Helper.stringForDatetime3(gymStore.selectedStartingDate
                 .add(

@@ -136,7 +136,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         ],
                                         fontFamily: Fonts.ROBOTO,
                                         keyboardType: TextInputType.phone,
-                                        maxLength: 10,
                                         hintText: 'Mobile Number',
                                         controller: mobileNumber,
                                         maxLines: 1,

@@ -150,7 +150,7 @@ class Helper {
   static String stringWeekDay(String dt) {
     var dtInLocal = DateTime.parse(dt);
     //DateTime.fromMillisecondsSinceEpoch( 1490489845  * 1000).toLocal(); //year:  1490489845 //>day: 1556152819  //month:  1553561845  //<day: 1556174419
-    var dateString = " ";
+    var dateString = "";
 
     var yearFormat = DateFormat("EEEE d MMM, y");
     dateString += yearFormat.format(dtInLocal);
@@ -164,7 +164,7 @@ class Helper {
     }
     var dtInLocal = DateTime.parse(dt);
     //DateTime.fromMillisecondsSinceEpoch( 1490489845  * 1000).toLocal(); //year:  1490489845 //>day: 1556152819  //month:  1553561845  //<day: 1556174419
-    var dateString = " ";
+    var dateString = "";
 
     var yearFormat = DateFormat("dd-MM-yyyy");
     dateString += yearFormat.format(dtInLocal);
