@@ -393,6 +393,7 @@ class RestDatasource {
 
   Future<bool> addEventParticipation(
       {BuildContext context, Map<String, dynamic> body}) async {
+    print('End Point of partial payment --- $body');
     String url = BASE_URL + Api.addEventParticipation;
     String token = locator<AppPrefs>().token.getValue();
     log(url);

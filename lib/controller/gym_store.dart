@@ -717,11 +717,13 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //TODO here is the add method
   Future<bool> addSubscription({
     BuildContext context,
     Map<String, dynamic> body,
     bool showLoader = false,
-  }) async {
+  }) async {//2293768
+    print('Payload while adding partial payment --- $body');
     print("get Gym Details 1");
     if (showLoader) {
       showDialog(

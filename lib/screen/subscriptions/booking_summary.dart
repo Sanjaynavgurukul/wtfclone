@@ -224,7 +224,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     body["isWhatsapp"] = !_isChecked;
 
     //Partial Payment Details :D
-    body["is_partial"] = isPartialPayment();
+    body["is_partial"] = isPartialPayment() ? 1:0;
     if(isPartialPayment())
       body['payment'] = [
         {
