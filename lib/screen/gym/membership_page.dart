@@ -60,410 +60,426 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
     return Scaffold(
       body: Consumer<GymStore>(
         builder: (context, gymStore, child) => gymStore.selectedGymDetail ==
-            null
+                null
             ? LoadingWithBackground()
             : gymStore.selectedGymDetail.status
-            ? Scaffold(
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.only(left: 16,right: 16,top: 6,bottom: 6),
-            constraints: BoxConstraints(
-                minHeight: 54,maxHeight: 60
-            ),
-            child: Row(
-              children: [
-                Expanded(child: InkWell(
-                  onTap:()async{
-                    if (gymStore.activeSubscriptions ==
-                        null ||
-                        (gymStore.activeSubscriptions !=
-                            null &&
-                            gymStore.activeSubscriptions
-                                .data ==
-                                null)) {
-                      gymStore
-                          .getGymPlans(
-                        gymId: gymStore
-                            .selectedGymDetail
-                            .data
-                            .userId,
-                        context: context,
-                      );
+                ? Scaffold(
+                    bottomNavigationBar: Container(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 6, bottom: 6),
+                      constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                if (gymStore.activeSubscriptions == null ||
+                                    (gymStore.activeSubscriptions != null &&
+                                        gymStore.activeSubscriptions.data ==
+                                            null)) {
+                                  gymStore.getGymPlans(
+                                    gymId:
+                                        gymStore.selectedGymDetail.data.userId,
+                                    context: context,
+                                  );
 
-                      NavigationService
-                          .navigateTo(
-                        Routes
-                            .membershipPlanPage,
-                      );
-                    } else {
-                      String selection =
-                      await showDialog<
-                          String>(
-                        context: context,
-                        barrierDismissible:
-                        true,
-                        builder: (context) =>
-                            SubscriptionAlreadyPresent(
-                              cancelTapped:
-                                  () {
-                                Navigator.pop(
-                                    context,
-                                    'no');
-                              },
-                              nextTapped: () {
-                                Navigator.pop(
-                                    context,
-                                    'yes');
-                              },
-                              gymName: gymStore
-                                  .activeSubscriptions
-                                  .data
-                                  .gymName,
-                            ),
-                      );
-                      if (selection !=
-                          null &&
-                          selection ==
-                              'yes') {
-                        gymStore
-                            .getGymPlans(
-                          gymId: gymStore
-                              .selectedGymDetail
-                              .data
-                              .userId,
-                          context:
-                          context,
-                        );
-                        NavigationService
-                            .navigateTo(
-                          Routes
-                              .membershipPlanPage,
-                        );
-                      }
-                    }
-                  },
-                  child: Container(
-                      padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Color(0xff490000),
-                              Color(0xffBA1406),
-                            ],
-                          )),
-                      alignment: Alignment.center,
-                      child:Text('Buy Membership')
-                  ),
-                ),),SizedBox(width:12),
-                Expanded(child: InkWell(
-                  onTap:(){
-                    gymStore
-                        .setAddOnSlot(
-                      context: context,
-                      data: gymStore
-                          .selectedGymAddOns
-                          .data
-                          .where((element) =>
-                      element
-                          .price ==
-                          '0')
-                          .toList()[0],
-                      isFree: true,
-                    );
-
-                    NavigationService
-                        .navigateTo(
-                      Routes
-                          .chooseSlotScreen,
-                    );
-                  },
-                  child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          border:Border.all(width:2,color: AppConstants.tabBg)
-                      ),
-                      alignment: Alignment.center,
-                      child:Text('Book Free Trial',style:TextStyle(color:AppConstants.whitish))
-                  ),
-                ),),
-              ],
-            ),
-          ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              await context.read<GymStore>().getGymDetails(
-                context: context,
-                gymId: widget.gymId,
-              );
-            },
-            color: AppConstants.primaryColor,
-            backgroundColor: Colors.white,
-            child: CustomScrollView(
-              physics: isPreview == true
-                  ? const NeverScrollableScrollPhysics()
-                  : null,
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverAppBar(
-                  centerTitle: false,
-                  backgroundColor: AppConstants.primaryColor,
-                  leading: InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      margin: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1,
-                            color: Colors.white.withOpacity(0.3)),
-                        shape: BoxShape.circle,
-                        // color: glassyColor.withOpacity(0.3)
-                      ),
-                      child: Icon(Icons.close,
-                          color: Colors.white.withOpacity(0.3)),
-                    ),
-                  ),
-                  pinned: false,
-                  expandedHeight: 300.0,
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(50.0),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            bottom: 14, right: 16, top: 16),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: FractionalOffset.topCenter,
-                                end: FractionalOffset.bottomCenter,
-                                colors: [
-                                  Colors.transparent,
-                                  Color(0xff272727)
-                                ])),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            RichText(
-                              text: TextSpan(
-                                text: '',
-                                style:
-                                DefaultTextStyle.of(context).style,
-                                children: <WidgetSpan>[
-                                  WidgetSpan(
-                                      child: Icon(
-                                        Icons.directions_car,
-                                        size: 18,
-                                        color: AppConstants.green,
-                                      )),
-                                  WidgetSpan(
-                                      child: Text(
-                                          ' ${gymStore.selectedGymDetail.data.distance_text ?? ''} | ${gymStore.selectedGymDetail.data.distance} Km',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight:
-                                              FontWeight.bold))),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Container(
-                              padding: EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 8,
-                                  left: 12,
-                                  right: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(4)),
-                                color: Color(0xffBA1406),
-                              ),
-                              child: Text('Direction',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal)),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: FlexibleAppBar(
-                      images: gymStore.selectedGymDetail.data.gallery,
-                      color: AppConstants.primaryColor,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16,bottom: 70),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          //Name and rating section :D
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('${gymStore.selectedGymDetail.data.gymName ?? ''}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                    fontStyle: FontStyle.normal)),
-                            subtitle: Text('${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
-                            trailing: gymStore.selectedGymDetail.data.rating.toDouble() != null && gymStore.selectedGymDetail.data.rating.toDouble() >0 ? Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Rating',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600)),
-                                SizedBox(height: 6),
-                                RatingBar(
-                                    initialRating: gymStore.selectedGymDetail.data.rating.toDouble() ?? 0.0,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemSize: 16,
-                                    ratingWidget: RatingWidget(
-                                      full: Icon(
-                                        Icons.star,
-                                        color: AppConstants.boxBorderColor,
-                                      ),
-                                      half: Icon(
-                                        Icons.star_half,
-                                        color: AppConstants.boxBorderColor,
-                                      ),
-                                      empty: Icon(
-                                        Icons.star_border,
-                                        color: AppConstants.white,
-                                      ),
+                                  NavigationService.navigateTo(
+                                    Routes.membershipPlanPage,
+                                  );
+                                } else {
+                                  String selection = await showDialog<String>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (context) =>
+                                        SubscriptionAlreadyPresent(
+                                      cancelTapped: () {
+                                        Navigator.pop(context, 'no');
+                                      },
+                                      nextTapped: () {
+                                        Navigator.pop(context, 'yes');
+                                      },
+                                      gymName: gymStore
+                                          .activeSubscriptions.data.gymName,
                                     ),
-                                    itemPadding: EdgeInsets.symmetric(
-                                        horizontal: 0.0),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    }),
-                              ],
-                            ):Text('Newly Opened'),
-                          ),
-                          //Divider :D
-                          Divider(
-                            thickness: 2,
-                            color: AppConstants.headingTextColor,
-                          ),
-                          //Description :D
-                          ListTile(
-                            contentPadding: EdgeInsets.all(0),
-                            title: Text('Description',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    fontStyle: FontStyle.normal)),
-                            subtitle: Html(data: gymStore.selectedGymDetail.data.description,),
-                          ),
-                          SizedBox(height: 24),
-                          //Facility Section :D
-                          Text('Facilities',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.normal)),
-                          SizedBox(height: 12),
-                          //Facility List :D
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.only(
-                                top: 12, bottom: 12, left: 8, right: 8),
-                            decoration: BoxDecoration(
-                                color: AppConstants.bgColor,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: facilityItems(data : gymStore.selectedGymDetail.data.benefits ?? []),
-                              ),
+                                  );
+                                  if (selection != null && selection == 'yes') {
+                                    gymStore.getGymPlans(
+                                      gymId: gymStore
+                                          .selectedGymDetail.data.userId,
+                                      context: context,
+                                    );
+                                    NavigationService.navigateTo(
+                                      Routes.membershipPlanPage,
+                                    );
+                                  }
+                                }
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.only(
+                                      top: 8, bottom: 8, left: 12, right: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xff490000),
+                                          Color(0xffBA1406),
+                                        ],
+                                      )),
+                                  alignment: Alignment.center,
+                                  child: Text('Buy Membership')),
                             ),
                           ),
-                          SizedBox(height: 24),
-                          Text('Why to choose WTF',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.normal)),
-                          SizedBox(height: 12),
-                          GridView.count(
-                            primary: false,
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(20),
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            physics: NeverScrollableScrollPhysics(),
-                            crossAxisCount: 2,
-                            children: <Widget>[
-                              whyWTF('Earn WTF rewards coin'),
-                              whyWTF('Fully Vaccinated Staff'),
-                              whyWTF('Track Fitness Journey'),
-                              whyWTF('Pocket Friendly Membership'),
-                              whyWTF('Free diet Support'),
-                              whyWTF('Top Class Ambiance'),
-                            ],
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                gymStore.setAddOnSlot(
+                                  context: context,
+                                  data: gymStore.selectedGymAddOns.data
+                                      .where((element) => element.price == '0')
+                                      .toList()[0],
+                                  isFree: true,
+                                );
+
+                                NavigationService.navigateTo(
+                                  Routes.chooseSlotScreen,
+                                );
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
+                                      border: Border.all(
+                                          width: 2, color: AppConstants.tabBg)),
+                                  alignment: Alignment.center,
+                                  child: Text('Book Free Trial',
+                                      style: TextStyle(
+                                          color: AppConstants.whitish))),
+                            ),
                           ),
-
-                          //CoSpace section :D
-                          GymLiveWidget(),
-                          SizedBox(height: 45),
-
-                          // Container(
-                          //   child: SingleChildScrollView(
-                          //     scrollDirection: Axis.horizontal,
-                          //     child: Row(
-                          //       children: coSpaceWidget(),
-                          //     ),
-                          //   ),
-                          // ),
-                          GymAddonWidget(),
-                          SizedBox(height: 12),
                         ],
                       ),
-                    )),
-              ],
-            ),
-          ),
-        )
-            : Center(
-          child: Text(
-            'Gym not Found',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
+                    ),
+                    body: RefreshIndicator(
+                      onRefresh: () async {
+                        await context.read<GymStore>().getGymDetails(
+                              context: context,
+                              gymId: widget.gymId,
+                            );
+                      },
+                      color: AppConstants.primaryColor,
+                      backgroundColor: Colors.white,
+                      child: CustomScrollView(
+                        physics: isPreview == true
+                            ? const NeverScrollableScrollPhysics()
+                            : null,
+                        controller: _scrollController,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            centerTitle: false,
+                            backgroundColor: AppConstants.primaryColor,
+                            leading: InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: Container(
+                                margin: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Colors.white.withOpacity(0.3)),
+                                  shape: BoxShape.circle,
+                                  // color: glassyColor.withOpacity(0.3)
+                                ),
+                                child: Icon(Icons.close,
+                                    color: Colors.white.withOpacity(0.3)),
+                              ),
+                            ),
+                            pinned: false,
+                            expandedHeight: 300.0,
+                            bottom: PreferredSize(
+                              preferredSize: const Size.fromHeight(50.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      bottom: 14, right: 16, top: 16),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: FractionalOffset.topCenter,
+                                          end: FractionalOffset.bottomCenter,
+                                          colors: [
+                                        Colors.transparent,
+                                        Color(0xff272727)
+                                      ])),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      RichText(
+                                        text: TextSpan(
+                                          text: '',
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <WidgetSpan>[
+                                            WidgetSpan(
+                                                child: Icon(
+                                              Icons.directions_car,
+                                              size: 18,
+                                              color: AppConstants.green,
+                                            )),
+                                            WidgetSpan(
+                                                child: Text(
+                                                    ' ${gymStore.selectedGymDetail.data.distance_text ?? ''} | ${gymStore.selectedGymDetail.data.distance} Km',
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold))),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            top: 8,
+                                            bottom: 8,
+                                            left: 12,
+                                            right: 12),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4)),
+                                          color: Color(0xffBA1406),
+                                        ),
+                                        child: Text('Direction',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal)),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            flexibleSpace: FlexibleSpaceBar(
+                              background: FlexibleAppBar(
+                                images: gymStore.selectedGymDetail.data.gallery,
+                                color: AppConstants.primaryColor,
+                              ),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                              child: Padding(
+                            padding: EdgeInsets.only(
+                                left: 16, right: 16, bottom: 70),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                //Name and rating section :D
+                                ListTile(
+                                  contentPadding: EdgeInsets.all(0),
+                                  title: Text(
+                                      '${gymStore.selectedGymDetail.data.gymName ?? ''}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                          fontStyle: FontStyle.normal)),
+                                  subtitle: Text(
+                                      '${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
+                                  trailing: gymStore
+                                                  .selectedGymDetail.data.rating
+                                                  .toDouble() !=
+                                              null &&
+                                          gymStore.selectedGymDetail.data.rating
+                                                  .toDouble() >
+                                              0
+                                      ? Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text('Rating',
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                            SizedBox(height: 6),
+                                            RatingBar(
+                                                initialRating: gymStore
+                                                        .selectedGymDetail
+                                                        .data
+                                                        .rating
+                                                        .toDouble() ??
+                                                    0.0,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemSize: 16,
+                                                ratingWidget: RatingWidget(
+                                                  full: Icon(
+                                                    Icons.star,
+                                                    color: AppConstants
+                                                        .boxBorderColor,
+                                                  ),
+                                                  half: Icon(
+                                                    Icons.star_half,
+                                                    color: AppConstants
+                                                        .boxBorderColor,
+                                                  ),
+                                                  empty: Icon(
+                                                    Icons.star_border,
+                                                    color: AppConstants.white,
+                                                  ),
+                                                ),
+                                                itemPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 0.0),
+                                                onRatingUpdate: (rating) {
+                                                  print(rating);
+                                                }),
+                                          ],
+                                        )
+                                      : Text('Newly Opened'),
+                                ),
+                                //Divider :D
+                                Divider(
+                                  thickness: 2,
+                                  color: AppConstants.headingTextColor,
+                                ),
+                                //Description :D
+                                ListTile(
+                                  contentPadding: EdgeInsets.all(0),
+                                  title: Text('Description',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                          fontStyle: FontStyle.normal)),
+                                  subtitle: Html(
+                                    data: gymStore
+                                        .selectedGymDetail.data.description,
+                                  ),
+                                ),
+                                SizedBox(height: 24),
+                                //Facility Section :D
+                                Text('Facilities',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.normal)),
+                                SizedBox(height: 12),
+                                //Facility List :D
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.only(
+                                      top: 12, bottom: 12, left: 8, right: 8),
+                                  decoration: BoxDecoration(
+                                      color: AppConstants.bgColor,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: facilityItems(
+                                          data: gymStore.selectedGymDetail.data
+                                                  .benefits ??
+                                              []),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 24),
+                                Text('Why to choose WTF',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.normal)),
+                                SizedBox(height: 12),
+                                GridView.count(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.all(20),
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  crossAxisCount: 2,
+                                  children: <Widget>[
+                                    whyWTF('Earn WTF rewards coin',
+                                        'assets/images/my_wtf.png'),
+                                    whyWTF('Fully Vaccinated Staff',
+                                        'assets/images/my_wtf.png'),
+                                    whyWTF('Track Fitness Journey',
+                                        'assets/images/my_wtf.png'),
+                                    whyWTF('Pocket Friendly Membership',
+                                        'assets/images/my_wtf.png'),
+                                    whyWTF('Free diet Support',
+                                        'assets/images/my_wtf.png'),
+                                    whyWTF('Top Class Ambiance',
+                                        'assets/images/my_wtf.png'),
+                                  ],
+                                ),
+                                BookPTWidget(),
+                                SizedBox(height: 34),
+                                //CoSpace section :D
+                                GymLiveWidget(),
+                                SizedBox(height: 45),
+                                // Container(
+                                //   child: SingleChildScrollView(
+                                //     scrollDirection: Axis.horizontal,
+                                //     child: Row(
+                                //       children: coSpaceWidget(),
+                                //     ),
+                                //   ),
+                                // ),
+                                GymAddonWidget(),
+                                SizedBox(height: 12),
+                              ],
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Gym not Found',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
       ),
     );
   }
 
   //Facility List Widget :D
-  List<Widget> facilityItems({List<Benfit> data}) => data.isNotEmpty ? data
-      .map((item) => Container(
-            padding: EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              children: [
-                Image.network(item.image,width: 60,height: 60,),SizedBox(height: 8,),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-                )
-              ],
-            ),
-          ))
-      .toList():[Center(child: Text("No facility Available"))];
+  List<Widget> facilityItems({List<Benfit> data}) => data.isNotEmpty
+      ? data
+          .map((item) => Container(
+                padding: EdgeInsets.only(left: 8, right: 8),
+                child: Column(
+                  children: [
+                    Image.network(
+                      item.image,
+                      width: 60,
+                      height: 60,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      item.name,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                    )
+                  ],
+                ),
+              ))
+          .toList()
+      : [Center(child: Text("No facility Available"))];
 
   Widget oldUI() {
     return Scaffold(
@@ -1682,23 +1698,18 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
   Widget whyChooseWTFItems(String text, String icon) {
     return TextIconCard(text: text, icon: icon);
   }
-  Widget whyWTF(String label) {
+
+  Widget whyWTF(String label, String icon) {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xff490000),
-              Color(0xffBA1406),
-            ],
-          )),
+          color: Color(0xff292929),
+          border: Border.all(width: 1, color: Color(0xffAAAAAA))),
       child: Column(
         children: [
           Image.asset(
-            'assets/images/my_wtf.png',
+            icon ?? 'assets/images/my_wtf.png',
             width: 60,
             height: 60,
           ),
@@ -1808,102 +1819,206 @@ class BookPTWidget extends StatelessWidget {
                     .length >
                 0
         ? Container()
-        : Container(
-            width: MediaQuery.of(context).size.width,
-            padding: gymStore.selectedGymAddOns.data
-                        .where((element) => element.isPt == '1')
-                        .toList()
-                        .length >
-                    0
-                ? EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 2.0,
-                  )
-                : EdgeInsets.zero,
-            color: Colors.grey[800],
-            child: gymStore.selectedGymAddOns.data
-                        .where((element) => element.isPt == '1')
-                        .toList()
-                        .length >
-                    0
-                ? Column(
-                    children: [
-                      Text(
-                        gymStore.selectedGymAddOns.data
-                            .where((element) => element.isPt == '1')
-                            .toList()[0]
-                            .name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      UIHelper.verticalSpace(8.0),
-                      Text(
-                        gymStore.selectedGymAddOns.data
-                            .where((element) => element.isPt == '1')
-                            .toList()[0]
-                            .description,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (gymStore.activeSubscriptions != null &&
-                              gymStore.activeSubscriptions.data != null) {
-                            gymStore.setAddOnSlot(
-                              context: context,
-                              data: gymStore.selectedGymAddOns.data
-                                  .where((element) => element.isPt == '1')
-                                  .toList()[0],
-                            );
-                            NavigationService.navigateTo(
-                              Routes.ptIntro,
-                            );
-                          } else {
-                            FlashHelper.informationBar(
-                              context,
-                              message:
-                                  'In order to buy PT, First you need to Buy Membership of this gym first',
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppConstants.primaryColor,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            // crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Book Personal Training',
-                                // '${gymStore.selectedGymAddOns.data.where((element) => element.isPt == '1').toList()[0].name}',
+        : gymStore.selectedGymAddOns.data
+                    .where((element) => element.isPt == '1')
+                    .toList()
+                    .length >
+                0
+            ? Column(
+                children: [
+                  SizedBox(height: 12),
+                  //Personal Training
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 20, bottom: 20, left: 12, right: 12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xff3C3B3F),
+                            Color(0xff603C3C),
+                          ],
+                        )),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/logo/wtf_light.png',
+                              width: 50,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                                '${gymStore.selectedGymAddOns.data.where((element) => element.isPt == '1').toList()[0].name}',
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700))
+                          ],
                         ),
-                      ),
-                    ],
-                  )
-                : Container(),
-          );
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(left: 18, right: 18),
+                            child: Text(
+                                '${gymStore.selectedGymAddOns.data
+                                    .where((element) => element.isPt == '1')
+                                    .toList()[0]
+                                    .description}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400))),
+                        SizedBox(
+                          height: 18,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (gymStore.activeSubscriptions != null &&
+                                gymStore.activeSubscriptions.data != null) {
+                              gymStore.setAddOnSlot(
+                                context: context,
+                                data: gymStore.selectedGymAddOns.data
+                                    .where((element) => element.isPt == '1')
+                                    .toList()[0],
+                              );
+                              NavigationService.navigateTo(
+                                Routes.ptIntro,
+                              );
+                            } else {
+                              FlashHelper.informationBar(
+                                context,
+                                message:
+                                'In order to buy PT, First you need to Buy Membership of this gym first',
+                              );
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                color: Colors.white),
+                            child: Text('Book Now',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black)),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : SizedBox(
+                height: 0,
+              );
+
+    // : Container(
+    //     width: MediaQuery.of(context).size.width,
+    //     padding: gymStore.selectedGymAddOns.data
+    //                 .where((element) => element.isPt == '1')
+    //                 .toList()
+    //                 .length >
+    //             0
+    //         ? EdgeInsets.symmetric(
+    //             vertical: 15,
+    //             horizontal: 2.0,
+    //           )
+    //         : EdgeInsets.zero,
+    //     color: Colors.grey[800],
+    //     child: gymStore.selectedGymAddOns.data
+    //                 .where((element) => element.isPt == '1')
+    //                 .toList()
+    //                 .length >
+    //             0
+    //         ? Column(
+    //             children: [
+    //               Text(
+    //                 gymStore.selectedGymAddOns.data
+    //                     .where((element) => element.isPt == '1')
+    //                     .toList()[0]
+    //                     .name,
+    //                 textAlign: TextAlign.center,
+    //                 style: TextStyle(
+    //                   color: Colors.white,
+    //                   fontSize: 18,
+    //                   fontWeight: FontWeight.w800,
+    //                 ),
+    //               ),
+    //               UIHelper.verticalSpace(8.0),
+    //               Text(
+    //                 gymStore.selectedGymAddOns.data
+    //                     .where((element) => element.isPt == '1')
+    //                     .toList()[0]
+    //                     .description,
+    //                 textAlign: TextAlign.center,
+    //                 style: TextStyle(
+    //                   color: Colors.white,
+    //                   fontSize: 14,
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 20,
+    //               ),
+    //               InkWell(
+    //                 onTap: () {
+    //                   if (gymStore.activeSubscriptions != null &&
+    //                       gymStore.activeSubscriptions.data != null) {
+    //                     gymStore.setAddOnSlot(
+    //                       context: context,
+    //                       data: gymStore.selectedGymAddOns.data
+    //                           .where((element) => element.isPt == '1')
+    //                           .toList()[0],
+    //                     );
+    //                     NavigationService.navigateTo(
+    //                       Routes.ptIntro,
+    //                     );
+    //                   } else {
+    //                     FlashHelper.informationBar(
+    //                       context,
+    //                       message:
+    //                           'In order to buy PT, First you need to Buy Membership of this gym first',
+    //                     );
+    //                   }
+    //                 },
+    //                 child: Container(
+    //                   padding:
+    //                       EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+    //                   decoration: BoxDecoration(
+    //                     color: AppConstants.primaryColor,
+    //                     borderRadius: BorderRadius.circular(6),
+    //                   ),
+    //                   child: Row(
+    //                     mainAxisSize: MainAxisSize.min,
+    //                     // crossAxisAlignment: CrossAxisAlignment.center,
+    //                     children: [
+    //                       Text(
+    //                         'Book Personal Training',
+    //                         // '${gymStore.selectedGymAddOns.data.where((element) => element.isPt == '1').toList()[0].name}',
+    //                         style: TextStyle(
+    //                           color: Colors.white,
+    //                           fontWeight: FontWeight.bold,
+    //                           fontSize: 15,
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           )
+    //         : Container(),
+    //   );
   }
 }
 
@@ -2129,167 +2244,175 @@ class GymAddonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, gymStore, child) =>
-      gymStore.selectedGymAddOns != null
+      builder: (context, gymStore, child) => gymStore.selectedGymAddOns != null
           ? gymStore.selectedGymAddOns.data != null &&
-          gymStore.selectedGymAddOns.data.isNotEmpty &&
-          gymStore.selectedGymAddOns.data
-              .where((e) =>
-          e.isPt == '0' &&
-              e.price != '0' &&
-              !e.isLive)
-              .toList()
-              .length >
-              0
-          ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Fun Session at GYM',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  fontStyle: FontStyle.normal)),
-          SizedBox(height: 12),
-          Container(
-            color: Color(0xff27447B),
-            padding: EdgeInsets.all(8),
-            child: Text('Starting only at 99',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white)),
-          ),
-          SizedBox(height: 16),
-          Container(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: gymStore.selectedGymAddOns.data
-                    .map((item) => Container(
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 118,
-                        height: 76,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-                              color: Colors.transparent,
-                            ),
-                            child: Image.network(
-                              item.image ??'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                              height: double.infinity,
-                              loadingBuilder: (context, _, chunk) => chunk == null
-                                  ? _
-                                  : RectangleShimmering(
-                                width: double.infinity,
-                                radius: 16.0,
-                              ),
-                            ),
-                            // height: 350.0,
-                          ),
+                  gymStore.selectedGymAddOns.data.isNotEmpty &&
+                  gymStore.selectedGymAddOns.data
+                          .where((e) =>
+                              e.isPt == '0' && e.price != '0' && !e.isLive)
+                          .toList()
+                          .length >
+                      0
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Fun Session at GYM',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal)),
+                    SizedBox(height: 12),
+                    Container(
+                      color: Color(0xff27447B),
+                      padding: EdgeInsets.all(8),
+                      child: Text('Starting only at 99',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white)),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: gymStore.selectedGymAddOns.data
+                              .map((item) => Container(
+                                    width: 118,
+                                    padding: EdgeInsets.only(left: 8, right: 8),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: 118,
+                                          height: 76,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(8),
+                                                topLeft: Radius.circular(8)),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                    topLeft:
+                                                        Radius.circular(8)),
+                                                color: Colors.transparent,
+                                              ),
+                                              child: Image.network(
+                                                item.image ??
+                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
+                                                width: double.infinity,
+                                                fit: BoxFit.fill,
+                                                height: double.infinity,
+                                                loadingBuilder: (context, _,
+                                                        chunk) =>
+                                                    chunk == null
+                                                        ? _
+                                                        : RectangleShimmering(
+                                                            width:
+                                                                double.infinity,
+                                                            radius: 16.0,
+                                                          ),
+                                              ),
+                                              // height: 350.0,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 6),
+                                        Text('${item.name ?? ''}'),
+                                        SizedBox(height: 6),
+                                        InkWell(
+                                          onTap: () {
+                                            gymStore.setAddOnSlot(
+                                              context: context,
+                                              data: item,
+                                              getTrainers: true,
+                                            );
+                                            NavigationService.navigateTo(
+                                              Routes.chooseSlotScreen,
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                left: 14,
+                                                right: 14,
+                                                bottom: 6,
+                                                top: 6),
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    AppConstants.boxBorderColor,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                            child: Text('Book now'),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
                         ),
                       ),
-                      SizedBox(height:6),
-                      InkWell(
-                        onTap:(){
-                          gymStore.setAddOnSlot(
-                            context: context,
-                            data: item,
-                            getTrainers: true,
-                          );
-                          NavigationService.navigateTo(
-                            Routes.chooseSlotScreen,
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left:14,right:14,bottom: 6,top: 6),
-                          decoration: BoxDecoration(
-                              color: AppConstants.boxBorderColor,
-                              borderRadius:BorderRadius.all(Radius.circular(8))
-                          ),
-                          child: Text('Book now'),
-                        ),
-                      )
-                    ],
+                    ),
+                  ],
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Text(
+                      'No ADDON Available',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                      ),
+                    ),
                   ),
-                ))
-                    .toList(),
-              ),
-            ),
-          ),
-        ],
-      )
-          : Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6.0),
-          child: Text(
-            'No ADDON Available',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.0,
-            ),
-          ),
-        ),
-      )
+                )
           : Loading(),
     );
   }
 
-  Widget old(){
+  Widget old() {
     return Consumer<GymStore>(
-      builder: (context, gymStore, child) =>
-      gymStore.selectedGymAddOns != null
+      builder: (context, gymStore, child) => gymStore.selectedGymAddOns != null
           ? gymStore.selectedGymAddOns.data != null &&
-          gymStore.selectedGymAddOns.data.isNotEmpty &&
-          gymStore.selectedGymAddOns.data
-              .where((e) =>
-          e.isPt == '0' &&
-              e.price != '0' &&
-              !e.isLive)
-              .toList()
-              .length >
-              0
-          ? Container(
-        height: 120,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount:
-          gymStore.selectedGymAddOns.data.length,
-          itemBuilder: (context, index) {
-            return gymStore.selectedGymAddOns.data[index]
-                .price ==
-                '0' ||
-                gymStore.selectedGymAddOns.data[index]
-                    .isPt ==
-                    '1' ||
-                gymStore.selectedGymAddOns.data[index]
-                    .isLive
-                ? Container()
-                : AddonCard(
-              data: gymStore
-                  .selectedGymAddOns.data[index],
-            );
-          },
-        ),
-      )
-          : Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6.0),
-          child: Text(
-            'No ADDON Available',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.0,
-            ),
-          ),
-        ),
-      )
+                  gymStore.selectedGymAddOns.data.isNotEmpty &&
+                  gymStore.selectedGymAddOns.data
+                          .where((e) =>
+                              e.isPt == '0' && e.price != '0' && !e.isLive)
+                          .toList()
+                          .length >
+                      0
+              ? Container(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: gymStore.selectedGymAddOns.data.length,
+                    itemBuilder: (context, index) {
+                      return gymStore
+                                      .selectedGymAddOns.data[index].price ==
+                                  '0' ||
+                              gymStore.selectedGymAddOns.data[index].isPt ==
+                                  '1' ||
+                              gymStore.selectedGymAddOns.data[index].isLive
+                          ? Container()
+                          : AddonCard(
+                              data: gymStore.selectedGymAddOns.data[index],
+                            );
+                    },
+                  ),
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Text(
+                      'No ADDON Available',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ),
+                )
           : Loading(),
     );
   }
@@ -2303,114 +2426,139 @@ class GymLiveWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, gymStore, child) =>
-      gymStore.selectedGymAddOns != null
+      builder: (context, gymStore, child) => gymStore.selectedGymAddOns != null
           ? gymStore.selectedGymAddOns.data != null &&
-          gymStore.selectedGymAddOns.data.isNotEmpty &&
-          gymStore.selectedGymAddOns.data
-              .where((e) => e.isLive)
-              .toList()
-              .length >
-              0
-          ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Train Live from Your co_space',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  fontStyle: FontStyle.normal)),
-          SizedBox(height: 12),
-          Container(
-            color: Color(0xff277B30),
-            padding: EdgeInsets.all(8),
-            child: Text('Starting only at 99',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white)),
-          ),
-          SizedBox(height: 16),
-          Container(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: gymStore.selectedGymAddOns.data
-                    .map((item) => Container(
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 118,
-                        height: 76,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
-                              color: Colors.transparent,
-                            ),
-                            child: Image.network(
-                              item.image ??'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                              height: double.infinity,
-                              loadingBuilder: (context, _, chunk) => chunk == null
-                                  ? _
-                                  : RectangleShimmering(
-                                width: double.infinity,
-                                radius: 16.0,
-                              ),
-                            ),
-                            // height: 350.0,
-                          ),
+                  gymStore.selectedGymAddOns.data.isNotEmpty &&
+                  gymStore.selectedGymAddOns.data
+                          .where((e) => e.isLive)
+                          .toList()
+                          .length >
+                      0
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Train Live from Your co_space',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            fontStyle: FontStyle.normal)),
+                    SizedBox(height: 12),
+                    Container(
+                      color: Color(0xff277B30),
+                      padding: EdgeInsets.all(8),
+                      child: Text('Starting only at 99',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white)),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: gymStore.selectedGymAddOns.data
+                              .map((item) => Container(
+                                    padding: EdgeInsets.only(left: 8, right: 8),
+                                    child: Container(
+                                      width: 118,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            width: 118,
+                                            height: 76,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(8),
+                                                  topLeft: Radius.circular(8)),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topRight: Radius
+                                                              .circular(8),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8)),
+                                                  color: Colors.transparent,
+                                                ),
+                                                child: Image.network(
+                                                  item.image ??
+                                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwcUlbvtXLjiLOIREI6GlAW7xLjoiYMqoeMg&usqp=CAU',
+                                                  width: double.infinity,
+                                                  fit: BoxFit.fill,
+                                                  height: double.infinity,
+                                                  loadingBuilder: (context, _,
+                                                          chunk) =>
+                                                      chunk == null
+                                                          ? _
+                                                          : RectangleShimmering(
+                                                              width: double
+                                                                  .infinity,
+                                                              radius: 16.0,
+                                                            ),
+                                                ),
+                                                // height: 350.0,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+                                          Text('${item.name ?? ''}'),
+                                          SizedBox(height: 6),
+                                          InkWell(
+                                            onTap: () {
+                                              gymStore.setAddOnSlot(
+                                                context: context,
+                                                data: item,
+                                                getTrainers: true,
+                                              );
+                                              NavigationService.navigateTo(
+                                                Routes.chooseSlotScreen,
+                                              );
+                                            },
+                                            child: Container(
+                                              width: 118,
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.only(
+                                                  left: 14,
+                                                  right: 14,
+                                                  bottom: 6,
+                                                  top: 6),
+                                              decoration: BoxDecoration(
+                                                  color: AppConstants
+                                                      .boxBorderColor,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(8))),
+                                              child: Text('Book now'),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
                         ),
                       ),
-                      SizedBox(height:6),
-                      InkWell(
-                        onTap:(){
-                          gymStore.setAddOnSlot(
-                            context: context,
-                            data: item,
-                            getTrainers: true,
-                          );
-                          NavigationService.navigateTo(
-                            Routes.chooseSlotScreen,
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left:14,right:14,bottom: 6,top: 6),
-                          decoration: BoxDecoration(
-                              color: AppConstants.boxBorderColor,
-                              borderRadius:BorderRadius.all(Radius.circular(8))
-                          ),
-                          child: Text('Book now'),
-                        ),
-                      )
-                    ],
+                    ),
+                  ],
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Text(
+                      'No ADDON Available',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                      ),
+                    ),
                   ),
-                ))
-                    .toList(),
-              ),
-            ),
-          ),
-        ],
-      )
-          : Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 6.0),
-          child: Text(
-            'No ADDON Available',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.0,
-            ),
-          ),
-        ),
-      )
+                )
           : Loading(),
     );
   }
+
   // Widget ab(){
   //   return Container(
   //     height: 120,
@@ -2431,7 +2579,7 @@ class GymLiveWidget extends StatelessWidget {
   //   );
   // }
 
-  Widget ge(){
+  Widget ge() {
     return Container(
       padding: EdgeInsets.only(left: 8, right: 8),
       child: Column(
@@ -2440,10 +2588,13 @@ class GymLiveWidget extends StatelessWidget {
             width: 118,
             height: 76,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8), topLeft: Radius.circular(8)),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(8),topLeft: Radius.circular(8)),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      topLeft: Radius.circular(8)),
                   color: Colors.transparent,
                 ),
                 child: Image.network(
@@ -2454,23 +2605,22 @@ class GymLiveWidget extends StatelessWidget {
                   loadingBuilder: (context, _, chunk) => chunk == null
                       ? _
                       : RectangleShimmering(
-                    width: double.infinity,
-                    radius: 16.0,
-                  ),
+                          width: double.infinity,
+                          radius: 16.0,
+                        ),
                 ),
                 // height: 350.0,
               ),
             ),
           ),
-          SizedBox(height:6),
+          SizedBox(height: 6),
           InkWell(
-            onTap:(){},
+            onTap: () {},
             child: Container(
-              padding: EdgeInsets.only(left:14,right:14,bottom: 6,top: 6),
+              padding: EdgeInsets.only(left: 14, right: 14, bottom: 6, top: 6),
               decoration: BoxDecoration(
                   color: AppConstants.boxBorderColor,
-                  borderRadius:BorderRadius.all(Radius.circular(8))
-              ),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
               child: Text('Book now'),
             ),
           )

@@ -266,6 +266,7 @@ class GymCard extends StatelessWidget {
   String convertToMonth(String value){
     return (int.parse(value)/30).round().toString();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
