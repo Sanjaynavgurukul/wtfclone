@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -188,53 +189,66 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                       begin: FractionalOffset.topLeft,
                       end: FractionalOffset.bottomRight,
                       colors: [_planColor.leftColor, _planColor.rightColor])),
-              child: Row(
+              child: Stack(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: ListTile(
-                      title: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            'assets/logo/wtf_light.png',
-                            width: 50,
-                            height: 50,
-                          ),
-                        ],
-                      ),
-                      subtitle: Text(
-                          '${gymStore.selectedGymPlan.plan_name ?? ''}',
-                          style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white)),
+                  Positioned(
+                    bottom: 6,right: 6,
+                    child: SvgPicture.asset(
+                        'assets/images/3_circle.svg',
+                        color: _planColor.leftColor,
+                        width: 30,
+                        semanticsLabel: 'A red up arrow'
                     ),
-                    // child: Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     Image.asset(
-                    //       'assets/logo/wtf_light.png',
-                    //       width: 50,
-                    //       height: 50,
-                    //     ),
-                    //     SizedBox(
-                    //       width: 6,
-                    //     ),
-                    //     Text('${gymStore.selectedGymPlan.planName??''}',
-                    //         style: TextStyle(
-                    //             fontSize: 24,
-                    //             fontWeight: FontWeight.w800,
-                    //             color: _planColor.rightColor))
-                    //   ],
-                    // ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Text('Include Unlimited Arena Access',
-                        style: TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.w400)),
-                  )
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: ListTile(
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                'assets/logo/wtf_light.png',
+                                width: 50,
+                                height: 50,
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(
+                              '${gymStore.selectedGymPlan.plan_name ?? ''}',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white)),
+                        ),
+                        // child: Row(
+                        //   mainAxisSize: MainAxisSize.min,
+                        //   children: [
+                        //     Image.asset(
+                        //       'assets/logo/wtf_light.png',
+                        //       width: 50,
+                        //       height: 50,
+                        //     ),
+                        //     SizedBox(
+                        //       width: 6,
+                        //     ),
+                        //     Text('${gymStore.selectedGymPlan.planName??''}',
+                        //         style: TextStyle(
+                        //             fontSize: 24,
+                        //             fontWeight: FontWeight.w800,
+                        //             color: _planColor.rightColor))
+                        //   ],
+                        // ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text('Include Unlimited Arena Access',
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.w400)),
+                      )
+                    ],
+                  ),
                 ],
               ),
               // child: ListTile(

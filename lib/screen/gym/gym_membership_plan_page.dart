@@ -157,12 +157,25 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                       ),
                     ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.all(0),
-                    dense: true,
-                    title: Html(
-                      data:'${data.description ??'Best for person who frequently travel'}',
-                    ),
+                  Stack(
+                    children: [
+                      Positioned(
+                        bottom: 6,right: 6,
+                        child: SvgPicture.asset(
+                            'assets/images/3_circle.svg',
+                            color: color.leftColor,
+                            width: 40,
+                            semanticsLabel: 'A red up arrow'
+                        ),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        dense: true,
+                        title: Html(
+                          data:'${data.description ??'Best for person who frequently travel'}',
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
