@@ -58,7 +58,7 @@ class _PTPagesState extends State<PTPages> {
                             color: Colors.transparent,
                           ),
                           height: 350.0,
-                          child: CommonBanner(bannerType: 'PT_banner',),
+                          child: CommonBanner(bannerType: 'PT_banner',height: 350,fraction: 1,),
                         ),
 
                         Positioned(
