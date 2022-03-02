@@ -126,6 +126,7 @@ flutter:
     - assets/svg/female/
     - assets/svg/you_get/
     - assets/svg/why_choose/
+    - assets/svg/nav_bar/
 
   fonts:
     - family: Railway

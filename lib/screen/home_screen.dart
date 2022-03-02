@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rolling_nav_bar/indexed.dart';
 import 'package:rolling_nav_bar/rolling_nav_bar.dart';
@@ -24,10 +25,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen>, WidgetsBindingObserver {
+  //Local Variables :D
+  int pageIndex = 0;
   ExplorePresenter _presenter;
   GymModel _gymModel;
   bool isLoaded = false;
   GymStore store;
+
+
   List<Widget> get badgeWidgets => indexed(badges)
       .map((Indexed indexed) => indexed.value != null
           ? Text(indexed.value.toString(),
@@ -133,27 +138,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
-  void onTabTapped(int index) {
-    // bool validateToken = Helper.isTokenValid();
-    // if (!validateToken) {
-    //   locator<NavigationService>().navigateReplacementTo(RouteList.login);
-    // }
-    store.init(context: context);
-    switch (index) {
-      case 0:
-        break;
-      case 1:
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-    }
-    setState(() {
-      store.currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -177,81 +161,110 @@ class _HomeScreenState extends State<HomeScreen>
           },
           child: Scaffold(
             backgroundColor: AppColors.PRIMARY_COLOR,
-            bottomNavigationBar: SizedBox(
-              height: 56.0,
-              width: MediaQuery.of(context).size.width,
-              child: Material(
-                elevation: 12.0,
-                child: RollingNavBar.iconData(
-                  activeBadgeColors: <Color>[
-                    Colors.black,
-                  ],
-                  activeIndex: store.currentIndex,
-                  animationCurve: Curves.linear,
-                  animationType: AnimationType.spinOutIn,
-                  baseAnimationSpeed: 250,
-                  badges: badgeWidgets,
-                  iconData: iconData,
-                  iconColors: <Color>[Colors.white],
-                  iconText: iconText,
-                  indicatorColors: [
-                    AppConstants.primaryColor
-//                Color(locator<AppPrefs>().selectedPrimaryColor2.getValue()),
-//                Color(locator<AppPrefs>().selectedPrimaryColor.getValue()),
-//                AppConstants.white
-                  ],
-                  iconSize: 24,
-                  indicatorRadius: scaledHeight(context, 25),
-                  onAnimate: _onAnimate,
-                  onTap: (index) => setState(() {
-                    switch (index) {
-                      case 0:
-                        context.read<GymStore>().getBanner(context: context);
-                        context.read<GymStore>().getAllEvents(context: context);
-                        break;
-                      case 1:
-                        context
-                            .read<GymStore>()
-                            .getActiveSubscriptions(context: context);
-                        context
-                            .read<GymStore>()
-                            .getMemberSubscriptions(context: context);
-                        context.read<GymStore>().getTerms();
-                        context.read<GymStore>().getBanner(context: context);
-                        context.read<GymStore>().getAllGyms(context: context);
-                        context.read<GymStore>().getAllEvents(context: context);
-                        break;
-                      case 2:
-                        break;
-                      case 3:
-                        context
-                            .read<GymStore>()
-                            .getWTFCoinBalance(context: context);
-                        context.read<GymStore>().getCoinHistory(context: context);
-                        context
-                            .read<GymStore>()
-                            .getRedeemHistory(context: context);
-                        // context.read<GymStore>().getNotifications(
-                        //       context: context,
-                        //       type: 'new',
-                        //     );
-                        break;
-                    }
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                    activeIcon:new SvgPicture.asset(
+                        'assets/svg/nav_bar/dashboard.svg',
 
-                    setState(() {
-                      store.currentIndex = index;
-                    });
-                    // _pageController.animateToPage(index,
-                    //     duration: Duration(milliseconds: 300), curve: Curves.ease);
-                  }),
-                  indicatorCornerRadius: 8.0,
-                  indicatorSides: 6,
-                  activeIconColors: [AppConstants.white],
-                  navBarDecoration: BoxDecoration(
-                    color: AppConstants.cardBg1.withOpacity(0.01),
-                  ),
-                ),
-              ),
+                        semanticsLabel: 'Dashboard Icon',
+                      color: AppConstants.boxBorderColor,
+                    ),
+                    icon: SvgPicture.asset(
+                        'assets/svg/nav_bar/dashboard.svg',
+
+                        semanticsLabel: 'Dashboard Icon'
+                    ), title: Text('Dashboard')),
+                BottomNavigationBarItem(
+                    activeIcon:new SvgPicture.asset(
+                      'assets/svg/nav_bar/explore.svg',
+
+                      semanticsLabel: 'Explore Icon',
+                      color: AppConstants.boxBorderColor,
+                    ),
+                    icon: SvgPicture.asset(
+                        'assets/svg/nav_bar/explore.svg',
+
+                        semanticsLabel: 'Explore icon'
+                    ), title: Text('Explore')),
+                BottomNavigationBarItem(
+                    activeIcon:new SvgPicture.asset(
+                      'assets/svg/nav_bar/wtf.svg',
+
+                      semanticsLabel: 'wtf icon',
+                      color: AppConstants.boxBorderColor,
+                    ),
+                    icon: SvgPicture.asset(
+                        'assets/svg/nav_bar/wtf.svg',
+
+                        semanticsLabel: 'wtf icon'
+                    ), title: Text('My WTF')),
+                BottomNavigationBarItem(
+                    activeIcon:new SvgPicture.asset(
+                      'assets/svg/nav_bar/coin.svg',
+
+                      semanticsLabel: 'coins icon',
+                      color: AppConstants.boxBorderColor,
+                    ),
+                    icon: SvgPicture.asset(
+                        'assets/svg/nav_bar/coin.svg',
+
+                        semanticsLabel: 'coin icon'
+                    ), title: Text('Coins')),
+              ],
+              currentIndex: store.currentIndex,
+              fixedColor: Colors.white,
+              backgroundColor: Color(0xff1A1A1A),
+              selectedLabelStyle: TextStyle(color: Colors.white),
+              unselectedIconTheme:
+              IconThemeData(color: AppConstants.white.withOpacity(0.3)),
+              unselectedItemColor: Colors.grey,
+              unselectedLabelStyle: TextStyle(color: Colors.green),
+              onTap: (index){
+                setState(() {
+                  switch (index) {
+                    case 0:
+                      context.read<GymStore>().getBanner(context: context);
+                      context.read<GymStore>().getAllEvents(context: context);
+                      break;
+                    case 1:
+                      context
+                          .read<GymStore>()
+                          .getActiveSubscriptions(context: context);
+                      context
+                          .read<GymStore>()
+                          .getMemberSubscriptions(context: context);
+                      context.read<GymStore>().getTerms();
+                      context.read<GymStore>().getBanner(context: context);
+                      context.read<GymStore>().getAllGyms(context: context);
+                      context.read<GymStore>().getAllEvents(context: context);
+                      break;
+                    case 2:
+                      break;
+                    case 3:
+                      context
+                          .read<GymStore>()
+                          .getWTFCoinBalance(context: context);
+                      context.read<GymStore>().getCoinHistory(context: context);
+                      context
+                          .read<GymStore>()
+                          .getRedeemHistory(context: context);
+                      // context.read<GymStore>().getNotifications(
+                      //       context: context,
+                      //       type: 'new',
+                      //     );
+                      break;
+                  }
+
+                  setState(() {
+                    store.currentIndex = index;
+                  });
+                  // _pageController.animateToPage(index,
+                  //     duration: Duration(milliseconds: 300), curve: Curves.ease);
+                });
+              },
+              enableFeedback: true,
+              type: BottomNavigationBarType.fixed,
             ),
             body: Column(
               children: [
@@ -365,6 +378,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
