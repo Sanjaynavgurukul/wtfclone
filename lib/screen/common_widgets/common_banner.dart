@@ -6,9 +6,12 @@ import 'package:wtf/model/banner_model.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
 
 class CommonBanner extends StatelessWidget {
-  const CommonBanner({this.bannerType});
+  const CommonBanner({this.bannerType,this.height=200,this.width = 200,this.fraction=0.8});
 
   final String bannerType;
+  final double height;
+  final double width;
+  final double fraction;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +19,8 @@ class CommonBanner extends StatelessWidget {
       builder: (context, value, child) {
         return value.bannerList == null
             ? Container(
-          height: 200,
-          width: 200,
+          height: height,
+          width: width,
           child: Center(
             child: loadingState(),
           ),
@@ -37,8 +40,9 @@ class CommonBanner extends StatelessWidget {
   Widget listCarouse(List<BannerItem> list) {
     return CarouselSlider(
         options: CarouselOptions(
-          height: 220.0,
-          viewportFraction: 0.8,
+          height: height,
+
+          viewportFraction: fraction,
           enlargeCenterPage: false,
           autoPlay: true,
           pageSnapping: true,
@@ -49,7 +53,7 @@ class CommonBanner extends StatelessWidget {
             .map(
               (i) {
             return ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(fraction == 1 ? 0:12.0),
               child: Builder(
                 builder: (BuildContext context) {
                   if (i.image == null) {
@@ -60,7 +64,7 @@ class CommonBanner extends StatelessWidget {
                   return Container(
                     margin: EdgeInsets.only(left: 4 ,right: 4),
                     decoration: BoxDecoration(
-                      borderRadius:BorderRadius.all(Radius.circular(20))
+                      borderRadius:BorderRadius.all(Radius.circular(fraction == 1 ? 0:20))
                     ),
                     child: Image.network(
                       i.image,

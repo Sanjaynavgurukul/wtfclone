@@ -8,6 +8,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/addon/powered_pages.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/progress_loader.dart';
 class PTPages extends StatefulWidget {
@@ -16,7 +17,13 @@ class PTPages extends StatefulWidget {
 }
 
 class _PTPagesState extends State<PTPages> {
+  //Local Variables :D
   GymStore store;
+  bool show = false;
+  bool scrollOrNot = true;
+  final bool isPreview = false;
+  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -49,19 +56,11 @@ class _PTPagesState extends State<PTPages> {
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              colorFilter: ColorFilter.mode(
-                                Color(0xff6B5B04).withOpacity(0.5),
-                                BlendMode.dstIn,
-                              ),
-                              image: AssetImage(
-                                'assets/images/pt_trainer.png',
-                              ),
-                            ),
                           ),
                           height: 350.0,
+                          child: CommonBanner(bannerType: 'PT_banner',),
                         ),
+
                         Positioned(
                           top: 66.0,
                           left: 0.0,
@@ -83,7 +82,7 @@ class _PTPagesState extends State<PTPages> {
                                       fontWeight: FontWeight.normal,
                                       fontSize: 18.0,
                                       color:
-                                          AppConstants.white.withOpacity(0.8),
+                                      AppConstants.white.withOpacity(0.8),
                                     ),
                                   ),
                                 ],
@@ -168,36 +167,36 @@ class _PTPagesState extends State<PTPages> {
                       color: AppConstants.white,
                       child: Consumer<GymStore>(
                         builder: (context, store, child) => store
-                                    .allAddonClasses !=
-                                null
+                            .allAddonClasses !=
+                            null
                             ? store.allAddonClasses.data != null &&
-                                    store.allAddonClasses.data.isNotEmpty
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    itemCount: store.allAddonClasses.data
-                                        .where((element) => element.isPt == '1')
-                                        .toList()
-                                        .length,
-                                    scrollDirection: Axis.vertical,
-                                    itemBuilder: (context, index) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0,
-                                      ),
-                                      child: LiveCard(
-                                        data: store.allAddonClasses.data
-                                            .where((element) =>
-                                                element.isPt == '1')
-                                            .toList()[index],
-                                        isFullView: true,
-                                      ),
-                                    ),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      'No live Classes found',
-                                    ),
-                                  )
+                            store.allAddonClasses.data.isNotEmpty
+                            ? ListView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: store.allAddonClasses.data
+                              .where((element) => element.isPt == '1')
+                              .toList()
+                              .length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20.0,
+                            ),
+                            child: LiveCard(
+                              data: store.allAddonClasses.data
+                                  .where((element) =>
+                              element.isPt == '1')
+                                  .toList()[index],
+                              isFullView: true,
+                            ),
+                          ),
+                        )
+                            : Center(
+                          child: Text(
+                            'No live Classes found',
+                          ),
+                        )
                             : Loading(),
                       ),
                     ),
@@ -211,4 +210,6 @@ class _PTPagesState extends State<PTPages> {
       ),
     );
   }
+
+
 }
