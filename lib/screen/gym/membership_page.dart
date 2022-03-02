@@ -407,17 +407,22 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                   crossAxisCount: 2,
                                   children: <Widget>[
                                     whyWTF('Earn WTF rewards coin',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/coins.svg'),
+
                                     whyWTF('Fully Vaccinated Staff',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/vaccine.svg'),
+
                                     whyWTF('Track Fitness Journey',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/heart.svg'),
+
                                     whyWTF('Pocket Friendly Membership',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/money.svg'),
+
                                     whyWTF('Free diet Support',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/diet.svg'),
+
                                     whyWTF('Top Class Ambiance',
-                                        'assets/images/my_wtf.png'),
+                                        'assets/svg/why_choose/class.svg'),
                                   ],
                                 ),
                                 BookPTWidget(),
@@ -1708,11 +1713,14 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
           border: Border.all(width: 1, color: Color(0xffAAAAAA))),
       child: Column(
         children: [
-          Image.asset(
-            icon ?? 'assets/images/my_wtf.png',
-            width: 60,
-            height: 60,
-          ),
+          SizedBox(height: 12),
+        SvgPicture.asset(
+            icon??'assets/svg/why_choose/class.svg',
+            width: 50,
+            height: 50,
+            color: Colors.white,
+            semanticsLabel: 'A red up arrow'
+        ),
           SizedBox(height: 18),
           Text(
             label,
