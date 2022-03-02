@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              CommonBanner(bannerType: "WTF_banner",),
+              CommonBanner(bannerType: "FC_banner",),
               SizedBox(
                 height: 16.0,
               ),

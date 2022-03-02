@@ -202,7 +202,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     // Default Key Values
     body["gym_id"] = gymStore.selectedGymDetail.data.userId;
     body["user_id"] = locator<AppPrefs>().memberId.getValue();
-    body["price"] = isPartialPayment() ? (totalAmount/2).toString():totalAmount.toString();
+    body["price"] = totalAmount.toString();
     body["tax_percentage"] = gymStore.selectedGymPlan.tax_percentage;
     body["tax_amount"] = tax.toString();
     body["type"] = 'regular';

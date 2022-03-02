@@ -15,29 +15,6 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   List<Map> _itemsList = [
-    // {
-    //   'name': 'My\n WTF',
-    //   'img': 'assets/images/wtf.png',
-    //   // 'img': 'assets/images/mywtf.jpeg',
-    // },
-    // {
-    //   'name': 'WTF\n Coins',
-    //   'img': 'assets/images/coins.png',
-    // },
-    // {
-    //   'name': 'My\n Schedule',
-    //   // 'img': 'assets/images/schedule.jpeg',
-    //   'img': 'assets/images/schedule.png',
-    // },
-    // {
-    //   'name': 'WTF\n Nutrition',
-    //   // 'img': 'assets/images/nutrition.jpeg',
-    //   'img': 'assets/images/nutrition.png',
-    // },
-    // {
-    //   'name': 'Active\n Subscription',
-    //   'img': 'assets/images/active_subscription.png',
-    //   // 'img': 'assets/images/wtf.png',
     {
       'name': 'Fitness',
       'img': 'assets/images/fitness.png',

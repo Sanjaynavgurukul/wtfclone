@@ -10,7 +10,6 @@ import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/addon/powered_pages.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/progress_loader.dart';
-
 class PTPages extends StatefulWidget {
   @override
   _PTPagesState createState() => _PTPagesState();
