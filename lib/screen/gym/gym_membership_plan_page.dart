@@ -205,6 +205,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
           store.selectedGymPlans.data[index];
     });
 
+    print('checking dates --- : ${store.selectedGymPlans.data[index].duration}');
     // NavigationService.navigateTo(Routes.searchScreen);
     NavigationService.pushName(Routes.buySubscriptionScreen,
         argument: PlanPageArgument(planColor: PlanColor.getColorList()[index]));

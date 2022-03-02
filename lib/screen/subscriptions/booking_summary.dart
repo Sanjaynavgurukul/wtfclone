@@ -202,7 +202,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     // Default Key Values
     body["gym_id"] = gymStore.selectedGymDetail.data.userId;
     body["user_id"] = locator<AppPrefs>().memberId.getValue();
-    body["price"] = totalAmount.toString();
+    body["price"] = isPartialPayment() ? (totalAmount/2).toString():totalAmount.toString();
     body["tax_percentage"] = gymStore.selectedGymPlan.tax_percentage;
     body["tax_amount"] = tax.toString();
     body["type"] = 'regular';
@@ -254,7 +254,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       await gymStore.processPayment(
         context: context,
         body: body,
-        price: (totalAmount * 100).toString(),
+        price: (isPartialPayment() ? (totalAmount/2)*100:totalAmount * 100).toString(),
       );
     } else {
       //100% discount applied :D
@@ -316,7 +316,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
               } else {
                 FlashHelper.errorBar(context, message: validateEmiPayment());
               }
-            } else {}
+            } else {
+              processToBuy();
+            }
           },
           child: Container(
               padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
@@ -696,6 +698,184 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Future<String> _selectEmiDate({int emiType}) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: gymStore.selectedStartingDate
+            .add(
+          Duration(
+            days: int.tryParse(
+              gymStore.selectedGymPlan.duration,
+            ),
+          ),
+        ),
+        builder: (BuildContext context, Widget child) {
+          return getDialogTheme(child);
+        });
+
+    if (picked != null) {
+      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      return formattedDate;
+    } else
+      return null;
+  }
+
+  Future<bool> showBottomDialog() {
+    final _formKey = GlobalKey<FormState>();
+    final _otpController = TextEditingController();
+    bool wrongOtp = false;
+    String otpMessage = 'Wrong OTP';
+    bool loading = false;
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      builder: (context) => WillPopScope(
+          onWillPop: () async => true,
+          child: StatefulBuilder(
+            builder: (BuildContext ctx, StateSetter setModelState) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      top: 16,
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      right: 12,
+                      left: 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ListTile(
+                        title: Text(
+                          'Verification Required\n',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          'We have sent an OTP to ${gymStore.selectedGymDetail.data.gymName} , ${gymStore.selectedGymDetail.data.name} to authenticate this transaction\, Please ask the OTP from ${gymStore.selectedGymDetail.data.name} to proceed',
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 40),
+                      Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          inputFormatters: [Global.amountValidator],
+                          keyboardType: TextInputType.numberWithOptions(
+                            decimal: true,
+                            signed: false,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: "Enter OTP",
+                            labelText: "Enter OTP",
+                            hintStyle: TextStyle(color: Colors.black),
+                            border: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            enabledBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: new OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                          style: TextStyle(color: Colors.black),
+                          maxLength: 7,
+                          autofocus: true,
+                          controller: _otpController,
+                          maxLines: 1,
+                          validator: (value) {
+                            if (value == null)
+                              return "Please enter OTP";
+                            else if (value.length < 6) {
+                              return 'Please enter 6 character otp';
+                            } else
+                              return null;
+                          },
+                          onChanged: (value) {},
+                        ),
+                      ),
+                      if(wrongOtp)SizedBox(height: 8),
+                      if(wrongOtp)Align(
+                          alignment: Alignment.center,
+                          child: Text('$otpMessage',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppConstants.boxBorderColor))),
+                      SizedBox(height: 12),
+                      InkWell(
+                        onTap: !loading ? () {
+                          final formState = _formKey.currentState;
+                          if (formState.validate()) {
+                            formState.save();
+                            // then do something
+                            setModelState((){
+                              loading = true;
+                            });
+                            gymStore.verifyOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId, otp: _otpController.text.trim()).then((value){
+                              if(value){
+                                Navigator.pop(context);
+                                FlashHelper.successBar(context, message: 'OTP verified');
+                                processToBuy();
+                              }else{
+                                setModelState((){
+                                  wrongOtp = true;
+                                  _otpController.text = null;
+                                });
+                              }
+                            });
+                          }
+                        }:null,
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                              color: AppConstants.bgColor),
+                          child: loading ? CupertinoActivityIndicator(): Text('Verify OTP',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14)),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )),
     );
   }
 
@@ -1393,180 +1573,4 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     );
   }
 
-  Future<String> _selectEmiDate({int emiType}) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: gymStore.activeSubscriptions.data.expireDate.add(
-          new Duration(days: 1),
-        ),
-        firstDate: gymStore.activeSubscriptions.data.expireDate.add(
-          new Duration(days: 1),
-        ),
-        lastDate: gymStore.activeSubscriptions.data.expireDate.add(
-          new Duration(days: 180),
-        ),
-        builder: (BuildContext context, Widget child) {
-          return getDialogTheme(child);
-        });
-
-    if (picked != null) {
-      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
-      return formattedDate;
-    } else
-      return null;
-  }
-
-  Future<bool> showBottomDialog() {
-    final _formKey = GlobalKey<FormState>();
-    final _otpController = TextEditingController();
-    bool wrongOtp = false;
-    String otpMessage = 'Wrong OTP';
-    bool loading = false;
-    return showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-      ),
-      isDismissible: false,
-      enableDrag: false,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      builder: (context) => WillPopScope(
-          onWillPop: () async => true,
-          child: StatefulBuilder(
-            builder: (BuildContext ctx, StateSetter setModelState) {
-              return SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.only(
-                      top: 16,
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      right: 12,
-                      left: 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Verification Required\n',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          'We have sent an OTP to ${gymStore.selectedGymDetail.data.gymName} , ${gymStore.selectedGymDetail.data.name} to authenticate this transaction\, Please ask the OTP from ${gymStore.selectedGymDetail.data.name} to proceed',
-                          style: TextStyle(fontSize: 14, color: Colors.black),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 40),
-                      Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          inputFormatters: [Global.amountValidator],
-                          keyboardType: TextInputType.numberWithOptions(
-                            decimal: true,
-                            signed: false,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "Enter OTP",
-                            labelText: "Enter OTP",
-                            hintStyle: TextStyle(color: Colors.black),
-                            border: new OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            enabledBorder: new OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: new OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                          ),
-                          style: TextStyle(color: Colors.black),
-                          maxLength: 7,
-                          autofocus: true,
-                          controller: _otpController,
-                          maxLines: 1,
-                          validator: (value) {
-                            if (value == null)
-                              return "Please enter OTP";
-                            else if (value.length < 6) {
-                              return 'Please enter 6 character otp';
-                            } else
-                              return null;
-                          },
-                          onChanged: (value) {},
-                        ),
-                      ),
-                      if(wrongOtp)SizedBox(height: 8),
-                      if(wrongOtp)Align(
-                          alignment: Alignment.center,
-                          child: Text('$otpMessage',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppConstants.boxBorderColor))),
-                      SizedBox(height: 12),
-                      InkWell(
-                        onTap: !loading ? () {
-                          final formState = _formKey.currentState;
-                          if (formState.validate()) {
-                            formState.save();
-                            // then do something
-                            setModelState((){
-                              loading = true;
-                            });
-                            gymStore.verifyOtpToGymOwner(gymId: gymStore.selectedGymDetail.data.userId, otp: _otpController.text.trim()).then((value){
-                              if(value){
-                                Navigator.pop(context);
-                                FlashHelper.successBar(context, message: 'OTP verified');
-                                processToBuy();
-                              }else{
-                                setModelState((){
-                                  wrongOtp = true;
-                                  _otpController.text = null;
-                                });
-                              }
-                            });
-                          }
-                        }:null,
-                        child: Container(
-                          padding: EdgeInsets.all(20),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              color: AppConstants.bgColor),
-                          child: loading ? CupertinoActivityIndicator(): Text('Verify OTP',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                    ],
-                  ),
-                ),
-              );
-            },
-          )),
-    );
-  }
 }
