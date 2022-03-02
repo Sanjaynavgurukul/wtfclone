@@ -542,7 +542,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                   color: Color(0xffAF4949)),
                               child: ListTile(
                                 onTap: () {
-                                  _selectEmiDate(emiType: 1).then((value) {
+                                  _selectEmiDate().then((value) {
                                     if (value != null) {
                                       gymStore.selectedGymDetail.data
                                           .second_payment = value;
@@ -556,7 +556,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                     }
                                   });
                                 },
-                                title: Text('Select First EMI date',
+                                title: Text('Select Second EMI date',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400)),
@@ -584,7 +584,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                               child: ListTile(
                                 enabled: isEnableThirdEmi(),
                                 onTap: () {
-                                  _selectEmiDate(emiType: 1).then((value) {
+                                  _selectThirdEmiDate().then((value) {
                                     if (value != null) {
                                       gymStore.selectedGymDetail.data
                                           .third_payment = value;
@@ -598,7 +598,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                     }
                                   });
                                 },
-                                title: Text('Select First EMI date',
+                                title: Text('Select Third EMI date',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400)),
@@ -701,7 +701,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     );
   }
 
-  Future<String> _selectEmiDate({int emiType}) async {
+  Future<String> _selectEmiDate() async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -709,9 +709,43 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         lastDate: gymStore.selectedStartingDate
             .add(
           Duration(
-            days: int.tryParse(
+            days: (int.tryParse(
               gymStore.selectedGymPlan.duration,
-            ),
+            )/2).round(),
+          ),
+        ),
+        builder: (BuildContext context, Widget child) {
+          return getDialogTheme(child);
+        });
+
+    if (picked != null) {
+      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      return formattedDate;
+    } else
+      return null;
+  }
+
+  DateTime convertDate(String date){
+    DateTime parseDate =
+    new DateFormat("dd-MM-yyyy'").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    // var outputFormat = DateFormat('dd-MM-yyyy');
+    // var outputDate = outputFormat.format(inputDate);
+    // print(outputDate);
+   return inputDate;
+
+  }
+  Future<String> _selectThirdEmiDate() async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: convertDate(gymStore.selectedGymDetail.data.second_payment),
+        firstDate: convertDate(gymStore.selectedGymDetail.data.second_payment),
+        lastDate: gymStore.selectedStartingDate
+            .add(
+          Duration(
+            days: (int.tryParse(
+              gymStore.selectedGymPlan.duration,
+            )/2).round(),
           ),
         ),
         builder: (BuildContext context, Widget child) {
@@ -908,7 +942,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       case 2:
         String amount = gymStore.selectedGymDetail.data.third_payment_amount;
         String paymentDate =
-            'Second Payment at ${gymStore.selectedGymDetail.data.third_payment}';
+            'Third Payment at ${gymStore.selectedGymDetail.data.third_payment}';
         return paymentDate + " " + '\u{20B9}$amount';
         break;
       default:

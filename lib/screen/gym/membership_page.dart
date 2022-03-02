@@ -215,7 +215,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                         Colors.transparent,
                                         Color(0xff272727)
                                       ])),
-                                  child: Column(
+                                  child: gymStore.selectedGymDetail.data.distance.contains('N/A')?SizedBox(width: 0,):Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
