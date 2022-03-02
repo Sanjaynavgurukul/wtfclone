@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -232,7 +233,8 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                             )),
                                             WidgetSpan(
                                                 child: Text(
-                                                    ' ${gymStore.selectedGymDetail.data.distance_text ?? ''} | ${gymStore.selectedGymDetail.data.distance} Km',
+                                                    // ' ${item.duration_text??''} away | ${item.distance_text??''}'
+                                                    ' ${gymStore.selectedGymDetail.data.duration_text ?? ''} away | ${gymStore.selectedGymDetail.data.distance_text}',
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
@@ -241,22 +243,37 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                         ),
                                       ),
                                       SizedBox(height: 8),
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            top: 8,
-                                            bottom: 8,
-                                            left: 12,
-                                            right: 12),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4)),
-                                          color: Color(0xffBA1406),
+
+                                      InkWell(
+                                          onTap:(){
+                                            MapsLauncher.launchCoordinates(
+                                              double.tryParse(
+                                                gymStore.selectedGymDetail
+                                                    .data.latitude,
+                                              ),
+                                              double.tryParse(
+                                                gymStore.selectedGymDetail
+                                                    .data.longitude,
+                                              ),
+                                            );
+                                          },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 8,
+                                              left: 12,
+                                              right: 12),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            color: Color(0xffBA1406),
+                                          ),
+                                          child: Text('Direction',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontStyle: FontStyle.normal)),
                                         ),
-                                        child: Text('Direction',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                fontStyle: FontStyle.normal)),
                                       )
                                     ],
                                   ),
@@ -360,7 +377,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                           fontStyle: FontStyle.normal)),
                                   subtitle: Html(
                                     data: gymStore
-                                        .selectedGymDetail.data.description,
+                                        .selectedGymDetail.data.description ?? 'No Description',
                                   ),
                                 ),
                                 SizedBox(height: 24),

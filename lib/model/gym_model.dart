@@ -236,7 +236,7 @@ class GymModelData {
         : [],
 
     //New Variables :D
-    distance: json["distance"] != 'N/A' ? json["distance"].toString():json["distance"],
+    distance: json["distance"].toString(),
     distance_text: json["distance_text"],
     duration: json["duration"].toString(),
     duration_text: json["duration_text"],

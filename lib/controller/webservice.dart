@@ -869,6 +869,7 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     print('checking type of gym : $type');
+    String finalUrl = Api.getNearByGym(lat, lng, type);
     return _netUtil
         .get(BASE_URL + Api.getNearByGym(lat, lng, type), headers: mapHeader)
         .then((dynamic res) {

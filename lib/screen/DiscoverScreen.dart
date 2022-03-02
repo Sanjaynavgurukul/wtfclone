@@ -508,7 +508,7 @@ class GymCard extends StatelessWidget {
                                 color: AppConstants.green,
                               )),
                               WidgetSpan(
-                                  child: Text(' ${item.duration_text??''}',
+                                  child: Text(' ${item.duration_text??''} away | ${item.distance_text??''}',
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400))),
