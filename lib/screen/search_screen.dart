@@ -7,7 +7,6 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/common_function.dart';
 import 'package:wtf/helper/flash_helper.dart';
-import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/common_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
@@ -15,7 +14,6 @@ import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
-import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -264,7 +262,6 @@ class _SearchScreenState extends State<SearchScreen>
                 SizedBox(
                   height: 12.0,
                 ),
-
                 Expanded(
                   child: !isLoaded
                       ? LoadingWithBackground()
@@ -287,8 +284,6 @@ class _SearchScreenState extends State<SearchScreen>
                               },
                             ),
                 ),
-                UIHelper.verticalSpace(20.0),
-                ComingSoonWidget(),
               ],
             ),
           ),
