@@ -166,7 +166,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                     ),
                     body: RefreshIndicator(
                       onRefresh: () async {
-                        await context.read<GymStore>().getGymDetails(
+                        await context.read<GymStore>().getGymByID(
                               context: context,
                               gymId: widget.gymId,
                             );

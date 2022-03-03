@@ -722,7 +722,8 @@ class GymStore extends ChangeNotifier {
     BuildContext context,
     Map<String, dynamic> body,
     bool showLoader = false,
-  }) async {//2293768
+  }) async {
+    //2293768
     print('Payload while adding partial payment --- $body');
     print("get Gym Details 1");
     if (showLoader) {
@@ -1719,6 +1720,32 @@ class GymStore extends ChangeNotifier {
     getTerms(context: context);
   }
 
+  //Get GYm By ID
+  Future<void> getGymByID({BuildContext context, String gymId}) async {
+    loading = true;
+    notifyListeners();
+    // 'lat': currentPosition.latitude,
+    // 'long': currentPosition.longitude,
+    GymDetailsModel res = await RestDatasource().getGymById(
+        gymID: gymId,
+        lng: currentPosition.longitude.toString(),
+        lat: currentPosition.latitude.toString());
+    if (res != null) {
+      selectedGymDetail = res;
+      getAllGymOffers(gymId: gymId, context: context);
+      notifyListeners();
+    } else {
+      selectedGymDetail = GymDetailsModel(
+        status: false,
+      );
+      notifyListeners();
+    }
+    getTrailInfo(context: context);
+    getAddOnForGym(gymId: gymId, context: context);
+    checkGymSubscription(context: context, gymId: gymId);
+    getTerms(context: context);
+  }
+
   Future<void> getAllSessionsForAddOn({BuildContext context}) async {
     AllSessions res = await RestDatasource().getAllSessionsForAddOn(
       context: context,
@@ -2176,14 +2203,17 @@ class GymStore extends ChangeNotifier {
     await RestDatasource().getDietPlans();
   }
 
-  Future<bool> sendOtpToGymOwner({String gymId})async{
+  Future<bool> sendOtpToGymOwner({String gymId}) async {
     // sendGymOwnerOtp
     bool response = await RestDatasource().sendGymOwnerOtp(gymId: gymId);
     return response;
   }
-  Future<bool> verifyOtpToGymOwner({@required String gymId,@required String otp})async{
+
+  Future<bool> verifyOtpToGymOwner(
+      {@required String gymId, @required String otp}) async {
     // sendGymOwnerOtp
-    bool response = await RestDatasource().verifyGymOwnerOtp(gymId: gymId,otp: otp);
+    bool response =
+        await RestDatasource().verifyGymOwnerOtp(gymId: gymId, otp: otp);
     return response;
   }
 }

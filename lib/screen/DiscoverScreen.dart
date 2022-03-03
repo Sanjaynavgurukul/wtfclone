@@ -533,7 +533,7 @@ class GymCard extends StatelessWidget {
                     color: Color(0XFFE2B411))):null,
             trailing: InkWell(
               onTap: (){
-                context.read<GymStore>().getGymDetails(
+                context.read<GymStore>().getGymByID(
                   context: context,
                   gymId: item.userId,
                 );

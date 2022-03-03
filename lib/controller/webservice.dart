@@ -681,6 +681,23 @@ class RestDatasource {
     return model;
   }
 
+  //Get gym By Id
+  Future<GymDetailsModel> getGymById(
+      {String gymID, String lat, String lng}) async {
+
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.get(BASE_URL + Api.getGymDetailsById(gymId: gymID,lat: lat,lng: lng),
+        headers: mapHeader);
+    print("response of Get GYM DETAILS : " + res.toString());
+    // print('ben---- ${res['gallery']}');
+    GymDetailsModel model;
+    if (res != null) model = GymDetailsModel.fromJson(res);
+    return model;
+  }
+
   ///Manmohan
   Future<AllEvents> getAllEvents() async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
