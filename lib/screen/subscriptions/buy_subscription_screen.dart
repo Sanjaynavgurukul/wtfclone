@@ -10,6 +10,8 @@ import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/Toast.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/screen/common_widgets/time_line.dart';
@@ -64,12 +66,13 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
         child: InkWell(
           onTap: () async {
             if (gymStore.selectedStartingDate != null) {
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => BookingSummaryScreen(),
-                ),
-              );
+              NavigationService.pushName(Routes.bookingSummaryScreen, argument: PlanPageArgument(planColor: _planColor));
+              // Navigator.push(
+              //   context,
+              //   CupertinoPageRoute(
+              //     builder: (context) => BookingSummaryScreen(),
+              //   ),
+              // );
             } else {
               Toast(
                 text: 'Please select a date first',

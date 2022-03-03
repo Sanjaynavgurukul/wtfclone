@@ -43,6 +43,7 @@ class Datum {
     this.status,
     this.dateAdded,
     this.lastUpdated,
+    this.image
   });
 
   int id;
@@ -51,6 +52,7 @@ class Datum {
   String value;
   String status;
   String dateAdded;
+  String image;
   dynamic lastUpdated;
 
   factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
@@ -63,6 +65,7 @@ class Datum {
         type: json["type"],
         value: json["value"],
         status: json["status"],
+    image: json["image"],
         dateAdded: json["date_added"],
         lastUpdated: json["last_updated"],
       );
@@ -73,6 +76,7 @@ class Datum {
         "type": type,
         "value": value,
         "status": status,
+        "image": image,
         "date_added": dateAdded,
         "last_updated": lastUpdated,
       };

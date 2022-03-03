@@ -23,6 +23,8 @@ import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
+import 'package:wtf/screen/gym/arguments/plan_page_argument.dart';
+import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
@@ -44,6 +46,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   int tax = 0;
   int _radioValue = 0;
   TextEditingController couponCodeController;
+  PlanColor _planColor;
 
   // Map subscriptionBody;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -280,6 +283,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
+    final PlanPageArgument args =
+    ModalRoute.of(context).settings.arguments as PlanPageArgument;
+    if(args.planColor != null)
+      _planColor = args.planColor;
+    else _planColor = PlanColor.getColorList()[0];
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.PRIMARY_COLOR,
@@ -640,13 +649,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xff438373),
-                        Color(0xff3E74B4),
-                      ],
-                    )),
+                        begin: FractionalOffset.topLeft,
+                        end: FractionalOffset.bottomRight,
+                        colors: [_planColor.leftColor, _planColor.rightColor])),
                 child: Column(
                   children: [
                     amountLabel(

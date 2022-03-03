@@ -157,13 +157,17 @@ class _Slide12State extends State<Slide12> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Flexible(
-                                child: SvgPicture.asset(
-                                  type2 == e.uid
-                                      ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
-                                      : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
-                                ),
-                              ),
+                              // Flexible(
+                              //   child: SvgPicture.asset(
+                              //     type2 == e.uid
+                              //         ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
+                              //         : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
+                              //   ),
+                              // ),
+                              Flexible(child: Image.network(
+                                '${e.image ?? 'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c='}',
+                                width: 10,
+                              )),
                               UIHelper.verticalSpace(10.0),
                               Flexible(
                                 child: Text(

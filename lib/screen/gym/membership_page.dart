@@ -2350,17 +2350,20 @@ class GymLiveWidget extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
+  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive || !element.isPt.contains('1')).toList();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, gymStore, child) => gymStore.selectedGymAddOns != null
-          ? gymStore.selectedGymAddOns.data != null &&
-                  gymStore.selectedGymAddOns.data.isNotEmpty &&
-                  gymStore.selectedGymAddOns.data
-                          .where((e) => e.isLive)
-                          .toList()
-                          .length >
-                      0
+      builder: (context, gymStore, child) => gymStore.selectedGymAddOns.data != null?getData(gymStore.selectedGymAddOns.data).isNotEmpty
+      // gymStore.selectedGymAddOns != null
+      //     ? gymStore.selectedGymAddOns.data != null &&
+      //             gymStore.selectedGymAddOns.data.isNotEmpty &&
+      //             gymStore.selectedGymAddOns.data
+      //                     .where((e) => e.isLive)
+      //                     .toList()
+      //                     .length >
+      //                 0
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -2384,7 +2387,7 @@ class GymLiveWidget extends StatelessWidget {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: gymStore.selectedGymAddOns.data
+                          children: getData(gymStore.selectedGymAddOns.data)
                               .map((item) => Container(
                                     padding: EdgeInsets.only(left: 8, right: 8),
                                     child: Container(

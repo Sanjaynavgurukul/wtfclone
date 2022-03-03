@@ -37,6 +37,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     GymStore store = Provider.of<GymStore>(context);
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          NavigationService.navigateTo(Routes.updateFitnessProfile);
+        },child: Icon(Icons.add),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);
