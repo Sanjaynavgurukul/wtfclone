@@ -60,7 +60,7 @@ class AddOnData {
   String gymId;
   String description;
   String image;
-  String isPt;
+  int isPt;
   String price;
   bool isLive;
   String freeSession;
@@ -79,7 +79,7 @@ class AddOnData {
       status: json["status"],
       dateAdded: json["date_added"],
       lastUpdated: json["last_updated"],
-      isPt: json['is_pt'] != null ? json['is_pt'] : '0',
+      isPt: int.parse(json['is_pt']),
       gymName: json['gym_name'] ?? '',
       freeSession: json['free_seesion'] ?? '',
       isLive: json['is_live'] ?? false);

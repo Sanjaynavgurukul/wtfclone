@@ -556,10 +556,6 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                             label: 'GST (18 %)',
                             value: tax.toString() ?? ''),
                       ),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.white,
-                      ),
                       SizedBox(height: 6),
                       amountLabel(
                           label: 'Total amount.',

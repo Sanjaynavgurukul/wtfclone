@@ -268,298 +268,299 @@ class GymCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-          color: Color(0xff272727),
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: Column(
-        children: [
-          Container(
-            height: 176,
-            width: MediaQuery.of(context).size.width,
-            // margin: EdgeInsets.only(right: 15),
-            child: Stack(
-              children: [
-                GradientImageWidget(
-                  //TODO Gym Cover image missing
-                  network: item.cover_image ??
-                      'https://media.istockphoto.com/photos/gym-background-fitness-weight-equipment-on-empty-dark-floor-picture-id1213615970?k=20&m=1213615970&s=612x612&w=0&h=S2Ny5JNrAlcpZ_0mt76CKAwARqvJN5glvHpB9fD3DA0=',
-                  gragientColor: [Colors.transparent, Color(0xff272727)],
-                ),
-                // Padding(
-                //   padding:
-                //   const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                //   child: Align(
-                //     alignment: Alignment.bottomLeft,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       crossAxisAlignment: CrossAxisAlignment.end,
-                //       children: [
-                //         Flexible(
-                //           child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             mainAxisAlignment: MainAxisAlignment.end,
-                //             children: [
-                //               Text(
-                //                 item.type?.capitalize() ?? '',
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                   fontSize: 12.5,
-                //                 ),
-                //               ),
-                //               SizedBox(
-                //                 height: 5,
-                //               ),
-                //               Text(
-                //                 item.gymName ?? '',
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                   fontSize: 20,
-                //                   fontWeight: FontWeight.bold,
-                //                 ),
-                //               ),
-                //               SizedBox(
-                //                 height: 5,
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //         Flexible(
-                //           child: Column(
-                //             mainAxisAlignment: MainAxisAlignment.end,
-                //             crossAxisAlignment: CrossAxisAlignment.end,
-                //             children: [
-                //               Flexible(
-                //                 child: Row(
-                //                   mainAxisAlignment: MainAxisAlignment.end,
-                //                   crossAxisAlignment:
-                //                   CrossAxisAlignment.center,
-                //                   children: [
-                //                     Icon(
-                //                       Icons.access_time,
-                //                       color: Colors.white,
-                //                       size: 16,
-                //                     ),
-                //                     SizedBox(
-                //                       width: 4,
-                //                     ),
-                //                     Text(
-                //                       '9 am-11 am',
-                //                       style: TextStyle(
-                //                         color: Colors.white,
-                //                         fontSize: 12.5,
-                //                       ),
-                //                     ),
-                //                   ],
-                //                 ),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 5.0,
-                // ),
-                // if (item.rating != 0)
-                //   Positioned(
-                //     top: 12.0,
-                //     right: 12.0,
-                //     child: Container(
-                //       padding: const EdgeInsets.symmetric(
-                //         vertical: 4.0,
-                //         horizontal: 6.0,
-                //       ),
-                //       decoration: BoxDecoration(
-                //         color: item.rating <= 2
-                //             ? Colors.red
-                //             : item.rating > 2 && item.rating <= 3
-                //             ? Colors.orange
-                //             : Colors.green,
-                //         borderRadius: BorderRadius.circular(6.0),
-                //       ),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //         mainAxisSize: MainAxisSize.min,
-                //         children: [
-                //           Text(
-                //             item.rating.toString() + ' ',
-                //             style: TextStyle(
-                //               color: Colors.white,
-                //               fontSize: 14.0,
-                //               fontWeight: FontWeight.w500,
-                //             ),
-                //           ),
-                //           Icon(
-                //             Icons.star,
-                //             color: Colors.white,
-                //             size: 14.0,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                if ((item.text1 ?? '').isNotEmpty ||
-                    (item.text2 ?? '').isNotEmpty)
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          left: 12, right: 12, top: 6, bottom: 6),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.only(topRight: Radius.circular(8))),
-                      child: Wrap(
-                        direction: Axis.vertical,
-                        children: <Widget>[
-                          // Row(
-                          //   children: [
-                          //     Text('Live Class ',
-                          //         style: TextStyle(
-                          //             fontSize: 14,
-                          //             fontWeight: FontWeight.w400,color: Colors.black)),
-                          //     Container(
-                          //       width: 12,height: 12,
-                          //       decoration: BoxDecoration(
-                          //           borderRadius: BorderRadius.all(Radius.circular(100)),
-                          //           border: Border.all(color: Color(0xffBA1406),width: 3)
-                          //       ),
-                          //     )
-                          //   ],
-                          // ),
-                          if ((item.text1 ?? '').isNotEmpty)
-                            Text('${item.text1}',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black)),
-                          if ((item.text2 ?? '').isNotEmpty)
-                            Text('${item.text2}',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black))
+    return InkWell(
+      onTap: (){
+        context.read<GymStore>().getGymByID(
+          context: context,
+          gymId: item.userId,
+        );
+        print('gym iD --- from nav ${item.userId}');
+        Navigator.of(context).push(
+          CupertinoPageRoute(
+            builder: (_) => BuyMemberShipPage(
+              gymId: item.userId,
+            ),
+          ),
+        );
+      },
+
+      child: Container(
+        margin: EdgeInsets.only(bottom: 24),
+        decoration: BoxDecoration(
+            color: Color(0xff272727),
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        child: Column(
+          children: [
+            Container(
+              height: 176,
+              width: MediaQuery.of(context).size.width,
+              // margin: EdgeInsets.only(right: 15),
+              child: Stack(
+                children: [
+                  GradientImageWidget(
+                    //TODO Gym Cover image missing
+                    network: item.cover_image ??
+                        'https://media.istockphoto.com/photos/gym-background-fitness-weight-equipment-on-empty-dark-floor-picture-id1213615970?k=20&m=1213615970&s=612x612&w=0&h=S2Ny5JNrAlcpZ_0mt76CKAwARqvJN5glvHpB9fD3DA0=',
+                    gragientColor: [Colors.transparent, Color(0xff272727)],
+                  ),
+                  // Padding(
+                  //   padding:
+                  //   const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                  //   child: Align(
+                  //     alignment: Alignment.bottomLeft,
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       crossAxisAlignment: CrossAxisAlignment.end,
+                  //       children: [
+                  //         Flexible(
+                  //           child: Column(
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             children: [
+                  //               Text(
+                  //                 item.type?.capitalize() ?? '',
+                  //                 style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontSize: 12.5,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(
+                  //                 height: 5,
+                  //               ),
+                  //               Text(
+                  //                 item.gymName ?? '',
+                  //                 style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontSize: 20,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(
+                  //                 height: 5,
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //         Flexible(
+                  //           child: Column(
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             children: [
+                  //               Flexible(
+                  //                 child: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.end,
+                  //                   crossAxisAlignment:
+                  //                   CrossAxisAlignment.center,
+                  //                   children: [
+                  //                     Icon(
+                  //                       Icons.access_time,
+                  //                       color: Colors.white,
+                  //                       size: 16,
+                  //                     ),
+                  //                     SizedBox(
+                  //                       width: 4,
+                  //                     ),
+                  //                     Text(
+                  //                       '9 am-11 am',
+                  //                       style: TextStyle(
+                  //                         color: Colors.white,
+                  //                         fontSize: 12.5,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 5.0,
+                  // ),
+                  // if (item.rating != 0)
+                  //   Positioned(
+                  //     top: 12.0,
+                  //     right: 12.0,
+                  //     child: Container(
+                  //       padding: const EdgeInsets.symmetric(
+                  //         vertical: 4.0,
+                  //         horizontal: 6.0,
+                  //       ),
+                  //       decoration: BoxDecoration(
+                  //         color: item.rating <= 2
+                  //             ? Colors.red
+                  //             : item.rating > 2 && item.rating <= 3
+                  //             ? Colors.orange
+                  //             : Colors.green,
+                  //         borderRadius: BorderRadius.circular(6.0),
+                  //       ),
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           Text(
+                  //             item.rating.toString() + ' ',
+                  //             style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontSize: 14.0,
+                  //               fontWeight: FontWeight.w500,
+                  //             ),
+                  //           ),
+                  //           Icon(
+                  //             Icons.star,
+                  //             color: Colors.white,
+                  //             size: 14.0,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  if ((item.text1 ?? '').isNotEmpty ||
+                      (item.text2 ?? '').isNotEmpty)
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 12, right: 12, top: 6, bottom: 6),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.only(topRight: Radius.circular(8))),
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          children: <Widget>[
+                            // Row(
+                            //   children: [
+                            //     Text('Live Class ',
+                            //         style: TextStyle(
+                            //             fontSize: 14,
+                            //             fontWeight: FontWeight.w400,color: Colors.black)),
+                            //     Container(
+                            //       width: 12,height: 12,
+                            //       decoration: BoxDecoration(
+                            //           borderRadius: BorderRadius.all(Radius.circular(100)),
+                            //           border: Border.all(color: Color(0xffBA1406),width: 3)
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            if ((item.text1 ?? '').isNotEmpty)
+                              Text('${item.text1}',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black)),
+                            if ((item.text2 ?? '').isNotEmpty)
+                              Text('${item.text2}',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black))
+                          ],
+                        ),
+                      ),
+                    ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: ListTile(
+                      title: Text(item.gymName ?? '',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              fontStyle: FontStyle.normal)),
+                      subtitle: Text(item.address1 + ' ' + item.address2),
+                      trailing: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (item.rating != null && item.rating > 0)
+                            RatingBar(
+                                initialRating: (item.rating ?? 0).toDouble(),
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemSize: 16,
+                                ratingWidget: RatingWidget(
+                                  full: Icon(
+                                    Icons.star,
+                                    color: AppConstants.boxBorderColor,
+                                  ),
+                                  half: Icon(
+                                    Icons.star_half,
+                                    color: AppConstants.boxBorderColor,
+                                  ),
+                                  empty: Icon(
+                                    Icons.star_border,
+                                    color: AppConstants.white,
+                                  ),
+                                ),
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 0.0),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                }),
+                          if (item.rating == null || item.rating <= 0)
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                style: DefaultTextStyle.of(context).style,
+                                children: <WidgetSpan>[
+                                  WidgetSpan(
+                                      child: Text('Newly Opened',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400))),
+                                ],
+                              ),
+                            ),
+                          item.distance.contains('N/A')
+                              ? SizedBox(
+                                  height: 0,
+                                )
+                              : RichText(
+                                  text: TextSpan(
+                                    text: '',
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <WidgetSpan>[
+                                      WidgetSpan(
+                                          child: Icon(
+                                        Icons.directions_car,
+                                        size: 16,
+                                        color: AppConstants.green,
+                                      )),
+                                      WidgetSpan(
+                                          child: Text(
+                                              ' ${item.duration_text ?? ''} away | ${item.distance_text ?? ''}',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w400))),
+                                    ],
+                                  ),
+                                )
                         ],
                       ),
                     ),
-                  ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: ListTile(
-                    title: Text(item.gymName ?? '',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            fontStyle: FontStyle.normal)),
-                    subtitle: Text(item.address1 + ' ' + item.address2),
-                    trailing: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (item.rating != null && item.rating > 0)
-                          RatingBar(
-                              initialRating: (item.rating ?? 0).toDouble(),
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemSize: 16,
-                              ratingWidget: RatingWidget(
-                                full: Icon(
-                                  Icons.star,
-                                  color: AppConstants.boxBorderColor,
-                                ),
-                                half: Icon(
-                                  Icons.star_half,
-                                  color: AppConstants.boxBorderColor,
-                                ),
-                                empty: Icon(
-                                  Icons.star_border,
-                                  color: AppConstants.white,
-                                ),
-                              ),
-                              itemPadding:
-                                  EdgeInsets.symmetric(horizontal: 0.0),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              }),
-                        if (item.rating == null || item.rating <= 0)
-                          RichText(
-                            text: TextSpan(
-                              text: '',
-                              style: DefaultTextStyle.of(context).style,
-                              children: <WidgetSpan>[
-                                WidgetSpan(
-                                    child: Text('Newly Opened',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400))),
-                              ],
-                            ),
-                          ),
-                        item.distance.contains('N/A')
-                            ? SizedBox(
-                                height: 0,
-                              )
-                            : RichText(
-                                text: TextSpan(
-                                  text: '',
-                                  style: DefaultTextStyle.of(context).style,
-                                  children: <WidgetSpan>[
-                                    WidgetSpan(
-                                        child: Icon(
-                                      Icons.directions_car,
-                                      size: 16,
-                                      color: AppConstants.green,
-                                    )),
-                                    WidgetSpan(
-                                        child: Text(
-                                            ' ${item.duration_text ?? ''} away | ${item.distance_text ?? ''}',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w400))),
-                                  ],
-                                ),
-                              )
-                      ],
-                    ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-          ListTile(
-            dense: true,
-            contentPadding: EdgeInsets.only(left: 12, right: 12),
-            title: isRecommended(item.plan_price)
-                ? Text(
-                    '\u{20B9}${item.plan_price} for ${convertToMonth(item.plan_duration)} months',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
-                        fontStyle: FontStyle.normal,
-                        color: Color(0XFFE2B411)))
-                : null,
-            trailing: InkWell(
-              onTap: () {
-                context.read<GymStore>().getGymByID(
-                      context: context,
-                      gymId: item.userId,
-                    );
-                print('gym iD --- from nav ${item.userId}');
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (_) => BuyMemberShipPage(
-                      gymId: item.userId,
-                    ),
-                  ),
-                );
-              },
-              child: Container(
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.only(left: 12, right: 12),
+              title: isRecommended(item.plan_price)
+                  ? Text(
+                      '\u{20B9}${item.plan_price} for ${convertToMonth(item.plan_duration)} months',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                          fontStyle: FontStyle.normal,
+                          color: Color(0XFFE2B411)))
+                  : null,
+              trailing: Container(
                 padding:
                     EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
                 decoration: BoxDecoration(
@@ -575,11 +576,11 @@ class GymCard extends StatelessWidget {
                 child: Text("Book Now"),
               ),
             ),
-          ),
-          SizedBox(
-            height: 12,
-          )
-        ],
+            SizedBox(
+              height: 12,
+            )
+          ],
+        ),
       ),
     );
   }

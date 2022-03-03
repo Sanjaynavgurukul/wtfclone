@@ -103,8 +103,8 @@ class _AllAddonListState extends State<AllAddonList> {
                         itemCount: store.allAddonClasses.data
                             .where((e) =>
                                 locator<AppPrefs>().seeMorePt.getValue()
-                                    ? int.tryParse(e.isPt) == 1
-                                    : int.tryParse(e.isPt) == 0)
+                                    ? e.isPt == 1
+                                    : e.isPt == 0)
                             .toList()
                             .length,
                         scrollDirection: Axis.vertical,
@@ -113,8 +113,8 @@ class _AllAddonListState extends State<AllAddonList> {
                             data: store.allAddonClasses.data
                                 .where((e) =>
                                     locator<AppPrefs>().seeMorePt.getValue()
-                                        ? int.tryParse(e.isPt) == 1
-                                        : int.tryParse(e.isPt) == 0)
+                                        ? e.isPt == 1
+                                        : e.isPt == 0)
                                 .toList()[index],
                             isFullView: true,
                           ),

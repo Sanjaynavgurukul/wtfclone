@@ -1761,6 +1761,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
       ),
     );
   }
+
 }
 
 class TextIconCard extends StatelessWidget {
@@ -2187,7 +2188,7 @@ class GymAddonWidget extends StatelessWidget {
                   gymStore.selectedGymAddOns.data.isNotEmpty &&
                   gymStore.selectedGymAddOns.data
                           .where((e) =>
-                              e.isPt == '0' && e.price != '0' && !e.isLive)
+                              e.isPt == 0 && e.price != '0' && !e.isLive)
                           .toList()
                           .length >
                       0
@@ -2298,51 +2299,6 @@ class GymAddonWidget extends StatelessWidget {
     );
   }
 
-  Widget old() {
-    return Consumer<GymStore>(
-      builder: (context, gymStore, child) => gymStore.selectedGymAddOns != null
-          ? gymStore.selectedGymAddOns.data != null &&
-                  gymStore.selectedGymAddOns.data.isNotEmpty &&
-                  gymStore.selectedGymAddOns.data
-                          .where((e) =>
-                              e.isPt == '0' && e.price != '0' && !e.isLive)
-                          .toList()
-                          .length >
-                      0
-              ? Container(
-                  height: 120,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: gymStore.selectedGymAddOns.data.length,
-                    itemBuilder: (context, index) {
-                      return gymStore
-                                      .selectedGymAddOns.data[index].price ==
-                                  '0' ||
-                              gymStore.selectedGymAddOns.data[index].isPt ==
-                                  '1' ||
-                              gymStore.selectedGymAddOns.data[index].isLive
-                          ? Container()
-                          : AddonCard(
-                              data: gymStore.selectedGymAddOns.data[index],
-                            );
-                    },
-                  ),
-                )
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
-                    child: Text(
-                      'No ADDON Available',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                )
-          : Loading(),
-    );
-  }
 }
 
 class GymLiveWidget extends StatelessWidget {
@@ -2350,7 +2306,7 @@ class GymLiveWidget extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive || !element.isPt.contains('1')).toList();
+  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive && element.isPt== 0).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -2478,25 +2434,6 @@ class GymLiveWidget extends StatelessWidget {
     );
   }
 
-  // Widget ab(){
-  //   return Container(
-  //     height: 120,
-  //     child: ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount:
-  //       gymStore.selectedGymAddOns.data.length,
-  //       itemBuilder: (context, index) {
-  //         return gymStore
-  //             .selectedGymAddOns.data[index].isLive
-  //             ? AddonCard(
-  //           data: gymStore
-  //               .selectedGymAddOns.data[index],
-  //         )
-  //             : Container();
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget ge() {
     return Container(

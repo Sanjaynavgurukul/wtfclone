@@ -37,11 +37,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     GymStore store = Provider.of<GymStore>(context);
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          NavigationService.navigateTo(Routes.updateFitnessProfile);
-        },child: Icon(Icons.add),
-      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);
@@ -1453,16 +1448,16 @@ class _AllAddonWidgetState extends State<AllAddonWidget> {
                             shrinkWrap: true,
                             itemCount: store.allAddonClasses.data
                                         .where((e) => widget.showOnlyPT
-                                            ? int.tryParse(e.isPt) == 1
-                                            : int.tryParse(e.isPt) == 0)
+                                            ? e.isPt == 1
+                                            : e.isPt == 0)
                                         .toList()
                                         .length >
                                     3
                                 ? 4
                                 : store.allAddonClasses.data
                                     .where((e) => widget.showOnlyPT
-                                        ? int.tryParse(e.isPt) == 1
-                                        : int.tryParse(e.isPt) == 0)
+                                        ? e.isPt == 1
+                                        : e.isPt == 0)
                                     .toList()
                                     .length,
                             scrollDirection: Axis.horizontal,
@@ -1484,8 +1479,8 @@ class _AllAddonWidgetState extends State<AllAddonWidget> {
                                 : LiveCard(
                                     data: store.allAddonClasses.data
                                         .where((e) => widget.showOnlyPT
-                                            ? int.tryParse(e.isPt) == 1
-                                            : int.tryParse(e.isPt) == 0)
+                                            ? e.isPt == 1
+                                            : e.isPt == 0)
                                         .toList()[index],
                                     showOnlyPt: widget.showOnlyPT,
                                   ),

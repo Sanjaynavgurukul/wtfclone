@@ -13,6 +13,7 @@ import 'package:wtf/helper/strings.dart';
 import '../main.dart';
 
 class LoaderPage extends StatefulWidget {
+
   @override
   _LoaderPageState createState() => _LoaderPageState();
 }
@@ -24,34 +25,14 @@ class _LoaderPageState extends State<LoaderPage> {
   @override
   void initState() {
     if (Platform.isAndroid) checkForUpdate();
-    // videoPlayerController = VideoPlayerController.asset(Videos.LOADER_VIDEO)
-    //   ..initialize().then((_) {
-    //     videoPlayerController.play();
-    //     // videoPlayerController.setLooping(true);
-    //     videoPlayerController.setVolume(0.0);
-    //     // videoPlayerController.value.duration
-    //     // setState(() {});
-    //     videoPlayerController.addListener(() {
-    //       if (!videoPlayerController.value.isPlaying &&
-    //           videoPlayerController.value.isInitialized &&
-    //           (videoPlayerController.value.duration ==
-    //               videoPlayerController.value.position)) {
-    //         NavigationService.navigateToReplacement(Routes.splash);
-    //         //checking the duration and position every time
-    //         print("video stoped");
-    //         setState(() {});
-    //       }
-    //     });
-    //   });
-
     Future.delayed(
       Duration(seconds: 0),
       () {
         context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
-
           NavigationService.navigateToReplacement(Routes.homePage);
+          // NavigationService.navigateToReplacement(Routes.homePage);
         } else {
           NavigationService.navigateToReplacement(Routes.splash);
         }
