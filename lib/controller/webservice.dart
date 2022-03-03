@@ -703,10 +703,11 @@ class RestDatasource {
   Future<AllEvents> getAllEvents() async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
+    print('this is token --- $token');
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil
+    return _netUtil//https://devapi.wtfup.me/event?type=new
         .get(BASE_URL + Api.EVENTS, headers: mapHeader)
         .then((dynamic res) {
       log("response of Get ALL Events : " + res.toString());

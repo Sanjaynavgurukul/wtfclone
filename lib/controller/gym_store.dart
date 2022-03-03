@@ -1553,7 +1553,7 @@ class GymStore extends ChangeNotifier {
       print('store ->member subs error: $e');
     }
   }
-
+  //GLKdIYAWDS2Q8
   Future<void> getAllEvents({BuildContext context}) async {
     AllEvents res = await RestDatasource().getAllEvents();
     if (res != null) {
@@ -1562,6 +1562,7 @@ class GymStore extends ChangeNotifier {
         allChallenges = [];
         allEvents = [];
         allEventsResult.data.forEach((element) {
+          // print('checking iddddd -- ${activeSubscriptions.data.uid} -- ${ element.uid}');
           if (element.isPublic == 'yes') {
             if (element.mode == 'challenge') {
               allChallenges.add(element);

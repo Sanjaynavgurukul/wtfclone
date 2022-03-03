@@ -1647,4 +1647,5 @@ class CustomGradientWidget extends StatelessWidget {
 }
 
 enum GradientType { linear, radial }
+
 enum GradientDirection { rtl, ltr, ttb, btt }
