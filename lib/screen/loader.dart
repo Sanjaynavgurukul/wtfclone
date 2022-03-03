@@ -31,8 +31,8 @@ class _LoaderPageState extends State<LoaderPage> {
         context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
-          NavigationService.navigateToReplacement(Routes.homePage);
           // NavigationService.navigateToReplacement(Routes.homePage);
+          NavigationService.navigateToReplacement(Routes.forceUpdateScreen);
         } else {
           NavigationService.navigateToReplacement(Routes.splash);
         }
@@ -53,6 +53,13 @@ class _LoaderPageState extends State<LoaderPage> {
     } else {
       print('no new update available');
     }
+  }
+
+
+  bool checkIsForceUpdate(){
+    context.read<GymStore>().getForceUpdate().then((value){
+
+    });
   }
 
   @override

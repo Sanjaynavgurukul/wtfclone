@@ -55,6 +55,7 @@ import 'package:wtf/model/diet_consumed.dart';
 import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/model/diet_pref.dart';
+import 'package:wtf/model/force_update_model.dart';
 import 'package:wtf/model/geo_address.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
@@ -214,6 +215,7 @@ class GymStore extends ChangeNotifier {
 
   DietPref dprefType1;
   DietPref dprefType2;
+  ForceUpdateModel forceUpdateModel;
 
   DietItem dietItem;
   DietConsumed dietConsumed;
@@ -1201,6 +1203,15 @@ class GymStore extends ChangeNotifier {
         return;
       }
     });
+  }
+
+  Future<ForceUpdateModel> getForceUpdate()async{
+    ForceUpdateModel forceUpdate = await RestDatasource().getForceUpdate();
+    if(forceUpdate != null)
+      forceUpdateModel = forceUpdate;
+    else forceUpdateModel = new ForceUpdateModel();
+
+    return forceUpdateModel;
   }
 
   setSchedule({schedule}) {

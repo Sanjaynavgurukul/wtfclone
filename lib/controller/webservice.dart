@@ -37,6 +37,7 @@ import 'package:wtf/model/diet_consumed.dart';
 import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/model/diet_pref.dart';
+import 'package:wtf/model/force_update_model.dart';
 import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
@@ -1491,6 +1492,25 @@ class RestDatasource {
         // model = [];
       }
     });
+  }
+
+  Future<ForceUpdateModel> getForceUpdate()async{
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    ForceUpdateModel model;
+    var res = await _netUtil
+        .get(BASE_URL + Api.getForceUpdate(), headers: mapHeader);
+    if (res['status']) {
+      // model = (res['data'] as List)
+      //     .map((p) => DietModel.fromJson(data: p))
+      //     .toList();
+      model = ForceUpdateModel.fromJson(res);
+      return model;
+    } else {
+      return null;
+    }
   }
 
   Future<bool> sendGymOwnerOtp({@required String gymId}) async {
