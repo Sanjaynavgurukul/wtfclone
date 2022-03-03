@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
 import 'package:wtf/helper/app_constants.dart';
@@ -21,10 +22,10 @@ class _ForceUpdateScreenState extends State<ForceUpdateScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // final ForceUpdateArgument args =
-    // ModalRoute.of(context).settings.arguments as ForceUpdateArgument;
-    // if(args.forceUpdateModel != null)
-    //   _forceUpdateModel = args.forceUpdateModel;
+    final ForceUpdateArgument args =
+    ModalRoute.of(context).settings.arguments as ForceUpdateArgument;
+    if(args.forceUpdateModel != null)
+      _forceUpdateModel = args.forceUpdateModel;
 
     return Scaffold(
       body: Padding(
@@ -62,11 +63,7 @@ class _ForceUpdateScreenState extends State<ForceUpdateScreen> {
             ),
             InkWell(
               onTap: (){
-                if(isAndroid()){
-
-                }else{
-
-                }
+                _launchURL(getPlayUrl());
               },
               child: Container(
                 padding: EdgeInsets.only(left: 12,right: 12,top: 8,bottom: 8),
@@ -93,7 +90,15 @@ class _ForceUpdateScreenState extends State<ForceUpdateScreen> {
   }
 
   String getImagePath(){
-    return isAndroid()?'assets/images/app_store.png':'assets/images/app_store.png';
+    return isAndroid()?'assets/images/google_play.png':'assets/images/app_store.png';
+  }
+
+  String getPlayUrl(){
+    return isAndroid()?'https://play.google.com/store/apps/details?id=com.wtf.member':'https://play.google.com/store/apps/details?id=com.wtf.member';
+  }
+
+  void _launchURL(String url) async {
+    if (!await launch(url)) throw 'Could not launch $url';
   }
 
   bool isAndroid(){

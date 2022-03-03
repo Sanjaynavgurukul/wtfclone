@@ -6,11 +6,15 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
+import 'package:wtf/model/force_update_model.dart';
+import 'package:wtf/screen/force_update/arguments/force_update_argument.dart';
 
 import '../main.dart';
+import 'dart:io' show Platform;
 
 class LoaderPage extends StatefulWidget {
 
@@ -24,21 +28,46 @@ class _LoaderPageState extends State<LoaderPage> {
 
   @override
   void initState() {
-    if (Platform.isAndroid) checkForUpdate();
+    print('init method called');
+    // if (Platform.isAndroid) checkForUpdate();
     Future.delayed(
       Duration(seconds: 0),
       () {
         context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
-          // NavigationService.navigateToReplacement(Routes.homePage);
-          NavigationService.navigateToReplacement(Routes.forceUpdateScreen);
+          // context.read<GymStore>().getForceUpdate().then((value) => gotForceUpdate(value));
+          // // context.read<GymStore>().getForceUpdate().then((value) => print('new method called'));
+          context.read<GymStore>().getForceUpdate().then((value){
+            print('checking from loader --- ${value.wtf_version}');
+            if(isAndroid()){
+              if(value.wtf_version.contains(Api.currentVersion)) {
+                navToForceUpdate(value);
+              } else{
+                navToHome();
+              }
+            }else{
+              if(value.apple_version.contains(Api.currentVersion)){
+                navToForceUpdate(value);
+              }
+              else {
+                navToHome();
+              }
+            }
+          });
         } else {
           NavigationService.navigateToReplacement(Routes.splash);
         }
       },
     );
     super.initState();
+  }
+
+  void navToForceUpdate(ForceUpdateModel data){
+    NavigationService.navigateToReplacement(Routes.forceUpdateScreen,argument: ForceUpdateArgument(forceUpdateModel: data));
+  }
+  void navToHome(){
+    NavigationService.navigateToReplacement(Routes.homePage);
   }
 
   Future<void> checkForUpdate() async {
@@ -56,11 +85,29 @@ class _LoaderPageState extends State<LoaderPage> {
   }
 
 
-  bool checkIsForceUpdate(){
-    context.read<GymStore>().getForceUpdate().then((value){
-
-    });
+  bool isAndroid(){
+    if (Platform.isAndroid) {
+      // Android-specific code
+      return true;
+    } else {
+      // iOS-specific code
+      return false;
+    }
   }
+  
+  // bool checkIsForceUpdate(){
+  //   bool check = false;
+  //   context.read<GymStore>().getForceUpdate().then((value){
+  //     if(isAndroid()){
+  //       if(value.wtf_version.contains(Api.currentVersion)) check = true;
+  //       else check = false;
+  //     }else{
+  //       if(value.apple_version.contains(Api.currentVersion)) check= true;
+  //       else check= false;
+  //     }
+  //   });
+  //   return check;
+  // }
 
   @override
   Widget build(BuildContext context) {

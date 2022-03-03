@@ -12,7 +12,6 @@ class ForceUpdateModel {
   String wtf_version;
   String google_version;
   String apple_version;
-  String status;
   String date_added;
 
   //Default Constructor :
@@ -20,7 +19,6 @@ class ForceUpdateModel {
     this.id,
     this.date_added,
     this.uid,
-    this.status,
     this.apple_version,
     this.google_version,
     this.wtf_version,
@@ -30,7 +28,6 @@ class ForceUpdateModel {
       id: json["id"],
       date_added: json["date_added"],
       uid: json["uid"],
-      status: json["status"],
       apple_version: json["apple_version"],
       google_version: json["google_version"],
       wtf_version: json["wtf_version"]);
@@ -39,7 +36,6 @@ class ForceUpdateModel {
     "id": id,
     "date_added": date_added,
     "uid": uid,
-    "status": status,
     "apple_version": apple_version,
     "google_version": google_version,
     "wtf_version": wtf_version,

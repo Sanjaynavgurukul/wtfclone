@@ -1206,12 +1206,15 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<ForceUpdateModel> getForceUpdate()async{
+    notifyListeners();
+    print('checking in gym store ---');
     ForceUpdateModel forceUpdate = await RestDatasource().getForceUpdate();
+    print('checking in gym store --- ${forceUpdate.wtf_version}');
     if(forceUpdate != null)
       forceUpdateModel = forceUpdate;
     else forceUpdateModel = new ForceUpdateModel();
-
-    return forceUpdateModel;
+    notifyListeners();
+    return forceUpdate;
   }
 
   setSchedule({schedule}) {

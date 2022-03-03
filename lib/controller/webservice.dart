@@ -1503,10 +1503,11 @@ class RestDatasource {
     var res = await _netUtil
         .get(BASE_URL + Api.getForceUpdate(), headers: mapHeader);
     if (res['status']) {
+      print('Force Update Response --- $res');
       // model = (res['data'] as List)
       //     .map((p) => DietModel.fromJson(data: p))
       //     .toList();
-      model = ForceUpdateModel.fromJson(res);
+      model = ForceUpdateModel.fromJson(res['data'][0]);
       return model;
     } else {
       return null;
