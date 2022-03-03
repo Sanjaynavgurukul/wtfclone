@@ -194,7 +194,11 @@ class _BookSessionState extends State<BookSession> {
                                     fit: BoxFit.cover,
                                     height: 300.0,
                                   )
-                                : Container(),
+                                : Image.network(
+                              'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c=',
+                              fit: BoxFit.cover,
+                              height: 300.0,
+                            )
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,

@@ -18,6 +18,7 @@ import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/gym_search_model.dart';
 import 'package:wtf/model/gym_slot_model.dart';
+import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
 import 'package:wtf/widget/slide_button.dart';
 
@@ -43,6 +44,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
   TextEditingController couponCodeController;
   // Map subscriptionBody;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  PlanColor _planColor;
 
   @override
   void initState() {
@@ -129,6 +131,8 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
+    _planColor = PlanColor.getColorList()[0];
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.PRIMARY_COLOR,
@@ -506,178 +510,237 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                 SizedBox(
                   height: 15,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Addon Price.",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      '₹ $price' ?? '',
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                if (gymStore.chosenOffer != null)
-                  SizedBox(
-                    height: 6,
-                  ),
-                if (gymStore.chosenOffer != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                Container(
+                  padding:
+                  EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      gradient: LinearGradient(
+                          begin: FractionalOffset.topLeft,
+                          end: FractionalOffset.bottomRight,
+                          colors: [_planColor.leftColor, _planColor.rightColor])),
+                  child: Column(
                     children: [
-                      Text(
-                        "Discount",
-                        style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      amountLabel(
+                          label: 'Addon Price.',
+                          value: price.toString() ?? ''),
+                      SizedBox(height: 6),
+                      if (gymStore.chosenOffer != null)
+                        amountLabel(
+                            label: 'Discount',
+                            value: discountAmount.toString() ?? ''),
+                      if (gymStore.chosenOffer != null) SizedBox(height: 6),
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('CGST 9%'),
+                                  Text('SGST 9%'),
+                                  Text(
+                                      'Tax acknowledgement will be emailed to you after subscription.'),
+                                ],
+                              ),
+                            ),
+                          );
+                          // FlashHelper.informationBar(context,
+                          //     message:
+                          //         );
+                        },
+                        child: amountLabel(
+                            label: 'GST (18 %)',
+                            value: tax.toString() ?? ''),
                       ),
-                      Text(
-                        '- ₹ ${discountAmount ?? ''}',
-                        // "RS. 499",
-                        style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.white,
                       ),
+                      SizedBox(height: 6),
+                      amountLabel(
+                          label: 'Total amount.',
+                          value: totalAmount.toString() ?? ''),
+
                     ],
                   ),
-                SizedBox(
-                  height: 6,
                 ),
-                if (gymStore.chosenOffer != null)
-                  Divider(
-                    // height: 0.0,
-                    color: Colors.white38,
-                    thickness: 0.4,
-                  ),
-                SizedBox(
-                  height: 6,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('CGST 9%'),
-                                Text('SGST 9%'),
-                                Text(
-                                    'Tax acknowledgement will be emailed to you after subscription.'),
-                              ],
-                            ),
-                          ),
-                        );
-                        // FlashHelper.informationBar(context,
-                        //     message:
-                        //         );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            "GST (18 %)",
-                            style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          UIHelper.horizontalSpace(6.0),
-                          Icon(
-                            Icons.info_outline,
-                            size: 16.0,
-                          )
-                        ],
-                      ),
-                    ),
-                    Text(
-                      '₹ $tax',
-                      // (int.parse(widget.selectedGymPlanModel.planPrice) +
-                      //         (int.parse(widget
-                      //                 .selectedGymPlanModel.taxPercentage
-                      //                 .split("%")
-                      //                 .first
-                      //                 .toString()) *
-                      //             100))
-                      // .toString(),
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Total amount.",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      '₹ $totalAmount' ?? '',
-                      // (int.parse(widget.selectedGymPlanModel.planPrice) +
-                      //         (int.parse(widget
-                      //                 .selectedGymPlanModel.taxPercentage
-                      //                 .split("%")
-                      //                 .first
-                      //                 .toString()) *
-                      //             100))
-                      // .toString(),
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       "Addon Price.",
+                //       style: TextStyle(
+                //           fontSize: 15,
+                //           // fontWeight: FontWeight.bold,
+                //           color: Colors.white),
+                //     ),
+                //     Text(
+                //       '₹ $price' ?? '',
+                //       // "RS. 499",
+                //       style: TextStyle(
+                //           fontSize: 15,
+                //           // fontWeight: FontWeight.bold,
+                //           color: Colors.white),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // Divider(
+                //   // height: 0.0,
+                //   color: Colors.white38,
+                //   thickness: 0.4,
+                // ),
+                // if (gymStore.chosenOffer != null)
+                //   SizedBox(
+                //     height: 6,
+                //   ),
+                // if (gymStore.chosenOffer != null)
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         "Discount",
+                //         style: TextStyle(
+                //             fontSize: 15,
+                //             // fontWeight: FontWeight.bold,
+                //             color: Colors.white),
+                //       ),
+                //       Text(
+                //         '- ₹ ${discountAmount ?? ''}',
+                //         // "RS. 499",
+                //         style: TextStyle(
+                //             fontSize: 15,
+                //             // fontWeight: FontWeight.bold,
+                //             color: Colors.white),
+                //       ),
+                //     ],
+                //   ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // if (gymStore.chosenOffer != null)
+                //   Divider(
+                //     // height: 0.0,
+                //     color: Colors.white38,
+                //     thickness: 0.4,
+                //   ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     InkWell(
+                //       onTap: () {
+                //         showDialog(
+                //           context: context,
+                //           builder: (context) => AlertDialog(
+                //             content: Column(
+                //               mainAxisSize: MainAxisSize.min,
+                //               crossAxisAlignment: CrossAxisAlignment.start,
+                //               children: [
+                //                 Text('CGST 9%'),
+                //                 Text('SGST 9%'),
+                //                 Text(
+                //                     'Tax acknowledgement will be emailed to you after subscription.'),
+                //               ],
+                //             ),
+                //           ),
+                //         );
+                //         // FlashHelper.informationBar(context,
+                //         //     message:
+                //         //         );
+                //       },
+                //       child: Row(
+                //         children: [
+                //           Text(
+                //             "GST (18 %)",
+                //             style: TextStyle(
+                //               fontSize: 15,
+                //               // fontWeight: FontWeight.bold,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //           UIHelper.horizontalSpace(6.0),
+                //           Icon(
+                //             Icons.info_outline,
+                //             size: 16.0,
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //     Text(
+                //       '₹ $tax',
+                //       // (int.parse(widget.selectedGymPlanModel.planPrice) +
+                //       //         (int.parse(widget
+                //       //                 .selectedGymPlanModel.taxPercentage
+                //       //                 .split("%")
+                //       //                 .first
+                //       //                 .toString()) *
+                //       //             100))
+                //       // .toString(),
+                //       // "RS. 499",
+                //       style: TextStyle(
+                //           fontSize: 15,
+                //           // fontWeight: FontWeight.bold,
+                //           color: Colors.white),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // Divider(
+                //   // height: 0.0,
+                //   color: Colors.white38,
+                //   thickness: 0.4,
+                // ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(
+                //       "Total amount.",
+                //       style: TextStyle(
+                //           fontSize: 15,
+                //           // fontWeight: FontWeight.bold,
+                //           color: Colors.white),
+                //     ),
+                //     Text(
+                //       '₹ $totalAmount' ?? '',
+                //       // (int.parse(widget.selectedGymPlanModel.planPrice) +
+                //       //         (int.parse(widget
+                //       //                 .selectedGymPlanModel.taxPercentage
+                //       //                 .split("%")
+                //       //                 .first
+                //       //                 .toString()) *
+                //       //             100))
+                //       // .toString(),
+                //       // "RS. 499",
+                //       style: TextStyle(
+                //           fontSize: 15,
+                //           // fontWeight: FontWeight.bold,
+                //           color: Colors.white),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 6,
+                // ),
+                // Divider(
+                //   // height: 0.0,
+                //   color: Colors.white38,
+                //   thickness: 0.4,
+                // ),
                 SizedBox(
                   height: 6,
                 ),
@@ -713,6 +776,17 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
           ),
         ),
       ),
+    );
+  }
+
+  Widget amountLabel({String label, String value}) {
+    return Row(
+      children: [
+        Text(label ?? '',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+        Spacer(),
+        Text('\u{20B9}${value ?? ''}')
+      ],
     );
   }
 
