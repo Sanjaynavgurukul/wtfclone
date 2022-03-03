@@ -15,6 +15,7 @@ class MySubscription extends StatefulWidget {
 
 class _MySubscriptionState extends State<MySubscription> {
   GymStore store;
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -212,7 +213,7 @@ class _MySubscriptionState extends State<MySubscription> {
                               height: MediaQuery.of(context).size.height * 0.7,
                               alignment: Alignment.center,
                               child: Text(
-                                'No Addon Found',
+                                'No Data Found',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
@@ -642,7 +643,7 @@ class _MySubscriptionState extends State<MySubscription> {
                               height: MediaQuery.of(context).size.height * 0.7,
                               alignment: Alignment.center,
                               child: Text(
-                                'No Addon Found',
+                                'No Live class Found',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
@@ -810,7 +811,7 @@ class _MySubscriptionState extends State<MySubscription> {
                             height: MediaQuery.of(context).size.height * 0.7,
                             alignment: Alignment.center,
                             child: Text(
-                              'No Addon Found',
+                              'No Event Found',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0,
