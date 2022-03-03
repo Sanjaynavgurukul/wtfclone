@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:wtf/controller/explore_controller_presenter.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
@@ -169,37 +170,75 @@ class _CoinScreenState extends State<CoinScreen> {
                         SizedBox(
                           height: 30.h,
                         ),
-                        GridView(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 2,
-                          ),
+                        // GridView(
+                        //   padding: EdgeInsets.zero,
+                        //   shrinkWrap: true,
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   gridDelegate:
+                        //       SliverGridDelegateWithFixedCrossAxisCount(
+                        //     crossAxisCount: 2,
+                        //     childAspectRatio: 2,
+                        //   ),
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         NavigationService.navigateTo(
+                        //             Routes.pointHistory);
+                        //       },
+                        //       child: CategoriesItem(
+                        //         itemName: "Coin History",
+                        //         img: "assets/images/wtf.png",
+                        //       ),
+                        //     ),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         NavigationService.navigateTo(
+                        //             Routes.redeemHistory);
+                        //       },
+                        //       child: CategoriesItem(
+                        //         itemName: "Redeem History",
+                        //         img: "assets/images/wtf.png",
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        Row(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                NavigationService.navigateTo(
-                                    Routes.pointHistory);
-                              },
-                              child: CategoriesItem(
-                                itemName: "Coin History",
-                                img: "assets/images/wtf.png",
-                              ),
+                            Expanded(
+                              flex: 1,
+                              child:GestureDetector(
+                                onTap: () {
+                                  NavigationService.navigateTo(
+                                      Routes.pointHistory);
+                                },
+                                child: Column(children: [
+                                  Image.asset('assets/images/wtf.png'),SizedBox(height: 6,),Text('Coin History')
+                                ],)
+
+                              ) ,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                NavigationService.navigateTo(
-                                    Routes.redeemHistory);
-                              },
-                              child: CategoriesItem(
-                                itemName: "Redeem History",
-                                img: "assets/images/wtf.png",
-                              ),
+                            Expanded(
+                              flex: 1,
+                              child:GestureDetector(
+                                  onTap: () {
+                                    NavigationService.navigateTo(
+                                        Routes.redeemHistory);
+                                  },
+                                  child: Column(children: [
+                                    Image.asset('assets/images/wtf.png'),
+                                    SizedBox(height: 6,),
+                                    Text('Redeem History')
+                                  ],)
+                                // CategoriesItem(
+                                //   itemName: "Coin History",
+                                //   img: "assets/images/wtf.png",
+                                // ),
+                              ) ,
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 30.h,
                         ),
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
