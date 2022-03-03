@@ -1055,26 +1055,21 @@ class CommonAppBar extends StatelessWidget {
                           );
                         }),
                     UIHelper.verticalSpace(4.0),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Welcome to   ',
-                        style: GoogleFonts.montserrat(
+                    Row(
+                      children: [
+                        Text('Welcome to',style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.bold,
                           fontSize: 14.0,
                           color: Colors.white,
-                        ),
-                        children: [
-                          if (store.activeSubscriptions == null &&
-                              store.activeSubscriptions.data == null)
-                            WidgetSpan(
-                              child: Image.asset(
-                                'assets/images/wtf_2.png',
-                                height: 18.0,
-                              ),
-                            ),
-                        ],
-                      ),
+                        ),),SizedBox(width: 4,),
+                        store.activeSubscriptions != null &&
+                            store.activeSubscriptions.data != null?SizedBox(width: 0,): Image.asset(
+                          'assets/images/wtf_2.png',
+                          height: 14.0,
+                        )
+                      ],
                     ),
+
                     UIHelper.verticalSpace(4.0),
                     if (store.activeSubscriptions != null &&
                         store.activeSubscriptions.data != null)
