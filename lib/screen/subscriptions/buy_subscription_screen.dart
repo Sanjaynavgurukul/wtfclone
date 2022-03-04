@@ -1039,7 +1039,7 @@ class _OfferSectionState extends State<OfferSection> {
   List<OfferData> filterData(List<OfferData> data) {
     return data
         .where((element) =>
-            element.status == 'active' && isExpired(element.validity))
+            element.status == 'active' && !isExpired(element.validity))
         .toList();
   }
 
@@ -1047,10 +1047,13 @@ class _OfferSectionState extends State<OfferSection> {
     // final bool isExpired = expirationDate.isBefore(now);
     //
 
+    DateTime parseDate =
+    new DateFormat("dd-MM-yyyy").parse(expireDate);
+    var inputDate = DateTime.parse(parseDate.toString());
     final now = DateTime.now();
-    DateTime parseDate = new DateFormat("dd-mm-yyyy").parse(expireDate);
-    var inputDate = DateTime.parse(parseDate.toString()).add(Duration(days: 0));
-    final bool isExpired = inputDate.isAfter(now);
+    final expirationDate = DateTime(inputDate.year, inputDate.month, inputDate.day).add(Duration(days: 1));
+    final bool isExpired = expirationDate.isBefore(now);
+    print('expired -- $isExpired');
     return isExpired;
   }
 }
