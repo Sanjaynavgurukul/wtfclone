@@ -104,6 +104,11 @@ class _CategoriesState extends State<Categories> {
           spacing: 12.0,
           children: _itemsList
               .map((e) =>newUI(data: e,onClick: ()=>navigation(_itemsList.indexOf(e), context))
+                // (e) => CategoriesItem(
+                //   itemName: e['name'],
+                //   img: e['img'],
+                //   onTap: () => navigation(_itemsList.indexOf(e), context),
+                // ),
               )
               .toList(),
         ),
