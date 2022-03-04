@@ -14,6 +14,7 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/my_schedule_model.dart';
+import 'package:wtf/screen/booking_summary/loader_screen.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/upcoming_events.dart';
@@ -39,6 +40,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkVersionCode();
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+        },
+        child: Icon(Icons.add),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);

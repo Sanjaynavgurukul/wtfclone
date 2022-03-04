@@ -755,6 +755,198 @@ class EventPurchaseDone extends StatelessWidget {
     );
   }
 
+
+  Widget oldUI(BuildContext context,GymStore gymStore){
+    return Scaffold(
+      backgroundColor: AppColors.BACK_GROUND_BG,
+      appBar: AppBar(
+        backgroundColor: AppConstants.primaryColor,
+        title: Text(
+          'Booking Detail',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      bottomNavigationBar: SlideButton(
+        text:"Let\'s WTF",
+        onTap:() {
+          Navigator.of(NavigationService.navigatorKey.currentContext)
+              .popUntil((route) => route.isFirst);
+          NavigationService.navigatorKey.currentContext
+              .read<GymStore>()
+              .init(context: context);
+          NavigationService.navigatorKey.currentContext
+              .read<GymStore>()
+              .changeNavigationTab(index: 2);
+          // NavigationService.navigateTo(Routes.scheduleSlotPage);
+        },
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          UIHelper.verticalSpace(20.0),
+          CircleAvatar(
+            child: Icon(
+              Icons.done,
+              color: Colors.white,
+              size: 50,
+            ),
+            backgroundColor: Colors.green,
+            radius: 40,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Booking successful',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.green,
+            ),
+          ),
+          Padding(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
+            child: Text(
+              'You\'ve successfully taken participation in - ${gymStore.selectedEventData.name ?? ''}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 12.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                SizedBox(height: 4.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Event :",
+                      style: TextStyle(
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "${gymStore.selectedEventData.name}",
+                      style: TextStyle(
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Divider(
+                  thickness: 0.7,
+                  color: Colors.white,
+                ),
+                SizedBox(height: 4.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Event Duration:",
+                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      '${gymStore.selectedEventData.timeFrom} to ${gymStore.selectedEventData.timeTo}',
+                      style: TextStyle(
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Divider(
+                  thickness: 0.7,
+                  color: Colors.white,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Event Date:",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      Helper.stringForDatetime2(
+                          gymStore.selectedEventData.date) ??
+                          '',
+                      style: TextStyle(
+                          fontSize: 15,
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4.0),
+                Divider(
+                  thickness: 0.7,
+                  color: Colors.white,
+                ),
+                SizedBox(height: 8.0),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 12.0,
+          ),
+          // Container(
+          //   padding: EdgeInsets.all(10),
+          //   color: Color(0xff333333),
+          //   alignment: Alignment.center,
+          //   width: double.maxFinite,
+          //   child: Text(
+          //     'Steps to unlock your session',
+          //     style: TextStyle(
+          //       fontSize: 20,
+          //       color: Colors.white,
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // for (int i = 0; i < 3; i++)
+          //   stepsItem(
+          //       'Navigate to unlock your booking slider on home screen'),
+          // Spacer(),
+          // Spacer(),
+
+          Spacer(),
+        ],
+      ),
+    );
+  }
   stepsItem(string) => Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 8.0,
