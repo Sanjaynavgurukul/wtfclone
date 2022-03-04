@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
@@ -28,62 +30,61 @@ class _ForceUpdateScreenState extends State<ForceUpdateScreen> {
       _forceUpdateModel = args.forceUpdateModel;
 
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 100,left: 16,right: 16),
-        child: Column(
-          children: [
-            Container(
-                height: 120,
-                width: 120,
-                child: Image.asset('assets/images/captcha.png')),
-            SizedBox(
-              height: 40,
-            ),
-            Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Force Update Available',
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                )),
-            SizedBox(
-              height: 10,
-            ),
-            Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Update WTF app for better experience',
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Colors.grey.shade300),
-                )),
-            SizedBox(
-              height: 80,
-            ),
-            InkWell(
-              onTap: (){
-                _launchURL(getPlayUrl());
-              },
-              child: Container(
-                padding: EdgeInsets.only(left: 12,right: 12,top: 8,bottom: 8),
-                margin: EdgeInsets.only(left: 16,right: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  color: AppConstants.white
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(getImagePath(),width: 40,),
-                    SizedBox(width: 16,),
-                    Text('Update Now',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w600),),
-                  ],
-                )
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 80,left: 16,right: 16),
+          child: Column(
+            children: [
+
+              Container(
+                  width: 230,
+height: 230,
+                  child: SvgPicture.asset(
+                      'assets/svg/force_update_bg.svg',
+                      semanticsLabel: 'Acme Logo'
+                  )),
+              SizedBox(
+                height: 40,
               ),
-            )
-          ],
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'New Update Available',
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 24,fontWeight: FontWeight.w700),
+                  )),
+              SizedBox(
+                height: 10,
+              ),
+              Align(
+                  alignment: Alignment.center,
+                  child: Html(
+                    shrinkWrap: true,
+                    data: _forceUpdateModel.description ?? 'Update WTF app for better experience',
+                  )),
+              SizedBox(
+                height: 80,
+              ),
+              InkWell(
+                onTap: (){
+                  _launchURL(_forceUpdateModel.link??getPlayUrl());
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(left: 12,right: 12,top: 16,bottom: 16),
+                  margin: EdgeInsets.only(left: 20,right: 20),
+                  alignment: Alignment.center,
+
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    color: AppConstants.boxBorderColor
+                  ),
+                  child:  Text('Update',style: TextStyle(fontWeight: FontWeight.w600,color:Colors.white),),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
