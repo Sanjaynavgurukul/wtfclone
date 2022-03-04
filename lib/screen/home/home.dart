@@ -38,6 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
    double leftCardWidth, rightCardWidth;
    double leftCardWidth2, rightCardWidth2;
    double fullWidth = double.infinity;
+   bool leftExpanded = false,rightExpanded = false;
 
   @override
   void didChangeDependencies() {
@@ -79,43 +80,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   new AnimatedContainer(
                     duration: const Duration(milliseconds: 860),
-                    child: new GestureDetector(
-                      onTap: () => setState(() {
-                        rightCardWidth != 0.0
-                            ? rightCardWidth = 0.0
-                            : rightCardWidth = leftCardWidth*2;
-                      }),
-                      child: new Container(
-                        margin: EdgeInsets.all(6),
-                        child: new Text("CLICK ME"),
-                        color: Colors.blueAccent,
-                        width: leftCardWidth,
-                        height: leftCardWidth,
-                      ),
+                    child: new Container(
+                      margin: EdgeInsets.all(6),
+                      child: ExpansionTileCard(
+                        baseColor: Colors.cyan[50],
+                        title: Text('My\nSchedule'),
+                        onExpansionChanged: (value){
+                          setState(() {
+                            if(!value){
+                              leftExpanded = true;
+                              rightCardWidth2 = 0;
+                              leftCardWidth2 = (leftCardWidth)*2;
+                              // leftCardWidth2 = (leftCardWidth) * 2;
+                            } else {
+                              leftExpanded = false;
+                              leftCardWidth2 = leftCardWidth;
+                              rightCardWidth2 = rightCardWidth;
+                              // leftCardWidth2 = (leftCardWidth) * 2;
+                            }
+                          });
+                        },
+                      )
                     ),
                     height: leftCardWidth,
-                    width: leftCardWidth,
+                    width:  leftExpanded?leftCardWidth2 :leftCardWidth,
                   ),
                   new AnimatedContainer(
                     duration: const Duration(milliseconds: 860),
-                    child: GestureDetector(
-                      onTap: () => setState(() {
-                        leftCardWidth != 0.0
-                            ? leftCardWidth = 0.0
-                            : leftCardWidth = rightCardWidth;
-                      }),
-                      child: new Container(
+                    child: new Container(
                         margin: EdgeInsets.all(6),
-                        child: new Text("CLICK ME"),
-                        color: Colors.blueAccent,
-                        width: leftCardWidth,
-                        height: leftCardWidth,
-                      ),
+                        child: ExpansionTileCard(
+                          baseColor: Colors.cyan[50],
+                          title: Text('My\nSchedule'),
+                          onExpansionChanged: (value){
+                            setState(() {
+                              if(!value){
+                                rightExpanded = true;
+                                leftCardWidth = 0;
+                                rightCardWidth2 = (rightCardWidth)*2;
+                                // leftCardWidth2 = (leftCardWidth) * 2;
+                              } else {
+                                rightExpanded = false;
+                                rightCardWidth2 = rightCardWidth;
+                                leftCardWidth = rightCardWidth;
+                                // leftCardWidth2 = (leftCardWidth) * 2;
+                              }
+                            });
+                          },
+                        )
                     ),
                     height: rightCardWidth,
-                    width: rightCardWidth,
-                  )
-
+                    width:  rightExpanded?rightCardWidth2 :rightCardWidth,
+                  ),
                 ],
               ),
               // if (store.mySchedule != null) TodayScheduleCard(),
