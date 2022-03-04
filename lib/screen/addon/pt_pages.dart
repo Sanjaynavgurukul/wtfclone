@@ -61,58 +61,58 @@ class _PTPagesState extends State<PTPages> {
                           child: CommonBanner(bannerType: 'PT_banner',height: 350,fraction: 1,),
                         ),
 
-                        Positioned(
-                          top: 66.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Column(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/svg/train_with_best.svg',
-                              ),
-                              UIHelper.verticalSpace(20.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/images/wtf_2.png'),
-                                  UIHelper.horizontalSpace(4.0),
-                                  Text(
-                                    'Powered',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18.0,
-                                      color:
-                                      AppConstants.white.withOpacity(0.8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              UIHelper.verticalSpace(2.0),
-                              GradientText(
-                                text: 'Personal Training',
-                                colors: <Color>[
-                                  Colors.deepOrange,
-                                  Colors.yellow
-                                ],
-                                style: TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 50.0,
-                            left: 12.0,
-                            right: 12.0,
-                          ),
-                          child: PageAppBar(
-                            isLive: false,
-                            showText: false,
-                          ),
-                        ),
+                        // Positioned(
+                        //   top: 66.0,
+                        //   left: 0.0,
+                        //   right: 0.0,
+                        //   child: Column(
+                        //     children: [
+                        //       // SvgPicture.asset(
+                        //       //   'assets/svg/train_with_best.svg',
+                        //       // ),
+                        //       UIHelper.verticalSpace(20.0),
+                        //       Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           Image.asset('assets/images/wtf_2.png'),
+                        //           UIHelper.horizontalSpace(4.0),
+                        //           Text(
+                        //             'Powered',
+                        //             style: TextStyle(
+                        //               fontWeight: FontWeight.normal,
+                        //               fontSize: 18.0,
+                        //               color:
+                        //               AppConstants.white.withOpacity(0.8),
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       UIHelper.verticalSpace(2.0),
+                        //       GradientText(
+                        //         text: 'Personal Training',
+                        //         colors: <Color>[
+                        //           Colors.deepOrange,
+                        //           Colors.yellow
+                        //         ],
+                        //         style: TextStyle(
+                        //           fontSize: 24.0,
+                        //           fontWeight: FontWeight.bold,
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(
+                        //     top: 50.0,
+                        //     left: 12.0,
+                        //     right: 12.0,
+                        //   ),
+                        //   child: PageAppBar(
+                        //     isLive: false,
+                        //     showText: false,
+                        //   ),
+                        // ),
                       ],
                     ),
                     UIHelper.verticalSpace(24.0),
@@ -175,7 +175,7 @@ class _PTPagesState extends State<PTPages> {
                           shrinkWrap: true,
                           primary: false,
                           itemCount: store.allAddonClasses.data
-                              .where((element) => element.isPt == '1')
+                              .where((element) => element.isPt == 1)
                               .toList()
                               .length,
                           scrollDirection: Axis.vertical,
@@ -186,7 +186,7 @@ class _PTPagesState extends State<PTPages> {
                             child: LiveCard(
                               data: store.allAddonClasses.data
                                   .where((element) =>
-                              element.isPt == '1')
+                              element.isPt == 1)
                                   .toList()[index],
                               isFullView: true,
                             ),

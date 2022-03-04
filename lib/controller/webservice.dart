@@ -1500,6 +1500,7 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
+
     ForceUpdateModel model;
     var res = await _netUtil
         .get(BASE_URL + Api.getForceUpdate(), headers: mapHeader);

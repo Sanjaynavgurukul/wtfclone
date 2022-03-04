@@ -137,7 +137,7 @@ class GymModelData {
   String text1 = '';
   String text2 = '';
   String plan_text;
-  int rating;
+  double rating;
 
   String plan_name;
   String plan_duration;
@@ -201,8 +201,6 @@ class GymModelData {
     this.third_payment_amount,
   });
 
-
-
   factory GymModelData.fromJson(Map<String, dynamic> json) => GymModelData(
     uid: json["uid"],
     userId: json["user_id"],
@@ -243,7 +241,7 @@ class GymModelData {
     text1: json["text1"],
     text2: json["text2"],
     plan_text: json["plan_text"],
-    rating: json["rating"],
+    rating: json["rating"].toDouble(),
 
     plan_name: json["plan_name"],
     plan_duration: json["plan_duration"],

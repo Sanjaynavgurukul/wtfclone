@@ -76,12 +76,12 @@ class _LiveClassesState extends State<LiveClasses> {
                       height: 270,
                       fraction: 1,
                     ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 12),
-                            child: Image.asset(
-                                'assets/images/live_class_banner.png'))),
+                    // Align(
+                    //     alignment: Alignment.bottomCenter,
+                    //     child: Padding(
+                    //       padding: EdgeInsets.only(top: 12),
+                    //         child: Image.asset(
+                    //             'assets/images/live_class_banner.png'))),
                   ],
                 ),
               ),

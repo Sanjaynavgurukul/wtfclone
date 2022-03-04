@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
@@ -35,6 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
+    checkVersionCode();
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       body: RefreshIndicator(
@@ -200,6 +202,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
+  }
+
+  void checkVersionCode()async{
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    print('version check appName = $appName');
+    print('version check packageName = $packageName');
+    print('version check version = $version');
+    print('version check buildNumber = $buildNumber');
   }
 }
 
