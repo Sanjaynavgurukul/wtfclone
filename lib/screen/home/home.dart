@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -34,18 +35,26 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+   double leftCardWidth, rightCardWidth;
+   double leftCardWidth2, rightCardWidth2;
+   double fullWidth = double.infinity;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    var halfWidth = MediaQuery.of(context).size.width / 2;
+    leftCardWidth = halfWidth ;
+    rightCardWidth = halfWidth;
+  }
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
     checkVersionCode();
+
+
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-        },
-        child: Icon(Icons.add),
-      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);
@@ -58,14 +67,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              CommonBanner(bannerType: "FC_banner",second_banner_pref: 'WTF_banner',),
+              CommonBanner(
+                bannerType: "FC_banner",
+                second_banner_pref: 'WTF_banner',
+              ),
               SizedBox(
                 height: 16.0,
               ),
               // Stories(),
-              if (store.mySchedule != null) TodayScheduleCard(),
-              UIHelper.verticalSpace(10.0),
-              UpcomingEventsWidget(),
+              Row(
+                children: [
+                  new AnimatedContainer(
+                    duration: const Duration(milliseconds: 860),
+                    child: new GestureDetector(
+                      onTap: () => setState(() {
+                        rightCardWidth != 0.0
+                            ? rightCardWidth = 0.0
+                            : rightCardWidth = leftCardWidth*2;
+                      }),
+                      child: new Container(
+                        margin: EdgeInsets.all(6),
+                        child: new Text("CLICK ME"),
+                        color: Colors.blueAccent,
+                        width: leftCardWidth,
+                        height: leftCardWidth,
+                      ),
+                    ),
+                    height: leftCardWidth,
+                    width: leftCardWidth,
+                  ),
+                  new AnimatedContainer(
+                    duration: const Duration(milliseconds: 860),
+                    child: GestureDetector(
+                      onTap: () => setState(() {
+                        leftCardWidth != 0.0
+                            ? leftCardWidth = 0.0
+                            : leftCardWidth = rightCardWidth;
+                      }),
+                      child: new Container(
+                        margin: EdgeInsets.all(6),
+                        child: new Text("CLICK ME"),
+                        color: Colors.blueAccent,
+                        width: leftCardWidth,
+                        height: leftCardWidth,
+                      ),
+                    ),
+                    height: rightCardWidth,
+                    width: rightCardWidth,
+                  )
+
+                ],
+              ),
+              // if (store.mySchedule != null) TodayScheduleCard(),
+              // UIHelper.verticalSpace(10.0),
+              // UpcomingEventsWidget(),
               if (store.upcomingEvents != null &&
                   store.upcomingEvents.data.isNotEmpty)
                 Divider(
@@ -211,7 +266,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void checkVersionCode()async{
+  void checkVersionCode() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appName = packageInfo.appName;
     String packageName = packageInfo.packageName;
@@ -223,116 +278,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print('version check buildNumber = $buildNumber');
   }
 }
-
-// class BannerWidget extends StatelessWidget {
-//   const BannerWidget({
-//     Key key,
-//     this.isExplore = false,
-//   }) : super(key: key);
-//   final bool isExplore;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<GymStore>(
-//       builder: (context, value, child) {
-//         print(
-//             'Dashboard banner length: ${value.bannerList.where((element) => element.type == 'WTF_banner').toList()}');
-//         return value.bannerList == null
-//             ? Container(
-//                 height: 200,
-//                 width: 200,
-//                 child: Center(
-//                   child: CircularProgressIndicator(
-//                     color: Colors.red,
-//                   ),
-//                 ),
-//               )
-//             : value.bannerList.isEmpty
-//                 ? Container()
-//                 : CarouselSlider(
-//                     options: CarouselOptions(
-//                       height: isExplore
-//                           ? value.bannerList
-//                                       .where((element) =>
-//                                           element.type == 'WTF_banner')
-//                                       .toList()
-//                                       .length >
-//                                   0
-//                               ? 260.0
-//                               : 0.0
-//                           : 260.0,
-//                       viewportFraction: 0.8,
-//                       enlargeCenterPage: true,
-//                       autoPlay: true,
-//                       pageSnapping: true,
-//                     ),
-//                     items: isExplore
-//                         ? value.bannerList
-//                             .where((element) => element.type == 'WTF_banner')
-//                             .toList()
-//                             .map(
-//                             (i) {
-//                               return ClipRRect(
-//                                 borderRadius: BorderRadius.circular(12.0),
-//                                 child: Builder(
-//                                   builder: (BuildContext context) {
-//                                     if (i.image == null) {
-//                                       return Center(
-//                                         child: Text("No image data"),
-//                                       );
-//                                     }
-//                                     return Image.network(
-//                                       i.image,
-//                                       fit: BoxFit.fill,
-//                                       width: double.infinity,
-//                                       height: double.infinity,
-//                                       loadingBuilder: (context, _, chunk) =>
-//                                           chunk == null
-//                                               ? _
-//                                               : RectangleShimmering(
-//                                                   width: double.infinity,
-//                                                   height: 180.0,
-//                                                 ),
-//                                     );
-//                                   },
-//                                 ),
-//                               );
-//                             },
-//                           ).toList()
-//                         : value.bannerList.map(
-//                             (i) {
-//                               return ClipRRect(
-//                                 borderRadius: BorderRadius.circular(12.0),
-//                                 child: Builder(
-//                                   builder: (BuildContext context) {
-//                                     if (i.image == null) {
-//                                       return Center(
-//                                         child: Text("No image data"),
-//                                       );
-//                                     }
-//                                     return Image.network(
-//                                       i.image,
-//                                       fit: BoxFit.fill,
-//                                       width: double.infinity,
-//                                       height: double.infinity,
-//                                       loadingBuilder: (context, _, chunk) =>
-//                                           chunk == null
-//                                               ? _
-//                                               : RectangleShimmering(
-//                                                   width: double.infinity,
-//                                                   height: 180.0,
-//                                                 ),
-//                                     );
-//                                   },
-//                                 ),
-//                               );
-//                             },
-//                           ).toList(),
-//                   );
-//       },
-//     );
-//   }
-// }
 
 class LiveBannerWidget extends StatelessWidget {
   const LiveBannerWidget({
@@ -806,6 +751,7 @@ class TodayScheduleItem extends StatelessWidget {
   final String session;
   final String completedSession;
   final MyScheduleAddonData data;
+
   const TodayScheduleItem({
     Key key,
     this.scheduleName,
@@ -1112,6 +1058,7 @@ class RenewCardItem extends StatelessWidget {
   final String scheduleName;
 
   final SubscriptionData data;
+
   const RenewCardItem({
     Key key,
     this.scheduleName,
@@ -1264,6 +1211,7 @@ class LiveAddonWidget extends StatefulWidget {
 
 class _LiveAddonWidgetState extends State<LiveAddonWidget> {
   GymStore store;
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -1364,6 +1312,7 @@ class _LiveAddonWidgetState extends State<LiveAddonWidget> {
 
 class SeeAll extends StatelessWidget {
   final GestureTapCallback onTap;
+
   const SeeAll({
     Key key,
     this.onTap,
@@ -1426,6 +1375,7 @@ class AllAddonWidget extends StatefulWidget {
 
 class _AllAddonWidgetState extends State<AllAddonWidget> {
   GymStore store;
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
