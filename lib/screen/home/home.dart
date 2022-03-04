@@ -6,6 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
@@ -35,24 +36,21 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-   double leftCardWidth, rightCardWidth;
-   double leftCardWidth2, rightCardWidth2;
-   double fullWidth = double.infinity;
-   bool leftExpanded = false,rightExpanded = false;
+  final GlobalKey<ExpansionTileCardState> cardA = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
+  bool abc = false;
+  bool abc2 = false;
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    var halfWidth = MediaQuery.of(context).size.width / 2;
-    leftCardWidth = halfWidth ;
-    rightCardWidth = halfWidth;
   }
+
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
     checkVersionCode();
-
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
@@ -75,68 +73,209 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 16.0,
               ),
-              // Stories(),
               Row(
                 children: [
-                  new AnimatedContainer(
-                    duration: const Duration(milliseconds: 860),
-                    child: new Container(
-                      margin: EdgeInsets.all(6),
-                      child: ExpansionTileCard(
-                        baseColor: Colors.cyan[50],
-                        title: Text('My\nSchedule'),
-                        onExpansionChanged: (value){
-                          setState(() {
-                            if(!value){
-                              leftExpanded = true;
-                              rightCardWidth2 = 0;
-                              leftCardWidth2 = (leftCardWidth)*2;
-                              // leftCardWidth2 = (leftCardWidth) * 2;
-                            } else {
-                              leftExpanded = false;
-                              leftCardWidth2 = leftCardWidth;
-                              rightCardWidth2 = rightCardWidth;
-                              // leftCardWidth2 = (leftCardWidth) * 2;
-                            }
-                          });
-                        },
-                      )
-                    ),
-                    height: leftCardWidth,
-                    width:  leftExpanded?leftCardWidth2 :leftCardWidth,
-                  ),
-                  new AnimatedContainer(
-                    duration: const Duration(milliseconds: 860),
-                    child: new Container(
+                  // new AnimatedContainer(
+                  //   duration: const Duration(milliseconds: 860),
+                  //   child: new Container(
+                  //     margin: EdgeInsets.all(6),
+                  //     child: ExpansionTileCard(
+                  //       baseColor: Colors.cyan[50],
+                  //       title: Text('My\nSchedule'),
+                  //       onExpansionChanged: (value){
+                  //         setState(() {
+                  //           if(!value){
+                  //             leftExpanded = true;
+                  //             rightCardWidth2 = 0;
+                  //             leftCardWidth2 = (leftCardWidth)*2;
+                  //             // leftCardWidth2 = (leftCardWidth) * 2;
+                  //           } else {
+                  //             leftExpanded = false;
+                  //             leftCardWidth2 = leftCardWidth;
+                  //             rightCardWidth2 = rightCardWidth;
+                  //             // leftCardWidth2 = (leftCardWidth) * 2;
+                  //           }
+                  //         });
+                  //       },
+                  //     )
+                  //   ),
+                  //   height: leftCardWidth,
+                  //   width:  leftExpanded?leftCardWidth2 :leftCardWidth,
+                  // ),
+                  // new AnimatedContainer(
+                  //   duration: const Duration(milliseconds: 860),
+                  //   child: new Container(
+                  //       margin: EdgeInsets.all(6),
+                  //       child: ExpansionTileCard(
+                  //         baseColor: Colors.cyan[50],
+                  //         title: Text('My\nSchedule'),
+                  //         onExpansionChanged: (value){
+                  //           setState(() {
+                  //             if(!value){
+                  //               rightExpanded = true;
+                  //               leftCardWidth = 0;
+                  //               rightCardWidth2 = (rightCardWidth)*2;
+                  //               // leftCardWidth2 = (leftCardWidth) * 2;
+                  //             } else {
+                  //               rightExpanded = false;
+                  //               rightCardWidth2 = rightCardWidth;
+                  //               leftCardWidth = rightCardWidth;
+                  //               // leftCardWidth2 = (leftCardWidth) * 2;
+                  //             }
+                  //           });
+                  //         },
+                  //       )
+                  //   ),
+                  //   height: rightCardWidth,
+                  //   width:  rightExpanded?rightCardWidth2 :rightCardWidth,
+                  // ),
+                  if (!abc && store.mySchedule != null)
+                    Flexible(
+                      flex: 1,
+                      child: Container(
                         margin: EdgeInsets.all(6),
                         child: ExpansionTileCard(
-                          baseColor: Colors.cyan[50],
-                          title: Text('My\nSchedule'),
-                          onExpansionChanged: (value){
+                          key: cardA,
+                          baseColor: Colors.white,
+                          contentPadding: EdgeInsets.only(top: 6,bottom: 6),
+                          expandedColor: Colors.white,
+                          title: Row(
+                            children: [
+                              SizedBox(width: 6,),Image.asset('assets/gif/regular.gif',width: 30,height: 30,),SizedBox(width: 6,),
+                              Text('My\nSchedule',
+                                  style: TextStyle(color: Colors.black))
+                            ],
+                          ),
+                          onExpansionChanged: (v) {
                             setState(() {
-                              if(!value){
-                                rightExpanded = true;
-                                leftCardWidth = 0;
-                                rightCardWidth2 = (rightCardWidth)*2;
-                                // leftCardWidth2 = (leftCardWidth) * 2;
-                              } else {
-                                rightExpanded = false;
-                                rightCardWidth2 = rightCardWidth;
-                                leftCardWidth = rightCardWidth;
-                                // leftCardWidth2 = (leftCardWidth) * 2;
-                              }
+                              abc2 = v;
                             });
-                          },
-                        )
+                          },children: [
+                         Container(
+                           color: Color(0xff922224),
+                           child: Column(
+                             children: [
+                               ListTile(
+                                 dense: true,
+                                 contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 26),
+                                 title: Text(store.mySchedule.data.addonPt.isNotEmpty
+                                     ? 'Personal Training'
+                                     : 'Gym Workouts',style:TextStyle(color: Color(0xffFF8F8F),fontWeight:FontWeight.w500)),
+                                 subtitle: Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     SizedBox(height: 8,),
+                                     Text('WTF Fitness unit',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w700),),
+                                     SizedBox(height: 4,),
+                                     Text('Sector 8,C-block',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w500),),
+                                   ],
+                                 ),
+                                 trailing: InkWell(
+                                   onTap:(){},
+                                   child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
+                                     decoration:BoxDecoration(
+                                       borderRadius: BorderRadius.all(Radius.circular(6)),
+                                       border:Border.all(width: 1,color: Colors.white)
+                                     ),
+                                     child: Text('Direction'),
+                                   ),
+                                 ),
+                               ),
+                               ListTile(
+                                 dense: true,
+                                 contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 12),
+                                 title: Text('Tap on check-in within Gym permises to activate your session',style:TextStyle(color:Color(0xffFFF848),fontWeight:FontWeight.w600)),
+                                 trailing: InkWell(
+                                   onTap:(){},
+                                   child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
+                                     decoration:BoxDecoration(
+                                         borderRadius: BorderRadius.all(Radius.circular(6)),
+                                         border:Border.all(width: 1,color: Colors.white),
+                                       color: Colors.white
+                                     ),
+                                     child: Text('Check-in',style:TextStyle(color:Colors.black)),
+                                   ),
+                                 ),
+                               ),
+                               // if (store.mySchedule.data.regular.isNotEmpty ||
+                               //     store.mySchedule.data.addonPt.isNotEmpty)
+                               //   TodayScheduleItem(
+                               //     scheduleName: store.mySchedule.data.addonPt.isNotEmpty
+                               //         ? 'Personal Training'
+                               //         : 'Gym Workouts',
+                               //     session: store.mySchedule.data.addonPt.isNotEmpty
+                               //         ? store.mySchedule.data.addonPt.first.nSession
+                               //         : null,
+                               //     completedSession:
+                               //     store.mySchedule.data.addonPt.isNotEmpty
+                               //         ? store.mySchedule.data.addonPt.first
+                               //         .completedSession
+                               //         : null,
+                               //     data: store.mySchedule.data.regular.isNotEmpty
+                               //         ? store.mySchedule.data.regular.first
+                               //         : store.mySchedule.data.addonPt.first,
+                               //   ),
+                               // if (store.mySchedule.data.addon.isNotEmpty)
+                               //   TodayScheduleItem(
+                               //     scheduleName:
+                               //     store.mySchedule.data.addon.first.addonName,
+                               //     session: store.mySchedule.data.addon.first.nSession,
+                               //     completedSession:
+                               //     store.mySchedule.data.addon.first.completedSession,
+                               //     data: store.mySchedule.data.addon.first,
+                               //   ),
+                               // if (store.mySchedule.data.addonLive.isNotEmpty)
+                               //   TodayScheduleItem(
+                               //     scheduleName:
+                               //     store.mySchedule.data.addonLive.first.addonName,
+                               //     session: store.mySchedule.data.addonLive.first.nSession,
+                               //     completedSession: store
+                               //         .mySchedule.data.addonLive.first.completedSession,
+                               //     data: store.mySchedule.data.addonLive.first,
+                               //   ),
+                               // if (store.mySchedule.data.event.isNotEmpty)
+                               //   TodayScheduleItem(
+                               //     scheduleName:
+                               //     store.mySchedule.data.event.first.eventName,
+                               //     data: store.mySchedule.data.event.first,
+                               //   ),
+                             ],
+                           ),
+                         )
+                        ],
+                        ),
+                      ),
                     ),
-                    height: rightCardWidth,
-                    width:  rightExpanded?rightCardWidth2 :rightCardWidth,
-                  ),
+
+                  if (!abc2 && store.upcomingEvents.data.isNotEmpty)
+                    Flexible(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.all(6),
+                        child: ExpansionTileCard(
+                          key: cardB,
+                          baseColor: Colors.white,
+                          expandedColor: Colors.white,
+                          title: Row(
+                            children: [
+                              SizedBox(width: 6,),Image.asset('assets/gif/regular.gif',width: 30,height: 30,),SizedBox(width: 6,),
+                              Text('Upcoming\nActivities',
+                                  style: TextStyle(color: Colors.black))
+                            ],
+                          ),
+                          contentPadding: EdgeInsets.only(top: 6,bottom: 6),
+                          onExpansionChanged: (v) {
+                            setState(() {
+                              abc = v;
+                            });
+                          },children: [
+                          UpcomingEventsWidget()
+                        ],
+                        )
+                      ),
+                    ),
                 ],
               ),
-              // if (store.mySchedule != null) TodayScheduleCard(),
-              // UIHelper.verticalSpace(10.0),
-              // UpcomingEventsWidget(),
               if (store.upcomingEvents != null &&
                   store.upcomingEvents.data.isNotEmpty)
                 Divider(
