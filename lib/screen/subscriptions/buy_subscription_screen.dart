@@ -66,7 +66,8 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
         child: InkWell(
           onTap: () async {
             if (gymStore.selectedStartingDate != null) {
-              NavigationService.pushName(Routes.bookingSummaryScreen, argument: PlanPageArgument(planColor: _planColor));
+              NavigationService.pushName(Routes.bookingSummaryScreen,
+                  argument: PlanPageArgument(planColor: _planColor));
               // Navigator.push(
               //   context,
               //   CupertinoPageRoute(
@@ -126,11 +127,13 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.only(left: 12, right: 0, bottom: 0),
-                          title: Text('${gymStore.selectedGymDetail.data.gymName}',
+                          title: Text(
+                              '${gymStore.selectedGymDetail.data.gymName}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 28, fontWeight: FontWeight.w600)),
-                          subtitle: Text('${gymStore.selectedGymDetail.data.address1} ${gymStore.selectedGymDetail.data.address2}',
+                          subtitle: Text(
+                              '${gymStore.selectedGymDetail.data.address1} ${gymStore.selectedGymDetail.data.address2}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w400)),
@@ -195,13 +198,12 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
               child: Stack(
                 children: [
                   Positioned(
-                    bottom: 6,right: 6,
-                    child: SvgPicture.asset(
-                        'assets/images/3_circle.svg',
+                    bottom: 6,
+                    right: 6,
+                    child: SvgPicture.asset('assets/images/3_circle.svg',
                         color: _planColor.leftColor,
                         width: 30,
-                        semanticsLabel: 'A red up arrow'
-                    ),
+                        semanticsLabel: 'A red up arrow'),
                   ),
                   Row(
                     children: [
@@ -355,13 +357,6 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                         ),
                   ),
                   SizedBox(height: 34),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text('Offers Available for you',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w400)),
-                  ),
-                  SizedBox(height: 24),
                   OfferSection(),
                   SizedBox(height: 24),
                   Align(
@@ -949,7 +944,6 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
       ),
     );
   }
-
 }
 
 class OfferSection extends StatefulWidget {
@@ -976,63 +970,89 @@ class _OfferSectionState extends State<OfferSection> {
     return Consumer<GymStore>(
       builder: (context, store, child) => store.selectedGymOffer != null &&
               store.selectedGymOffer.data != null &&
-              store.selectedGymOffer.data.isNotEmpty
-          ? Container(
-              decoration: BoxDecoration(
-                  color: AppConstants.cardBg2,
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              padding: EdgeInsets.only(left: 12, right: 12),
-              child: filterData(store.selectedGymOffer.data).isNotEmpty ? ListView.builder(
-                  itemCount: filterData(store.selectedGymOffer.data).length,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(0),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    OfferData d = filterData(store.selectedGymOffer.data)[index];
-                    return OfferCard(data: d,onApplied: widget.onApplied);
-                  }):Container(
-                decoration: BoxDecoration(
-                    color: AppConstants.cardBg2,
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                padding: EdgeInsets.only(left: 12, right: 12),
-                child: Center(child: Text('No Offer Available')),
-              )
-              // child: Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     // ...store.selectedGymOffer.data
-              //     //     .map((e){
-              //     //       if(e.status == 'active'){
-              //     //         OfferCard(
-              //     //           data: e,
-              //     //           onApplied: widget.onApplied,
-              //     //         );
-              //     //       }
-              //     // })
-              //     //     .toList()??Container(
-              //     //   decoration: BoxDecoration(
-              //     //       color: AppConstants.cardBg2,
-              //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
-              //     //   padding: EdgeInsets.only(left: 12, right: 12),
-              //     //   child: Center(child: Text('No Offer Available')),
-              //     // ),
-              //   ],
-              // ),
+              filterData(store.selectedGymOffer.data).isNotEmpty
+          ? Column(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('Offers Available for you',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+                ),
+                SizedBox(height: 24),
+                Container(
+                    decoration: BoxDecoration(
+                        color: AppConstants.cardBg2,
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    padding: EdgeInsets.only(left: 12, right: 12),
+                    child: filterData(store.selectedGymOffer.data).isNotEmpty
+                        ? ListView.builder(
+                            itemCount:
+                                filterData(store.selectedGymOffer.data).length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(0),
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              OfferData d = filterData(
+                                  store.selectedGymOffer.data)[index];
+                              return OfferCard(
+                                  data: d, onApplied: widget.onApplied);
+                            })
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: AppConstants.cardBg2,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12))),
+                            padding: EdgeInsets.only(left: 12, right: 12),
+                            child: Center(child: Text('No Offer Available')),
+                          )
+                    // child: Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     // ...store.selectedGymOffer.data
+                    //     //     .map((e){
+                    //     //       if(e.status == 'active'){
+                    //     //         OfferCard(
+                    //     //           data: e,
+                    //     //           onApplied: widget.onApplied,
+                    //     //         );
+                    //     //       }
+                    //     // })
+                    //     //     .toList()??Container(
+                    //     //   decoration: BoxDecoration(
+                    //     //       color: AppConstants.cardBg2,
+                    //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
+                    //     //   padding: EdgeInsets.only(left: 12, right: 12),
+                    //     //   child: Center(child: Text('No Offer Available')),
+                    //     // ),
+                    //   ],
+                    // ),
+                    )
+              ],
             )
-          : Container(
-              decoration: BoxDecoration(
-                  color: AppConstants.cardBg2,
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              padding: EdgeInsets.only(left: 12, right: 12),
-              child: Center(child: Text('No Offer Available')),
+          : SizedBox(
+              width: 0,
             ),
     );
   }
 
-  List<OfferData> filterData(List<OfferData> data){
-    return data.where((element) => element.status == 'active').toList();
+  List<OfferData> filterData(List<OfferData> data) {
+    return data
+        .where((element) =>
+            element.status == 'active' && isExpired(element.validity))
+        .toList();
   }
 
+  bool isExpired(String expireDate) {
+    // final bool isExpired = expirationDate.isBefore(now);
+    //
+
+    final now = DateTime.now();
+    DateTime parseDate = new DateFormat("dd-mm-yyyy").parse(expireDate);
+    var inputDate = DateTime.parse(parseDate.toString()).add(Duration(days: 0));
+    final bool isExpired = inputDate.isAfter(now);
+    return isExpired;
+  }
 }
 
 class OfferCard extends StatefulWidget {
