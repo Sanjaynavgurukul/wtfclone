@@ -210,13 +210,15 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                       Expanded(
                         flex: 2,
                         child: ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.all(0),
                           title: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset(
                                 'assets/logo/wtf_light.png',
                                 width: 50,
-                                height: 50,
+                                height: 30,
                               ),
                             ],
                           ),
@@ -224,7 +226,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                               '${gymStore.selectedGymPlan.plan_name ?? ''}',
                               style: TextStyle(
                                   fontSize: 24,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                         ),
                         // child: Row(
@@ -248,9 +250,9 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Text('Include Unlimited Arena Access',
+                        child: Text('Includes Unlimited Gym  Access and a lot more addons',
                             style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.w400)),
+                                fontSize: 14, fontWeight: FontWeight.w400)),
                       )
                     ],
                   ),
