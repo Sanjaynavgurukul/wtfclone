@@ -29,7 +29,8 @@ class _CategoriesState extends State<Categories> {
     },
     {
       'name': 'Daily Schedule',
-      'img': 'assets/images/daily_schedule.png',
+      'img': 'assets/images/personal_training.png',
+      // 'img': 'assets/images/daily_schedule.png',
     },
     {
       'name': 'Personal Training',
@@ -97,20 +98,42 @@ class _CategoriesState extends State<Categories> {
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Wrap(
           alignment: WrapAlignment.start,
-          runAlignment: WrapAlignment.center,
-          crossAxisAlignment: WrapCrossAlignment.center,
+          runAlignment: WrapAlignment.start,
+          crossAxisAlignment: WrapCrossAlignment.start,
           runSpacing: 0.0,
           spacing: 12.0,
           children: _itemsList
-              .map(
-                (e) => CategoriesItem(
-                  itemName: e['name'],
-                  img: e['img'],
-                  onTap: () => navigation(_itemsList.indexOf(e), context),
-                ),
+              .map((e) =>newUI(data: e,onClick: ()=>navigation(_itemsList.indexOf(e), context))
               )
               .toList(),
         ),
+      ),
+    );
+  }
+
+  Widget newUI({Map data,Function onClick}){
+    return Container(
+      width: 76,
+      margin: EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 76,
+            height: 76,
+            margin: EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                border: Border.all(width: 1,color: Colors.white)
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              onTap: onClick,
+              child: Image.asset(data['img']),
+            ),
+          ),
+          Text(data['name'],maxLines: 5,textAlign: TextAlign.center,)
+        ],
       ),
     );
   }
