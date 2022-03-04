@@ -27,32 +27,34 @@ class _WorkoutCompleteState extends State<WorkoutComplete> {
       backgroundColor: AppColors.BACK_GROUND_BG,
       bottomNavigationBar: WorkoutCompleteButtons(),
       body: Consumer<GymStore>(
-        builder: (context, store, child) => Column(
-          children: [
-            // SizedBox(height: kToolbarHeight,),
-            SuccessImage(),
-            Text(
-              locator<AppPrefs>().selectedMySchedule.getValue(),
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.white,
+        builder: (context, store, child) => SingleChildScrollView(
+          child: Column(
+            children: [
+              // SizedBox(height: kToolbarHeight,),
+              SuccessImage(),
+              Text(
+                locator<AppPrefs>().selectedMySchedule.getValue(),
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              'WORKOUT COMPLETED',
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.white70,
+              SizedBox(
+                height: 5,
               ),
-            ),
-            UIHelper.verticalSpace(20.0),
-            WorkoutCompleteInfo(),
-            UIHelper.verticalSpace(30.0),
-            RateSession(),
-          ],
+              Text(
+                'WORKOUT COMPLETED',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white70,
+                ),
+              ),
+              UIHelper.verticalSpace(20.0),
+              WorkoutCompleteInfo(),
+              UIHelper.verticalSpace(30.0),
+              RateSession(),
+            ],
+          ),
         ),
       ),
     );

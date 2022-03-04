@@ -435,7 +435,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
               SizedBox(
                 height: 45,
               ),
-              if (gymStore.selectedGymPlan.is_recomended == 1)
+              if (gymStore.selectedGymDetail.data.is_partial == 1 && totalAmount != 0)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

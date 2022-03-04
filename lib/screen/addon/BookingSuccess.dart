@@ -299,24 +299,7 @@ class PurchaseDoneSummary extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              margin: EdgeInsets.only(bottom: 0,top: 20),
-              child: Text.rich(
-                TextSpan(
-                  children: <WidgetSpan>[
-                    WidgetSpan(child: Icon(Icons.add)),
-                    WidgetSpan(child: Text('Coins Earned - ',style:TextStyle(fontSize: 14,fontWeight:FontWeight.w400))),
-                    WidgetSpan(child: Text('500',style:TextStyle(fontSize: 14,fontWeight:FontWeight.w400))),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              margin: EdgeInsets.only(bottom: 12,top: 4),
-              child: Text('Total Coins balance - 13500',style:TextStyle(fontSize: 14,fontWeight:FontWeight.w400)),
-            ),
+
             Container(
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(left: 16, right: 16, top: 18),
@@ -384,7 +367,7 @@ class PurchaseDoneSummary extends StatelessWidget {
         Text(label ?? '',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
         Spacer(),
-        Text('\u{20B9}${value ?? ''}')
+        Text('${value ?? ''}')
       ],
     );
   }

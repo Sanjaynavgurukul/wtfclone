@@ -76,7 +76,7 @@ class SubscriptionData {
   String userId;
   var price;
   String trxId;
-  String trxStatus;
+  String trxStatus = 'failed';
   var taxPercentage;
   var taxAmount;
   String orderStatus;
@@ -123,7 +123,7 @@ class SubscriptionData {
         userId: json["user_id"],
         price: json["price"],
         trxId: json["trx_id"],
-        trxStatus: json["trx_status"],
+        trxStatus: json["trx_status"]??'failed',
         taxPercentage: json["tax_percentage"],
         taxAmount: json["tax_amount"],
         orderStatus: json["order_status"],

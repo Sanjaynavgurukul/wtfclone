@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -151,103 +152,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               abc2 = v;
                             });
                           },children: [
-                         Container(
-                           color: Color(0xff922224),
-                           child: Column(
-                             children: [
-                               ListTile(
-                                 dense: true,
-                                 contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 26),
-                                 title: Text(store.mySchedule.data.addonPt.isNotEmpty
-                                     ? 'Personal Training'
-                                     : 'Gym Workouts',style:TextStyle(color: Color(0xffFF8F8F),fontWeight:FontWeight.w500)),
-                                 subtitle: Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     SizedBox(height: 8,),
-                                     Text('WTF Fitness unit',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w700),),
-                                     SizedBox(height: 4,),
-                                     Text('Sector 8,C-block',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w500),),
-                                   ],
-                                 ),
-                                 trailing: InkWell(
-                                   onTap:(){},
-                                   child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
-                                     decoration:BoxDecoration(
-                                       borderRadius: BorderRadius.all(Radius.circular(6)),
-                                       border:Border.all(width: 1,color: Colors.white)
-                                     ),
-                                     child: Text('Direction'),
-                                   ),
-                                 ),
-                               ),
-                               ListTile(
-                                 dense: true,
-                                 contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 12),
-                                 title: Text('Tap on check-in within Gym permises to activate your session',style:TextStyle(color:Color(0xffFFF848),fontWeight:FontWeight.w600)),
-                                 trailing: InkWell(
-                                   onTap:(){},
-                                   child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
-                                     decoration:BoxDecoration(
-                                         borderRadius: BorderRadius.all(Radius.circular(6)),
-                                         border:Border.all(width: 1,color: Colors.white),
-                                       color: Colors.white
-                                     ),
-                                     child: Text('Check-in',style:TextStyle(color:Colors.black)),
-                                   ),
-                                 ),
-                               ),
-                               // if (store.mySchedule.data.regular.isNotEmpty ||
-                               //     store.mySchedule.data.addonPt.isNotEmpty)
-                               //   TodayScheduleItem(
-                               //     scheduleName: store.mySchedule.data.addonPt.isNotEmpty
-                               //         ? 'Personal Training'
-                               //         : 'Gym Workouts',
-                               //     session: store.mySchedule.data.addonPt.isNotEmpty
-                               //         ? store.mySchedule.data.addonPt.first.nSession
-                               //         : null,
-                               //     completedSession:
-                               //     store.mySchedule.data.addonPt.isNotEmpty
-                               //         ? store.mySchedule.data.addonPt.first
-                               //         .completedSession
-                               //         : null,
-                               //     data: store.mySchedule.data.regular.isNotEmpty
-                               //         ? store.mySchedule.data.regular.first
-                               //         : store.mySchedule.data.addonPt.first,
-                               //   ),
-                               // if (store.mySchedule.data.addon.isNotEmpty)
-                               //   TodayScheduleItem(
-                               //     scheduleName:
-                               //     store.mySchedule.data.addon.first.addonName,
-                               //     session: store.mySchedule.data.addon.first.nSession,
-                               //     completedSession:
-                               //     store.mySchedule.data.addon.first.completedSession,
-                               //     data: store.mySchedule.data.addon.first,
-                               //   ),
-                               // if (store.mySchedule.data.addonLive.isNotEmpty)
-                               //   TodayScheduleItem(
-                               //     scheduleName:
-                               //     store.mySchedule.data.addonLive.first.addonName,
-                               //     session: store.mySchedule.data.addonLive.first.nSession,
-                               //     completedSession: store
-                               //         .mySchedule.data.addonLive.first.completedSession,
-                               //     data: store.mySchedule.data.addonLive.first,
-                               //   ),
-                               // if (store.mySchedule.data.event.isNotEmpty)
-                               //   TodayScheduleItem(
-                               //     scheduleName:
-                               //     store.mySchedule.data.event.first.eventName,
-                               //     data: store.mySchedule.data.event.first,
-                               //   ),
-                             ],
-                           ),
-                         )
+                          TodayScheduleCard()
+                         // Container(
+                         //   color: Color(0xff922224),
+                         //   child: Column(
+                         //     children: [
+                         //       if (store.mySchedule.data.regular.isNotEmpty ||
+                         //           store.mySchedule.data.addonPt.isNotEmpty)
+                         //         TodayScheduleItem(
+                         //           scheduleName: store.mySchedule.data.addonPt.isNotEmpty
+                         //               ? 'Personal Training'
+                         //               : 'Gym Workouts',
+                         //           session: store.mySchedule.data.addonPt.isNotEmpty
+                         //               ? store.mySchedule.data.addonPt.first.nSession
+                         //               : null,
+                         //           completedSession:
+                         //           store.mySchedule.data.addonPt.isNotEmpty
+                         //               ? store.mySchedule.data.addonPt.first
+                         //               .completedSession
+                         //               : null,
+                         //           data: store.mySchedule.data.regular.isNotEmpty
+                         //               ? store.mySchedule.data.regular.first
+                         //               : store.mySchedule.data.addonPt.first,
+                         //         ),
+                         //       if (store.mySchedule.data.addon.isNotEmpty)
+                         //         TodayScheduleItem(
+                         //           scheduleName:
+                         //           store.mySchedule.data.addon.first.addonName,
+                         //           session: store.mySchedule.data.addon.first.nSession,
+                         //           completedSession:
+                         //           store.mySchedule.data.addon.first.completedSession,
+                         //           data: store.mySchedule.data.addon.first,
+                         //         ),
+                         //       if (store.mySchedule.data.addonLive.isNotEmpty)
+                         //         TodayScheduleItem(
+                         //           scheduleName:
+                         //           store.mySchedule.data.addonLive.first.addonName,
+                         //           session: store.mySchedule.data.addonLive.first.nSession,
+                         //           completedSession: store
+                         //               .mySchedule.data.addonLive.first.completedSession,
+                         //           data: store.mySchedule.data.addonLive.first,
+                         //         ),
+                         //       if (store.mySchedule.data.event.isNotEmpty)
+                         //         TodayScheduleItem(
+                         //           scheduleName:
+                         //           store.mySchedule.data.event.first.eventName,
+                         //           data: store.mySchedule.data.event.first,
+                         //         ),
+                         //     ],
+                         //   ),
+                         // )
                         ],
                         ),
                       ),
                     ),
 
-                  if (!abc2 && store.upcomingEvents.data.isNotEmpty)
+                  if (store.upcomingEvents != null &&
+      store.upcomingEvents.data.isNotEmpty && !abc2)
                     Flexible(
                       flex: 1,
                       child: Container(
@@ -276,8 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                 ],
               ),
-              if (store.upcomingEvents != null &&
-                  store.upcomingEvents.data.isNotEmpty)
+
                 Divider(
                   thickness: 1.2,
                   color: Colors.white10,
@@ -775,77 +735,56 @@ class TodayScheduleCard extends StatelessWidget {
       builder: (context, store, child) => store.mySchedule != null &&
               store.mySchedule.data != null &&
               store.mySchedule.data.hasData()
-          ? IntrinsicHeight(
-              child: Container(
-                width: double.infinity,
-                child: CustomExpansionTile(
-                  collapsedIconColor: Colors.white,
-                  collapsedTextColor: Colors.white,
-                  collapsedBackgroundColor: AppConstants.primaryColor,
-                  iconColor: Colors.white,
-                  // tilePadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.platform,
-                  title: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 12.0,
-                      right: 12.0,
-                    ),
-                    child: Text(
-                      'Today\'s Schedule',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  children: [
-                    if (store.mySchedule.data.regular.isNotEmpty ||
-                        store.mySchedule.data.addonPt.isNotEmpty)
-                      TodayScheduleItem(
-                        scheduleName: store.mySchedule.data.addonPt.isNotEmpty
-                            ? 'Personal Training'
-                            : 'Gym Workouts',
-                        session: store.mySchedule.data.addonPt.isNotEmpty
-                            ? store.mySchedule.data.addonPt.first.nSession
-                            : null,
-                        completedSession:
-                            store.mySchedule.data.addonPt.isNotEmpty
-                                ? store.mySchedule.data.addonPt.first
-                                    .completedSession
-                                : null,
-                        data: store.mySchedule.data.regular.isNotEmpty
-                            ? store.mySchedule.data.regular.first
-                            : store.mySchedule.data.addonPt.first,
-                      ),
-                    if (store.mySchedule.data.addon.isNotEmpty)
-                      TodayScheduleItem(
-                        scheduleName:
-                            store.mySchedule.data.addon.first.addonName,
-                        session: store.mySchedule.data.addon.first.nSession,
-                        completedSession:
-                            store.mySchedule.data.addon.first.completedSession,
-                        data: store.mySchedule.data.addon.first,
-                      ),
-                    if (store.mySchedule.data.addonLive.isNotEmpty)
-                      TodayScheduleItem(
-                        scheduleName:
-                            store.mySchedule.data.addonLive.first.addonName,
-                        session: store.mySchedule.data.addonLive.first.nSession,
-                        completedSession: store
-                            .mySchedule.data.addonLive.first.completedSession,
-                        data: store.mySchedule.data.addonLive.first,
-                      ),
-                    if (store.mySchedule.data.event.isNotEmpty)
-                      TodayScheduleItem(
-                        scheduleName:
-                            store.mySchedule.data.event.first.eventName,
-                        data: store.mySchedule.data.event.first,
-                      ),
-                  ],
-                ),
+          ? Container(
+        width: double.infinity,
+        color: Color(0xff922224),
+        child: Column(
+          children: [
+            if (store.mySchedule.data.regular.isNotEmpty ||
+                store.mySchedule.data.addonPt.isNotEmpty)
+              TodayScheduleItem(
+                scheduleName: store.mySchedule.data.addonPt.isNotEmpty
+                    ? 'Personal Training'
+                    : 'Gym Workouts',
+                session: store.mySchedule.data.addonPt.isNotEmpty
+                    ? store.mySchedule.data.addonPt.first.nSession
+                    : null,
+                completedSession:
+                store.mySchedule.data.addonPt.isNotEmpty
+                    ? store.mySchedule.data.addonPt.first
+                    .completedSession
+                    : null,
+                data: store.mySchedule.data.regular.isNotEmpty
+                    ? store.mySchedule.data.regular.first
+                    : store.mySchedule.data.addonPt.first,
               ),
-            )
+            if (store.mySchedule.data.addon.isNotEmpty)
+              TodayScheduleItem(
+                scheduleName:
+                store.mySchedule.data.addon.first.addonName,
+                session: store.mySchedule.data.addon.first.nSession,
+                completedSession:
+                store.mySchedule.data.addon.first.completedSession,
+                data: store.mySchedule.data.addon.first,
+              ),
+            if (store.mySchedule.data.addonLive.isNotEmpty)
+              TodayScheduleItem(
+                scheduleName:
+                store.mySchedule.data.addonLive.first.addonName,
+                session: store.mySchedule.data.addonLive.first.nSession,
+                completedSession: store
+                    .mySchedule.data.addonLive.first.completedSession,
+                data: store.mySchedule.data.addonLive.first,
+              ),
+            if (store.mySchedule.data.event.isNotEmpty)
+              TodayScheduleItem(
+                scheduleName:
+                store.mySchedule.data.event.first.eventName,
+                data: store.mySchedule.data.event.first,
+              ),
+          ],
+        ),
+      )
           : Container(),
     );
   }
@@ -919,289 +858,350 @@ class TodayScheduleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
       builder: (context, store, child) => Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-          vertical: 12.0,
-        ),
-        color: AppColors.TEXT_DARK.withOpacity(0.1),
+        color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            UIHelper.verticalSpace(8.0),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 18.0,
-                right: 18.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 26),
+              title: Text(scheduleName ?? '',style:TextStyle(color: Color(0xffFF8F8F),fontWeight:FontWeight.w500)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                    child: Text(
-                      scheduleName ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: 8,),
+                  Text(data?.gymname ?? '',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w700),),
+                  SizedBox(height: 4,),
+                  Text('${data.gymAddress1 ?? 'address'} , ${data.gymAddress2 ?? ' is here'}',style: TextStyle(color:Colors.white,fontWeight:FontWeight.w500),),
                 ],
               ),
-            ),
-            UIHelper.verticalSpace(10.0),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 18.0,
-                right: 18.0,
-              ),
-              child: Text(
-                '${data?.gymname ?? ''} ',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            if (session != null || completedSession != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18.0,
-                  vertical: 6.0,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    UIHelper.verticalSpace(12.0),
-                    if (session != null)
-                      RichText(
-                        text: TextSpan(
-                          text: 'Sessions: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.0,
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: session ?? '0',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    UIHelper.horizontalSpace(12.0),
-                    if (completedSession != null)
-                      RichText(
-                        text: TextSpan(
-                          text: 'Completed Sessions: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.0,
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: completedSession ?? '0',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            UIHelper.verticalSpace(10.0),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 18.0,
-                right: 18.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: Colors.white.withOpacity(0.8),
-                          size: 14,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Flexible(
-                          child: Text(
-                            // '${store.activeSubscriptions?.data?.gymAddress1}, ${store.activeSubscriptions?.data?.gymAddress2}',
-                            '${data.gymAddress1 ?? 'address'} , ${data.gymAddress2 ?? ' is here'}',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 11.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            UIHelper.verticalSpace(10.0),
-            Consumer<GymStore>(
-              builder: (context, store, child) =>
-                  store.attendanceDetails == null ||
-                          (store.attendanceDetails != null &&
-                              store.attendanceDetails.status)
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 12.0,
-                          ),
-                          color: Colors.black,
-                          child: Text(
-                            'Tap on Check In button within Gym premises to activate your session.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      : Container(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                  ),
-                  child: GetDirectionButton(
-                    lat: data.gymLat.isNotEmpty
+              trailing: InkWell(
+                onTap:(){
+                  MapsLauncher.launchCoordinates(
+                    data.gymLat.isNotEmpty
                         ? double.tryParse(data.gymLat)
                         : 28.576639,
-                    lng: data.gymLng.isNotEmpty
+                    data.gymLng.isNotEmpty
                         ? double.tryParse(data.gymLng)
                         : 77.388474,
+                  );
+                },
+                child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
+                  decoration:BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      border:Border.all(width: 1,color: Colors.white)
                   ),
+                  child: Text('Direction'),
                 ),
-                if (store.attendanceDetails == null ||
-                    (store.attendanceDetails != null &&
-                        store.attendanceDetails.data == null))
-                  CustomButton(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 6.0,
-                      horizontal: 16.0,
-                    ),
-                    text: data.type == 'addon_live'
-                        ? 'Join Live Session'
-                        : 'Lets WTF - Check In',
-                    bgColor: AppConstants.primaryColor,
-                    textColor: Colors.white,
-                    textSize: 12.0,
-                    height: 30.0,
-                    onTap: () {
-                      if (data.type == 'addon_live') {
-                        switch (data.roomStatus) {
-                          case 'scheduled':
-                            FlashHelper.informationBar(
-                              context,
-                              message:
-                                  'Trainer has not started the live session yet',
-                            );
-                            break;
-                          case 'started':
-                            context.read<GymStore>().joinLiveSession(
-                                  addonName: data.addonName,
-                                  liveClassId: data.liveClassId,
-                                  roomId: data.roomId,
-                                  context: context,
-                                  addonId: data.addonId,
-                                );
-                            break;
-                          case 'completed':
-                            FlashHelper.informationBar(
-                              context,
-                              message: 'Trainer has ended the live session',
-                            );
-                            break;
-                          default:
-                            break;
-                        }
-                      } else {
-                        context.read<GymStore>().setSelectedSchedule(
-                              context: context,
-                              val: data,
-                            );
-                        context
-                            .read<GymStore>()
-                            .getCurrentAttendance(context: context);
-                        NavigationService.navigateTo(Routes.mainAttendance);
-                      }
-                    },
-                  )
-                else
-                  CustomButton(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 6.0,
-                      horizontal: 16.0,
-                    ),
-                    text: data.type == 'addon_live'
-                        ? 'Join Live Session'
-                        : 'CONTINUE',
-                    bgColor: AppConstants.primaryColor,
-                    textColor: Colors.white,
-                    onTap: () {
-                      if (data.type == 'addon_live') {
-                        switch (data.roomStatus) {
-                          case 'scheduled':
-                            FlashHelper.informationBar(
-                              context,
-                              message:
-                                  'Trainer has not started the live session yet',
-                            );
-                            break;
-                          case 'started':
-                            context.read<GymStore>().joinLiveSession(
-                                  addonName: data.addonName,
-                                  liveClassId: data.liveClassId,
-                                  roomId: data.roomId,
-                                  context: context,
-                                  addonId: data.addonId,
-                                );
-                            break;
-                          case 'completed':
-                            FlashHelper.informationBar(
-                              context,
-                              message: 'Trainer has ended the live session',
-                            );
-                            break;
-                          default:
-                            break;
-                        }
-                      } else {
-                        NavigationService.navigateTo(Routes.mySchedule);
-                      }
-                    },
-                    textSize: 12.0,
-                    height: 30.0,
-                  ),
-              ],
+              ),
             ),
+            ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.only(left: 12,right: 12,bottom: 8,top: 12),
+              title: Text('Tap on check-in within Gym permises to activate your session',style:TextStyle(color:Color(0xffFFF848),fontWeight:FontWeight.w600)),
+              trailing: InkWell(
+                onTap:(){
+                  if (data.type == 'addon_live') {
+                    switch (data.roomStatus) {
+                      case 'scheduled':
+                        FlashHelper.informationBar(
+                          context,
+                          message:
+                          'Trainer has not started the live session yet',
+                        );
+                        break;
+                      case 'started':
+                        context.read<GymStore>().joinLiveSession(
+                          addonName: data.addonName,
+                          liveClassId: data.liveClassId,
+                          roomId: data.roomId,
+                          context: context,
+                          addonId: data.addonId,
+                        );
+                        break;
+                      case 'completed':
+                        FlashHelper.informationBar(
+                          context,
+                          message: 'Trainer has ended the live session',
+                        );
+                        break;
+                      default:
+                        break;
+                    }
+                  } else {
+                    context.read<GymStore>().setSelectedSchedule(
+                      context: context,
+                      val: data,
+                    );
+                    context
+                        .read<GymStore>()
+                        .getCurrentAttendance(context: context);
+                    NavigationService.navigateTo(Routes.mainAttendance);
+                  }
+                },
+                child: Container(padding: EdgeInsets.only(left: 16,right: 16,top: 12,bottom: 12),
+                  decoration:BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      border:Border.all(width: 1,color: Colors.white),
+                      color: Colors.white
+                  ),
+                  child: Text('Check-in',style:TextStyle(color:Colors.black)),
+                ),
+              ),
+            ),
+            // UIHelper.verticalSpace(10.0),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     left: 18.0,
+            //     right: 18.0,
+            //   ),
+            //   child: Text(
+            //     '${data?.gymname ?? ''} ',
+            //     style: TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
+            // if (session != null || completedSession != null)
+            //   Padding(
+            //     padding: const EdgeInsets.symmetric(
+            //       horizontal: 18.0,
+            //       vertical: 6.0,
+            //     ),
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         UIHelper.verticalSpace(12.0),
+            //         if (session != null)
+            //           RichText(
+            //             text: TextSpan(
+            //               text: 'Sessions: ',
+            //               style: TextStyle(
+            //                 fontWeight: FontWeight.w500,
+            //                 fontSize: 14.0,
+            //                 color: Colors.white.withOpacity(0.6),
+            //               ),
+            //               children: [
+            //                 TextSpan(
+            //                   text: session ?? '0',
+            //                   style: TextStyle(
+            //                     fontWeight: FontWeight.w500,
+            //                     fontSize: 14.0,
+            //                     color: Colors.white,
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         UIHelper.horizontalSpace(12.0),
+            //         if (completedSession != null)
+            //           RichText(
+            //             text: TextSpan(
+            //               text: 'Completed Sessions: ',
+            //               style: TextStyle(
+            //                 fontWeight: FontWeight.w500,
+            //                 fontSize: 14.0,
+            //                 color: Colors.white.withOpacity(0.6),
+            //               ),
+            //               children: [
+            //                 TextSpan(
+            //                   text: completedSession ?? '0',
+            //                   style: TextStyle(
+            //                     fontWeight: FontWeight.w500,
+            //                     fontSize: 14.0,
+            //                     color: Colors.white,
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //       ],
+            //     ),
+            //   ),
+            // UIHelper.verticalSpace(10.0),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //     left: 18.0,
+            //     right: 18.0,
+            //   ),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Flexible(
+            //         child: Row(
+            //           children: [
+            //             Icon(
+            //               Icons.location_on_outlined,
+            //               color: Colors.white.withOpacity(0.8),
+            //               size: 14,
+            //             ),
+            //             SizedBox(
+            //               width: 4,
+            //             ),
+            //             Flexible(
+            //               child: Text(
+            //                 // '${store.activeSubscriptions?.data?.gymAddress1}, ${store.activeSubscriptions?.data?.gymAddress2}',
+            //                 '${data.gymAddress1 ?? 'address'} , ${data.gymAddress2 ?? ' is here'}',
+            //                 style: TextStyle(
+            //                   color: Colors.white.withOpacity(0.8),
+            //                   fontSize: 11.5,
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // UIHelper.verticalSpace(10.0),
+            // Consumer<GymStore>(
+            //   builder: (context, store, child) =>
+            //       store.attendanceDetails == null ||
+            //               (store.attendanceDetails != null &&
+            //                   store.attendanceDetails.status)
+            //           ? Container(
+            //               padding: const EdgeInsets.symmetric(
+            //                 vertical: 12.0,
+            //                 horizontal: 12.0,
+            //               ),
+            //               color: Colors.black,
+            //               child: Text(
+            //                 'Tap on Check In button within Gym premises to activate your session.',
+            //                 textAlign: TextAlign.center,
+            //                 style: TextStyle(
+            //                   color: Colors.white,
+            //                   fontSize: 14,
+            //                   fontWeight: FontWeight.w500,
+            //                 ),
+            //               ),
+            //             )
+            //           : Container(),
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(
+            //         horizontal: 12.0,
+            //       ),
+            //       child: GetDirectionButton(
+            //
+            //         lat: data.gymLat.isNotEmpty
+            //             ? double.tryParse(data.gymLat)
+            //             : 28.576639,
+            //         lng: data.gymLng.isNotEmpty
+            //             ? double.tryParse(data.gymLng)
+            //             : 77.388474,
+            //       ),
+            //     ),
+            //     if (store.attendanceDetails == null ||
+            //         (store.attendanceDetails != null &&
+            //             store.attendanceDetails.data == null))
+            //       CustomButton(
+            //         padding: const EdgeInsets.symmetric(
+            //           vertical: 6.0,
+            //           horizontal: 16.0,
+            //         ),
+            //         text: data.type == 'addon_live'
+            //             ? 'Join Live Session'
+            //             : 'Lets WTF - Check In',
+            //         bgColor: AppConstants.primaryColor,
+            //         textColor: Colors.white,
+            //         textSize: 12.0,
+            //         height: 30.0,
+            //         onTap: () {
+            //           if (data.type == 'addon_live') {
+            //             switch (data.roomStatus) {
+            //               case 'scheduled':
+            //                 FlashHelper.informationBar(
+            //                   context,
+            //                   message:
+            //                       'Trainer has not started the live session yet',
+            //                 );
+            //                 break;
+            //               case 'started':
+            //                 context.read<GymStore>().joinLiveSession(
+            //                       addonName: data.addonName,
+            //                       liveClassId: data.liveClassId,
+            //                       roomId: data.roomId,
+            //                       context: context,
+            //                       addonId: data.addonId,
+            //                     );
+            //                 break;
+            //               case 'completed':
+            //                 FlashHelper.informationBar(
+            //                   context,
+            //                   message: 'Trainer has ended the live session',
+            //                 );
+            //                 break;
+            //               default:
+            //                 break;
+            //             }
+            //           } else {
+            //             context.read<GymStore>().setSelectedSchedule(
+            //                   context: context,
+            //                   val: data,
+            //                 );
+            //             context
+            //                 .read<GymStore>()
+            //                 .getCurrentAttendance(context: context);
+            //             NavigationService.navigateTo(Routes.mainAttendance);
+            //           }
+            //         },
+            //       )
+            //     else
+            //       CustomButton(
+            //         padding: const EdgeInsets.symmetric(
+            //           vertical: 6.0,
+            //           horizontal: 16.0,
+            //         ),
+            //         text: data.type == 'addon_live'
+            //             ? 'Join Live Session'
+            //             : 'CONTINUE',
+            //         bgColor: AppConstants.primaryColor,
+            //         textColor: Colors.white,
+            //         onTap: () {
+            //           if (data.type == 'addon_live') {
+            //             switch (data.roomStatus) {
+            //               case 'scheduled':
+            //                 FlashHelper.informationBar(
+            //                   context,
+            //                   message:
+            //                       'Trainer has not started the live session yet',
+            //                 );
+            //                 break;
+            //               case 'started':
+            //                 context.read<GymStore>().joinLiveSession(
+            //                       addonName: data.addonName,
+            //                       liveClassId: data.liveClassId,
+            //                       roomId: data.roomId,
+            //                       context: context,
+            //                       addonId: data.addonId,
+            //                     );
+            //                 break;
+            //               case 'completed':
+            //                 FlashHelper.informationBar(
+            //                   context,
+            //                   message: 'Trainer has ended the live session',
+            //                 );
+            //                 break;
+            //               default:
+            //                 break;
+            //             }
+            //           } else {
+            //             NavigationService.navigateTo(Routes.mySchedule);
+            //           }
+            //         },
+            //         textSize: 12.0,
+            //         height: 30.0,
+            //       ),
+            //   ],
+            // ),
           ],
         ),
       ),

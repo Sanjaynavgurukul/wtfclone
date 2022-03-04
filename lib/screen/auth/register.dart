@@ -294,6 +294,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         } else if (value.length < 6) {
                                           return 'Password should be of at least 6 characters';
                                         }
+                                        else if(password.text != value) return 'Password not match';
                                         return null;
                                       },
                                       onChanged: (value) {
@@ -545,7 +546,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   //         .navigateToReplacement(
                                   //             Routes.userDetail));
                                   //end
-                                  if (formKey.currentState.validate()) {
+                                  final formState = formKey.currentState;
+                                  if (formState.validate()) {
+                                    formState.save();
                                     if (isSend) {
                                       if (auth.registerMethod != null) {
                                         context

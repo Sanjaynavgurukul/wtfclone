@@ -6,6 +6,7 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
+import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class MyTransaction extends StatefulWidget {
@@ -18,6 +19,16 @@ class _MyTransactionState extends State<MyTransaction> {
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
+
+    List<SubscriptionData> getFilterList(List<SubscriptionData> data,
+        {String status}){
+      if(data != null && data.isNotEmpty){
+        return data.where((element) => element.trxStatus ==status ).toList();
+      }else {
+        return [];
+      }
+    }
+
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -60,9 +71,9 @@ class _MyTransactionState extends State<MyTransaction> {
                       if (store.memberSubscriptions.data != null &&
                           store.memberSubscriptions.data.isNotEmpty)
                         ...store.memberSubscriptions.data
-                            .where((element) =>
-                                element.trxStatus.toLowerCase() != 'failed')
-                            .toList()
+                            // .where((element) =>
+                            //     element.trxStatus.toLowerCase() == 'done')
+                            // .toList()
                             .map(
                               (e) => e != null
                                   ? Container(
@@ -344,9 +355,9 @@ class _MyTransactionState extends State<MyTransaction> {
                       if (store.memberSubscriptions.data != null &&
                           store.memberSubscriptions.data.isNotEmpty)
                         ...store.memberSubscriptions.data
-                            .where((element) =>
-                                element.trxStatus.toLowerCase() == 'failed')
-                            .toList()
+                            // .where((element) =>
+                            //     element.trxStatus.toLowerCase() == 'failed')
+                            // .toList()
                             .map(
                               (e) => e != null
                                   ? Container(
