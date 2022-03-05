@@ -291,6 +291,8 @@ class _BookingSummaryEventsState extends State<BookingSummaryEvents>
                 UIHelper.verticalSpace(20.0),
                 if (gymStore.chosenOffer != null || totalAmount > 0)
                   OfferSection(
+                    gymId: gymStore.selectedEventData.gymId,
+                    plan_id: gymStore.selectedEventData.uid,
                     onApplied: () {
                       calculateFinalPrice();
                     },

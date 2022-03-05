@@ -452,10 +452,11 @@ class _EventButtonState extends State<EventButton> {
                                     if (int.tryParse(
                                             store.selectedEventData.price) >
                                         0) {
-                                      store.getAllGymOffers(
-                                        gymId: store.selectedEventData.gymId,
-                                        context: context,
-                                      );
+                                      //TODO Check plan :D
+                                      // store.getAllGymOffers(
+                                      //   gymId: store.selectedEventData.gymId,
+                                      //   context: context,
+                                      // );
                                       NavigationService.navigateTo(
                                           Routes.bookingSummaryEvent);
                                     } else {

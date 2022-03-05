@@ -1270,6 +1270,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 ),
                 if (gymStore.selectedGymPlan.plan_price != '0')
                   OfferSection(
+                    gymId: gymStore.selectedGymDetail.data.userId,
+                    plan_id: gymStore.selectedGymPlan.plan_uid,
                     onApplied: () {
                       setState(() {
                         WidgetsBinding.instance

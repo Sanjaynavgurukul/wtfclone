@@ -42,7 +42,7 @@ class APIHelper {
   static String checkOffer(String offerId) =>
       BASE_URL +
       'offervalidation?user_id=${locator<AppPrefs>().memberId.getValue()}&offer_id=$offerId';
-  static String allGymOffers(String gymId) => BASE_URL + 'offer?gym_id=$gymId';
+  static String allGymOffers(String gymId,String plan_uid) => BASE_URL + 'offer/?gym_id=$gymId&type_id=$plan_uid';
   static String allSessionForAddOn(String addOnId) =>
       BASE_URL + 'session/addon?addon=$addOnId';
   static String memberSubscriptions(String memberId) =>

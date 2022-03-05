@@ -359,7 +359,7 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
                         ),
                   ),
                   SizedBox(height: 34),
-                  OfferSection(),
+                  OfferSection(gymId: gymStore.selectedGymDetail.data.userId,plan_id: gymStore.selectedGymPlan.plan_uid,),
                   SizedBox(height: 24),
                   Align(
                     alignment: Alignment.topLeft,
@@ -951,9 +951,11 @@ class _BuySubscriptionScreenState extends State<BuySubscriptionScreen> {
 class OfferSection extends StatefulWidget {
   final String gymId;
   final GestureTapCallback onApplied;
+  final String plan_id;
 
   OfferSection({
     this.gymId,
+    this.plan_id,
     this.onApplied,
   });
 
@@ -962,6 +964,7 @@ class OfferSection extends StatefulWidget {
 }
 
 class _OfferSectionState extends State<OfferSection> {
+
   @override
   void initState() {
     super.initState();
@@ -969,6 +972,7 @@ class _OfferSectionState extends State<OfferSection> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GymStore>().getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
     return Consumer<GymStore>(
       builder: (context, store, child) => store.selectedGymOffer != null &&
               store.selectedGymOffer.data != null &&

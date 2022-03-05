@@ -1592,11 +1592,12 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getAllGymOffers({BuildContext context, String gymId}) async {
+  Future<void> getAllGymOffers({String plan_uid,BuildContext context, String gymId}) async {
     loading = true;
     notifyListeners();
     GymOffers res = await RestDatasource().getAllGymOffers(
       gymId: gymId,
+      plan_uid: plan_uid
     );
     if (res != null) {
       selectedGymOffer = res;
@@ -1721,7 +1722,8 @@ class GymStore extends ChangeNotifier {
     GymDetailsModel res = await RestDatasource().getGymDetails(gymId);
     if (res != null) {
       selectedGymDetail = res;
-      getAllGymOffers(gymId: gymId, context: context);
+      //TODO Check plan :D
+      // getAllGymOffers(plan_uid,gymId: gymId, context: context);
       notifyListeners();
     } else {
       selectedGymDetail = GymDetailsModel(
@@ -1747,7 +1749,8 @@ class GymStore extends ChangeNotifier {
         lat: currentPosition.latitude.toString());
     if (res != null) {
       selectedGymDetail = res;
-      getAllGymOffers(gymId: gymId, context: context);
+      //TODO check plan :D
+      // getAllGymOffers(gymId: gymId, context: context);
       notifyListeners();
     } else {
       selectedGymDetail = GymDetailsModel(

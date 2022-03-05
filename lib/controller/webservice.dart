@@ -642,14 +642,14 @@ class RestDatasource {
   }
 
   Future<GymOffers> getAllGymOffers(
-      {BuildContext context, String gymId}) async {
+      {BuildContext context, String gymId,String plan_uid}) async {
     try {
       String token = locator<AppPrefs>().token.getValue();
       Map<String, String> mapHeader = Map();
       mapHeader["Authorization"] = "Bearer " + token;
       mapHeader["Content-Type"] = "application/json";
       var res = await _netUtil.get(
-        APIHelper.allGymOffers(gymId),
+        APIHelper.allGymOffers(gymId,plan_uid),
         headers: mapHeader,
       );
       print("response getAllGymOffers : " + res.toString());

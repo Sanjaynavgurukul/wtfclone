@@ -357,6 +357,8 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                 ),
                 if (gymStore.chosenOffer != null || totalAmount > 0)
                   OfferSection(
+                    gymId: gymStore.selectedSlotData.gymId,
+                    plan_id: gymStore.selectedSlotData.uid,
                     onApplied: () {
                       setState(() {
                         calculateFinalPrice2();
