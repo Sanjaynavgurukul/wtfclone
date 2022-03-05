@@ -493,11 +493,11 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                 padding: EdgeInsets.only(left: 8, right: 8),
                 child: Column(
                   children: [
-                    Image.network(
+                    item.image != null ? Image.network(
                       item.image,
                       width: 60,
                       height: 60,
-                    ),
+                    ):Image.asset('assets/images/benefit.png',width: 60,height: 60,),
                     SizedBox(
                       height: 8,
                     ),

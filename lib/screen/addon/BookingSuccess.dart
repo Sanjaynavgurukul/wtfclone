@@ -222,8 +222,8 @@ class PurchaseDoneSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     GymStore gymStore = context.read<GymStore>();
     bool isFromAddon = gymStore.selectedSlotData != null ? true : false;
-    print('date added --- ${gymStore.selectedSlotData.dateAdded}');
-    print('date added end--- ${gymStore.selectedSlotData.dateAdded}');
+    // print('date added --- ${gymStore.selectedSlotData.dateAdded}');
+    // print('date added end--- ${gymStore.selectedSlotData.dateAdded}');
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(NavigationService.navigatorKey.currentContext)
@@ -260,10 +260,10 @@ class PurchaseDoneSummary extends StatelessWidget {
                           children: [
                             SvgPicture.asset('assets/svg/success_bg.svg',
                                 semanticsLabel: 'Acme Logo'),
-                            // Image.asset(
-                            //   'assets/gif/payment_done.gif',
-                            //   width: 120,
-                            // ),
+                            Image.asset(
+                              'assets/gif/payment_done.gif',
+                              width: 120,
+                            ),
                           ],
                         ),
                       ),
@@ -282,8 +282,8 @@ class PurchaseDoneSummary extends StatelessWidget {
                         amountLabel(label: 'Booked at:', value: '${gymStore.selectedGymDetail.data.gymName ??''}'),
                         SizedBox(height: 12),
                         amountLabel(label: 'AddOn:', value: '${gymStore.selectedAddOnSlot.name??''}'),
-                        SizedBox(height: 12),
-                        amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}'),
+                        // SizedBox(height: 12),
+                        // amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}'),
                         SizedBox(height: 12),
                         amountLabel(label:'End Date:',value:'${convertDate(gymStore.selectedSlotData.date.add(Duration(days: int.parse(gymStore.selectedSession.duration))))}'),
                         // amountLabel(label: 'End Date:', value: gymStore.isFreeSession
@@ -324,35 +324,34 @@ class PurchaseDoneSummary extends StatelessWidget {
                 ),
               ],
             ),
-
-            Container(
-              padding: EdgeInsets.only(left: 16, right: 16),
-              margin: EdgeInsets.only(left: 16, right: 16, top: 18),
-              child: InkWell(
-                onTap: () {
-                  NavigationService.navigateToReplacement(
-                      Routes.allcoin);
-                  Navigator.of(NavigationService.navigatorKey.currentContext)
-                      .popUntil((route) => route.settings.name == Routes.homePage);
-                  NavigationService.navigatorKey.currentContext
-                      .read<GymStore>()
-                      .init(context: context);
-                  // NavigationService.navigatorKey.currentContext
-                  //     .read<GymStore>()
-                  //     .changeNavigationTab(index: 2);
-                },
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Container(
-                    width: double.infinity,
-                    padding:
-                    EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                        color: AppConstants.boxBorderColor),
-                    child: Text("Redeem", style: TextStyle(fontSize: 16))),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.only(left: 16, right: 16),
+            //   margin: EdgeInsets.only(left: 16, right: 16, top: 18),
+            //   child: InkWell(
+            //     onTap: () {
+            //       NavigationService.navigateToReplacement(
+            //           Routes.allcoin);
+            //       Navigator.of(NavigationService.navigatorKey.currentContext)
+            //           .popUntil((route) => route.settings.name == Routes.homePage);
+            //       NavigationService.navigatorKey.currentContext
+            //           .read<GymStore>()
+            //           .init(context: context);
+            //       // NavigationService.navigatorKey.currentContext
+            //       //     .read<GymStore>()
+            //       //     .changeNavigationTab(index: 2);
+            //     },
+            //     borderRadius: BorderRadius.all(Radius.circular(100)),
+            //     child: Container(
+            //         width: double.infinity,
+            //         padding:
+            //         EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+            //         alignment: Alignment.center,
+            //         decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.all(Radius.circular(100)),
+            //             color: AppConstants.boxBorderColor),
+            //         child: Text("Redeem", style: TextStyle(fontSize: 16))),
+            //   ),
+            // ),
             Container(
               padding: EdgeInsets.only(left: 16, right: 16),
               margin: EdgeInsets.only(left: 16, right: 16, top: 18),

@@ -261,6 +261,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       return;
                                     }
                                   }
+
                                   if (currentIndex == 2) {
                                     if (user.bodyType == null ||
                                         user.bodyType == '') {
@@ -364,12 +365,12 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   }
 
                                   if (currentIndex == 11) {
-                                    if (user.type1 == null ||
+                                    if (user.type1 == null &&
                                         user.type2 == null) {
                                       key.currentState.showSnackBar(
                                           new SnackBar(
                                               content: new Text(
-                                                  'Select your diet')));
+                                                  'Select your diet and')));
                                       return;
                                     }
                                   }

@@ -131,7 +131,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   //   height: rightCardWidth,
                   //   width:  rightExpanded?rightCardWidth2 :rightCardWidth,
                   // ),
-                  if (!abc && store.mySchedule != null)
+                  if (!abc && store.mySchedule != null &&
+                      store.mySchedule.data != null &&
+                      store.mySchedule.data.hasData())
                     Flexible(
                       flex: 1,
                       child: Container(
@@ -141,12 +143,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           baseColor: Colors.white,
                           contentPadding: EdgeInsets.only(top: 6,bottom: 6),
                           expandedColor: Colors.white,
-                          title: Row(
+                          title:Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(width: 6,),Image.asset('assets/gif/my_schedule.gif',width: 40,height: 40,),SizedBox(width: 6,),
-                              Expanded(
+                              store.upcomingEvents != null && store.upcomingEvents.data.isNotEmpty ? Expanded(
                                 child: ListTile(
                                   dense: true,
                                   contentPadding: EdgeInsets.all(0),
@@ -155,7 +157,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                       style: TextStyle(color: Colors.black)),
                                 ),
-                              )
+                              ):Text('My Schedule',
+                                  maxLines: 2,
+
+                                  style: TextStyle(color: Colors.black))
                             ],
                           ),
                           onExpansionChanged: (v) {
