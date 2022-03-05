@@ -173,132 +173,128 @@ class _BookSessionState extends State<BookSession> {
           radius: 10.0,
           height: 40.0,
         ),
-        body: LayoutBuilder(
-          builder: (context, constraints) => SingleChildScrollView(
-            child: Consumer<GymStore>(
-              builder: (context, store, child) => IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 300.0,
-                      child: Stack(
-                        // fit: StackFit.expand,
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: store.selectedAddOnSlot.image != null
-                                ? Image.network(
-                                    store.selectedAddOnSlot.image,
-                                    fit: BoxFit.cover,
-                                    height: 300.0,
-                                  )
-                                : Image.network(
-                              'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c=',
-                              fit: BoxFit.cover,
-                              height: 300.0,
-                            )
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Image.asset(
-                                'assets/images/workout_background.png'),
-                          ),
-                          Positioned(
-                            bottom: 10.0,
-                            left: 20.0,
-                            child: Text(
-                              store.selectedAddOnSlot.name.capitalize(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ),
-                        ],
+        body: SingleChildScrollView(
+          child: Consumer<GymStore>(
+            builder: (context, store, child) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 300.0,
+                  child: Stack(
+                    // fit: StackFit.expand,
+                    children: [
+                      Align(
+                          alignment: Alignment.topCenter,
+                          child: store.selectedAddOnSlot.image != null
+                              ? Image.network(
+                            store.selectedAddOnSlot.image,
+                            fit: BoxFit.cover,
+                            height: 300.0,
+                          )
+                              : Image.network(
+                            'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c=',
+                            fit: BoxFit.cover,
+                            height: 300.0,
+                          )
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 20.0,
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Image.asset(
+                            'assets/images/workout_background.png'),
                       ),
-                      child: Text(
-                        store.selectedAddOnSlot.description.capitalize() ?? '',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 13.0,
+                      Positioned(
+                        bottom: 10.0,
+                        left: 20.0,
+                        child: Text(
+                          store.selectedAddOnSlot.name.capitalize(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 20.0,
+                  ),
+                  child: Text(
+                    store.selectedAddOnSlot.description.capitalize() ?? '',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 13.0,
                     ),
-                    UIHelper.verticalSpace(4.0),
-                    Divider(
-                      thickness: 0.5,
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                    UIHelper.verticalSpace(24.0),
-                    IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                'Select a package',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20.0,
-                                ),
-                              ),
+                  ),
+                ),
+                UIHelper.verticalSpace(4.0),
+                Divider(
+                  thickness: 0.5,
+                  color: Colors.white.withOpacity(0.4),
+                ),
+                UIHelper.verticalSpace(24.0),
+                IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            'Select a package',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20.0,
                             ),
                           ),
-                          UIHelper.verticalSpace(20.0),
-                          Consumer<GymStore>(
-                            builder: (context, store, child) => store
-                                        .selectedAddonSessions !=
-                                    null
-                                ? store.selectedAddonSessions.data.isNotEmpty
-                                    ? Wrap(
-                                        children: store
-                                            .selectedAddonSessions.data
-                                            .map(
-                                              (e) => Consumer<GymStore>(
-                                                builder:
-                                                    (context, store, child) =>
-                                                        SessionCard(
-                                                  data: e,
-                                                  onSelected: (data) {
-                                                    store.setSession(data);
-                                                  },
-                                                ),
-                                              ),
-                                            )
-                                            .toList(),
-                                      )
-                                    : Container(
-                                        child: Text(
-                                          'Sessions Pack Unavailable',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
-                                            fontSize: 16.0,
-                                          ),
-                                        ),
-                                      )
-                                : Loader(),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                    UIHelper.verticalSpace(12.0),
-                  ],
+                      UIHelper.verticalSpace(20.0),
+                      Consumer<GymStore>(
+                        builder: (context, store, child) => store
+                            .selectedAddonSessions !=
+                            null
+                            ? store.selectedAddonSessions.data.isNotEmpty
+                            ? Wrap(
+                          children: store
+                              .selectedAddonSessions.data
+                              .map(
+                                (e) => Consumer<GymStore>(
+                              builder:
+                                  (context, store, child) =>
+                                  SessionCard(
+                                    data: e,
+                                    onSelected: (data) {
+                                      store.setSession(data);
+                                    },
+                                  ),
+                            ),
+                          )
+                              .toList(),
+                        )
+                            : Container(
+                          child: Text(
+                            'Sessions Pack Unavailable',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        )
+                            : Loader(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                UIHelper.verticalSpace(12.0),
+              ],
             ),
           ),
         ),

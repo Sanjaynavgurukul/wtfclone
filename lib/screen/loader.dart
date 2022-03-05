@@ -31,7 +31,7 @@ class _LoaderPageState extends State<LoaderPage> {
     print('init method called');
     // if (Platform.isAndroid) checkForUpdate();
     Future.delayed(
-      Duration(seconds: 9),
+      Duration(seconds: 5),
       () {
         context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {

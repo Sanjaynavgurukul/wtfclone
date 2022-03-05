@@ -222,6 +222,8 @@ class PurchaseDoneSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     GymStore gymStore = context.read<GymStore>();
     bool isFromAddon = gymStore.selectedSlotData != null ? true : false;
+    print('date added --- ${gymStore.selectedSlotData.dateAdded}');
+    print('date added end--- ${gymStore.selectedSlotData.dateAdded}');
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(NavigationService.navigatorKey.currentContext)
@@ -258,10 +260,10 @@ class PurchaseDoneSummary extends StatelessWidget {
                           children: [
                             SvgPicture.asset('assets/svg/success_bg.svg',
                                 semanticsLabel: 'Acme Logo'),
-                            Image.asset(
-                              'assets/gif/payment_done.gif',
-                              width: 120,
-                            ),
+                            // Image.asset(
+                            //   'assets/gif/payment_done.gif',
+                            //   width: 120,
+                            // ),
                           ],
                         ),
                       ),
@@ -281,15 +283,16 @@ class PurchaseDoneSummary extends StatelessWidget {
                         SizedBox(height: 12),
                         amountLabel(label: 'AddOn:', value: '${gymStore.selectedAddOnSlot.name??''}'),
                         SizedBox(height: 12),
-                        amountLabel(label: 'Date Added:', value: '${readTimestamp(int.parse(gymStore.selectedSlotData.dateAdded))??''}'),
+                        amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}'),
                         SizedBox(height: 12),
-                        amountLabel(label: 'End Date:', value: gymStore.isFreeSession
-                            ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
-                            : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
-                          Duration(
-                              days: int.tryParse(gymStore
-                                  .selectedSession.duration)),
-                        ).toIso8601String())}"),
+                        amountLabel(label:'End Date:',value:'${convertDate(gymStore.selectedSlotData.date.add(Duration(days: int.parse(gymStore.selectedSession.duration))))}'),
+                        // amountLabel(label: 'End Date:', value: gymStore.isFreeSession
+                        //     ? "${formatDate(gymStore.selectedSlotData.date)}"
+                        //     : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                        //   Duration(
+                        //       days: int.tryParse(gymStore
+                        //           .selectedSession.duration)),
+                        // ).toIso8601String())}"),
                         SizedBox(height: 12),
                         amountLabel(label: 'Begin Time:', value: '${gymStore.selectedSlotData.startTime??''}'),
                         SizedBox(height: 12),
@@ -383,17 +386,18 @@ class PurchaseDoneSummary extends StatelessWidget {
     );
   }
 
-  String readTimestamp(int date) {
-    // var format = new DateFormat('dd-MM-yyyy');
-    // var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp);
-    // var diff = format.format(date);
-    // return diff;
-    // String dateWithT = date.substring(0, 8) + 'T' + date.substring(8);
-    // DateTime dateTime = DateTime.parse(dateWithT);
+  String convertDate(DateTime value){
+    var format = new DateFormat('MMM dd,yyyy');
+    return format.format(value);
+  }
 
-    DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(date);
+  String formatDate(String value) {
+    if(value == null) return 'No Date';
+    int timeStamp = int.parse(value);
+    var format = new DateFormat('MMM dd, yyyy');
+    var date = new DateTime.fromMillisecondsSinceEpoch(timeStamp);
 
-    return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
+    return format.format(date);
   }
 
   Widget amountLabel({String label, String value}) {

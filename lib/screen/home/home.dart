@@ -146,8 +146,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(width: 6,),Image.asset('assets/gif/my_schedule.gif',width: 40,height: 40,),SizedBox(width: 6,),
-                              Text('My\nSchedule',
-                                  style: TextStyle(color: Colors.black))
+                              Expanded(
+                                child: ListTile(
+                                  dense: true,
+                                  contentPadding: EdgeInsets.all(0),
+                                  title: Text('My Schedule',
+                                      maxLines: 2,
+
+                                      style: TextStyle(color: Colors.black)),
+                                ),
+                              )
                             ],
                           ),
                           onExpansionChanged: (v) {
@@ -223,8 +231,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(width: 6,),Image.asset('assets/gif/upcoming.gif',width: 40,height: 40,),SizedBox(width: 6,),
-                              Text('Upcoming\nActivities',
-                                  style: TextStyle(color: Colors.black))
+                              Expanded(
+                                child: ListTile(
+                                  dense: true,
+                                  contentPadding: EdgeInsets.all(0),
+                                  title: Text('Upcoming Activities',
+                                      maxLines: 2,
+
+                                      style: TextStyle(color: Colors.black)),
+                                ),
+                              )
                             ],
                           ),
                           contentPadding: EdgeInsets.only(top: 6,bottom: 6),
@@ -240,7 +256,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                 ],
               ),
-
               Divider(
                   thickness: 1.2,
                   color: Colors.white10,

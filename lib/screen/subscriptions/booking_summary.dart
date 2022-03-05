@@ -1269,6 +1269,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                   height: 12,
                 ),
                 if (gymStore.selectedGymPlan.plan_price != '0')
+                  //TODO cehck Here :D
                   OfferSection(
                     gymId: gymStore.selectedGymDetail.data.userId,
                     plan_id: gymStore.selectedGymPlan.plan_uid,

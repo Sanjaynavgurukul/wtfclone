@@ -358,7 +358,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
                 if (gymStore.chosenOffer != null || totalAmount > 0)
                   OfferSection(
                     gymId: gymStore.selectedSlotData.gymId,
-                    plan_id: gymStore.selectedSlotData.uid,
+                    plan_id: gymStore.selectedSlotData.addonsId,
                     onApplied: () {
                       setState(() {
                         calculateFinalPrice2();
@@ -911,7 +911,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
       bool isSubscribed =
       await gymStore.addSubscription(context: context, body: body);
       if (isSubscribed) {
-        print('Done ');
+        print('Done');
         NavigationService.navigateTo(Routes.purchaseDone);
       } else {
         FlashHelper.errorBar(context, message: 'Please Try again!');

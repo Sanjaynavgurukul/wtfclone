@@ -964,81 +964,247 @@ class OfferSection extends StatefulWidget {
 }
 
 class _OfferSectionState extends State<OfferSection> {
-
+  // GymStore store = GymStore();
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<GymStore>().getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+    });
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // context.read<GymStore>().getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   store = Provider.of<GymStore>(context, listen: false);
+    // });
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
-    context.read<GymStore>().getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+    // return Provider<GymStore>(
+    //   create: (_) => GymStore()..getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId),
+    //   child:  Consumer<GymStore>(
+    //
+    //       builder: (context, store, child){
+    //         // store.getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+    //         return store.selectedGymOffer != null &&
+    //             store.selectedGymOffer.data != null &&
+    //             filterData(store.selectedGymOffer.data).isNotEmpty
+    //             ? Column(
+    //           children: [
+    //             Align(
+    //               alignment: Alignment.center,
+    //               child: Text('Offers Available for you',
+    //                   style:
+    //                   TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+    //             ),
+    //             SizedBox(height: 24),
+    //             Container(
+    //                 decoration: BoxDecoration(
+    //                     color: AppConstants.cardBg2,
+    //                     borderRadius: BorderRadius.all(Radius.circular(12))),
+    //                 padding: EdgeInsets.only(left: 12, right: 12),
+    //                 child: filterData(store.selectedGymOffer.data).isNotEmpty
+    //                     ? ListView.builder(
+    //                     itemCount:
+    //                     filterData(store.selectedGymOffer.data).length,
+    //                     shrinkWrap: true,
+    //                     padding: EdgeInsets.all(0),
+    //                     physics: NeverScrollableScrollPhysics(),
+    //                     itemBuilder: (context, index) {
+    //                       OfferData d = filterData(
+    //                           store.selectedGymOffer.data)[index];
+    //                       return OfferCard(
+    //                           data: d, onApplied: widget.onApplied);
+    //                     })
+    //                     : Container(
+    //                   decoration: BoxDecoration(
+    //                       color: AppConstants.cardBg2,
+    //                       borderRadius:
+    //                       BorderRadius.all(Radius.circular(12))),
+    //                   padding: EdgeInsets.only(left: 12, right: 12),
+    //                   child: Center(child: Text('No Offer Available')),
+    //                 )
+    //               // child: Column(
+    //               //   crossAxisAlignment: CrossAxisAlignment.start,
+    //               //   children: [
+    //               //     // ...store.selectedGymOffer.data
+    //               //     //     .map((e){
+    //               //     //       if(e.status == 'active'){
+    //               //     //         OfferCard(
+    //               //     //           data: e,
+    //               //     //           onApplied: widget.onApplied,
+    //               //     //         );
+    //               //     //       }
+    //               //     // })
+    //               //     //     .toList()??Container(
+    //               //     //   decoration: BoxDecoration(
+    //               //     //       color: AppConstants.cardBg2,
+    //               //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
+    //               //     //   padding: EdgeInsets.only(left: 12, right: 12),
+    //               //     //   child: Center(child: Text('No Offer Available')),
+    //               //     // ),
+    //               //   ],
+    //               // ),
+    //             )
+    //           ],
+    //         )
+    //             : SizedBox(
+    //           width: 0,
+    //         );
+    //       }
+    //   ),
+    // );
     return Consumer<GymStore>(
-      builder: (context, store, child) => store.selectedGymOffer != null &&
+      builder: (context, store, child){
+        return store.selectedGymOffer != null &&
+            store.selectedGymOffer.data != null &&
+            filterData(store.selectedGymOffer.data).isNotEmpty
+            ? Column(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Text('Offers Available for you',
+                  style:
+                  TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+            ),
+            SizedBox(height: 24),
+            Container(
+                decoration: BoxDecoration(
+                    color: AppConstants.cardBg2,
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                padding: EdgeInsets.only(left: 12, right: 12),
+                child: filterData(store.selectedGymOffer.data).isNotEmpty
+                    ? ListView.builder(
+                    itemCount:
+                    filterData(store.selectedGymOffer.data).length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(0),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      OfferData d = filterData(
+                          store.selectedGymOffer.data)[index];
+                      return OfferCard(
+                          data: d, onApplied: widget.onApplied);
+                    })
+                    : Container(
+                  decoration: BoxDecoration(
+                      color: AppConstants.cardBg2,
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(12))),
+                  padding: EdgeInsets.only(left: 12, right: 12),
+                  child: Center(child: Text('No Offer Available')),
+                )
+              // child: Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     // ...store.selectedGymOffer.data
+              //     //     .map((e){
+              //     //       if(e.status == 'active'){
+              //     //         OfferCard(
+              //     //           data: e,
+              //     //           onApplied: widget.onApplied,
+              //     //         );
+              //     //       }
+              //     // })
+              //     //     .toList()??Container(
+              //     //   decoration: BoxDecoration(
+              //     //       color: AppConstants.cardBg2,
+              //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
+              //     //   padding: EdgeInsets.only(left: 12, right: 12),
+              //     //   child: Center(child: Text('No Offer Available')),
+              //     // ),
+              //   ],
+              // ),
+            )
+          ],
+        )
+            : SizedBox(
+          width: 0,
+        );
+      }
+    );
+
+    // context.read<GymStore>().getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+  }
+
+  Widget abc(){
+    return Consumer<GymStore>(
+
+        builder: (context, store, child){
+          store.getAllGymOffers(plan_uid: widget.plan_id,gymId: widget.gymId);
+          return store.selectedGymOffer != null &&
               store.selectedGymOffer.data != null &&
               filterData(store.selectedGymOffer.data).isNotEmpty
-          ? Column(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Text('Offers Available for you',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
-                ),
-                SizedBox(height: 24),
-                Container(
+              ? Column(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text('Offers Available for you',
+                    style:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+              ),
+              SizedBox(height: 24),
+              Container(
+                  decoration: BoxDecoration(
+                      color: AppConstants.cardBg2,
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  padding: EdgeInsets.only(left: 12, right: 12),
+                  child: filterData(store.selectedGymOffer.data).isNotEmpty
+                      ? ListView.builder(
+                      itemCount:
+                      filterData(store.selectedGymOffer.data).length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(0),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        OfferData d = filterData(
+                            store.selectedGymOffer.data)[index];
+                        return OfferCard(
+                            data: d, onApplied: widget.onApplied);
+                      })
+                      : Container(
                     decoration: BoxDecoration(
                         color: AppConstants.cardBg2,
-                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12))),
                     padding: EdgeInsets.only(left: 12, right: 12),
-                    child: filterData(store.selectedGymOffer.data).isNotEmpty
-                        ? ListView.builder(
-                            itemCount:
-                                filterData(store.selectedGymOffer.data).length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(0),
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              OfferData d = filterData(
-                                  store.selectedGymOffer.data)[index];
-                              return OfferCard(
-                                  data: d, onApplied: widget.onApplied);
-                            })
-                        : Container(
-                            decoration: BoxDecoration(
-                                color: AppConstants.cardBg2,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12))),
-                            padding: EdgeInsets.only(left: 12, right: 12),
-                            child: Center(child: Text('No Offer Available')),
-                          )
-                    // child: Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     // ...store.selectedGymOffer.data
-                    //     //     .map((e){
-                    //     //       if(e.status == 'active'){
-                    //     //         OfferCard(
-                    //     //           data: e,
-                    //     //           onApplied: widget.onApplied,
-                    //     //         );
-                    //     //       }
-                    //     // })
-                    //     //     .toList()??Container(
-                    //     //   decoration: BoxDecoration(
-                    //     //       color: AppConstants.cardBg2,
-                    //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
-                    //     //   padding: EdgeInsets.only(left: 12, right: 12),
-                    //     //   child: Center(child: Text('No Offer Available')),
-                    //     // ),
-                    //   ],
-                    // ),
-                    )
-              ],
-            )
-          : SizedBox(
-              width: 0,
-            ),
+                    child: Center(child: Text('No Offer Available')),
+                  )
+                // child: Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     // ...store.selectedGymOffer.data
+                //     //     .map((e){
+                //     //       if(e.status == 'active'){
+                //     //         OfferCard(
+                //     //           data: e,
+                //     //           onApplied: widget.onApplied,
+                //     //         );
+                //     //       }
+                //     // })
+                //     //     .toList()??Container(
+                //     //   decoration: BoxDecoration(
+                //     //       color: AppConstants.cardBg2,
+                //     //       borderRadius: BorderRadius.all(Radius.circular(12))),
+                //     //   padding: EdgeInsets.only(left: 12, right: 12),
+                //     //   child: Center(child: Text('No Offer Available')),
+                //     // ),
+                //   ],
+                // ),
+              )
+            ],
+          )
+              : SizedBox(
+            width: 0,
+          );
+        }
     );
   }
 

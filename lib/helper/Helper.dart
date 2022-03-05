@@ -126,7 +126,7 @@ class Helper {
     //DateTime.fromMillisecondsSinceEpoch( 1490489845  * 1000).toLocal(); //year:  1490489845 //>day: 1556152819  //month:  1553561845  //<day: 1556174419
     var dateString = " ";
 
-    var yearFormat = DateFormat("MMM d, y");
+    var yearFormat = DateFormat("MMM dd, yyyy");
     dateString += yearFormat.format(dtInLocal);
 
     return dateString;
