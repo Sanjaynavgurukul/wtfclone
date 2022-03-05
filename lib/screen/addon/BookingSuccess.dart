@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
@@ -280,7 +281,7 @@ class PurchaseDoneSummary extends StatelessWidget {
                         SizedBox(height: 12),
                         amountLabel(label: 'AddOn:', value: '${gymStore.selectedAddOnSlot.name??''}'),
                         SizedBox(height: 12),
-                        amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedAddOnSlot.dateAdded) ??''}'),
+                        amountLabel(label: 'Date Added:', value: '${readTimestamp(int.parse(gymStore.selectedSlotData.dateAdded))??''}'),
                         SizedBox(height: 12),
                         amountLabel(label: 'End Date:', value: gymStore.isFreeSession
                             ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
@@ -380,6 +381,19 @@ class PurchaseDoneSummary extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String readTimestamp(int date) {
+    // var format = new DateFormat('dd-MM-yyyy');
+    // var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp);
+    // var diff = format.format(date);
+    // return diff;
+    // String dateWithT = date.substring(0, 8) + 'T' + date.substring(8);
+    // DateTime dateTime = DateTime.parse(dateWithT);
+
+    DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(date);
+
+    return '${dateTime.day}-${dateTime.month}-${dateTime.year}';
   }
 
   Widget amountLabel({String label, String value}) {
