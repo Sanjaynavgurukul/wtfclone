@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 
@@ -16,25 +17,32 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   List<Map> _itemsList = [
     {
-      'name': 'Fitness',
+      'name': 'Gym',
       'img': 'assets/images/fitness.png',
     },
     {
-      'name': 'Live Class',
-      'img': 'assets/images/live_class.png',
+      'name': 'Daily Schedule',
+      'img': 'assets/images/personal_training.png',
     },
     {
       'name': 'Nutrition',
       'img': 'assets/images/nutrition_2.png',
     },
     {
-      'name': 'Daily Schedule',
-      'img': 'assets/images/personal_training.png',
-      // 'img': 'assets/images/daily_schedule.png',
-    },
-    {
       'name': 'Personal Training',
       'img': 'assets/images/personal_training.png',
+    },
+    {
+      'name': 'Live Class',
+      'img': 'assets/images/live_class.png',
+    },
+    {
+      'name': 'Fitness Activity',
+      'img': 'assets/images/fitness_activity.png',
+    },
+    {
+      'name': 'Meditation',
+      'img': 'assets/images/meditation.png',
     },
   ];
 
@@ -53,10 +61,9 @@ class _CategoriesState extends State<Categories> {
         NavigationService.navigateTo(Routes.discoverNow);
         break;
       case 1:
-        NavigationService.navigateTo(Routes.allLiveAddons);
+        context.read<GymStore>().getActiveSubscriptions(context: context);
+        NavigationService.navigateTo(Routes.mySchedule);
         break;
-      // Navigator.pushNamed(context, Routes.mySubscription);
-      // break;
       case 2:
         NavigationService.navigateTo(Routes.myDietSchedule);
         // showDialog(
@@ -76,17 +83,23 @@ class _CategoriesState extends State<Categories> {
         break;
       case 3:
         context.read<GymStore>().getActiveSubscriptions(context: context);
-        NavigationService.navigateTo(Routes.mySchedule);
-        break;
-      case 4:
-        context.read<GymStore>().getActiveSubscriptions(context: context);
         NavigationService.navigateTo(Routes.ptClassPage);
         break;
+      case 4:
+        NavigationService.navigateTo(Routes.allLiveAddons);
+        break;
+      case 5:
+        NavigationService.navigateTo(Routes.poweredPages);
+        break;
+      // Navigator.pushNamed(context, Routes.mySubscription);
+      // break;
+
       // case 5:
       //   context.read<GymStore>().getMemberSubscriptions(context: context);
       //   Navigator.pushNamed(context, Routes.mySubscription);
       //   break;
       default:
+        break;
     }
   }
 
@@ -103,20 +116,22 @@ class _CategoriesState extends State<Categories> {
           runSpacing: 0.0,
           spacing: 12.0,
           children: _itemsList
-              .map((e) =>newUI(data: e,onClick: ()=>navigation(_itemsList.indexOf(e), context))
-                // (e) => CategoriesItem(
-                //   itemName: e['name'],
-                //   img: e['img'],
-                //   onTap: () => navigation(_itemsList.indexOf(e), context),
-                // ),
-              )
+              .map((e) => newUI(
+                      data: e,
+                      onClick: () => navigation(_itemsList.indexOf(e), context))
+                  // (e) => CategoriesItem(
+                  //   itemName: e['name'],
+                  //   img: e['img'],
+                  //   onTap: () => navigation(_itemsList.indexOf(e), context),
+                  // ),
+                  )
               .toList(),
         ),
       ),
     );
   }
 
-  Widget newUI({Map data,Function onClick}){
+  Widget newUI({Map data, Function onClick}) {
     return Container(
       width: 76,
       margin: EdgeInsets.only(bottom: 12),
@@ -129,15 +144,42 @@ class _CategoriesState extends State<Categories> {
             margin: EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                border: Border.all(width: 1,color: Colors.white)
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              onTap: onClick,
-              child: Image.asset(data['img']),
+                border: Border.all(width: 1, color: Colors.white)),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  onTap: onClick,
+                  child: Container(
+                      margin:
+                          EdgeInsets.all(data['name'] == "Meditation" ? 14 :data['name'] == 'Fitness Activity'?12: 0),
+                      child: Image.asset(data['img'])),
+                ),
+                if(data['name'] == "Meditation")Container(
+                  width: 76,
+                  height: 76,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      color: AppConstants.bgColor.withOpacity(0.5)),
+                  child: Text(
+                    'Coming\nSoon',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
             ),
           ),
-          Text(data['name'],maxLines: 5,textAlign: TextAlign.center,)
+          Text(
+            data['name'],
+            maxLines: 5,
+            textAlign: TextAlign.center,
+          )
         ],
       ),
     );
