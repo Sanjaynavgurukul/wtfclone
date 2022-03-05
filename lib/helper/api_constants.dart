@@ -102,4 +102,5 @@ class Api {
           {String userId, String gymId, String otp})=>'subscription/verify?user_id=$userId&gym_id=$gymId&otp=$otp';
   static String getGymDetailsById({String gymId,String lat,String lng})=>'gym/getbyid?uid=$gymId&lat=$lat&long=$lng';
   static String getForceUpdate()=>'version/latest';
+  static String fetchSessionDuration({String addOnId})=>'session/addon?addon=$addOnId';
 }

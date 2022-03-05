@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -141,8 +142,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           contentPadding: EdgeInsets.only(top: 6,bottom: 6),
                           expandedColor: Colors.white,
                           title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(width: 6,),Image.asset('assets/gif/regular.gif',width: 30,height: 30,),SizedBox(width: 6,),
+                              SizedBox(width: 6,),Image.asset('assets/gif/my_schedule.gif',width: 40,height: 40,),SizedBox(width: 6,),
                               Text('My\nSchedule',
                                   style: TextStyle(color: Colors.black))
                             ],
@@ -207,8 +210,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
 
-                  if (store.upcomingEvents != null &&
-      store.upcomingEvents.data.isNotEmpty && !abc2)
+                  if (store.upcomingEvents != null && store.upcomingEvents.data.isNotEmpty && !abc2)
                     Flexible(
                       flex: 1,
                       child: Container(
@@ -218,8 +220,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           baseColor: Colors.white,
                           expandedColor: Colors.white,
                           title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(width: 6,),Image.asset('assets/gif/regular.gif',width: 30,height: 30,),SizedBox(width: 6,),
+                              SizedBox(width: 6,),Image.asset('assets/gif/upcoming.gif',width: 40,height: 40,),SizedBox(width: 6,),
                               Text('Upcoming\nActivities',
                                   style: TextStyle(color: Colors.black))
                             ],
@@ -238,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
 
-                Divider(
+              Divider(
                   thickness: 1.2,
                   color: Colors.white10,
                 ),

@@ -274,7 +274,28 @@ class PurchaseDoneSummary extends StatelessWidget {
                         color: Color(0xff292929)),
                     padding:
                     EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
-                    child: Column(
+                    child:isFromAddon?Column(
+                      children: [
+                        amountLabel(label: 'Booked at:', value: '${gymStore.selectedGymDetail.data.gymName ??''}'),
+                        SizedBox(height: 12),
+                        amountLabel(label: 'AddOn:', value: '${gymStore.selectedAddOnSlot.name??''}'),
+                        SizedBox(height: 12),
+                        amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedAddOnSlot.dateAdded) ??''}'),
+                        SizedBox(height: 12),
+                        amountLabel(label: 'End Date:', value: gymStore.isFreeSession
+                            ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
+                            : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                          Duration(
+                              days: int.tryParse(gymStore
+                                  .selectedSession.duration)),
+                        ).toIso8601String())}"),
+                        SizedBox(height: 12),
+                        amountLabel(label: 'Begin Time:', value: '${gymStore.selectedSlotData.startTime??''}'),
+                        SizedBox(height: 12),
+                        amountLabel(label: 'Session count:', value: '${gymStore.selectedSlotData.slot??''}'),
+                        SizedBox(height: 12),
+                      ],
+                    ): Column(
                       children: [
                         amountLabel(label: 'Booked at:', value: '${gymStore.selectedGymDetail.data.gymName ??''}'),
                         SizedBox(height: 12),
