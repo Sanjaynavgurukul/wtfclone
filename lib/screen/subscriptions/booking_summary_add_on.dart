@@ -890,6 +890,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
           .toIso8601String())
           .trim(),
       "isWhatsapp": !_isChecked,
+      'is_partial':0
     };
     if (gymStore.chosenOffer != null) {
       body['coupon'] = gymStore.chosenOffer.uid;
@@ -899,6 +900,8 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
       body['remark'] =
       '${gymStore.selectedSession.uid} - ${gymStore.selectedSession.nSession}';
     }
+
+
     if (gymStore.isFreeSession) {
       body['trx_id'] = 'pay_free';
       body['trx_status'] = 'done';
@@ -912,6 +915,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
         FlashHelper.errorBar(context, message: 'Please Try again!');
       }
     } else {
+      print('This is not a free session ---- ');
       if (totalAmount != 0) {
         await gymStore.processPayment(
           context: context,

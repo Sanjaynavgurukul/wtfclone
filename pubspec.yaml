@@ -78,9 +78,6 @@ dependencies:
   firebase_core: ^1.0.2
   flutter_geocoder: ^0.2.2-nullsafety
   geocoding: ^2.0.1
-#  flutter_fluid_slider: ^1.0.2
-#  flutter_fluid_slider: ^1.0.3
-#  flutter_google_places: ^0.3.0
   place_picker: ^0.9.19
   awesome_notifications:
 #  neumorphic: ^0.4.0

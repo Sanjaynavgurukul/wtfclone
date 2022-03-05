@@ -1190,6 +1190,7 @@ class RestDatasource {
 
   // Search Gym
   Future<CommonModel> addSubscritpion(Map<String, dynamic> body) async {
+    print('add sub map -- $body');
     String token = locator<AppPrefs>().token.getValue();
     String userId = locator<AppPrefs>().memberId.getValue();
     var headers = {
@@ -1204,6 +1205,7 @@ class RestDatasource {
       headers: headers,
       body: json.encode(body),
     );
+    print('Add subscription response --- $res');
     CommonModel model = CommonModel.fromJson(res);
     return model;
   }
