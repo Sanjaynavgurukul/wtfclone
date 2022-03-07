@@ -94,33 +94,34 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (locator<AppPrefs>().updateMemberData.getValue()) {
-          return true;
-        } else {
-          switch (currentIndex) {
-            case 0:
-              return false;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-              currentIndex--;
-              _controller.animateToPage(currentIndex,
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.easeInCubic);
-              return false;
-            default:
-              return false;
-          }
-        }
+        // if (locator<AppPrefs>().updateMemberData.getValue()) {
+        //   return true;
+        // } else {
+        //   switch (currentIndex) {
+        //     case 0:
+        //       return false;
+        //     case 1:
+        //     case 2:
+        //     case 3:
+        //     case 4:
+        //     case 5:
+        //     case 6:
+        //     case 7:
+        //     case 8:
+        //     case 9:
+        //     case 10:
+        //     case 11:
+        //     case 12:
+        //       currentIndex--;
+        //       _controller.animateToPage(currentIndex,
+        //           duration: Duration(milliseconds: 400),
+        //           curve: Curves.easeInCubic);
+        //       return false;
+        //     default:
+        //       return false;
+        //   }
+        // }
+        return true;
       },
       child: Scaffold(
         key: key,

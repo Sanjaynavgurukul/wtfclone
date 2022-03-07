@@ -51,126 +51,214 @@ class _Slide10State extends State<Slide10> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  text: 'Eat ',
+              Container(
+                color: Color(0xff922224),
+                child: ListTile(
+                  leading: InkWell(
+                    onTap: (){},
+                    child: Icon(Icons.arrow_back_ios,color: Colors.white,),
+                  ),title: Text(
+                  "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 24.0,
+                    color: Colors.white,
                   ),
-                  children: [
-                    TextSpan(
-                      text: bmrState.bmrResult,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' calories every day',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
+                ),
                 ),
               ),
-              SizedBox(height: 15),
-              RichText(
-                text: TextSpan(
-                  text: 'Drink ',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '4000 ml',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' of water every day',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: 40,
               ),
-              SizedBox(height: 15),
-              RichText(
-                text: TextSpan(
-                  text: 'Walk minimum ',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white.withOpacity(0.8),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: item(image: 'assets/gif/upcoming.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
                   ),
-                  children: [
-                    TextSpan(
-                      text: '8000',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' steps every day',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15),
-              RichText(
-                text: TextSpan(
-                  text: 'Burn ',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white.withOpacity(0.8),
+                  SizedBox(width: 20,),
+                  Expanded(
+                    flex: 1,
+                    child: item(image: 'assets/gif/upcoming.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
                   ),
-                  children: [
-                    TextSpan(
-                      text: '500',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' calories every day',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
-              // TextField(),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: item(image: 'assets/gif/upcoming.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
+                  ),
+                  SizedBox(width: 20,),
+                  Expanded(
+                    flex: 1,
+                    child: item(image: 'assets/gif/upcoming.gif',value: ' calories every day',count: '500',label: 'Burn'),
+                  ),
+                ],
+              )
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget item({String image, String label, String count,String value}){
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            color: Colors.white
+
+          ),
+          child: Column(
+            children: [
+              Image.asset(image??'assets/gif/upcoming.gif',width: 70,height: 70,),SizedBox(height: 8,),Text(label??'No Label',style: TextStyle(color: Colors.black),)
+            ],
+          ),
+        ),SizedBox(height: 12,),
+        RichText(
+          text: TextSpan(
+            text: '',
+            style: DefaultTextStyle.of(context).style,
+            children: <TextSpan>[
+              TextSpan(text: count??'0', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: value??' no value'),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget oldUI(UserController store){
+    return  Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
+          style: TextStyle(
+            fontSize: 24.0,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(height: 20),
+        RichText(
+          text: TextSpan(
+            text: 'Eat ',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.white.withOpacity(0.8),
+            ),
+            children: [
+              TextSpan(
+                text: bmrState.bmrResult,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
+              TextSpan(
+                text: ' calories every day',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 15),
+        RichText(
+          text: TextSpan(
+            text: 'Drink ',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.white.withOpacity(0.8),
+            ),
+            children: [
+              TextSpan(
+                text: '4000 ml',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
+              TextSpan(
+                text: ' of water every day',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 15),
+        RichText(
+          text: TextSpan(
+            text: 'Walk minimum ',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.white.withOpacity(0.8),
+            ),
+            children: [
+              TextSpan(
+                text: '8000',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
+              TextSpan(
+                text: ' steps every day',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 15),
+        RichText(
+          text: TextSpan(
+            text: 'Burn ',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.white.withOpacity(0.8),
+            ),
+            children: [
+              TextSpan(
+                text: '500',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
+              TextSpan(
+                text: ' calories every day',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // TextField(),
+      ],
     );
   }
 }

@@ -91,7 +91,7 @@ class _Slide1State extends State<Slide1> {
                                 color: Color(0xff922224),
                                 border:Border.all(width: 2,color:user.gender == genderList[1] ? Colors.white:Color(0xff922224))
                             ),child: SvgPicture.asset(
-                              'assets/svg/male_filter.svg',
+                              'assets/svg/female_gender.svg',
                               color: Colors.white,
                               semanticsLabel: 'male selection'
                           ),
@@ -122,7 +122,7 @@ class _Slide1State extends State<Slide1> {
                                 color: Color(0xff922224),
                                 border:Border.all(width: 2,color:user.gender == genderList[2] ? Colors.white:Color(0xff922224))
                             ),child: SvgPicture.asset(
-                              'assets/svg/male_filter.svg',
+                              'assets/svg/other_gender.svg',
                               color: Colors.white,
                               semanticsLabel: 'male selection'
                           ),
