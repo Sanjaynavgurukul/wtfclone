@@ -45,62 +45,64 @@ class _Slide10State extends State<Slide10> {
     bmrState = context.watch<BmrState>();
 
     return Consumer<UserController>(
-      builder: (context, store, child) => Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                color: Color(0xff922224),
-                child: ListTile(
-                  leading: InkWell(
-                    onTap: (){},
-                    child: Icon(Icons.arrow_back_ios,color: Colors.white,),
-                  ),title: Text(
-                  "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    color: Colors.white,
-                  ),
-                ),
-                ),
+      builder: (context, store, child) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
+            color: Color(0xff922224),
+            child: Text(
+              "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.0,
+                color: Colors.white,
               ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/eat_outline.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/glass-water-outline.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/burn_outline.gif',value: ' calories every day',count: '500',label: 'Burn'),
-                  ),
-                ],
-              )
-            ],
+            ),
           ),
+          SizedBox(
+            height: 40,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 18,right: 18),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: item(image: 'assets/gif/eat_outline.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  flex: 1,
+                  child: item(image: 'assets/gif/glass-water-outline.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 18,right: 18),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
+                ),
+                SizedBox(width: 20,),
+                Expanded(
+                  flex: 1,
+                  child: item(image: 'assets/gif/burn_outline.gif',value: ' calories every day',count: '500',label: 'Burn'),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

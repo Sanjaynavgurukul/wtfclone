@@ -48,6 +48,7 @@ class _Slide0State extends State<Slide0> {
     return Consumer<UserController>(
       builder: (context, user, snapshot) {
         return Container(
+          padding: EdgeInsets.only(top: 40,left: 18,right: 18),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

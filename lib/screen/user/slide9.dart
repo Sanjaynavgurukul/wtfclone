@@ -81,196 +81,201 @@ class _Slide9State extends State<Slide9> {
   Widget build(BuildContext context) {
     return Consumer<UserController>(
       builder: (context, user, child) => SingleChildScrollView(
-        child: Column(
-          children: [
-            ExpansionTileCard(
-              elevation: 0,
-              baseColor: Color(0xff922224),
-              expandedColor: Color(0xff922224),
-              title: Text('Choose your body type',
-                  style: TextStyle(color: Colors.white)),
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff292929),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8))),
-                  padding: EdgeInsets.all(12),
-                  width: double.infinity,
-                  child: Wrap(
-                      alignment: WrapAlignment.start,
-                      runAlignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      runSpacing: 0.0,
-                      spacing: 12.0,
-                      children: types
-                          .map((e) => newUI(
-                              data: e,
-                              selected: bodyType == e['type'],
-                              onClick: () {
-                                // print('clicked value');
-                                setState(() {
-                                  bodyType = e['type'];
-                                  user.setValue(bodyType: e['type']);
-                                });
-                              }))
-                          .toList()),
-                )
-              ],
-            ),
-            SizedBox(height: 12,),
-            ExpansionTileCard(
-              elevation: 0,
-              baseColor: Color(0xff292929),
-              expandedColor: Color(0xff922224),
-              trailing: _heightChildPopup(),
-              title: Text('Enter your height',
-                  style: TextStyle(color: Colors.white,fontSize: 12)),
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff292929),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8))),
-                  padding: EdgeInsets.all(12),
-                  width: double.infinity,
-                  child: (tallLabel ?? tallList[0]) == tallList[0] ?Height() :HeightCm(),
-                )
-              ],
-            ),
-            SizedBox(height: 12,),
-            ExpansionTileCard(
-              elevation: 0,
-              baseColor: Color(0xff292929),
-              expandedColor: Color(0xff922224),
-              trailing: _weightChildPopup(),
-              title: Text('Enter your weight',
-                  style: TextStyle(color: Colors.white,fontSize: 12)),
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff292929),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8))),
-                  padding: EdgeInsets.all(12),
-                  width: double.infinity,
-                  child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
-                    textStyle: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
+        child: Container(
+          padding: EdgeInsets.only(top: 40,left: 18,right: 18),
+          child: Column(
+            children: [
+              Text('Let us know more about you' ,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
+              SizedBox(height: 40,),
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff922224),
+                expandedColor: Color(0xff922224),
+                title: Text('Choose your body type',
+                    style: TextStyle(color: Colors.white)),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        runSpacing: 0.0,
+                        spacing: 12.0,
+                        children: types
+                            .map((e) => newUI(
+                                data: e,
+                                selected: bodyType == e['type'],
+                                onClick: () {
+                                  // print('clicked value');
+                                  setState(() {
+                                    bodyType = e['type'];
+                                    user.setValue(bodyType: e['type']);
+                                  });
+                                }))
+                            .toList()),
+                  )
+                ],
+              ),
+              SizedBox(height: 12,),
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff292929),
+                expandedColor: Color(0xff922224),
+                trailing: _heightChildPopup(),
+                title: Text('Enter your height',
+                    style: TextStyle(color: Colors.white,fontSize: 12)),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: (tallLabel ?? tallList[0]) == tallList[0] ?Height() :HeightCm(),
+                  )
+                ],
+              ),
+              SizedBox(height: 12,),
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff292929),
+                expandedColor: Color(0xff922224),
+                trailing: _weightChildPopup(),
+                title: Text('Enter your weight',
+                    style: TextStyle(color: Colors.white,fontSize: 12)),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+                      textStyle: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                      selectedTextStyle: TextStyle(
+                        fontSize: 45,
+                        color: Color(0xff922224),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      itemHeight: 60,
+                      value: weightInKg,
+                      minValue: 0,
+                      maxValue: 200,
+                      step: 1,
+                      haptics: true,
+                      onChanged: (value){
+                        setState(() {
+                          weightInKg = value;
+                          // user.setValue(heightFeet: value);
+                        });
+                      },
+                    ):NumberPicker(
+                      textStyle: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                      selectedTextStyle: TextStyle(
+                        fontSize: 45,
+                        color: Color(0xff922224),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      itemHeight: 60,
+                      value: weightInPound,
+                      minValue: 0,
+                      maxValue: 600,
+                      step: 1,
+                      haptics: true,
+                      onChanged: (value){
+                        setState(() {
+                          weightInPound = value;
+                          // user.setValue(heightFeet: value);
+                        });
+                      },
                     ),
-                    selectedTextStyle: TextStyle(
-                      fontSize: 45,
-                      color: Color(0xff922224),
-                      fontWeight: FontWeight.bold,
+                  )
+                ],
+              ),
+              SizedBox(height: 12,),
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff292929),
+                expandedColor: Color(0xff922224),
+                trailing: _weightChildPopup(),
+                title: Text('Target weight',
+                    style: TextStyle(color: Colors.white,fontSize: 12)),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+                      textStyle: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                      selectedTextStyle: TextStyle(
+                        fontSize: 45,
+                        color: Color(0xff922224),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      itemHeight: 60,
+                      value: targetWeightInKg,
+                      minValue: 0,
+                      maxValue: 200,
+                      step: 1,
+                      haptics: true,
+                      onChanged: (value){
+                        setState(() {
+                          targetWeightInKg = value;
+                          // user.setValue(heightFeet: value);
+                        });
+                      },
+                    ):NumberPicker(
+                      textStyle: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                      selectedTextStyle: TextStyle(
+                        fontSize: 45,
+                        color: Color(0xff922224),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      itemHeight: 60,
+                      value: targetWeightInPound,
+                      minValue: 0,
+                      maxValue: 600,
+                      step: 1,
+                      haptics: true,
+                      onChanged: (value){
+                        setState(() {
+                          targetWeightInPound = value;
+                          // user.setValue(heightFeet: value);
+                        });
+                      },
                     ),
-                    itemHeight: 60,
-                    value: weightInKg,
-                    minValue: 0,
-                    maxValue: 200,
-                    step: 1,
-                    haptics: true,
-                    onChanged: (value){
-                      setState(() {
-                        weightInKg = value;
-                        // user.setValue(heightFeet: value);
-                      });
-                    },
-                  ):NumberPicker(
-                    textStyle: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                    ),
-                    selectedTextStyle: TextStyle(
-                      fontSize: 45,
-                      color: Color(0xff922224),
-                      fontWeight: FontWeight.bold,
-                    ),
-                    itemHeight: 60,
-                    value: weightInPound,
-                    minValue: 0,
-                    maxValue: 600,
-                    step: 1,
-                    haptics: true,
-                    onChanged: (value){
-                      setState(() {
-                        weightInPound = value;
-                        // user.setValue(heightFeet: value);
-                      });
-                    },
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 12,),
-            ExpansionTileCard(
-              elevation: 0,
-              baseColor: Color(0xff292929),
-              expandedColor: Color(0xff922224),
-              trailing: _weightChildPopup(),
-              title: Text('Target weight',
-                  style: TextStyle(color: Colors.white,fontSize: 12)),
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff292929),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8))),
-                  padding: EdgeInsets.all(12),
-                  width: double.infinity,
-                  child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
-                    textStyle: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                    ),
-                    selectedTextStyle: TextStyle(
-                      fontSize: 45,
-                      color: Color(0xff922224),
-                      fontWeight: FontWeight.bold,
-                    ),
-                    itemHeight: 60,
-                    value: targetWeightInKg,
-                    minValue: 0,
-                    maxValue: 200,
-                    step: 1,
-                    haptics: true,
-                    onChanged: (value){
-                      setState(() {
-                        targetWeightInKg = value;
-                        // user.setValue(heightFeet: value);
-                      });
-                    },
-                  ):NumberPicker(
-                    textStyle: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                    ),
-                    selectedTextStyle: TextStyle(
-                      fontSize: 45,
-                      color: Color(0xff922224),
-                      fontWeight: FontWeight.bold,
-                    ),
-                    itemHeight: 60,
-                    value: targetWeightInPound,
-                    minValue: 0,
-                    maxValue: 600,
-                    step: 1,
-                    haptics: true,
-                    onChanged: (value){
-                      setState(() {
-                        targetWeightInPound = value;
-                        // user.setValue(heightFeet: value);
-                      });
-                    },
-                  ),
-                )
-              ],
-            )
-          ],
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

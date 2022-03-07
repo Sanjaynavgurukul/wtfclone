@@ -32,6 +32,7 @@ class _Slide12State extends State<Slide12> {
     GymStore store = Provider.of<GymStore>(context);
     UserController user = Provider.of<UserController>(context);
     return Container(
+      padding: EdgeInsets.only(left: 18,right: 18,top: 40),
       child: ListView(
         children: [
           Center(

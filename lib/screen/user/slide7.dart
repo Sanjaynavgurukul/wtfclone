@@ -18,7 +18,7 @@ class _Slide7State extends State<Slide7> {
   bool isDrinking = false;
 
   int radioCheck = -0;
-  
+
   List<String> selectedConditions = [];
   final formKey = GlobalKey<FormState>();
 
@@ -74,21 +74,17 @@ class _Slide7State extends State<Slide7> {
             child: Column(
               children: [
                 Container(
+                  padding: EdgeInsets.only(top: 40,left: 18,right: 18),
                   color: Color(0xff922224),
                   child: Column(
                     children: [
-                      ListTile(
-                        leading: InkWell(
-                          onTap: (){},
-                          child: Icon(Icons.arrow_back_ios,color: Colors.white,),
-                        ),title:  Text(
+                      Text(
                         "How fast do you want to ${user.targetWeight > user.weight ? 'gain your weight' : 'lose your weight'}?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.white,
                         ),
-                      ),
                       ),
                       SizedBox(height: 40,),
                       Center(
@@ -137,6 +133,7 @@ class _Slide7State extends State<Slide7> {
                 ),
                 SizedBox(height:20),
                 Container(
+                  padding: EdgeInsets.only(left: 18,right: 18),
                   child: Wrap(
                     children: [
                       ...datSource
@@ -270,49 +267,52 @@ class _Slide7State extends State<Slide7> {
                   ),
                 ),
                 UIHelper.verticalSpace(6.0),
-                InkWell(
-                  onTap: () async {
-                    if (selectedConditions.contains('None')) {
-                      setState(() {
-                        selectedConditions.remove('None');
-                        user.existingDisease.remove('None');
-                      });
-                    } else {
-                      setState(() {
-                        selectedConditions.clear();
-                        user.existingDisease.clear();
-                        selectedConditions.add('None');
-                        user.existingDisease.add('None');
-                      });
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * .78,
-                    padding: const EdgeInsets.all(12.0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: selectedConditions.contains('None')
-                          ? AppConstants.primaryColor
-                          : Colors.transparent,
-                      border: Border.all(
+                Container(
+                  padding: EdgeInsets.only(left: 18,right: 18),
+                  child: InkWell(
+                    onTap: () async {
+                      if (selectedConditions.contains('None')) {
+                        setState(() {
+                          selectedConditions.remove('None');
+                          user.existingDisease.remove('None');
+                        });
+                      } else {
+                        setState(() {
+                          selectedConditions.clear();
+                          user.existingDisease.clear();
+                          selectedConditions.add('None');
+                          user.existingDisease.add('None');
+                        });
+                      }
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * .78,
+                      padding: const EdgeInsets.all(12.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
                         color: selectedConditions.contains('None')
                             ? AppConstants.primaryColor
-                            : Colors.white,
+                            : Colors.transparent,
+                        border: Border.all(
+                          color: selectedConditions.contains('None')
+                              ? AppConstants.primaryColor
+                              : Colors.white,
+                        ),
                       ),
-                    ),
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 4.0,
-                      vertical: 6.0,
-                    ),
-                    child: Text(
-                      'None of the above',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 12,
-                        letterSpacing: 0.5,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 4.0,
+                        vertical: 6.0,
+                      ),
+                      child: Text(
+                        'None of the above',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                     ),
                   ),
@@ -321,81 +321,92 @@ class _Slide7State extends State<Slide7> {
                 SizedBox(
                   height: 24.0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    //SizedBox
-                    Text(
-                      'Do you Drink?',
-                      style: TextStyle(
-                        fontSize: 17.0,
-                        color: Colors.white,
+                Container(
+                  padding: EdgeInsets.only(left: 18,right: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      //SizedBox
+                      Text(
+                        'Do you Drink?',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                        ),
+                      ), //Text
+                      Switch(
+                        value: isDrinking,
+                        onChanged: (val) {
+                          setState(() {
+                            isDrinking = !isDrinking;
+                            user.setValue(isDrinking: isDrinking);
+                          });
+                        },
+                        activeColor: AppConstants.primaryColor,
+                        inactiveTrackColor: Colors.grey,
                       ),
-                    ), //Text
-                    Switch(
-                      value: isDrinking,
-                      onChanged: (val) {
-                        setState(() {
-                          isDrinking = !isDrinking;
-                          user.setValue(isDrinking: isDrinking);
-                        });
-                      },
-                      activeColor: AppConstants.primaryColor,
-                      inactiveTrackColor: Colors.grey,
-                    ),
-                  ], //<Widget>[]
+                    ], //<Widget>[]
+                  ),
                 ),
                 if (isDrinking) ...{
                   UIHelper.verticalSpace(6.0),
-                  Text(
-                    AppConstants.drinkingText,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: AppColors.TEXT_DARK,
+                  Container(
+                    padding: EdgeInsets.only(left: 18,right: 18),
+                    child: Text(
+                      AppConstants.drinkingText,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: AppColors.TEXT_DARK,
+                      ),
                     ),
-                  ),
+                  )
                 },
                 SizedBox(
                   height: 24.0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    //SizedBox
-                    Text(
-                      'Do you Smoke ?',
-                      style: TextStyle(
-                        fontSize: 17.0,
-                        color: Colors.white,
+                Container(
+                  padding: EdgeInsets.only(left: 18,right: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      //SizedBox
+                      Text(
+                        'Do you Smoke ?',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Switch(
-                      value: isSmoking,
-                      onChanged: (val) {
-                        setState(() {
-                          isSmoking = !isSmoking;
-                          user.setValue(isSmoking: isSmoking);
-                        });
-                      },
-                      activeColor: AppConstants.primaryColor,
-                      inactiveTrackColor: Colors.grey,
-                    ),
-                  ], //<Widget>[]
+                      Switch(
+                        value: isSmoking,
+                        onChanged: (val) {
+                          setState(() {
+                            isSmoking = !isSmoking;
+                            user.setValue(isSmoking: isSmoking);
+                          });
+                        },
+                        activeColor: AppConstants.primaryColor,
+                        inactiveTrackColor: Colors.grey,
+                      ),
+                    ], //<Widget>[]
+                  ),
                 ),
                 if (isSmoking) ...{
                   UIHelper.verticalSpace(6.0),
-                  Text(
+
+                Container(
+                padding: EdgeInsets.only(left: 18,right: 18),child:Text(
                     AppConstants.smokingText,
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12.0,
                       color: AppColors.TEXT_DARK,
                     ),
-                  ),
+                  )),
                 },
                 SizedBox(
-                  height: 60.0,
+                  height: 100.0,
                 ),
               ],
             ),

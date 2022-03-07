@@ -65,19 +65,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         title: 'Welcome to WTF',
         subTitle:
             'To help us serve you better and give you a wholesome experience, please complete \n your fitness profile.',
-      ),
-      Slide1(),
-      Slide9(),
+      ),//
+      Slide1(),//
+      Slide9(),//
       Slide11(),
       Slide2(),
       Slide3(),
       Slide4(),
       Slide5(),
       Slide6(),
-      Slide7(),
+      Slide7(),//
       Slide8(),
-      Slide12(),
-      Slide10(),
+      Slide12(),//
+      Slide10(),//
     ];
     // BackButtonInterceptor.add(myInterceptor);
     super.initState();
@@ -134,16 +134,16 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 children: [
                   Column(
                     children: [
-                      UIHelper.verticalSpace(30.0),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            contents.length,
-                            (index) => buildDot(index, context),
-                          ),
-                        ),
-                      ),
+                      // UIHelper.verticalSpace(30.0),
+                      // Container(
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: List.generate(
+                      //       contents.length,
+                      //       (index) => buildDot(index, context),
+                      //     ),
+                      //   ),
+                      // ),
                       Expanded(
                         child: PageView.builder(
                           physics: new NeverScrollableScrollPhysics(),
@@ -155,13 +155,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             });
                           },
                           itemBuilder: (_, i) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 40,
-                                horizontal: 30.0,
-                              ),
-                              child: contents[i],
-                            );
+                            return contents[i];
                           },
                         ),
                       ),
