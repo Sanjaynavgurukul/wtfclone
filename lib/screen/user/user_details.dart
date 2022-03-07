@@ -127,39 +127,36 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         key: key,
         backgroundColor: AppColors.PRIMARY_COLOR,
         body: Consumer<UserController>(builder: (context, user, snapshot) {
-          return Container(
-            color: AppColors.PRIMARY_COLOR,
-            child: SafeArea(
-              child: Stack(
+          return Scaffold(
+            // color: AppColors.PRIMARY_COLOR,
+            body: SafeArea(
+              child: Column(
                 children: [
-                  Column(
-                    children: [
-                      // UIHelper.verticalSpace(30.0),
-                      // Container(
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: List.generate(
-                      //       contents.length,
-                      //       (index) => buildDot(index, context),
-                      //     ),
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: PageView.builder(
-                          physics: new NeverScrollableScrollPhysics(),
-                          controller: _controller,
-                          itemCount: contents.length,
-                          onPageChanged: (int index) {
-                            setState(() {
-                              currentIndex = index;
-                            });
-                          },
-                          itemBuilder: (_, i) {
-                            return contents[i];
-                          },
-                        ),
+
+                  // UIHelper.verticalSpace(30.0),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        contents.length,
+                        (index) => buildDot(index, context),
                       ),
-                    ],
+                    ),
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      physics: new NeverScrollableScrollPhysics(),
+                      controller: _controller,
+                      itemCount: contents.length,
+                      onPageChanged: (int index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (_, i) {
+                        return contents[i];
+                      },
+                    ),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -168,41 +165,52 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       children: [
                         currentIndex == 0
                             ? Container(
-                                height: 50,
-                              )
+                          height: 50,
+                        )
                             : Container(
-                                height: 50,
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _controller.previousPage(
-                                          duration: Duration(milliseconds: 500),
-                                          curve: Curves.easeInToLinear);
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 15),
-                                      child: Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(60),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Icon(
-                                            Icons.arrow_back_outlined,
-                                            color: AppConstants.primaryColor,
-                                          ),
-                                        ),
-                                      ),
+                          height: 50,
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: GestureDetector(
+                              onTap: () {
+                                _controller.previousPage(
+                                    duration: Duration(milliseconds: 500),
+                                    curve: Curves.easeInToLinear);
+                              },
+                              child: Padding(
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 15),
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(60),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_back_outlined,
+                                      color: AppConstants.primaryColor,
                                     ),
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                contents.length,
+                                    (index) => buildDot(index, context),
+                              ),
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: EdgeInsets.all(20),
                           child: Container(
@@ -210,7 +218,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             width: 50,
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(170)),
+                              BorderRadius.all(Radius.circular(170)),
                               color: Colors.white,
                             ),
                             child: IconButton(
@@ -220,7 +228,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 FocusScope.of(context).unfocus();
                                 if (currentIndex + 1 == contents.length) {
                                   Map<String, dynamic> res =
-                                      await user.addMember(context: context);
+                                  await user.addMember(context: context);
                                   if (res['status']) {
                                     // NavigationService.navigateTo(Routes.mainHome);
                                     context
@@ -256,17 +264,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       return;
                                     }
 
-                                  // else if()
-                                  //   if (user.gender == null &&
-                                  //       user.gender == '' && user.age != null && user.age != 0) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content:
-                                  //             new Text('Select your gender'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
+                                    // else if()
+                                    //   if (user.gender == null &&
+                                    //       user.gender == '' && user.age != null && user.age != 0) {
+                                    //     key.currentState.showSnackBar(
+                                    //       new SnackBar(
+                                    //         content:
+                                    //             new Text('Select your gender'),
+                                    //       ),
+                                    //     );
+                                    //     return;
+                                    //   }
                                   }
                                   //Body Type height weight target weight validation :D
                                   if (currentIndex == 2) {
@@ -290,7 +298,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(
                                         new SnackBar(
                                           content:
-                                              new Text('Select your a value'),
+                                          new Text('Select your a value'),
                                         ),
                                       );
                                       return;
@@ -303,7 +311,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(
                                         new SnackBar(
                                           content:
-                                              new Text('Enter your city name'),
+                                          new Text('Enter your city name'),
                                         ),
                                       );
                                       return;
@@ -326,7 +334,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(
                                         new SnackBar(
                                           content:
-                                              new Text('Select your height'),
+                                          new Text('Select your height'),
                                         ),
                                       );
                                       return;
@@ -338,7 +346,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       key.currentState.showSnackBar(
                                         new SnackBar(
                                           content:
-                                              new Text('Select your weight'),
+                                          new Text('Select your weight'),
                                         ),
                                       );
                                       return;
@@ -414,11 +422,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
   Container buildDot(int index, BuildContext context) {
     return Container(
-      height: 4,
-      width: currentIndex == index ? 30 : 20,
-      margin: EdgeInsets.only(right: 7),
+      height: 6,
+      width: 6,
+      // width: currentIndex == index ? 30 : 20,
+      // margin: EdgeInsets.only(right: 7),
+      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(100),
         color: currentIndex == index ? Colors.red : Colors.white,
       ),
     );
