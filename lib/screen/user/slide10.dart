@@ -74,12 +74,12 @@ class _Slide10State extends State<Slide10> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: item(image: 'assets/gif/upcoming.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
+                    child: item(image: 'assets/gif/eat_outline.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
                   ),
                   SizedBox(width: 20,),
                   Expanded(
                     flex: 1,
-                    child: item(image: 'assets/gif/upcoming.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
+                    child: item(image: 'assets/gif/glass-water-outline.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
                   ),
                 ],
               ),
@@ -90,12 +90,12 @@ class _Slide10State extends State<Slide10> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: item(image: 'assets/gif/upcoming.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
+                    child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
                   ),
                   SizedBox(width: 20,),
                   Expanded(
                     flex: 1,
-                    child: item(image: 'assets/gif/upcoming.gif',value: ' calories every day',count: '500',label: 'Burn'),
+                    child: item(image: 'assets/gif/burn_outline.gif',value: ' calories every day',count: '500',label: 'Burn'),
                   ),
                 ],
               )
