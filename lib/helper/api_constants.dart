@@ -104,4 +104,5 @@ class Api {
   static String getGymDetailsById({String gymId,String lat,String lng})=>'gym/getbyid?uid=$gymId&lat=$lat&long=$lng';
   static String getForceUpdate()=>'version/latest';
   static String fetchSessionDuration({String addOnId})=>'session/addon?addon=$addOnId';
+  static String checkCoupon({String coupon, String plan_type})=>'offer/code?code=$coupon&type_id=$plan_type';
 }

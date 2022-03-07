@@ -33,12 +33,14 @@ Future<dynamic> fetchData(
       'Content-Type': 'application/json; charset=UTF-8',
     };
   }
-  if (queryParams.isNotEmpty) {
-    // ignore: parameter_assignments
-    url += "?$queryParams";
-  }
+
+  // if (queryParams.isNotEmpty) {
+  //   // ignore: parameter_assignments
+  //   url += "?$queryParams";
+  // }
 
   print('checking coup api $url');
+  print('checking coup api $url $queryParams');
   final response = await http.get(
     Uri.parse(url),
     headers: requestHeaders,

@@ -8,6 +8,7 @@ import 'package:wtf/helper/social_auth_services.dart';
 
 import '../main.dart';
 import 'AppPrefs.dart';
+import 'api_constants.dart';
 
 class APIHelper {
   static const String BASE_URL = 'https://devapi.wtfup.me/';
@@ -70,12 +71,12 @@ class APIHelper {
     }
   }
 
-  static Future<ResponseData> getCoupon(String coupon) async {
+  static Future<ResponseData> getCoupon(String coupon,String plan_type) async {
     try {
       return fetchData(
         addToken: true,
         queryParams: 'code=$coupon',
-        url: BASE_URL + "offer/code",
+        url: BASE_URL + Api.checkCoupon(coupon: coupon,plan_type: plan_type),
       ).then((value) {
         if (value['status'] is bool) {
           return ResponseData(

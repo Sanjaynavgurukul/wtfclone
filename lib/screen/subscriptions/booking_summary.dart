@@ -125,7 +125,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     if (couponCodeController.text != '') {
       context
           .read<GymStore>()
-          .getCoupon(couponCodeController.text)
+          .getCoupon(couponCodeController.text,gymStore.selectedGymPlan.plan_uid)
           .then((value) {
         if (value != null) {
           print('check the apply ${value.value}');

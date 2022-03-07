@@ -884,8 +884,8 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<OfferData> getCoupon(String couponCode) async {
-    return APIHelper.getCoupon(couponCode).then((value) {
+  Future<OfferData> getCoupon(String couponCode,String plan_type) async {
+    return APIHelper.getCoupon(couponCode,plan_type).then((value) {
       if (value.isSuccessed) {
         return OfferData.fromJson(value.data[0]);
       } else {
