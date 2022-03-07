@@ -38,11 +38,12 @@ Future<dynamic> fetchData(
     url += "?$queryParams";
   }
 
+  print('checking coup api $url');
   final response = await http.get(
     Uri.parse(url),
     headers: requestHeaders,
   );
-  print(requestHeaders.toString());
+  print('checking coupon response ${requestHeaders.toString()}');
 
   if (response.statusCode == 200) {
     log(jsonDecode(response.body).toString());

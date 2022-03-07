@@ -73,6 +73,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     totalAmount = 0;
     discountAmount = 0;
     if (context.read<GymStore>().chosenOffer != null) {
+      print('chosenOffer called not null');
       if (context.read<GymStore>().chosenOffer.type == 'flat') {
         int couponValue =
             int.tryParse(context.read<GymStore>().chosenOffer.value);
@@ -81,6 +82,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
             ? int.tryParse(context.read<GymStore>().selectedEventData.price)
             : couponValue;
       } else {
+
         print('price: ${context.read<GymStore>().selectedGymPlan.plan_price}');
         print('offer val: ${context.read<GymStore>().chosenOffer.value}');
         discountAmount =
@@ -89,6 +91,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     100)
                 .truncate();
       }
+    }else{
+      print('chosenOffer called null');
     }
     totalAmount =
         int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
@@ -101,7 +105,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     totalAmount = tax +
         int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
         discountAmount;
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback ((timeStamp) {
       if (mounted) setState(() {});
     });
   }
@@ -124,10 +128,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           .getCoupon(couponCodeController.text)
           .then((value) {
         if (value != null) {
-          setState(() {
-            gymStore.setOffer(context: context, data: value);
-            print('set');
-            calculateFinalPrice();
+          print('check the apply ${value.value}');
+          gymStore.applyCoupon(context: context, data: value).then((value) {
+            setState(() {
+              print('set');
+              calculateFinalPrice();
+            });
           });
         } else {
           setState(() {
@@ -154,8 +160,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   }
 
   void removeCoupon() {
+    gymStore.removeOffer();
     setState(() {
-      gymStore.chosenOffer = null;
       couponCodeController.text = '';
       calculateFinalPrice();
     });

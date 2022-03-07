@@ -272,6 +272,16 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeOffer(){
+    chosenOffer = null;
+    notifyListeners();
+  }
+
+  Future<void> applyCoupon({BuildContext context, OfferData data})async{
+    await setOffer(context: context, data: data);
+    notifyListeners();
+  }
+
   Future<void> submitRating({BuildContext context}) async {
     showDialog(
       context: context,
