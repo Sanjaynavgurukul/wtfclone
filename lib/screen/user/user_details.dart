@@ -68,14 +68,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       ),//
       Slide1(),//
       Slide9(),//
-      Slide11(),
-      Slide2(),
-      Slide3(),
-      Slide4(),
-      Slide5(),
-      Slide6(),
+      // Slide11(),
+      // Slide2(),
+      // Slide3(),
+      // Slide4(),
+      // Slide5(),
+      // Slide6(),
       Slide7(),//
-      Slide8(),
+      // Slide8(),
       Slide12(),//
       Slide10(),//
     ];
@@ -244,28 +244,41 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   //   }
                                   // }
 
+                                  //Gender and age validation :D
                                   if (currentIndex == 1) {
-                                    if (user.gender == null ||
-                                        user.gender == '') {
-                                      key.currentState.showSnackBar(
-                                        new SnackBar(
-                                          content:
-                                              new Text('Select your gender'),
-                                        ),
-                                      );
+                                    //Checking Gender Validation :D
+                                    if(user.gender == null &&
+                                        user.gender == ''){
+                                      displaySnack('Please select gender');
+                                      return;
+                                    }else if(user.age == null || user.age == 0){
+                                      displaySnack('Please select Age!');
                                       return;
                                     }
-                                  }
 
+                                  // else if()
+                                  //   if (user.gender == null &&
+                                  //       user.gender == '' && user.age != null && user.age != 0) {
+                                  //     key.currentState.showSnackBar(
+                                  //       new SnackBar(
+                                  //         content:
+                                  //             new Text('Select your gender'),
+                                  //       ),
+                                  //     );
+                                  //     return;
+                                  //   }
+                                  }
+                                  //Body Type height weight target weight validation :D
                                   if (currentIndex == 2) {
+
+
+
                                     if (user.bodyType == null ||
                                         user.bodyType == '') {
-                                      key.currentState.showSnackBar(
-                                        new SnackBar(
-                                          content:
-                                              new Text('Select your body type'),
-                                        ),
-                                      );
+                                      displaySnack('Select your body type');
+                                      return;
+                                    }else if(user.heightFeet == null || user.heightFeet == 0){
+                                      displaySnack('Please choose your height');
                                       return;
                                     }
                                   }
@@ -391,6 +404,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
+  void displaySnack(String message){
+    key.currentState.showSnackBar(
+      new SnackBar(
+        content:
+        new Text('Select your gender'),
+      ),
+    );
+  }
   Container buildDot(int index, BuildContext context) {
     return Container(
       height: 4,
