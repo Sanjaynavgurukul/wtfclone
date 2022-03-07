@@ -49,42 +49,44 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
         title: Text('Choose Your Plan'),
       ),
       body: Consumer<GymStore>(
-        builder: (context, store, child) => store.selectedGymPlans != null
-            ? store.selectedGymPlans.data != null &&
-            store.selectedGymPlans.data.isNotEmpty
-            ? Container(
-          child: ListView(
-            children: [
-              ListTile(
-                  title: Text(
-                      'One Membership for all your fitness need')),
-              ListView.builder(
-                  itemCount: store.selectedGymPlans.data.length,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(
-                      left: 32, right: 32, top: 18, bottom: 54),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    GymPlanData data =
-                    store.selectedGymPlans.data[index];
-                    bool r = data.is_recomended == 1;
-                    PlanColor color =
-                    PlanColor.getColorList()[index];
-                    return prizeItem(
-                        recomended: r,
-                        color: color,
-                        data: data,
-                        index: index);
-                  })
-            ],
-          ),
-        )
-            : Center(
-          child: Text(
-            'No Plans found',
-          ),
-        )
-            : Loading(),
+        builder: (context, store, child){
+          return store.selectedGymPlans != null
+              ? store.selectedGymPlans.data != null &&
+              store.selectedGymPlans.data.isNotEmpty
+              ? Container(
+            child: ListView(
+              children: [
+                ListTile(
+                    title: Text(
+                        'One Membership for all your fitness need')),
+                ListView.builder(
+                    itemCount: store.selectedGymPlans.data.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(
+                        left: 32, right: 32, top: 18, bottom: 54),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      GymPlanData data =
+                      store.selectedGymPlans.data[index];
+                      bool r = data.is_recomended == 1;
+                      PlanColor color =
+                      PlanColor.getColorList()[index];
+                      return prizeItem(
+                          recomended: r,
+                          color: color,
+                          data: data,
+                          index: index);
+                    })
+              ],
+            ),
+          )
+              : Center(
+            child: Text(
+              'No Plans found',
+            ),
+          )
+              : Loading();
+        }
       ),
     );
   }
@@ -207,6 +209,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   void onPressBook(int index) async {
     print('press called -----');
     context.read<GymStore>().selectedStartingDate = null;
+    context.read<GymStore>().chosenOffer = null;
     // int days = e.planName ==
     //         'Half yearly'
     //     ? 6 * 30 + 3

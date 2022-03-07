@@ -232,7 +232,6 @@ class _SearchScreenState extends State<SearchScreen>
                     // ),
                   ],
                 ),
-// Search Column
                 SizedBox(
                   height: 25.0,
                 ),
@@ -351,3 +350,5 @@ class _SearchScreenState extends State<SearchScreen>
     // TODO: implement onAddSubscriptionSuccess
   }
 }
+
+
