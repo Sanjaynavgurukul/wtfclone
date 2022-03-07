@@ -10,6 +10,9 @@ import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 
 import '../../main.dart';
+import 'package:numberpicker/numberpicker.dart';
+
+import 'dart:math' as math;
 
 class Slide9 extends StatefulWidget {
   @override
@@ -18,6 +21,8 @@ class Slide9 extends StatefulWidget {
 
 class _Slide9State extends State<Slide9> {
   String bodyType = '';
+
+
   List<Map<String, String>> types = [
     {
       'type': 'Lean',
@@ -60,6 +65,11 @@ class _Slide9State extends State<Slide9> {
     super.initState();
   }
 
+  List<String> tallList = ['in cm','in inches'];
+  List<String> weightList = ['in kg','in pound'];
+  String tallLabel;
+  String weightLabel;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserController>(
@@ -99,6 +109,27 @@ class _Slide9State extends State<Slide9> {
                                 });
                               }))
                           .toList()),
+                )
+              ],
+            ),
+            SizedBox(height: 12,),
+            ExpansionTileCard(
+              elevation: 0,
+              baseColor: Color(0xff922224),
+              expandedColor: Color(0xff922224),
+              trailing: _childPopup(),
+              title: Text('Choose your body type',
+                  style: TextStyle(color: Colors.white)),
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xff292929),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8))),
+                  padding: EdgeInsets.all(12),
+                  width: double.infinity,
+                  child: (tallLabel ?? tallList[0]) == tallList[0] ?Height() :HeightCm(),
                 )
               ],
             )
@@ -231,5 +262,268 @@ class _Slide9State extends State<Slide9> {
         ],
       ),
     );
+  }
+
+
+  Widget _childPopup() => PopupMenuButton<String>(
+    itemBuilder: (context) => tallList.map((e) => PopupMenuItem(
+      value: e,
+      onTap: (){
+        tallLabel = e;
+        setState(() {
+
+        });
+      },
+      child: Text(
+        "$e",
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w700),
+      ),
+    )).toList(),
+    child: Container(
+      child: Text(tallLabel??tallList[0]),
+    ),
+  );
+}
+
+class Height extends StatefulWidget {
+  Height({Key key}) : super(key: key);
+
+  @override
+  _HeightState createState() => _HeightState();
+}
+
+class _HeightState extends State<Height> {
+  int _currentIntValue = 160;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<UserController>(builder: (context, user, snapshot) {
+        return Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: <Widget>[
+    NumberPicker(
+      textStyle: TextStyle(
+        fontSize: 22,
+        color: Colors.white,
+      ),
+      selectedTextStyle: TextStyle(
+        fontSize: 45,
+        color: Color(0xff922224),
+        fontWeight: FontWeight.bold,
+      ),
+      itemHeight: 60,
+      value: _currentIntValue,
+      minValue: 0,
+      maxValue: 200,
+      step: 1,
+      haptics: true,
+      onChanged: (value){
+        setState(() {
+          _currentIntValue = value;
+          // user.setValue(heightFeet: value);
+        });
+      },
+    ),
+    SizedBox(height: 10),
+  ],
+);
+    });
+  }
+}
+
+class HeightCm extends StatefulWidget {
+  HeightCm({Key key}) : super(key: key);
+
+  @override
+  _HeightCmState createState() => _HeightCmState();
+}
+
+class _HeightCmState extends State<HeightCm> {
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Consumer<UserController>(builder: (context, user, snapshot) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            UIHelper.verticalSpace(30.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Feet',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                UIHelper.horizontalSpace(80.0),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Inches',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            DecimalNumberPicker(
+                textStyle: TextStyle(
+                  fontSize: 22,
+                  color: Colors.white54,
+                ),
+                selectedTextStyle: TextStyle(
+                  fontSize: 45,
+                  color: Color(0xff922224),
+                  fontWeight: FontWeight.bold,
+                ),
+                itemHeight: 60,
+                value: user.heightFeet,
+                minValue: 1,
+                maxValue: 9,
+                haptics: true,
+                decimalPlaces: 2,
+                decimalTextMapper: (text) {
+                  print('text: $text');
+                  int dec = int.tryParse(text);
+                  return dec < 12 ? text : '';
+                },
+                onChanged: (value) {
+                  setState(() {
+                    user.setValue(heightFeet: value);
+                  });
+                }
+
+              /*onChanged: (value) => setState(() => _currentDoubleValue = value
+
+                ),*/
+            ),
+          ],
+        );
+      }),
+    );
+  }
+}
+
+class DecimalNumberPicker extends StatelessWidget {
+  final int minValue;
+  final int maxValue;
+  final double value;
+  final ValueChanged<double> onChanged;
+  final int itemCount;
+  final double itemHeight;
+  final double itemWidth;
+  final Axis axis;
+  final TextStyle textStyle;
+  final TextStyle selectedTextStyle;
+  final bool haptics;
+  final TextMapper integerTextMapper;
+  final TextMapper decimalTextMapper;
+  final bool integerZeroPad;
+
+  /// Decoration to apply to central box where the selected integer value is placed
+  final Decoration integerDecoration;
+
+  /// Decoration to apply to central box where the selected decimal value is placed
+  final Decoration decimalDecoration;
+
+  /// Inidcates how many decimal places to show
+  /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
+  final int decimalPlaces;
+
+  const DecimalNumberPicker({
+    Key key,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.value,
+    @required this.onChanged,
+    this.itemCount = 3,
+    this.itemHeight = 50,
+    this.itemWidth = 100,
+    this.axis = Axis.vertical,
+    this.textStyle,
+    this.selectedTextStyle,
+    this.haptics = false,
+    this.decimalPlaces = 1,
+    this.integerTextMapper,
+    this.decimalTextMapper,
+    this.integerZeroPad = false,
+    this.integerDecoration,
+    this.decimalDecoration,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMax = value.floor() == maxValue;
+    print('val: $value ------ max: ${maxValue}');
+    final decimalValue = isMax
+        ? 0
+        : ((value - value.floorToDouble()) * math.pow(10, decimalPlaces))
+        .round() ??
+        0;
+    final doubleMaxValue = isMax ? 0 : math.pow(10, decimalPlaces).toInt() - 1;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        NumberPicker(
+          minValue: 3,
+          maxValue: 7,
+          value: value.floor(),
+          onChanged: _onIntChanged,
+          itemCount: itemCount,
+          itemHeight: itemHeight,
+          itemWidth: itemWidth,
+          textStyle: textStyle,
+          selectedTextStyle: selectedTextStyle,
+          haptics: haptics,
+          zeroPad: integerZeroPad,
+          textMapper: integerTextMapper,
+          decoration: integerDecoration,
+        ),
+        NumberPicker(
+          minValue: 0,
+          maxValue: 11,
+          value: decimalValue,
+          onChanged: _onDoubleChanged,
+          // itemCount: 11,
+          itemHeight: itemHeight,
+          itemWidth: itemWidth,
+          textStyle: textStyle,
+          selectedTextStyle: selectedTextStyle,
+          haptics: haptics,
+          textMapper: decimalTextMapper,
+          decoration: decimalDecoration,
+        ),
+      ],
+    );
+  }
+
+  void _onIntChanged(int intValue) {
+    final newValue =
+    (value - value.floor() + intValue).clamp(minValue, maxValue);
+    onChanged(newValue.toDouble());
+  }
+
+  void _onDoubleChanged(int doubleValue) {
+    final decimalPart = double.parse(
+        (doubleValue * math.pow(10, -decimalPlaces))
+            .toStringAsFixed(decimalPlaces));
+    onChanged(value.floor() + decimalPart);
   }
 }
