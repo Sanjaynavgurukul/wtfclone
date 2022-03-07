@@ -279,9 +279,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   }
                                   //Body Type height weight target weight validation :D
                                   if (currentIndex == 2) {
-
-
-
                                     if (user.bodyType == null ||
                                         user.bodyType == '') {
                                       displaySnack('Select your body type');

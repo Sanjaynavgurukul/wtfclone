@@ -87,6 +87,7 @@ class _Slide9State extends State<Slide9> {
             children: [
               Text('Let us know more about you' ,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
               SizedBox(height: 40,),
+              //Body Type Card :D
               ExpansionTileCard(
                 elevation: 0,
                 baseColor: Color(0xff922224),
@@ -124,6 +125,7 @@ class _Slide9State extends State<Slide9> {
                 ],
               ),
               SizedBox(height: 12,),
+              //Your height Card :D
               ExpansionTileCard(
                 elevation: 0,
                 baseColor: Color(0xff292929),
@@ -145,6 +147,7 @@ class _Slide9State extends State<Slide9> {
                 ],
               ),
               SizedBox(height: 12,),
+              //Your weight card :D
               ExpansionTileCard(
                 elevation: 0,
                 baseColor: Color(0xff292929),
@@ -180,7 +183,7 @@ class _Slide9State extends State<Slide9> {
                       onChanged: (value){
                         setState(() {
                           weightInKg = value;
-                          // user.setValue(heightFeet: value);
+                          user.setValue(weight: '${weightInKg.toString()} kg');
                         });
                       },
                     ):NumberPicker(
@@ -203,6 +206,7 @@ class _Slide9State extends State<Slide9> {
                         setState(() {
                           weightInPound = value;
                           // user.setValue(heightFeet: value);
+                          user.setValue(weight: '${weightInPound.toString()} lbs');
                         });
                       },
                     ),
@@ -210,6 +214,7 @@ class _Slide9State extends State<Slide9> {
                 ],
               ),
               SizedBox(height: 12,),
+              //Target weight card :D
               ExpansionTileCard(
                 elevation: 0,
                 baseColor: Color(0xff292929),
@@ -245,7 +250,8 @@ class _Slide9State extends State<Slide9> {
                       onChanged: (value){
                         setState(() {
                           targetWeightInKg = value;
-                          // user.setValue(heightFeet: value);
+                          user.setValue(targetWeight: '${targetWeightInKg.toString()} kg');
+
                         });
                       },
                     ):NumberPicker(
@@ -267,6 +273,7 @@ class _Slide9State extends State<Slide9> {
                       onChanged: (value){
                         setState(() {
                           targetWeightInPound = value;
+                          user.setValue(targetWeight: '${targetWeightInPound.toString()} lbs');
                           // user.setValue(heightFeet: value);
                         });
                       },
@@ -485,7 +492,7 @@ class _HeightState extends State<Height> {
       onChanged: (value){
         setState(() {
           _currentIntValue = value;
-          // user.setValue(heightFeet: value);
+          user.setValue(heightFeet: '$value'+'cm');
         });
       },
     ),
@@ -568,11 +575,11 @@ class _HeightCmState extends State<HeightCm> {
                   return dec < 12 ? text : '';
                 },
                 onChanged: (value) {
+                  user.setValue(heightFeet: value.toString());
                   setState(() {
-                    user.setValue(heightFeet: value);
+                    // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
                   });
                 }
-
               /*onChanged: (value) => setState(() => _currentDoubleValue = value
 
                 ),*/

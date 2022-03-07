@@ -105,7 +105,7 @@ class _Slide7State extends State<Slide7> {
                           onChanged: (double newValue) {
                             setState(() {
                               user.setValue(
-                                goalWeight: newValue,
+                                goalWeight: newValue.toString(),
                               );
                             });
                           },
@@ -477,7 +477,7 @@ class _Slide7State extends State<Slide7> {
             onChanged: (double newValue) {
               setState(() {
                 user.setValue(
-                  goalWeight: newValue,
+                  goalWeight: newValue.toString(),
                 );
               });
             },

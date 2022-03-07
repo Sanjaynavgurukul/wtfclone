@@ -251,7 +251,7 @@ class _HeightCmState extends State<HeightCm> {
                 },
                 onChanged: (value) {
                   setState(() {
-                    user.setValue(heightFeet: value);
+                    user.setValue(heightFeet: value.toString());
                   });
                 }
 
