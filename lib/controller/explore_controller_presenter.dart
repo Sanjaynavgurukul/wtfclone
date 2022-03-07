@@ -63,9 +63,9 @@ class ExplorePresenter {
     );
   }
 
-  searchGym(String name) async {
+  searchGym({String name, String lat, String lng}) async {
     print("get Gym Details 1");
-    api.searchGym(name).then(
+    api.searchGym(name:name,lng: lng,lat: lat).then(
       (GymSearchModel model) {
         if (model.status) {
           _view.onsearchGymSuccess(model);

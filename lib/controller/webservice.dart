@@ -1141,17 +1141,15 @@ class RestDatasource {
   }
 
   // Search Gym
-  Future<GymSearchModel> searchGym(String name) async {
+  Future<GymSearchModel> searchGym(
+      {String name, String lat, String lng}) async {
     String token = locator<AppPrefs>().token.getValue();
-    print('URL : $BASE_URL${Api.SEARCH_GYM} \n body: ${{'name': name}}');
+
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil.post(BASE_URL + Api.SEARCH_GYM, headers: mapHeader, body: {
-      "name": name,
-    }).then((dynamic res) {
+    return _netUtil.get(BASE_URL + Api.SEARCH_GYM(lat: lat,lng: lng,query: name), headers: mapHeader).then((dynamic res) {
       print(res.toString());
-
       return GymSearchModel.fromJson(res);
     });
   }

@@ -9,7 +9,8 @@ class Api {
 
   static String getGyms(String lat, String lng) =>
       'gym?status=active&lat=$lat&long=$lng';
-  static const String SEARCH_GYM = 'gym/search';
+  // static const String SEARCH_GYM = 'gym/search';
+  static String SEARCH_GYM({String lat, String lng, String query}) => 'gym/nearestgym?lat=$lat&long=$lng&name=$query';
   static const String GYM_DETAILS = 'gym/getbyid?uid=';
   static const String EVENTS = 'event?type=new';
   static const String getWorkoutCalculations = 'workoutmapping/cal';
