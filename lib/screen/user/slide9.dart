@@ -21,6 +21,12 @@ class Slide9 extends StatefulWidget {
 
 class _Slide9State extends State<Slide9> {
   String bodyType = '';
+  int weightInKg = 60;
+  int weightInPound = 166;
+
+  int targetWeightInKg = 70;
+  int targetWeightInPound = 170;
+
 
 
   List<Map<String, String>> types = [
@@ -67,6 +73,7 @@ class _Slide9State extends State<Slide9> {
 
   List<String> tallList = ['in cm','in inches'];
   List<String> weightList = ['in kg','in pound'];
+
   String tallLabel;
   String weightLabel;
 
@@ -115,11 +122,11 @@ class _Slide9State extends State<Slide9> {
             SizedBox(height: 12,),
             ExpansionTileCard(
               elevation: 0,
-              baseColor: Color(0xff922224),
+              baseColor: Color(0xff292929),
               expandedColor: Color(0xff922224),
-              trailing: _childPopup(),
-              title: Text('Choose your body type',
-                  style: TextStyle(color: Colors.white)),
+              trailing: _heightChildPopup(),
+              title: Text('Enter your height',
+                  style: TextStyle(color: Colors.white,fontSize: 12)),
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -130,6 +137,136 @@ class _Slide9State extends State<Slide9> {
                   padding: EdgeInsets.all(12),
                   width: double.infinity,
                   child: (tallLabel ?? tallList[0]) == tallList[0] ?Height() :HeightCm(),
+                )
+              ],
+            ),
+            SizedBox(height: 12,),
+            ExpansionTileCard(
+              elevation: 0,
+              baseColor: Color(0xff292929),
+              expandedColor: Color(0xff922224),
+              trailing: _weightChildPopup(),
+              title: Text('Enter your weight',
+                  style: TextStyle(color: Colors.white,fontSize: 12)),
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xff292929),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8))),
+                  padding: EdgeInsets.all(12),
+                  width: double.infinity,
+                  child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+                    textStyle: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      fontSize: 45,
+                      color: Color(0xff922224),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    itemHeight: 60,
+                    value: weightInKg,
+                    minValue: 0,
+                    maxValue: 200,
+                    step: 1,
+                    haptics: true,
+                    onChanged: (value){
+                      setState(() {
+                        weightInKg = value;
+                        // user.setValue(heightFeet: value);
+                      });
+                    },
+                  ):NumberPicker(
+                    textStyle: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      fontSize: 45,
+                      color: Color(0xff922224),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    itemHeight: 60,
+                    value: weightInPound,
+                    minValue: 0,
+                    maxValue: 600,
+                    step: 1,
+                    haptics: true,
+                    onChanged: (value){
+                      setState(() {
+                        weightInPound = value;
+                        // user.setValue(heightFeet: value);
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 12,),
+            ExpansionTileCard(
+              elevation: 0,
+              baseColor: Color(0xff292929),
+              expandedColor: Color(0xff922224),
+              trailing: _weightChildPopup(),
+              title: Text('Target weight',
+                  style: TextStyle(color: Colors.white,fontSize: 12)),
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Color(0xff292929),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8))),
+                  padding: EdgeInsets.all(12),
+                  width: double.infinity,
+                  child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+                    textStyle: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      fontSize: 45,
+                      color: Color(0xff922224),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    itemHeight: 60,
+                    value: targetWeightInKg,
+                    minValue: 0,
+                    maxValue: 200,
+                    step: 1,
+                    haptics: true,
+                    onChanged: (value){
+                      setState(() {
+                        targetWeightInKg = value;
+                        // user.setValue(heightFeet: value);
+                      });
+                    },
+                  ):NumberPicker(
+                    textStyle: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      fontSize: 45,
+                      color: Color(0xff922224),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    itemHeight: 60,
+                    value: targetWeightInPound,
+                    minValue: 0,
+                    maxValue: 600,
+                    step: 1,
+                    haptics: true,
+                    onChanged: (value){
+                      setState(() {
+                        targetWeightInPound = value;
+                        // user.setValue(heightFeet: value);
+                      });
+                    },
+                  ),
                 )
               ],
             )
@@ -265,7 +402,8 @@ class _Slide9State extends State<Slide9> {
   }
 
 
-  Widget _childPopup() => PopupMenuButton<String>(
+  Widget _heightChildPopup() => PopupMenuButton<String>(
+    color: Color(0xff922224),
     itemBuilder: (context) => tallList.map((e) => PopupMenuItem(
       value: e,
       onTap: (){
@@ -282,6 +420,26 @@ class _Slide9State extends State<Slide9> {
     )).toList(),
     child: Container(
       child: Text(tallLabel??tallList[0]),
+    ),
+  );
+  Widget _weightChildPopup() => PopupMenuButton<String>(
+    color: Color(0xff922224),
+    itemBuilder: (context) => weightList.map((e) => PopupMenuItem(
+      value: e,
+      onTap: (){
+        weightLabel = e;
+        setState(() {
+
+        });
+      },
+      child: Text(
+        "$e",
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w700),
+      ),
+    )).toList(),
+    child: Container(
+      child: Text(weightLabel??weightList[0]),
     ),
   );
 }
