@@ -156,7 +156,7 @@ class _SearchBarState extends State<SearchBar> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: TextFormField(
-                // enabled: false,
+
                 onTap: () {
                   FocusScope.of(context).unfocus();
                   store.determinePosition();
