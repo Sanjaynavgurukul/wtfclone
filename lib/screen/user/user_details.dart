@@ -134,15 +134,15 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 children: [
 
                   // UIHelper.verticalSpace(30.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        contents.length,
-                        (index) => buildDot(index, context),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: List.generate(
+                  //       contents.length,
+                  //       (index) => buildDot(index, context),
+                  //     ),
+                  //   ),
+                  // ),
                   Expanded(
                     child: PageView.builder(
                       physics: new NeverScrollableScrollPhysics(),
@@ -202,8 +202,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         ),
                         Expanded(
                           child: Container(
+                            padding: EdgeInsets.only(left: currentIndex == 0 ? 18:0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: currentIndex == 0?MainAxisAlignment.start:MainAxisAlignment.center,
                               children: List.generate(
                                 contents.length,
                                     (index) => buildDot(index, context),
