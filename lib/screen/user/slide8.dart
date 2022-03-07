@@ -17,6 +17,8 @@ class _Slide8State extends State<Slide8> {
   bool isSmoking = false;
   bool isDrinking = false;
 
+  int radioValue = -1;
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +76,10 @@ class _Slide8State extends State<Slide8> {
       "display": "Relationship stress",
       "value": "Relationship stress",
     },
+    {
+      "display": " Any Other",
+      "value": " Any Other",
+    }
   ];
 
   // {
