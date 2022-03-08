@@ -132,16 +132,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             body: SafeArea(
               child: Column(
                 children: [
-                  // UIHelper.verticalSpace(30.0),
-                  // Container(
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: List.generate(
-                  //       contents.length,
-                  //       (index) => buildDot(index, context),
-                  //     ),
-                  //   ),
-                  // ),
                   Expanded(
                     child: PageView.builder(
                       physics: new NeverScrollableScrollPhysics(),

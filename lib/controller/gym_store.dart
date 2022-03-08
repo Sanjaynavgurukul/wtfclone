@@ -65,6 +65,7 @@ import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/home/jitsi_meeting.dart';
@@ -89,6 +90,8 @@ class GymStore extends ChangeNotifier {
   WhyChooseWtf whyChooseWtf;
 
   GymAddOn allLiveClasses;
+
+  PreambleModel preambleModel;
 
   GymAddOn allAddonClasses;
 
@@ -2243,5 +2246,10 @@ class GymStore extends ChangeNotifier {
     bool response =
         await RestDatasource().verifyGymOwnerOtp(gymId: gymId, otp: otp);
     return response;
+  }
+
+  void serPreambleValue(PreambleModel data){
+    preambleModel = data;
+    notifyListeners();
   }
 }
