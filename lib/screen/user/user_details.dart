@@ -398,11 +398,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   Container buildDot(int index, BuildContext context) {
     return Container(
-      height: 4,
-      width: currentIndex == index ? 30 : 20,
-      margin: EdgeInsets.only(right: 7),
+      height: 6,
+      width: 6,
+      // width: currentIndex == index ? 30 : 20,
+      // margin: EdgeInsets.only(right: 7),
+      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(100),
         color: currentIndex == index ? Colors.red : Colors.white,
       ),
     );
