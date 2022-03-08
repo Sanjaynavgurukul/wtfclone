@@ -17,8 +17,6 @@ class _Slide8State extends State<Slide8> {
   bool isSmoking = false;
   bool isDrinking = false;
 
-  int radioValue = -1;
-
   @override
   void initState() {
     super.initState();
@@ -76,10 +74,6 @@ class _Slide8State extends State<Slide8> {
       "display": "Relationship stress",
       "value": "Relationship stress",
     },
-    {
-      "display": " Any Other",
-      "value": " Any Other",
-    }
   ];
 
   // {
@@ -120,69 +114,69 @@ class _Slide8State extends State<Slide8> {
                       ...datSource
                           .map(
                             (e) => Opacity(
-                              opacity: selectedConditions.contains('None')
-                                  ? 0.5
-                                  : 1.0,
-                              child: InkWell(
-                                onTap: () async {
-                                  if (!selectedConditions.contains('None')) {
-                                    if (selectedConditions
-                                        .contains(e['value'])) {
-                                      setState(() {
-                                        selectedConditions.remove(e['value']);
-                                      });
-                                      user.existingDisease.remove(e['value']);
-                                    } else {
-                                      setState(() {
-                                        selectedConditions.add(e['value']);
-                                        user.existingDisease.add(e['value']);
-                                      });
-                                    }
-                                  }
-                                  // user.existingDisease
-                                  //     .addAll(selectedConditions);
-                                  // user.existingDisease.clear();
-                                },
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * .38,
-                                  padding: const EdgeInsets.all(12.0),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        selectedConditions.contains(e['value'])
-                                            ? AppConstants.primaryColor
-                                            : Colors.transparent,
-                                    border: Border.all(
-                                      color: selectedConditions
-                                              .contains(e['value'])
-                                          ? AppConstants.primaryColor
-                                          : Colors.white,
-                                    ),
-                                  ),
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 4.0,
-                                    vertical: 6.0,
-                                  ),
-                                  child: Text(
-                                    e['value'],
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
+                          opacity: selectedConditions.contains('None')
+                              ? 0.5
+                              : 1.0,
+                          child: InkWell(
+                            onTap: () async {
+                              if (!selectedConditions.contains('None')) {
+                                if (selectedConditions
+                                    .contains(e['value'])) {
+                                  setState(() {
+                                    selectedConditions.remove(e['value']);
+                                  });
+                                  user.existingDisease.remove(e['value']);
+                                } else {
+                                  setState(() {
+                                    selectedConditions.add(e['value']);
+                                    user.existingDisease.add(e['value']);
+                                  });
+                                }
+                              }
+                              // user.existingDisease
+                              //     .addAll(selectedConditions);
+                              // user.existingDisease.clear();
+                            },
+                            child: Container(
+                              width:
+                              MediaQuery.of(context).size.width * .38,
+                              padding: const EdgeInsets.all(12.0),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color:
+                                selectedConditions.contains(e['value'])
+                                    ? AppConstants.primaryColor
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: selectedConditions
+                                      .contains(e['value'])
+                                      ? AppConstants.primaryColor
+                                      : Colors.white,
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 4.0,
+                                vertical: 6.0,
+                              ),
+                              child: Text(
+                                e['value'],
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ),
-                          )
+                          ),
+                        ),
+                      )
                           .toList(),
                       Opacity(
                         opacity:
-                            selectedConditions.contains('None') ? 0.5 : 1.0,
+                        selectedConditions.contains('None') ? 0.5 : 1.0,
                         child: InkWell(
                           onTap: () async {
                             if (!selectedConditions.contains('None')) {

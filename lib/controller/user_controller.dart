@@ -20,17 +20,17 @@ class UserController extends ChangeNotifier {
   int age = 25;
   double heightFeet = locator<AppPrefs>().memberData.getValue().height != null
       ? double.parse(locator<AppPrefs>()
-              .memberData
-              .getValue()
-              .height
-              .contains("'")
-          ? '${locator<AppPrefs>().memberData.getValue().height.split("'")[0]}'
-          : locator<AppPrefs>().memberData.getValue().height)
+      .memberData
+      .getValue()
+      .height
+      .contains("'")
+      ? '${locator<AppPrefs>().memberData.getValue().height.split("'")[0]}'
+      : locator<AppPrefs>().memberData.getValue().height)
       : 5.0;
   int inches = locator<AppPrefs>().memberData.getValue().height != null &&
-          locator<AppPrefs>().memberData.getValue().height.contains("'")
+      locator<AppPrefs>().memberData.getValue().height.contains("'")
       ? int.parse(
-          locator<AppPrefs>().memberData.getValue().height.split("'")[1])
+      locator<AppPrefs>().memberData.getValue().height.split("'")[1])
       : 5;
   int weight = locator<AppPrefs>().memberData.getValue().weight != null
       ? int.parse(locator<AppPrefs>().memberData.getValue().weight)
@@ -43,9 +43,9 @@ class UserController extends ChangeNotifier {
       ? locator<AppPrefs>().memberData.getValue().bodyType
       : '';
   String activeType =
-      locator<AppPrefs>().memberData.getValue().howActive != null
-          ? locator<AppPrefs>().memberData.getValue().howActive
-          : '';
+  locator<AppPrefs>().memberData.getValue().howActive != null
+      ? locator<AppPrefs>().memberData.getValue().howActive
+      : '';
   bool isSmoking = locator<AppPrefs>().memberData.getValue().isSmoking != null
       ? locator<AppPrefs>().memberData.getValue().isSmoking == 'true'
       : false;
@@ -53,14 +53,14 @@ class UserController extends ChangeNotifier {
       ? locator<AppPrefs>().memberData.getValue().isDrinking == 'true'
       : false;
   List<String> existingDisease =
-      locator<AppPrefs>().memberData.getValue().existingDisease != null
-          ? locator<AppPrefs>()
-              .memberData
-              .getValue()
-              .existingDisease
-              .split(',')
-              .toList()
-          : [];
+  locator<AppPrefs>().memberData.getValue().existingDisease != null
+      ? locator<AppPrefs>()
+      .memberData
+      .getValue()
+      .existingDisease
+      .split(',')
+      .toList()
+      : [];
   String type1 = locator<AppPrefs>().type1.getValue() != null
       ? locator<AppPrefs>().type1.getValue()
       : '';
@@ -73,11 +73,11 @@ class UserController extends ChangeNotifier {
     String gender,
     String address,
     int age,
-    String heightFeet,
+    double heightFeet,
     int inches,
-    String weight,
-    String targetWeight,
-    String goalWeight,
+    int weight,
+    int targetWeight,
+    var goalWeight,
     String bodyType,
     String activeType,
     bool isSmoking,
@@ -99,7 +99,7 @@ class UserController extends ChangeNotifier {
     this.isSmoking = isSmoking == null ? this.isSmoking : isSmoking;
     this.isDrinking = isDrinking == null ? this.isDrinking : isDrinking;
     this.existingDisease =
-        existingDisease == null ? this.existingDisease : existingDisease;
+    existingDisease == null ? this.existingDisease : existingDisease;
     this.activeType = activeType == null ? this.activeType : activeType;
     this.type1 = type1 == null ? this.type1 : type1;
     this.type2 = type2 == null ? this.type2 : type2;
@@ -214,14 +214,14 @@ class UserUpdateController extends ChangeNotifier {
       ? locator<AppPrefs>().memberData.getValue().isDrinking == 'true'
       : false;
   List<String> existingDisease =
-      locator<AppPrefs>().memberData.getValue() != null
-          ? locator<AppPrefs>()
-              .memberData
-              .getValue()
-              .existingDisease
-              .split(',')
-              .toList()
-          : [];
+  locator<AppPrefs>().memberData.getValue() != null
+      ? locator<AppPrefs>()
+      .memberData
+      .getValue()
+      .existingDisease
+      .split(',')
+      .toList()
+      : [];
   String type1 = locator<AppPrefs>().type1.getValue() != null
       ? locator<AppPrefs>().type1.getValue()
       : '';
@@ -260,7 +260,7 @@ class UserUpdateController extends ChangeNotifier {
     this.isSmoking = isSmoking == null ? this.isSmoking : isSmoking;
     this.isDrinking = isDrinking == null ? this.isDrinking : isDrinking;
     this.existingDisease =
-        existingDisease == null ? this.existingDisease : existingDisease;
+    existingDisease == null ? this.existingDisease : existingDisease;
     this.activeType = activeType == null ? this.activeType : activeType;
     this.type1 = type1 == null ? this.type1 : type1;
     this.type2 = type2 == null ? this.type2 : type2;

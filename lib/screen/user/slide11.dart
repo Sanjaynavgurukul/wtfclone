@@ -160,7 +160,7 @@ class _Slide11State extends State<Slide11> {
               padding: const EdgeInsets.all(6.0),
               decoration: BoxDecoration(
                 color:
-                    isSelected ? AppConstants.primaryColor : Colors.transparent,
+                isSelected ? AppConstants.primaryColor : Colors.transparent,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: isSelected

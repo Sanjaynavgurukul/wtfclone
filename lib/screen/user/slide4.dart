@@ -251,14 +251,14 @@ class _HeightCmState extends State<HeightCm> {
                 },
                 onChanged: (value) {
                   setState(() {
-                    user.setValue(heightFeet: value.toString());
+                    user.setValue(heightFeet: value);
                   });
                 }
 
-                /*onChanged: (value) => setState(() => _currentDoubleValue = value
+              /*onChanged: (value) => setState(() => _currentDoubleValue = value
 
                 ),*/
-                ),
+            ),
           ],
         );
       }),
@@ -322,8 +322,8 @@ class DecimalNumberPicker extends StatelessWidget {
     final decimalValue = isMax
         ? 0
         : ((value - value.floorToDouble()) * math.pow(10, decimalPlaces))
-                .round() ??
-            0;
+        .round() ??
+        0;
     final doubleMaxValue = isMax ? 0 : math.pow(10, decimalPlaces).toInt() - 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -363,7 +363,7 @@ class DecimalNumberPicker extends StatelessWidget {
 
   void _onIntChanged(int intValue) {
     final newValue =
-        (value - value.floor() + intValue).clamp(minValue, maxValue);
+    (value - value.floor() + intValue).clamp(minValue, maxValue);
     onChanged(newValue.toDouble());
   }
 

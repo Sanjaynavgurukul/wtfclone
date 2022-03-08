@@ -31,16 +31,16 @@ class GenderItem extends StatelessWidget {
                 ),
                 gradient: isSelected
                     ? LinearGradient(
-                        colors: [
-                          // Colors.transparent,
-                          Colors.red.withOpacity(0.01),
-                          Colors.red.withOpacity(0.25),
-                          Colors.red.withOpacity(0.5),
-                          Colors.red,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      )
+                  colors: [
+                    // Colors.transparent,
+                    Colors.red.withOpacity(0.01),
+                    Colors.red.withOpacity(0.25),
+                    Colors.red.withOpacity(0.5),
+                    Colors.red,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )
                     : null),
           ),
         ),

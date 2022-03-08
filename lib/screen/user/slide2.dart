@@ -70,67 +70,67 @@ class _Slide2State extends State<Slide2> {
                   width: MediaQuery.of(context).size.width,
                   child: store.currentAddress != null
                       ? TextField(
-                          controller: _place,
-                          cursorColor: AppColors.TEXT_DARK,
-                          onChanged: (val) {
-                            user.setValue(address: val);
-                          },
-                          onTap: () async {
-                            showPlacePicker(user);
-                            // Prediction p = await PlacesAutocomplete.show(
-                            //   context: context,
-                            //   apiKey: Helper.googleMapKey,
-                            //   mode: Mode.overlay, // Mode.fullscreen
-                            //   onError: onError,
-                            //   language: "en",
-                            //   components: [
-                            //     new Component(Component.country, "en")
-                            //   ],
-                            // );
-                            // if (p != null) {
-                            //   displayPrediction(p, user);
-                            // }
-                          },
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.white,
-                          ),
-                          decoration: InputDecoration(
-                            helperText: "Search locality",
-                            helperStyle: TextStyle(
-                              color: Colors.white,
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFFFFF)),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffffffff)),
-                            ),
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffffffff)),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () => _place.clear(),
-                              icon: Icon(
-                                Icons.clear,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 12.0,
-                          ),
-                          child: Text(
-                            'Fetching location, Please wait...',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                          ),
+                    controller: _place,
+                    cursorColor: AppColors.TEXT_DARK,
+                    onChanged: (val) {
+                      user.setValue(address: val);
+                    },
+                    onTap: () async {
+                      showPlacePicker(user);
+                      // Prediction p = await PlacesAutocomplete.show(
+                      //   context: context,
+                      //   apiKey: Helper.googleMapKey,
+                      //   mode: Mode.overlay, // Mode.fullscreen
+                      //   onError: onError,
+                      //   language: "en",
+                      //   components: [
+                      //     new Component(Component.country, "en")
+                      //   ],
+                      // );
+                      // if (p != null) {
+                      //   displayPrediction(p, user);
+                      // }
+                    },
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                    ),
+                    decoration: InputDecoration(
+                      helperText: "Search locality",
+                      helperStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFFFFFFF)),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffffffff)),
+                      ),
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffffffff)),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () => _place.clear(),
+                        icon: Icon(
+                          Icons.clear,
+                          color: Color(0xffffffff),
                         ),
+                      ),
+                    ),
+                  )
+                      : Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 12.0,
+                    ),
+                    child: Text(
+                      'Fetching location, Please wait...',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -158,19 +158,19 @@ class _Slide2State extends State<Slide2> {
     // Handle the result in your way
   }
 
-  // Future<Null> displayPrediction(Prediction p, UserController user) async {
-  //   if (p != null) {
-  //     // get detail (lat/lng)
-  //     GoogleMapsPlaces _places = GoogleMapsPlaces(
-  //       apiKey: Helper.googleMapKey,
-  //       apiHeaders: await GoogleApiHeaders().getHeaders(),
-  //     );
-  //     PlacesDetailsResponse detail =
-  //         await _places.getDetailsByPlaceId(p.placeId);
-  //     setState(() {
-  //       _place.text = detail.result.formattedAddress;
-  //       user.setValue(address: _place.value.text);
-  //     });
-  //   }
-  // }
+// Future<Null> displayPrediction(Prediction p, UserController user) async {
+//   if (p != null) {
+//     // get detail (lat/lng)
+//     GoogleMapsPlaces _places = GoogleMapsPlaces(
+//       apiKey: Helper.googleMapKey,
+//       apiHeaders: await GoogleApiHeaders().getHeaders(),
+//     );
+//     PlacesDetailsResponse detail =
+//         await _places.getDetailsByPlaceId(p.placeId);
+//     setState(() {
+//       _place.text = detail.result.formattedAddress;
+//       user.setValue(address: _place.value.text);
+//     });
+//   }
+// }
 }

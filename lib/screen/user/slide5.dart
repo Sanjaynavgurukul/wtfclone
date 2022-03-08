@@ -127,7 +127,7 @@ class _WeightState extends State<Weight> {
             step: 1,
             haptics: true,
             onChanged: (value) {
-              user.setValue(weight: value.toString());
+              user.setValue(weight: value);
             },
 
             /* onChanged: (value) => setState(() => _currentIntValue = value),*/

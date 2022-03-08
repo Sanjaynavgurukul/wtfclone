@@ -57,7 +57,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
     contents = <Widget>[
       Slide0(
         subTitle:
-            'To help us serve you better and give you a wholesome experience, please keep updating your fitness profile on weekly basis.',
+        'To help us serve you better and give you a wholesome experience, please keep updating your fitness profile on weekly basis.',
         title: 'Update your Fitness Profile',
       ),
       Slide1(),
@@ -103,7 +103,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
                           contents.length,
-                          (index) => buildDot(index, context),
+                              (index) => buildDot(index, context),
                         ),
                       ),
                     ),
@@ -137,41 +137,41 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                     children: [
                       currentIndex == 0
                           ? Container(
-                              height: 50,
-                            )
+                        height: 50,
+                      )
                           : Container(
-                              height: 50,
-                              child: Align(
-                                alignment: Alignment.bottomLeft,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _controller.previousPage(
-                                        duration: Duration(milliseconds: 500),
-                                        curve: Curves.easeInToLinear);
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15),
-                                    child: Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(60),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.arrow_back_outlined,
-                                          color: AppConstants.primaryColor,
-                                        ),
-                                      ),
-                                    ),
+                        height: 50,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              _controller.previousPage(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeInToLinear);
+                            },
+                            child: Padding(
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 15),
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(60),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_back_outlined,
+                                    color: AppConstants.primaryColor,
                                   ),
                                 ),
                               ),
                             ),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.all(20),
                         child: Container(
@@ -179,7 +179,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                           width: 50,
                           decoration: BoxDecoration(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(170)),
+                            BorderRadius.all(Radius.circular(170)),
                             color: Colors.white,
                           ),
                           child: IconButton(
@@ -189,7 +189,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                               FocusScope.of(context).unfocus();
                               if (currentIndex + 1 == contents.length) {
                                 Map<String, dynamic> res =
-                                    await user.updateMember(context: context);
+                                await user.updateMember(context: context);
                                 if (res['status']) {
                                   // NavigationService.navigateTo(Routes.mainHome);
                                   context
@@ -230,7 +230,7 @@ class _UpdateFitnessProfileState extends State<UpdateFitnessProfile> {
                                     key.currentState.showSnackBar(
                                       new SnackBar(
                                         content:
-                                            new Text('Select your body type'),
+                                        new Text('Select your body type'),
                                       ),
                                     );
                                     return;

@@ -32,7 +32,6 @@ class _Slide12State extends State<Slide12> {
     GymStore store = Provider.of<GymStore>(context);
     UserController user = Provider.of<UserController>(context);
     return Container(
-      padding: EdgeInsets.only(left: 18,right: 18,top: 40),
       child: ListView(
         children: [
           Center(
@@ -148,79 +147,79 @@ class _Slide12State extends State<Slide12> {
               children: [
                 ...store.dprefType2.data
                     .map((e) => InkWell(
-                          onTap: () {
-                            setState(() {
-                              type2 = e.uid;
-                              user.setValue(type2: type2);
-                              locator<AppPrefs>().type2.setValue(type2);
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(6.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: SvgPicture.asset(
-                                    type2 == e.uid
-                                        ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
-                                        : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
-                                  ),
-                                ),
-                                UIHelper.verticalSpace(10.0),
-                                Flexible(
-                                  child: Text(
-                                    e.value,
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                  onTap: () {
+                    setState(() {
+                      type2 = e.uid;
+                      user.setValue(type2: type2);
+                      locator<AppPrefs>().type2.setValue(type2);
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(6.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: SvgPicture.asset(
+                            type2 == e.uid
+                                ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
+                                : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
+                          ),
+                        ),
+                        UIHelper.verticalSpace(10.0),
+                        Flexible(
+                          child: Text(
+                            e.value,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     SizedBox(height: 30),
-                          //     Container(
-                          //       height: 15,
-                          //       width: 15,
-                          //       decoration: BoxDecoration(
-                          //         border: Border.all(
-                          //             color: type2 != store.dprefType2.data[index].uid
-                          //                 ? Color(0xFFCBD4DE)
-                          //                 : AppConstants.primaryColor),
-                          //         borderRadius: BorderRadius.all(
-                          //           Radius.circular(30),
-                          //         ),
-                          //       ),
-                          //       child: Container(
-                          //         margin: EdgeInsets.all(2),
-                          //         width: 5,
-                          //         height: 5,
-                          //         decoration: BoxDecoration(
-                          //           color: type2 != store.dprefType2.data[index].uid
-                          //               ? Colors.transparent
-                          //               : AppConstants.primaryColor,
-                          //           borderRadius: BorderRadius.all(Radius.circular(30)),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     SizedBox(width: 10),
-                          //     Text(
-                          //       store.dprefType2.data[index].value,
-                          //       style: TextStyle(
-                          //         fontSize: 14.0,
-                          //         color: Colors.white,
-                          //         fontWeight: FontWeight.bold,
-                          //       ),
-                          //     ),
-                          //     SizedBox(height: 30),
-                          //   ],
-                          // ),
-                        ))
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     SizedBox(height: 30),
+                  //     Container(
+                  //       height: 15,
+                  //       width: 15,
+                  //       decoration: BoxDecoration(
+                  //         border: Border.all(
+                  //             color: type2 != store.dprefType2.data[index].uid
+                  //                 ? Color(0xFFCBD4DE)
+                  //                 : AppConstants.primaryColor),
+                  //         borderRadius: BorderRadius.all(
+                  //           Radius.circular(30),
+                  //         ),
+                  //       ),
+                  //       child: Container(
+                  //         margin: EdgeInsets.all(2),
+                  //         width: 5,
+                  //         height: 5,
+                  //         decoration: BoxDecoration(
+                  //           color: type2 != store.dprefType2.data[index].uid
+                  //               ? Colors.transparent
+                  //               : AppConstants.primaryColor,
+                  //           borderRadius: BorderRadius.all(Radius.circular(30)),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 10),
+                  //     Text(
+                  //       store.dprefType2.data[index].value,
+                  //       style: TextStyle(
+                  //         fontSize: 14.0,
+                  //         color: Colors.white,
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     SizedBox(height: 30),
+                  //   ],
+                  // ),
+                ))
                     .toList(),
               ],
             ),
