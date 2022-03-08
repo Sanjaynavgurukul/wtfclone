@@ -18,6 +18,7 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/my_schedule_model.dart';
+import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/screen/booking_summary/loader_screen.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/home/categories.dart';
@@ -58,6 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppColors.BACK_GROUND_BG,
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+          store.preambleModel = new PreambleModel();
           NavigationService.pushName(Routes.userDetail);
         },
         child:Icon(Icons.add)

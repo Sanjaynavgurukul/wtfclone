@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -64,10 +65,10 @@ class _Slide9State extends State<Slide9> {
 
   @override
   void initState() {
-    final user = Provider.of<UserController>(context, listen: false);
-    if (user.bodyType != null && user.bodyType != '') {
-      bodyType = user.bodyType;
-    }
+    // final user = Provider.of<UserController>(context, listen: false);
+    // if (user.bodyType != null && user.bodyType != '') {
+    //   bodyType = user.bodyType;
+    // }
     super.initState();
   }
 
@@ -79,6 +80,286 @@ class _Slide9State extends State<Slide9> {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<GymStore>(
+      builder: (context, user, child) => SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: 40,left: 18,right: 18),
+          child: Column(
+            children: [
+              Text('Let us know more about you' ,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
+              SizedBox(height: 40,),
+              //Body Type Card :D
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff922224),
+                expandedColor: Color(0xff922224),
+                title: Text('Choose your body type',
+                    style: TextStyle(color: Colors.white)),
+                subtitle: user.preambleModel.bodyType == null ? null : Text(user.preambleModel.bodyType??'',style: TextStyle(color: Colors.white),),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        runSpacing: 0.0,
+                        spacing: 12.0,
+                        children: types
+                            .map((e) => newUI(
+                                data: e,
+                                selected: user.preambleModel.bodyType == null ? false:user.preambleModel.bodyType == e['type'],
+                                onClick: () {
+                                  // print('clicked value');
+                                  setState(() {
+                                    bodyType = e['type'];
+                                    user.preambleModel.bodyType = bodyType;
+                                    // user.setValue(bodyType: e['type']);
+                                  });
+                                }))
+                            .toList()),
+                  )
+                ],
+              ),
+              SizedBox(height: 12,),
+              //Your height Card :D
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff292929),
+                expandedColor: Color(0xff922224),
+                trailing: _heightChildPopup(),
+                title: Text('Enter your height',
+                    style: TextStyle(color: Colors.white,fontSize: 12)),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: (tallLabel ?? tallList[0]) == tallList[0] ?Height() :Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        UIHelper.verticalSpace(30.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                'Feet',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            UIHelper.horizontalSpace(80.0),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                'Inches',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        DecimalNumberPicker(
+                            textStyle: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white54,
+                            ),
+                            selectedTextStyle: TextStyle(
+                              fontSize: 45,
+                              color: Color(0xff922224),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            itemHeight: 60,
+                            value: double.parse(user.preambleModel.heightInFeet)??5.4,
+                            minValue: 1,
+                            maxValue: 9,
+                            haptics: true,
+                            decimalPlaces: 2,
+                            decimalTextMapper: (text) {
+                              print('text: $text');
+                              int dec = int.tryParse(text);
+                              return dec < 12 ? text : '';
+                            },
+                            onChanged: (value) {
+                              user.preambleModel.heightInFeet = '$value';
+                              // user.setValue(heightFeet: value.toString());
+                              setState(() {
+                                // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
+                              });
+                            }
+                          /*onChanged: (value) => setState(() => _currentDoubleValue = value
+
+                ),*/
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              // SizedBox(height: 12,),
+              // //Your weight card :D
+              // ExpansionTileCard(
+              //   elevation: 0,
+              //   baseColor: Color(0xff292929),
+              //   expandedColor: Color(0xff922224),
+              //   trailing: _weightChildPopup(),
+              //   title: Text('Enter your weight',
+              //       style: TextStyle(color: Colors.white,fontSize: 12)),
+              //   children: [
+              //     Container(
+              //       decoration: BoxDecoration(
+              //           color: Color(0xff292929),
+              //           borderRadius: BorderRadius.only(
+              //               bottomLeft: Radius.circular(8),
+              //               bottomRight: Radius.circular(8))),
+              //       padding: EdgeInsets.all(12),
+              //       width: double.infinity,
+              //       child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+              //         textStyle: TextStyle(
+              //           fontSize: 22,
+              //           color: Colors.white,
+              //         ),
+              //         selectedTextStyle: TextStyle(
+              //           fontSize: 45,
+              //           color: Color(0xff922224),
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         itemHeight: 60,
+              //         value: weightInKg,
+              //         minValue: 0,
+              //         maxValue: 200,
+              //         step: 1,
+              //         haptics: true,
+              //         onChanged: (value){
+              //           setState(() {
+              //             weightInKg = value;
+              //             user.setValue(weight: '${weightInKg.toString()} kg');
+              //           });
+              //         },
+              //       ):NumberPicker(
+              //         textStyle: TextStyle(
+              //           fontSize: 22,
+              //           color: Colors.white,
+              //         ),
+              //         selectedTextStyle: TextStyle(
+              //           fontSize: 45,
+              //           color: Color(0xff922224),
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         itemHeight: 60,
+              //         value: weightInPound,
+              //         minValue: 0,
+              //         maxValue: 600,
+              //         step: 1,
+              //         haptics: true,
+              //         onChanged: (value){
+              //           setState(() {
+              //             weightInPound = value;
+              //             // user.setValue(heightFeet: value);
+              //             user.setValue(weight: '${weightInPound.toString()} lbs');
+              //           });
+              //         },
+              //       ),
+              //     )
+              //   ],
+              // ),
+              // SizedBox(height: 12,),
+              // //Target weight card :D
+              // ExpansionTileCard(
+              //   elevation: 0,
+              //   baseColor: Color(0xff292929),
+              //   expandedColor: Color(0xff922224),
+              //   trailing: _weightChildPopup(),
+              //   title: Text('Target weight',
+              //       style: TextStyle(color: Colors.white,fontSize: 12)),
+              //   children: [
+              //     Container(
+              //       decoration: BoxDecoration(
+              //           color: Color(0xff292929),
+              //           borderRadius: BorderRadius.only(
+              //               bottomLeft: Radius.circular(8),
+              //               bottomRight: Radius.circular(8))),
+              //       padding: EdgeInsets.all(12),
+              //       width: double.infinity,
+              //       child: (weightLabel ?? weightList[0]) == weightList[0] ?NumberPicker(
+              //         textStyle: TextStyle(
+              //           fontSize: 22,
+              //           color: Colors.white,
+              //         ),
+              //         selectedTextStyle: TextStyle(
+              //           fontSize: 45,
+              //           color: Color(0xff922224),
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         itemHeight: 60,
+              //         value: targetWeightInKg,
+              //         minValue: 0,
+              //         maxValue: 200,
+              //         step: 1,
+              //         haptics: true,
+              //         onChanged: (value){
+              //           setState(() {
+              //             targetWeightInKg = value;
+              //             user.setValue(targetWeight: '${targetWeightInKg.toString()} kg');
+              //
+              //           });
+              //         },
+              //       ):NumberPicker(
+              //         textStyle: TextStyle(
+              //           fontSize: 22,
+              //           color: Colors.white,
+              //         ),
+              //         selectedTextStyle: TextStyle(
+              //           fontSize: 45,
+              //           color: Color(0xff922224),
+              //           fontWeight: FontWeight.bold,
+              //         ),
+              //         itemHeight: 60,
+              //         value: targetWeightInPound,
+              //         minValue: 0,
+              //         maxValue: 600,
+              //         step: 1,
+              //         haptics: true,
+              //         onChanged: (value){
+              //           setState(() {
+              //             targetWeightInPound = value;
+              //             user.setValue(targetWeight: '${targetWeightInPound.toString()} lbs');
+              //             // user.setValue(heightFeet: value);
+              //           });
+              //         },
+              //       ),
+              //     )
+              //   ],
+              // )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget so(BuildContext context){
     return Consumer<UserController>(
       builder: (context, user, child) => SingleChildScrollView(
         child: Container(
@@ -111,15 +392,15 @@ class _Slide9State extends State<Slide9> {
                         spacing: 12.0,
                         children: types
                             .map((e) => newUI(
-                                data: e,
-                                selected: bodyType == e['type'],
-                                onClick: () {
-                                  // print('clicked value');
-                                  setState(() {
-                                    bodyType = e['type'];
-                                    user.setValue(bodyType: e['type']);
-                                  });
-                                }))
+                            data: e,
+                            selected: bodyType == e['type'],
+                            onClick: () {
+                              // print('clicked value');
+                              setState(() {
+                                bodyType = e['type'];
+                                user.setValue(bodyType: e['type']);
+                              });
+                            }))
                             .toList()),
                   )
                 ],
@@ -468,7 +749,7 @@ class _HeightState extends State<Height> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserController>(builder: (context, user, snapshot) {
+    return Consumer<GymStore>(builder: (context, user, snapshot) {
         return Column(
   mainAxisAlignment: MainAxisAlignment.center,
   crossAxisAlignment: CrossAxisAlignment.center,
@@ -492,7 +773,8 @@ class _HeightState extends State<Height> {
       onChanged: (value){
         setState(() {
           _currentIntValue = value;
-          user.setValue(heightFeet: '$value'+'cm');
+          user.preambleModel.heightInCm = '$value';
+          // user.setValue(heightFeet: '$value'+'cm');
         });
       },
     ),
@@ -517,7 +799,7 @@ class _HeightCmState extends State<HeightCm> {
       onWillPop: () async {
         return false;
       },
-      child: Consumer<UserController>(builder: (context, user, snapshot) {
+      child: Consumer<GymStore>(builder: (context, user, snapshot) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -564,7 +846,7 @@ class _HeightCmState extends State<HeightCm> {
                   fontWeight: FontWeight.bold,
                 ),
                 itemHeight: 60,
-                value: user.heightFeet,
+                value: double.parse(user.preambleModel.heightInFeet)??5.4,
                 minValue: 1,
                 maxValue: 9,
                 haptics: true,
@@ -575,7 +857,8 @@ class _HeightCmState extends State<HeightCm> {
                   return dec < 12 ? text : '';
                 },
                 onChanged: (value) {
-                  user.setValue(heightFeet: value.toString());
+                  user.preambleModel.heightInFeet = '$value';
+                  // user.setValue(heightFeet: value.toString());
                   setState(() {
                     // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
                   });

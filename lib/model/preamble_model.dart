@@ -6,7 +6,8 @@ class PreambleModel {
   int age = 24; //24 is the default age value
 
   String bodyType;
-  String height;
+  String heightInCm = '160';
+  String heightInFeet = '5.4';
   String weight;
   String targetWeight;
 
@@ -31,7 +32,8 @@ class PreambleModel {
     this.weight =  json["weight"];
     this.age = json["age"];
     this.name = json["name"];
-    this.height = json["height"];
+    this.heightInCm = json["heightInCm"];
+    this.heightInFeet = json["heightInFeet"];
     this.bodyType = json["bodyType"];
     this.dietPreference = json["dietPreference"];
     this.existingDisease = json["existingDisease"];
@@ -47,7 +49,8 @@ class PreambleModel {
     "weight": data.weight,
     "age": data.age,
     "name": data.name,
-    "height": data.height,
+    "heightInCm": data.heightInCm,
+    "heightInFeet": data.heightInFeet,
     "bodyType": data.bodyType,
     "dietPreference": data.dietPreference,
     "existingDisease": data.existingDisease,
