@@ -1,6 +1,6 @@
 class PreambleModel {
   String name;
-  String gender;
+  String gender = 'Male';
 
   // String address;
   int age = 24; //24 is the default age value
@@ -24,35 +24,23 @@ class PreambleModel {
   // String type1;
   // String type2;
 
-  PreambleModel(
-      {this.targetWeight,
-      this.weight,
-      this.age, //
-      this.name,
-      this.height,
-      this.bodyType,
-      this.dietPreference,
-      this.existingDisease,
-      this.fitnessGoal,
-      this.gender,
-      this.goalWeight,
-      this.isDrinking,
-      this.isSmoking});
+  PreambleModel();
 
-  factory PreambleModel.fromJson(Map<String, dynamic> json) => PreambleModel(
-      targetWeight: json["targetWeight"],
-      weight: json["weight"],
-      age: json["age"],
-      name: json["name"],
-      height: json["height"],
-      bodyType: json["bodyType"],
-      dietPreference: json["dietPreference"],
-      existingDisease: json["existingDisease"],
-      fitnessGoal: json['fitnessGoal'],
-      gender: json['gender'] ?? '',
-      goalWeight: json['goalWeight'] ?? '',
-      isDrinking: json['isDrinking'] ?? false,
-      isSmoking: json['isSmoking'] ?? false);
+  PreambleModel.fromJson(Map<String, dynamic> json){
+    this.targetWeight =  json["targetWeight"];
+    this.weight =  json["weight"];
+    this.age = json["age"];
+    this.name = json["name"];
+    this.height = json["height"];
+    this.bodyType = json["bodyType"];
+    this.dietPreference = json["dietPreference"];
+    this.existingDisease = json["existingDisease"];
+    this.fitnessGoal =json['fitnessGoal'];
+    this.gender =json['gender'] ?? '';
+    this.goalWeight = json['goalWeight'] ?? '';
+    this.isDrinking = json['isDrinking'] ?? false;
+    this.isSmoking = json['isSmoking'] ?? false;
+  }
 
   Map<String, dynamic> toJson(PreambleModel data) => {
     "targetWeight": data.targetWeight,

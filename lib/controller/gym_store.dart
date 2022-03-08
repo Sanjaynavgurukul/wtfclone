@@ -91,7 +91,7 @@ class GymStore extends ChangeNotifier {
 
   GymAddOn allLiveClasses;
 
-  PreambleModel preambleModel;
+  PreambleModel preambleModel = new PreambleModel();
 
   GymAddOn allAddonClasses;
 
@@ -2247,6 +2247,7 @@ class GymStore extends ChangeNotifier {
         await RestDatasource().verifyGymOwnerOtp(gymId: gymId, otp: otp);
     return response;
   }
+
 
   void serPreambleValue(PreambleModel data){
     preambleModel = data;

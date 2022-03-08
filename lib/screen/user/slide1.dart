@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -26,15 +27,17 @@ class _Slide1State extends State<Slide1> {
   @override
   void initState() {
     super.initState();
-    final user = Provider.of<UserController>(context, listen: false);
-    if (user.gender != null && user.gender != '') {
-      _value = genderList.indexOf(user.gender);
-    }
+    // final user = Provider.of<GymStore>(context, listen: false);
+
+    // user.preambleModel.gende
+    // if (user.gender != null && user.gender != '') {
+    //   _value = genderList.indexOf(user.gender);
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserController>(
+    return Consumer<GymStore>(
       builder: (context, user, snapshot) {
         return SingleChildScrollView(
           child: Container(
@@ -52,17 +55,17 @@ class _Slide1State extends State<Slide1> {
                           InkWell(
                             onTap:(){
                               setState(() {
-                                user.gender = genderList[0];
-                                locator<AppPrefs>().gender.setValue(genderList[0]);
+                                user.preambleModel.gender = genderList[0];
+                                // locator<AppPrefs>().gender.setValue(genderList[0]);
                               });
-                              },
+                            },
                             child: Container(
                               padding: EdgeInsets.all(20),
                               width: double.infinity,
                               decoration:BoxDecoration(
-                                borderRadius:BorderRadius.all(Radius.circular(8)),
-                                color: Color(0xff922224),
-                                border:Border.all(width: 2,color:user.gender == genderList[0] ? Colors.white:Color(0xff922224))
+                                  borderRadius:BorderRadius.all(Radius.circular(8)),
+                                  color: Color(0xff922224),
+                                  border:Border.all(width: 2,color:user.preambleModel.gender == genderList[0] ? Colors.white:Color(0xff922224))
                               ),child: SvgPicture.asset(
                                 'assets/svg/male_filter.svg',
                                 color: Colors.white,
@@ -83,7 +86,7 @@ class _Slide1State extends State<Slide1> {
                           InkWell(
                             onTap:(){
                               setState(() {
-                                user.gender = genderList[1];
+                                user.preambleModel.gender = genderList[1];
                                 locator<AppPrefs>().gender.setValue(genderList[1]);
                               });
                             },
@@ -93,7 +96,7 @@ class _Slide1State extends State<Slide1> {
                               decoration:BoxDecoration(
                                   borderRadius:BorderRadius.all(Radius.circular(8)),
                                   color: Color(0xff922224),
-                                  border:Border.all(width: 2,color:user.gender == genderList[1] ? Colors.white:Color(0xff922224))
+                                  border:Border.all(width: 2,color:user.preambleModel.gender == genderList[1] ? Colors.white:Color(0xff922224))
                               ),child: SvgPicture.asset(
                                 'assets/svg/female_gender.svg',
                                 color: Colors.white,
@@ -113,10 +116,10 @@ class _Slide1State extends State<Slide1> {
                         children: [
                           InkWell(
                             onTap:(){
-                             setState(() {
-                               user.gender = genderList[2];
-                               locator<AppPrefs>().gender.setValue(genderList[2]);
-                             });
+                              setState(() {
+                                user.preambleModel.gender = genderList[2];
+                                locator<AppPrefs>().gender.setValue(genderList[2]);
+                              });
                             },
                             child: Container(
                               padding: EdgeInsets.all(20),
@@ -124,7 +127,7 @@ class _Slide1State extends State<Slide1> {
                               decoration:BoxDecoration(
                                   borderRadius:BorderRadius.all(Radius.circular(8)),
                                   color: Color(0xff922224),
-                                  border:Border.all(width: 2,color:user.gender == genderList[2] ? Colors.white:Color(0xff922224))
+                                  border:Border.all(width: 2,color:user.preambleModel.gender == genderList[2] ? Colors.white:Color(0xff922224))
                               ),child: SvgPicture.asset(
                                 'assets/svg/other_gender.svg',
                                 color: Colors.white,
@@ -156,14 +159,15 @@ class _Slide1State extends State<Slide1> {
                   //   color: AppConstants.primaryColor.withOpacity(0.6),
                   // ),
                   itemHeight: 60,
-                  value: user.age,
+                  value: user.preambleModel.age,
                   minValue: 1,
                   maxValue: 100,
                   step: 1,
                   haptics: true,
                   onChanged: (value) {
                     setState(() {
-                      user.setValue(age: value);
+                      // user.setValue(age: value);
+                      user.preambleModel.age = value;
                     });
                   },
                 ),
@@ -174,7 +178,6 @@ class _Slide1State extends State<Slide1> {
       },
     );
   }
-
 
   Widget oldUI(UserController user){
     return Column(
@@ -254,74 +257,3 @@ class _Slide1State extends State<Slide1> {
     );
   }
 }
-//
-// @override
-// Widget build(BuildContext context) {
-//   return Consumer<UserController>(
-//     builder: (context, user, snapshot) {
-//       return Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: [
-//           Text("Select your Gender ?",
-//               style: TextStyle(fontSize: 22.0, color: Colors.white)),
-//           SizedBox(height: 20),
-//           Container(
-//             width: MediaQuery.of(context).size.width,
-//             child: DropdownButton(
-//               iconSize: 28,
-//               isExpanded: true,
-//               dropdownColor: AppColors.TEXT_DARK,
-//               value: _value == null ? null : genderList[_value],
-//               style: TextStyle(color: Colors.green),
-//               items: genderList.map((String value) {
-//                 return new DropdownMenuItem<String>(
-//                   value: value,
-//                   child: new Text(value,
-//                       style: TextStyle(color: Colors.red, fontSize: 16)),
-//                 );
-//               }).toList(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _value = genderList.indexOf(value);
-//                   print(value);
-//                   user.setValue(gender: value);
-//                 });
-//               },
-//             ),
-//           ),
-//           SizedBox(
-//             height: 40.0,
-//           ),
-//           Text("Select your Body Type ?",
-//               style: TextStyle(fontSize: 22.0, color: Colors.white)),
-//           SizedBox(height: 20),
-//           Container(
-//             width: MediaQuery.of(context).size.width,
-//             child: DropdownButton(
-//               iconSize: 28,
-//               isExpanded: true,
-//               dropdownColor: AppColors.TEXT_DARK,
-//               value: _value2 == null ? null : bodyTypes[_value2],
-//               style: TextStyle(color: Colors.green),
-//               items: bodyTypes.map((String value) {
-//                 return new DropdownMenuItem<String>(
-//                   value: value,
-//                   child: new Text(value,
-//                       style: TextStyle(color: Colors.red, fontSize: 16)),
-//                 );
-//               }).toList(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _value2 = bodyTypes.indexOf(value);
-//                   print(value);
-//                   user.setValue(bodyType: value);
-//                 });
-//               },
-//             ),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
