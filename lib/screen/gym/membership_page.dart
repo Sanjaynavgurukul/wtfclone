@@ -1856,7 +1856,7 @@ class BookPTWidget extends StatelessWidget {
                 0
         ? Container()
         : gymStore.selectedGymAddOns.data
-                    .where((element) => element.isPt == '1')
+                    .where((element) => element.isPt == 1)
                     .toList()
                     .length >
                 0
@@ -1959,6 +1959,7 @@ class BookPTWidget extends StatelessWidget {
                 height: 0,
               );
   }
+
 }
 
 class BookLiveWidget extends StatelessWidget {
@@ -2311,15 +2312,15 @@ class GymLiveWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, gymStore, child) => gymStore.selectedGymAddOns.data != null?getData(gymStore.selectedGymAddOns.data).isNotEmpty
-      // gymStore.selectedGymAddOns != null
-      //     ? gymStore.selectedGymAddOns.data != null &&
-      //             gymStore.selectedGymAddOns.data.isNotEmpty &&
-      //             gymStore.selectedGymAddOns.data
-      //                     .where((e) => e.isLive)
-      //                     .toList()
-      //                     .length >
-      //                 0
+      builder: (context, gymStore, child) =>gymStore.selectedGymAddOns!=null&& gymStore.selectedGymAddOns.data != null&&gymStore.selectedGymAddOns.data.isNotEmpty?getData(gymStore.selectedGymAddOns.data).isNotEmpty
+              // gymStore.selectedGymAddOns != null
+              //     ? gymStore.selectedGymAddOns.data != null &&
+              //             gymStore.selectedGymAddOns.data.isNotEmpty &&
+              //             gymStore.selectedGymAddOns.data
+              //                     .where((e) => e.isLive)
+              //                     .toList()
+              //                     .length >
+              //                 0
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
