@@ -54,6 +54,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   //
   //   return true;
   // }
+
   List<Widget> contents = [];
 
   @override

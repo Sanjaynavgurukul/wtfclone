@@ -6,8 +6,8 @@ class PreambleModel {
   int age = 24; //24 is the default age value
 
   String bodyType;
-  String heightInCm = '160';
-  String heightInFeet = '5.4';
+  int heightInCm = 160;
+  double heightInFeet = 5.0;
   String weight;
   String targetWeight;
 

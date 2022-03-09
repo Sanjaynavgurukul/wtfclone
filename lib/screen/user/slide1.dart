@@ -27,12 +27,6 @@ class _Slide1State extends State<Slide1> {
   @override
   void initState() {
     super.initState();
-    // final user = Provider.of<GymStore>(context, listen: false);
-
-    // user.preambleModel.gende
-    // if (user.gender != null && user.gender != '') {
-    //   _value = genderList.indexOf(user.gender);
-    // }
   }
 
   @override
