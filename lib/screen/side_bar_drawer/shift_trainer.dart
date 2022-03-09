@@ -17,11 +17,13 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
   String newTrainer = '';
   final textController = TextEditingController();
   GymStore gymStore;
+  final GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
     return Scaffold(
+      key: key,
       backgroundColor: AppColors.BACK_GROUND_BG,
       appBar: AppBar(
         backgroundColor: AppConstants.primaryColor,
@@ -138,7 +140,16 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
             ),
             UIHelper.verticalSpace(20.0),
             ElevatedButton(
-              onPressed: () => _modalBottomSheetMenu(context),
+              onPressed: () => gymStore.newTrainers == null ?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Please  buy subscription',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )): _modalBottomSheetMenu(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
