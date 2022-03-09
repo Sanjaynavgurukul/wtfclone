@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/fluid_slider.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -13,11 +14,7 @@ class Slide7 extends StatefulWidget {
 }
 
 class _Slide7State extends State<Slide7> {
-  String other = 'Any Other';
-  bool isSmoking = false;
-  bool isDrinking = false;
-
-  int radioCheck = -0;
+  static String other = 'Other';
 
   List<String> selectedConditions = [];
   final formKey = GlobalKey<FormState>();
@@ -63,50 +60,61 @@ class _Slide7State extends State<Slide7> {
       "display": "Loneliness",
       "value": "Loneliness",
     },
+    {
+      "display": "Other",
+      "value": 'other',
+    },
+    {
+      "display": "None of above",
+      "value": 'none',
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserController>(
+    return Consumer<GymStore>(
       builder: (context, user, snapshot) {
         return Scaffold(
           body: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 40,left: 18,right: 18),
+                  padding: EdgeInsets.only(top: 40, left: 18, right: 18),
                   color: Color(0xff922224),
                   child: Column(
                     children: [
                       Text(
-                        "How fast do you want to ${user.targetWeight > user.weight ? 'gain your weight' : 'lose your weight'}?",
+                        "How fast do you want to ${user.preambleModel.gainingWeight ? 'gain your weight' : 'lose your weight'}?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(height: 40,),
+                      SizedBox(
+                        height: 40,
+                      ),
                       Center(
                         child: Text(
-                          '${user.goalWeight.toStringAsFixed(2)} kg / week',
+                          '${user.preambleModel.goalWeight.toStringAsFixed(2)} kg / week',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 22,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Padding(
-                        padding: EdgeInsets.only(left: 12,right: 12,bottom: 20),
+                        padding:
+                            EdgeInsets.only(left: 12, right: 12, bottom: 20),
                         child: FluidSlider(
-                          value: user.goalWeight,
+                          value: user.preambleModel.goalWeight,
                           thumbColor: Color(0xff922224),
                           onChanged: (double newValue) {
                             setState(() {
-                              user.setValue(
-                                goalWeight: newValue.toString(),
-                              );
+                              user.preambleModel.goalWeight = newValue;
                             });
                           },
                           min: 0.0,
@@ -120,7 +128,8 @@ class _Slide7State extends State<Slide7> {
                     ],
                   ),
                 ),
-                SizedBox(height:40),
+
+                SizedBox(height: 40),
                 Center(
                   child: Text(
                     "Do you have any special medical condition(s)?",
@@ -131,198 +140,281 @@ class _Slide7State extends State<Slide7> {
                     ),
                   ),
                 ),
-                SizedBox(height:20),
+                SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.only(left: 18,right: 18),
+                  padding: EdgeInsets.only(left: 18, right: 18),
                   child: Wrap(
-                    children: [
-                      ...datSource
-                          .map(
-                            (e) => Opacity(
-                          opacity: selectedConditions.contains('None')
-                              ? 0.5
-                              : 1.0,
+                      alignment: WrapAlignment.start,
+                      runAlignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      runSpacing: 0.0,
+                      spacing: 12.0,
+                      children: datSource.map((data) {
+                        String value = data['value'];
+                        String name = data['display'];
+                        bool selected =
+                            user.preambleModel.dietPreference.contains(value) ??
+                                false;
+                        bool isOther =
+                            user.preambleModel.dietPreference.contains('other');
+                        bool none =
+                            user.preambleModel.dietPreference.contains('none');
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12),
                           child: InkWell(
                             onTap: () async {
-                              if (!selectedConditions.contains('None')) {
-                                if (selectedConditions
-                                    .contains(e['value'])) {
-                                  setState(() {
-                                    selectedConditions.remove(e['value']);
-                                  });
-                                  user.existingDisease.remove(e['value']);
-                                } else {
-                                  setState(() {
-                                    selectedConditions.add(e['value']);
-                                    user.existingDisease.add(e['value']);
-                                  });
-                                }
-                              }
-                              // user.existingDisease
-                              //     .addAll(selectedConditions);
-                              // user.existingDisease.clear();
-                            },
-                            child: Container(
-                              width:
-                              MediaQuery.of(context).size.width * .38,
-                              padding: const EdgeInsets.all(12.0),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color:
-                                selectedConditions.contains(e['value'])
-                                    ? AppConstants.primaryColor
-                                    : Colors.transparent,
-                                border: Border.all(
-                                  color: selectedConditions
-                                      .contains(e['value'])
-                                      ? AppConstants.primaryColor
-                                      : Colors.white,
-                                ),
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                                vertical: 6.0,
-                              ),
-                              child: Text(
-                                e['value'],
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                          .toList(),
-                      Opacity(
-                        opacity:
-                        selectedConditions.contains('None') ? 0.5 : 1.0,
-                        child: InkWell(
-                          onTap: () async {
-                            if (!selectedConditions.contains('None')) {
-                              if (selectedConditions.contains(other)) {
-                                setState(() {
-                                  selectedConditions.remove(other);
-                                  other = 'Any Other';
-                                });
-                                user.existingDisease.clear();
-                                user.existingDisease.addAll(selectedConditions);
-                              } else {
-                                String value = await showDialog<String>(
+                              if (value == 'other') {
+                                await showDialog<String>(
                                   context: context,
                                   barrierDismissible: true,
                                   builder: (context) => CustomTextDialog(),
-                                );
-                                if (value != null) {
-                                  setState(() {
-                                    other = value;
-                                  });
-                                }
-                                print('other:: $other');
-                                setState(() {
-                                  selectedConditions.add(other);
-                                  user.existingDisease.add(other);
+                                ).then((v) {
+                                  if(v != null){
+                                    user.preambleModel.dietPreference = [];
+                                    user.preambleModel.otherDietPreference = v;
+                                    user.preambleModel.dietPreference.add(value);
+                                    setState(() {});
+                                  }
                                 });
+                              } else if (value == 'none') {
+                                user.preambleModel.dietPreference = [];
+                                user.preambleModel.dietPreference.add(value);
+                                setState(() {});
+                              } else {
+                                if (isOther) {
+                                  user.preambleModel.dietPreference = [];
+                                  user.preambleModel.dietPreference.add(value);
+                                  setState(() {});
+                                } else if (none) {
+                                  user.preambleModel.dietPreference = [];
+                                  user.preambleModel.dietPreference.add(value);
+                                  setState(() {});
+                                } else {
+                                  if (selected) {
+                                    user.preambleModel.dietPreference
+                                        .remove(value);
+                                    setState(() {});
+                                  } else {
+                                    user.preambleModel.dietPreference
+                                        .add(value);
+                                    setState(() {});
+                                  }
+                                }
                               }
-                            }
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * .38,
-                            padding: const EdgeInsets.all(12.0),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: selectedConditions.contains(other)
-                                  ? AppConstants.primaryColor
-                                  : Colors.transparent,
-                              border: Border.all(
-                                color: selectedConditions.contains(other)
-                                    ? AppConstants.primaryColor
-                                    : Colors.white,
+                            },
+                            child: Container(
+                              child: Text(
+                                name ?? 'No Type',
+                                style: TextStyle(
+                                    color:
+                                        selected ? Colors.black : Colors.white),
                               ),
-                            ),
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 4.0,
-                              vertical: 6.0,
-                            ),
-                            child: Text(
-                              other,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 12,
-                                letterSpacing: 0.5,
-                              ),
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
+                                  color: selected
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  border: Border.all(
+                                      width: 1, color: Colors.white)),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                      }).toList()),
                 ),
-                UIHelper.verticalSpace(6.0),
-                Container(
-                  padding: EdgeInsets.only(left: 18,right: 18),
-                  child: InkWell(
-                    onTap: () async {
-                      if (selectedConditions.contains('None')) {
-                        setState(() {
-                          selectedConditions.remove('None');
-                          user.existingDisease.remove('None');
-                        });
-                      } else {
-                        setState(() {
-                          selectedConditions.clear();
-                          user.existingDisease.clear();
-                          selectedConditions.add('None');
-                          user.existingDisease.add('None');
-                        });
-                      }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * .78,
-                      padding: const EdgeInsets.all(12.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: selectedConditions.contains('None')
-                            ? AppConstants.primaryColor
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: selectedConditions.contains('None')
-                              ? AppConstants.primaryColor
-                              : Colors.white,
-                        ),
-                      ),
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 4.0,
-                        vertical: 6.0,
-                      ),
-                      child: Text(
-                        'None of the above',
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 12,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height:20),
+                // Container(
+                //   padding: EdgeInsets.only(left: 18,right: 18),
+                //   child: Wrap(
+                //     children: [
+                //       ...datSource
+                //           .map(
+                //             (e) => Opacity(
+                //           opacity: selectedConditions.contains('None')
+                //               ? 0.5
+                //               : 1.0,
+                //           child: InkWell(
+                //             onTap: () async {
+                //               if (!selectedConditions.contains('None')) {
+                //                 if (selectedConditions
+                //                     .contains(e['value'])) {
+                //                   setState(() {
+                //                     selectedConditions.remove(e['value']);
+                //                   });
+                //                   user.preambleModel.dietPreference.remove(e['value']);
+                //                 } else {
+                //                   setState(() {
+                //                     selectedConditions.add(e['value']);
+                //                     user.preambleModel.dietPreference.add(e['value']);
+                //                   });
+                //                 }
+                //               }
+                //               // user.existingDisease
+                //               //     .addAll(selectedConditions);
+                //               // user.existingDisease.clear();
+                //             },
+                //             child: Container(
+                //               width:
+                //               MediaQuery.of(context).size.width * .38,
+                //               padding: const EdgeInsets.all(12.0),
+                //               alignment: Alignment.center,
+                //               decoration: BoxDecoration(
+                //                 color:
+                //                 selectedConditions.contains(e['value'])
+                //                     ? AppConstants.primaryColor
+                //                     : Colors.transparent,
+                //                 border: Border.all(
+                //                   color: selectedConditions
+                //                       .contains(e['value'])
+                //                       ? AppConstants.primaryColor
+                //                       : Colors.white,
+                //                 ),
+                //               ),
+                //               margin: const EdgeInsets.symmetric(
+                //                 horizontal: 4.0,
+                //                 vertical: 6.0,
+                //               ),
+                //               child: Text(
+                //                 e['value'],
+                //                 textAlign: TextAlign.center,
+                //                 maxLines: 2,
+                //                 style: TextStyle(
+                //                   fontWeight: FontWeight.bold,
+                //                   color: Colors.white,
+                //                   fontSize: 12,
+                //                   letterSpacing: 0.5,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       )
+                //           .toList(),
+                //       Opacity(
+                //         opacity:
+                //         selectedConditions.contains('None') ? 0.5 : 1.0,
+                //         child: InkWell(
+                //           onTap: () async {
+                //             if (!selectedConditions.contains('None')) {
+                //               if (selectedConditions.contains(other)) {
+                //                 setState(() {
+                //                   selectedConditions.remove(other);
+                //                   other = 'Any Other';
+                //                 });
+                //                 user.preambleModel.dietPreference.clear();
+                //                 user.preambleModel.dietPreference.addAll(selectedConditions);
+                //               } else {
+                //                 String value = await showDialog<String>(
+                //                   context: context,
+                //                   barrierDismissible: true,
+                //                   builder: (context) => CustomTextDialog(),
+                //                 );
+                //                 if (value != null) {
+                //                   setState(() {
+                //                     other = value;
+                //                   });
+                //                 }
+                //                 print('other:: $other');
+                //                 setState(() {
+                //                   selectedConditions.add(other);
+                //                   user.preambleModel.dietPreference.add(other);
+                //                 });
+                //               }
+                //             }
+                //           },
+                //           child: Container(
+                //             width: MediaQuery.of(context).size.width * .38,
+                //             padding: const EdgeInsets.all(12.0),
+                //             alignment: Alignment.center,
+                //             decoration: BoxDecoration(
+                //               color: selectedConditions.contains(other)
+                //                   ? AppConstants.primaryColor
+                //                   : Colors.transparent,
+                //               border: Border.all(
+                //                 color: selectedConditions.contains(other)
+                //                     ? AppConstants.primaryColor
+                //                     : Colors.white,
+                //               ),
+                //             ),
+                //             margin: const EdgeInsets.symmetric(
+                //               horizontal: 4.0,
+                //               vertical: 6.0,
+                //             ),
+                //             child: Text(
+                //               other,
+                //               textAlign: TextAlign.center,
+                //               maxLines: 2,
+                //               style: TextStyle(
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.white,
+                //                 fontSize: 12,
+                //                 letterSpacing: 0.5,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // UIHelper.verticalSpace(6.0),
+                // Container(
+                //   padding: EdgeInsets.only(left: 18,right: 18),
+                //   child: InkWell(
+                //     onTap: () async {
+                //       if (selectedConditions.contains('None')) {
+                //         setState(() {
+                //           selectedConditions.remove('None');
+                //           user.preambleModel.dietPreference.remove('None');
+                //         });
+                //       } else {
+                //         setState(() {
+                //           selectedConditions.clear();
+                //           user.preambleModel.dietPreference.clear();
+                //           selectedConditions.add('None');
+                //           user.preambleModel.dietPreference.add('None');
+                //         });
+                //       }
+                //     },
+                //     child: Container(
+                //       width: MediaQuery.of(context).size.width * .78,
+                //       padding: const EdgeInsets.all(12.0),
+                //       alignment: Alignment.center,
+                //       decoration: BoxDecoration(
+                //         color: selectedConditions.contains('None')
+                //             ? AppConstants.primaryColor
+                //             : Colors.transparent,
+                //         border: Border.all(
+                //           color: selectedConditions.contains('None')
+                //               ? AppConstants.primaryColor
+                //               : Colors.white,
+                //         ),
+                //       ),
+                //       margin: const EdgeInsets.symmetric(
+                //         horizontal: 4.0,
+                //         vertical: 6.0,
+                //       ),
+                //       child: Text(
+                //         'None of the above',
+                //         textAlign: TextAlign.center,
+                //         maxLines: 2,
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.white,
+                //           fontSize: 12,
+                //           letterSpacing: 0.5,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                SizedBox(height: 20),
                 SizedBox(
                   height: 24.0,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 18,right: 18),
+                  padding: EdgeInsets.only(left: 18, right: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -335,11 +427,11 @@ class _Slide7State extends State<Slide7> {
                         ),
                       ), //Text
                       Switch(
-                        value: isDrinking,
+                        value: user.preambleModel.isDrinking,
                         onChanged: (val) {
                           setState(() {
-                            isDrinking = !isDrinking;
-                            user.setValue(isDrinking: isDrinking);
+                            user.preambleModel.isDrinking =
+                                !user.preambleModel.isDrinking;
                           });
                         },
                         activeColor: AppConstants.primaryColor,
@@ -348,10 +440,10 @@ class _Slide7State extends State<Slide7> {
                     ], //<Widget>[]
                   ),
                 ),
-                if (isDrinking) ...{
+                if (user.preambleModel.isDrinking) ...{
                   UIHelper.verticalSpace(6.0),
                   Container(
-                    padding: EdgeInsets.only(left: 18,right: 18),
+                    padding: EdgeInsets.only(left: 18, right: 18),
                     child: Text(
                       AppConstants.drinkingText,
                       textAlign: TextAlign.start,
@@ -366,7 +458,7 @@ class _Slide7State extends State<Slide7> {
                   height: 24.0,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 18,right: 18),
+                  padding: EdgeInsets.only(left: 18, right: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -379,11 +471,11 @@ class _Slide7State extends State<Slide7> {
                         ),
                       ),
                       Switch(
-                        value: isSmoking,
+                        value: user.preambleModel.isSmoking,
                         onChanged: (val) {
                           setState(() {
-                            isSmoking = !isSmoking;
-                            user.setValue(isSmoking: isSmoking);
+                            user.preambleModel.isSmoking =
+                                !user.preambleModel.isSmoking;
                           });
                         },
                         activeColor: AppConstants.primaryColor,
@@ -392,18 +484,18 @@ class _Slide7State extends State<Slide7> {
                     ], //<Widget>[]
                   ),
                 ),
-                if (isSmoking) ...{
+                if (user.preambleModel.isSmoking) ...{
                   UIHelper.verticalSpace(6.0),
-
-                Container(
-                padding: EdgeInsets.only(left: 18,right: 18),child:Text(
-                    AppConstants.smokingText,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: AppColors.TEXT_DARK,
-                    ),
-                  )),
+                  Container(
+                      padding: EdgeInsets.only(left: 18, right: 18),
+                      child: Text(
+                        AppConstants.smokingText,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: AppColors.TEXT_DARK,
+                        ),
+                      )),
                 },
                 SizedBox(
                   height: 100.0,
@@ -437,7 +529,7 @@ class _Slide7State extends State<Slide7> {
     );
   }
 
-  Widget oldUI(UserController user){
+  Widget oldUI(UserController user) {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,6 +582,14 @@ class _Slide7State extends State<Slide7> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<String> otherMedical(BuildContext context) async {
+    return await showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => CustomTextDialog(),
     );
   }
 }

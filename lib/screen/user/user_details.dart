@@ -475,6 +475,16 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   }
                                 }
                                 else if(currentIndex == 3){
+                                  if(user.preambleModel.goalWeight == null || user.preambleModel.goalWeight == 0.0){
+                                    displaySnack('Please select valid goal weight!');
+                                    return;
+                                  }else if(user.preambleModel.dietPreference ==null || user.preambleModel.dietPreference.isEmpty){
+                                    displaySnack('Please select 1 medical condition!');
+                                    return;
+                                  }else {
+                                    gotoNext();
+                                  }
+                                }else if(currentIndex ==4){
 
                                 }
                                 else {
