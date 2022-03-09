@@ -478,7 +478,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   if(user.preambleModel.goalWeight == null || user.preambleModel.goalWeight == 0.0){
                                     displaySnack('Please select valid goal weight!');
                                     return;
-                                  }else if(user.preambleModel.dietPreference ==null || user.preambleModel.dietPreference.isEmpty){
+                                  }else if(user.preambleModel.existingDisease ==null || user.preambleModel.existingDisease.isEmpty){
                                     displaySnack('Please select 1 medical condition!');
                                     return;
                                   }else {

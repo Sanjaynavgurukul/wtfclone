@@ -153,12 +153,12 @@ class _Slide7State extends State<Slide7> {
                         String value = data['value'];
                         String name = data['display'];
                         bool selected =
-                            user.preambleModel.dietPreference.contains(value) ??
+                            user.preambleModel.existingDisease.contains(value) ??
                                 false;
                         bool isOther =
-                            user.preambleModel.dietPreference.contains('other');
+                            user.preambleModel.existingDisease.contains('other');
                         bool none =
-                            user.preambleModel.dietPreference.contains('none');
+                            user.preambleModel.existingDisease.contains('none');
                         return Container(
                           margin: EdgeInsets.only(bottom: 12),
                           child: InkWell(
@@ -170,32 +170,32 @@ class _Slide7State extends State<Slide7> {
                                   builder: (context) => CustomTextDialog(),
                                 ).then((v) {
                                   if(v != null){
-                                    user.preambleModel.dietPreference = [];
+                                    user.preambleModel.existingDisease = [];
                                     user.preambleModel.otherDietPreference = v;
-                                    user.preambleModel.dietPreference.add(value);
+                                    user.preambleModel.existingDisease.add(value);
                                     setState(() {});
                                   }
                                 });
                               } else if (value == 'none') {
-                                user.preambleModel.dietPreference = [];
-                                user.preambleModel.dietPreference.add(value);
+                                user.preambleModel.existingDisease = [];
+                                user.preambleModel.existingDisease.add(value);
                                 setState(() {});
                               } else {
                                 if (isOther) {
-                                  user.preambleModel.dietPreference = [];
-                                  user.preambleModel.dietPreference.add(value);
+                                  user.preambleModel.existingDisease = [];
+                                  user.preambleModel.existingDisease.add(value);
                                   setState(() {});
                                 } else if (none) {
-                                  user.preambleModel.dietPreference = [];
-                                  user.preambleModel.dietPreference.add(value);
+                                  user.preambleModel.existingDisease = [];
+                                  user.preambleModel.existingDisease.add(value);
                                   setState(() {});
                                 } else {
                                   if (selected) {
-                                    user.preambleModel.dietPreference
+                                    user.preambleModel.existingDisease
                                         .remove(value);
                                     setState(() {});
                                   } else {
-                                    user.preambleModel.dietPreference
+                                    user.preambleModel.existingDisease
                                         .add(value);
                                     setState(() {});
                                   }
@@ -241,11 +241,11 @@ class _Slide7State extends State<Slide7> {
                 //                   setState(() {
                 //                     selectedConditions.remove(e['value']);
                 //                   });
-                //                   user.preambleModel.dietPreference.remove(e['value']);
+                //                   user.preambleModel.existingDisease.remove(e['value']);
                 //                 } else {
                 //                   setState(() {
                 //                     selectedConditions.add(e['value']);
-                //                     user.preambleModel.dietPreference.add(e['value']);
+                //                     user.preambleModel.existingDisease.add(e['value']);
                 //                   });
                 //                 }
                 //               }
@@ -301,8 +301,8 @@ class _Slide7State extends State<Slide7> {
                 //                   selectedConditions.remove(other);
                 //                   other = 'Any Other';
                 //                 });
-                //                 user.preambleModel.dietPreference.clear();
-                //                 user.preambleModel.dietPreference.addAll(selectedConditions);
+                //                 user.preambleModel.existingDisease.clear();
+                //                 user.preambleModel.existingDisease.addAll(selectedConditions);
                 //               } else {
                 //                 String value = await showDialog<String>(
                 //                   context: context,
@@ -317,7 +317,7 @@ class _Slide7State extends State<Slide7> {
                 //                 print('other:: $other');
                 //                 setState(() {
                 //                   selectedConditions.add(other);
-                //                   user.preambleModel.dietPreference.add(other);
+                //                   user.preambleModel.existingDisease.add(other);
                 //                 });
                 //               }
                 //             }
@@ -365,14 +365,14 @@ class _Slide7State extends State<Slide7> {
                 //       if (selectedConditions.contains('None')) {
                 //         setState(() {
                 //           selectedConditions.remove('None');
-                //           user.preambleModel.dietPreference.remove('None');
+                //           user.preambleModel.existingDisease.remove('None');
                 //         });
                 //       } else {
                 //         setState(() {
                 //           selectedConditions.clear();
-                //           user.preambleModel.dietPreference.clear();
+                //           user.preambleModel.existingDisease.clear();
                 //           selectedConditions.add('None');
-                //           user.preambleModel.dietPreference.add('None');
+                //           user.preambleModel.existingDisease.add('None');
                 //         });
                 //       }
                 //     },

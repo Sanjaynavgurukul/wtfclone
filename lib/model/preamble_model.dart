@@ -21,12 +21,12 @@ class PreambleModel {
 
   bool gainingWeight = true;
   double goalWeight = 0.25;
-  List<String> existingDisease;
+  List<String> existingDisease = [];
   bool isSmoking = false;
   bool isDrinking = false;
 
   String fitnessGoal;
-  List<String> dietPreference = [];
+  String dietPreference;
   String otherDietPreference;
 
   // int inches;
