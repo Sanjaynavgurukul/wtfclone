@@ -70,8 +70,8 @@ class _Slide9State extends State<Slide9> {
     super.initState();
   }
 
-  List<String> tallList = ['in cm','in inches'];
-  List<String> weightList = ['in kg','in pound'];
+  List<String> tallList = ['in cm', 'in inches'];
+  List<String> weightList = ['in kg', 'in pound'];
 
   String tallLabel;
   String weightLabel;
@@ -81,11 +81,16 @@ class _Slide9State extends State<Slide9> {
     return Consumer<GymStore>(
       builder: (context, user, child) => SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(top: 40,left: 18,right: 18),
+          padding: EdgeInsets.only(top: 40, left: 18, right: 18),
           child: Column(
             children: [
-              Text('Let us know more about you' ,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
-              SizedBox(height: 40,),
+              Text(
+                'Let us know more about you',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 40,
+              ),
               //Body Type Card :D
               ExpansionTileCard(
                 elevation: 0,
@@ -93,7 +98,12 @@ class _Slide9State extends State<Slide9> {
                 expandedColor: Color(0xff922224),
                 title: Text('Choose your body type',
                     style: TextStyle(color: Colors.white)),
-                subtitle: user.preambleModel.bodyType == null ? null : Text(user.preambleModel.bodyType??'',style: TextStyle(color: Colors.white),),
+                subtitle: user.preambleModel.bodyType == null
+                    ? null
+                    : Text(
+                        user.preambleModel.bodyType ?? '',
+                        style: TextStyle(color: Colors.white),
+                      ),
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -112,7 +122,9 @@ class _Slide9State extends State<Slide9> {
                         children: types
                             .map((e) => newUI(
                                 data: e,
-                                selected: user.preambleModel.bodyType == null ? false:user.preambleModel.bodyType == e['type'],
+                                selected: user.preambleModel.bodyType == null
+                                    ? false
+                                    : user.preambleModel.bodyType == e['type'],
                                 onClick: () {
                                   // print('clicked value');
                                   setState(() {
@@ -125,7 +137,9 @@ class _Slide9State extends State<Slide9> {
                   )
                 ],
               ),
-              SizedBox(height: 12,),
+              SizedBox(
+                height: 12,
+              ),
               //Your height Card :D
               ExpansionTileCard(
                 elevation: 0,
@@ -133,7 +147,9 @@ class _Slide9State extends State<Slide9> {
                 expandedColor: Color(0xff922224),
                 trailing: _heightChildPopup(),
                 title: Text('Enter your height',
-                    style: TextStyle(color: Colors.white,fontSize: 12)),
+                    style: TextStyle(color: Colors.white, fontSize: 12)),
+                subtitle: Text(
+                    '${(tallLabel ?? tallList[0]) == tallList[0] ? '${user.preambleModel.heightInCm} CM' : '${user.preambleModel.heightInFeet} Inches'}',style:TextStyle(color:Colors.white)),
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -143,67 +159,11 @@ class _Slide9State extends State<Slide9> {
                             bottomRight: Radius.circular(8))),
                     padding: EdgeInsets.all(12),
                     width: double.infinity,
-                    child: (tallLabel ?? tallList[0]) == tallList[0] ?NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
-                      ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value: user.preambleModel.heightInCm,
-                      minValue: 0,
-                      maxValue: 200,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value){
-                        setState(() {
-                          user.preambleModel.heightInCm = value;
-                          // user.setValue(heightFeet: '$value'+'cm');
-                        });
-                      },
-                    ) :Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        UIHelper.verticalSpace(30.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Feet',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            UIHelper.horizontalSpace(80.0),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Inches',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        DecimalNumberPicker(
+                    child: (tallLabel ?? tallList[0]) == tallList[0]
+                        ? NumberPicker(
                             textStyle: TextStyle(
                               fontSize: 22,
-                              color: Colors.white54,
+                              color: Colors.white,
                             ),
                             selectedTextStyle: TextStyle(
                               fontSize: 45,
@@ -211,29 +171,88 @@ class _Slide9State extends State<Slide9> {
                               fontWeight: FontWeight.bold,
                             ),
                             itemHeight: 60,
-                            value: user.preambleModel.heightInFeet??5.0,
-                            minValue: 1,
-                            maxValue: 9,
+                            value: user.preambleModel.heightInCm,
+                            minValue: 0,
+                            maxValue: 200,
+                            step: 1,
                             haptics: true,
-                            decimalPlaces: 2,
-                            decimalTextMapper: (text) {
-                              print('text: $text');
-                              int dec = int.tryParse(text);
-                              return dec < 12 ? text : '';
-                            },
                             onChanged: (value) {
-                              user.preambleModel.heightInFeet = value;
-                              // user.setValue(heightFeet: value.toString());
                               setState(() {
-                                // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
+                                user.preambleModel.heightInCm = value;
+                                // user.setValue(heightFeet: '$value'+'cm');
                               });
-                            }
-                          /*onChanged: (value) => setState(() => _currentDoubleValue = value
+                            },
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              UIHelper.verticalSpace(30.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'Feet',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  UIHelper.horizontalSpace(80.0),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      'Inches',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              DecimalNumberPicker(
+                                  textStyle: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white54,
+                                  ),
+                                  selectedTextStyle: TextStyle(
+                                    fontSize: 45,
+                                    color: Color(0xff922224),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  itemHeight: 60,
+                                  value: user.preambleModel.heightInFeet ?? 5.0,
+                                  minValue: 1,
+                                  maxValue: 9,
+                                  haptics: true,
+                                  decimalPlaces: 2,
+                                  decimalTextMapper: (text) {
+                                    print('text: $text');
+                                    int dec = int.tryParse(text);
+                                    return dec < 12 ? text : '';
+                                  },
+                                  onChanged: (value) {
+                                    user.preambleModel.heightInFeet = value;
+                                    // user.setValue(heightFeet: value.toString());
+                                    setState(() {
+                                      // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
+                                    });
+                                  }
+                                  /*onChanged: (value) => setState(() => _currentDoubleValue = value
 
                 ),*/
-                        ),
-                      ],
-                    ),
+                                  ),
+                            ],
+                          ),
                   )
                 ],
               ),
@@ -714,45 +733,45 @@ class _Slide9State extends State<Slide9> {
     );
   }
 
-
   Widget _heightChildPopup() => PopupMenuButton<String>(
-    color: Color(0xff922224),
-    itemBuilder: (context) => tallList.map((e) => PopupMenuItem(
-      value: e,
-      onTap: (){
-        tallLabel = e;
-        setState(() {
+        color: Color(0xff922224),
+        itemBuilder: (context) => tallList
+            .map((e) => PopupMenuItem(
+                  value: e,
+                  onTap: () {
+                    tallLabel = e;
+                    setState(() {});
+                  },
+                  child: Text(
+                    "$e",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ))
+            .toList(),
+        child: Container(
+          child: Text(tallLabel ?? tallList[0]),
+        ),
+      );
 
-        });
-      },
-      child: Text(
-        "$e",
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w700),
-      ),
-    )).toList(),
-    child: Container(
-      child: Text(tallLabel??tallList[0]),
-    ),
-  );
   Widget _weightChildPopup() => PopupMenuButton<String>(
-    color: Color(0xff922224),
-    itemBuilder: (context) => weightList.map((e) => PopupMenuItem(
-      value: e,
-      onTap: (){
-        weightLabel = e;
-        setState(() {
-
-        });
-      },
-      child: Text(
-        "$e",
-        style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.w700),
-      ),
-    )).toList(),
-    child: Container(
-      child: Text(weightLabel??weightList[0]),
-    ),
-  );
+        color: Color(0xff922224),
+        itemBuilder: (context) => weightList
+            .map((e) => PopupMenuItem(
+                  value: e,
+                  onTap: () {
+                    weightLabel = e;
+                    setState(() {});
+                  },
+                  child: Text(
+                    "$e",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w700),
+                  ),
+                ))
+            .toList(),
+        child: Container(
+          child: Text(weightLabel ?? weightList[0]),
+        ),
+      );
 }
