@@ -470,8 +470,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     displaySnack(
                                         'Please choose your valid target weight in lbs!');
                                     return;
+                                  }else{
+                                    gotoNext();
                                   }
-                                } else {
+                                }
+                                else if(currentIndex == 3){
+
+                                }
+                                else {
                                   gotoNext();
                                 }
                               },

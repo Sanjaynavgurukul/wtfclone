@@ -19,10 +19,11 @@ class PreambleModel {
   int targetWeight;
   int targetWeightInLbs;
 
+  bool gainingWeight = true;
   String goalWeight;
   List<String> existingDisease;
-  bool isSmoking;
-  bool isDrinking;
+  bool isSmoking = false;
+  bool isDrinking = false;
 
   String fitnessGoal;
   String dietPreference;
