@@ -24,7 +24,7 @@
 
     ],
     "Firebase/Messaging": [
-      "8.6.0"
+      "8.9.0"
     ]
   },
   "static_framework": true,

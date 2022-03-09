@@ -425,7 +425,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-
 class LiveBannerWidget extends StatelessWidget {
   const LiveBannerWidget({
     Key key,
