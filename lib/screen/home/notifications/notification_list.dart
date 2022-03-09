@@ -12,6 +12,7 @@ class NotificationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
+
       builder: (context, store, child) {
         AllNotifications notifications = store.selectedNotificationType == 'new'
             ? store.newNotifications
