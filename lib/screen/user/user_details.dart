@@ -332,97 +332,148 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 //     }
                                 //   }
 
-                                  // if (currentIndex == 100) {
-                                  //   if (user.address == null ||
-                                  //       user.address.isEmpty) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content:
-                                  //         new Text('Enter your city name'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  // }
-                                  //
-                                  // if (currentIndex == 5) {
-                                  //   if (user.age == 1) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content: new Text('Select your age'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  // }
-                                  //
-                                  // if (currentIndex == 6) {
-                                  //   if (user.heightFeet == 1.0) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content:
-                                  //         new Text('Select your height'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  // }
-                                  //
-                                  // if (currentIndex == 7) {
-                                  //   if (user.weight == 1) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content:
-                                  //         new Text('Select your weight'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  // }
-                                  //
-                                  // if (currentIndex == 8) {
-                                  //   if (user.targetWeight == 1) {
-                                  //     key.currentState.showSnackBar(new SnackBar(
-                                  //         content: new Text(
-                                  //             'Select your target weight')));
-                                  //     return;
-                                  //   }
-                                  // }
-                                  //
-                                  // if (currentIndex == 10) {
-                                  //   if (user.existingDisease.length == null ||
-                                  //       user.existingDisease.length == 0) {
-                                  //     key.currentState.showSnackBar(
-                                  //       new SnackBar(
-                                  //         content: new Text('Select disease'),
-                                  //       ),
-                                  //     );
-                                  //     return;
-                                  //   }
-                                  //   context.read<GymStore>().getdietPref(
-                                  //       context: context,
-                                  //       type: DietPrefType.type1);
-                                  //   context.read<GymStore>().getdietPref(
-                                  //       context: context,
-                                  //       type: DietPrefType.type2);
-                                  // }
-                                  //
-                                  // if (currentIndex == 11) {
-                                  //   if (user.type1 == null &&
-                                  //       user.type2 == null) {
-                                  //     key.currentState.showSnackBar(
-                                  //         new SnackBar(
-                                  //             content: new Text(
-                                  //                 'Select your diet and')));
-                                  //     return;
-                                  //   }
-                                  // }
-
-                                  _controller.nextPage(
-                                    duration: Duration(milliseconds: 500),
-                                    curve: Curves.easeInToLinear,
-                                  );
+                                // if (currentIndex == 100) {
+                                //   if (user.address == null ||
+                                //       user.address.isEmpty) {
+                                //     key.currentState.showSnackBar(
+                                //       new SnackBar(
+                                //         content:
+                                //         new Text('Enter your city name'),
+                                //       ),
+                                //     );
+                                //     return;
+                                //   }
                                 // }
+                                //
+                                // if (currentIndex == 5) {
+                                //   if (user.age == 1) {
+                                //     key.currentState.showSnackBar(
+                                //       new SnackBar(
+                                //         content: new Text('Select your age'),
+                                //       ),
+                                //     );
+                                //     return;
+                                //   }
+                                // }
+                                //
+                                // if (currentIndex == 6) {
+                                //   if (user.heightFeet == 1.0) {
+                                //     key.currentState.showSnackBar(
+                                //       new SnackBar(
+                                //         content:
+                                //         new Text('Select your height'),
+                                //       ),
+                                //     );
+                                //     return;
+                                //   }
+                                // }
+                                //
+                                // if (currentIndex == 7) {
+                                //   if (user.weight == 1) {
+                                //     key.currentState.showSnackBar(
+                                //       new SnackBar(
+                                //         content:
+                                //         new Text('Select your weight'),
+                                //       ),
+                                //     );
+                                //     return;
+                                //   }
+                                // }
+                                //
+                                // if (currentIndex == 8) {
+                                //   if (user.targetWeight == 1) {
+                                //     key.currentState.showSnackBar(new SnackBar(
+                                //         content: new Text(
+                                //             'Select your target weight')));
+                                //     return;
+                                //   }
+                                // }
+                                //
+                                // if (currentIndex == 10) {
+                                //   if (user.existingDisease.length == null ||
+                                //       user.existingDisease.length == 0) {
+                                //     key.currentState.showSnackBar(
+                                //       new SnackBar(
+                                //         content: new Text('Select disease'),
+                                //       ),
+                                //     );
+                                //     return;
+                                //   }
+                                //   context.read<GymStore>().getdietPref(
+                                //       context: context,
+                                //       type: DietPrefType.type1);
+                                //   context.read<GymStore>().getdietPref(
+                                //       context: context,
+                                //       type: DietPrefType.type2);
+                                // }
+                                //
+                                // if (currentIndex == 11) {
+                                //   if (user.type1 == null &&
+                                //       user.type2 == null) {
+                                //     key.currentState.showSnackBar(
+                                //         new SnackBar(
+                                //             content: new Text(
+                                //                 'Select your diet and')));
+                                //     return;
+                                //   }
+                                // }
+
+                                //
+
+                                //age and gender :D
+
+                                if (currentIndex == 1) {
+                                  if (user.preambleModel.gender == null ||
+                                      user.preambleModel.gender.isEmpty) {
+                                    displaySnack('Please select your gender!');
+                                    return;
+                                  } else if (user.preambleModel.age == null ||
+                                      user.preambleModel.age == 0) {
+                                    displaySnack('Please select valid age!');
+                                    return;
+                                  } else {
+                                    gotoNext();
+                                  }
+                                } else if (currentIndex == 2) {
+                                  if (user.preambleModel.bodyType == null) {
+                                    displaySnack(
+                                        'Please select your body type!');
+                                    return;
+                                  }//validating in height in cm
+                                  else if(user.preambleModel.heightInCm && (user.preambleModel.heightCm == null || user.preambleModel.heightCm == 0)){
+                                    displaySnack(
+                                        'Please choose your valid height in cm!');
+                                    return;
+                                  }//validating in height in Feet
+                                  else if(!user.preambleModel.heightInCm && (user.preambleModel.heightFeet == null || user.preambleModel.heightFeet == 0)){
+                                    displaySnack(
+                                        'Please choose your valid height in feet!');
+                                    return;
+                                  }
+                                  //validating your weight in kg
+                                  else if (user.preambleModel.weightInKg && (user.preambleModel.weight == null || user.preambleModel.weight == 0)) {
+                                      displaySnack(
+                                          'Please choose your valid weight in kg!');
+                                    return;
+                                  }//validating your weight in pound
+                                  else if (!user.preambleModel.weightInKg && (user.preambleModel.weightInLbs == null || user.preambleModel.weightInLbs == 0)) {
+                                    displaySnack(
+                                        'Please choose your valid weight in lbs!');
+                                    return;
+                                  }//validating target weight in kg
+                                  else if(user.preambleModel.targetWeightInKg && (user.preambleModel.targetWeight == null || user.preambleModel.targetWeight == 0)){
+                                    displaySnack(
+                                        'Please choose your valid target weight in kg!');
+                                    return;
+                                  }//validating target weight in lbs
+                                  else if(!user.preambleModel.targetWeightInKg && (user.preambleModel.targetWeightInLbs == null || user.preambleModel.targetWeightInLbs == 0)){
+                                    displaySnack(
+                                        'Please choose your valid target weight in lbs!');
+                                    return;
+                                  }
+                                } else {
+                                  gotoNext();
+                                }
                               },
                             ),
                           ),
@@ -436,6 +487,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           );
         }),
       ),
+    );
+  }
+
+  void gotoNext() {
+    _controller.nextPage(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInToLinear,
     );
   }
 
