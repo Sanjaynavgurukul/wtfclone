@@ -16,6 +16,7 @@ class GymOffers {
   });
 
   bool status;
+
   // List<Pagination> pagination;
   List<OfferData> data;
 
@@ -37,19 +38,24 @@ class GymOffers {
 }
 
 class OfferData {
-  OfferData({
-    this.uid,
-    this.gymId,
-    this.name,
-    this.code,
-    this.validity,
-    this.mode,
-    this.type,
-    this.value,
-    this.status,
-    this.dateAdded,
-    this.lastUpdated,
-  });
+  OfferData(
+      {this.uid,
+      this.gymId,
+      this.name,
+      this.code,
+      this.validity,
+      this.mode,
+      this.type,
+      this.value,
+      this.status,
+      this.dateAdded,
+      this.lastUpdated,
+      this.gym_name,
+      this.is_public,
+      this.is_trigger,
+      this.offer_type,
+      this.type_id,
+      this.type_name});
 
   String uid;
   String gymId;
@@ -61,6 +67,14 @@ class OfferData {
   String value;
   String status;
   String dateAdded;
+
+  int is_trigger;
+  String offer_type;
+  String type_id;
+  int is_public;
+  String gym_name;
+  String type_name;
+
   dynamic lastUpdated;
 
   factory OfferData.fromJson(Map<String, dynamic> json) => OfferData(
@@ -75,6 +89,12 @@ class OfferData {
         status: json["status"],
         dateAdded: json["date_added"],
         lastUpdated: json["last_updated"],
+        is_trigger: json["is_trigger"],
+        offer_type: json["offer_type"],
+        type_id: json["type_id"],
+        is_public: int.parse(json["is_public"].toString() ?? '0'),
+        gym_name: json["gym_name"],
+        type_name: json["type_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -89,6 +109,12 @@ class OfferData {
         "status": status,
         "date_added": dateAdded,
         "last_updated": lastUpdated,
+        "is_trigger": is_trigger,
+        "offer_type": offer_type,
+        "type_id": type_id,
+        "is_public": is_public,
+        "gym_name": gym_name,
+        "type_name": type_name,
       };
 }
 

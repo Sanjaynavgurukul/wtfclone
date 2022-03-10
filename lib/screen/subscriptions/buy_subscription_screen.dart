@@ -1165,7 +1165,7 @@ class _OfferSectionState extends State<OfferSection> {
   List<OfferData> filterData(List<OfferData> data) {
     return data
         .where((element) =>
-            element.status == 'active' && !isExpired(element.validity))
+            element.status == 'active' && !isExpired(element.validity) && element.is_public == 1)
         .toList();
   }
 
