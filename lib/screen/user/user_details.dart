@@ -548,10 +548,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   void gotoNext() {
     if(currentIndex == 5){
-      if(user.preambleFromLogin){
-        addMember();
-      }else{
-      updatePreamble();}
+      updatePreamble();
     }else{
       _controller.nextPage(
         duration: Duration(milliseconds: 500),
@@ -608,11 +605,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void updateMember(){
-    user.updateMember(context: context,data: user.preambleModel).then((value){
+    user.updateMember(context: context,data: user.preambleModel,isLogin:user.preambleFromLogin).then((value){
       // Navigator.pop(context);
       if(value != null){
         if(user.preambleFromLogin){
-
+          NavigationService.navigateToReplacement(Routes.homePage);
         }else{
           // NavigationService.navigateTo(Routes.bmrCalculatorResult);
           NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);

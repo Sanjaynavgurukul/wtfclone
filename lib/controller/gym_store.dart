@@ -2304,10 +2304,10 @@ class GymStore extends ChangeNotifier {
 
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
     locator<AppPrefs>().updateMemberData.setValue(false);
-    Map<String, dynamic> res = isLogin?await RestDatasource().addMember(body):await RestDatasource().updateMember(body);
+    bool res = isLogin?await RestDatasource().addMember(body):await RestDatasource().updateMember(body);
     print('controller response: $res');
     loading = false;
-    if (res['status'] == true) {
+    if (res == false) {
       FlashHelper.successBar(context, message: 'Profile Updates Successfully');
     }
     notifyListeners();

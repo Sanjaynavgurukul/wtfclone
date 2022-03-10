@@ -395,7 +395,7 @@ class RestDatasource {
     });
   }
 
-  Future<Map<String, dynamic>> updateMember(Map<String, dynamic> body) async {
+  Future<bool> updateMember(Map<String, dynamic> body) async {
     String url = APIHelper.updateMember;
     print('adding member : $body');
     print('adding member : $url');
@@ -410,10 +410,10 @@ class RestDatasource {
         headers: mapHeader,
       );
       print("response updateMember : " + res.toString());
-      return res;
+      return res['status'];
     } catch (e) {
       print('update member error: $e');
-      return {};
+      return false;
     }
   }
 
