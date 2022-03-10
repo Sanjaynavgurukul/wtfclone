@@ -78,7 +78,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         int couponValue =
             int.tryParse(context.read<GymStore>().chosenOffer.value);
         discountAmount = couponValue >
-                int.tryParse(context.read<GymStore>().selectedEventData.price)
+                int.tryParse(context.read<GymStore>().chosenOffer.value??'0')
             ? int.tryParse(context.read<GymStore>().selectedEventData.price)
             : couponValue;
       } else {

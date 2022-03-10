@@ -66,7 +66,7 @@ class AttendanceDetailsData {
 
   factory AttendanceDetailsData.fromJson(Map<String, dynamic> json) =>
       AttendanceDetailsData(
-        id: json["id"],
+        id: int.parse(json["id"].toString()??'0'),
         uid: json["uid"],
         userId: json["user_id"],
         mode: json["mode"],
