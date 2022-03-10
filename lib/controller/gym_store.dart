@@ -2259,7 +2259,7 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<dynamic> updateMember(
-      {BuildContext context, PreambleModel data}) async {
+      {BuildContext context, PreambleModel data,bool isLogin = false}) async {
     loading = true;
     notifyListeners();
     data.uid = locator<AppPrefs>().memberData.getValue().uid;
@@ -2304,7 +2304,7 @@ class GymStore extends ChangeNotifier {
 
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
     locator<AppPrefs>().updateMemberData.setValue(false);
-    Map<String, dynamic> res = await RestDatasource().updateMember(body);
+    Map<String, dynamic> res = isLogin?await RestDatasource().addMember(body):await RestDatasource().updateMember(body);
     print('controller response: $res');
     loading = false;
     if (res['status'] == true) {
@@ -2319,4 +2319,6 @@ class GymStore extends ChangeNotifier {
     preambleModel = data;
     notifyListeners();
   }
+
+
 }

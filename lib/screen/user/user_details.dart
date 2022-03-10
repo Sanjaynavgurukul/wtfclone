@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/place_picker.dart';
+import 'package:place_picker/widgets/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
@@ -78,6 +82,24 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     // BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
+
+  // void showPlacePicker(GymStore store) async {
+  //   LocationResult result = await Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (context) => PlacePicker(
+  //         Helper.googleMapKey,
+  //         displayLocation: LatLng(
+  //             store.currentPosition.latitude, store.currentPosition.longitude),
+  //       ),
+  //     ),
+  //   );
+  //   print(result);
+  //
+  //     store.preambleModel.location = result.formattedAddress;
+  //     // user.setValue(address: result.formattedAddress);
+  //
+  //   // Handle the result in your way
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -526,7 +548,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   void gotoNext() {
     if(currentIndex == 5){
-      updatePreamble();
+      if(user.preambleFromLogin){
+        addMember();
+      }else{
+      updatePreamble();}
     }else{
       _controller.nextPage(
         duration: Duration(milliseconds: 500),
@@ -578,9 +603,23 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     });
   }
 
+  void addMember(){
+
+  }
+
   void updateMember(){
     user.updateMember(context: context,data: user.preambleModel).then((value){
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      if(value != null){
+        if(user.preambleFromLogin){
+
+        }else{
+          // NavigationService.navigateTo(Routes.bmrCalculatorResult);
+          NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
+        }
+      }else{
+        displaySnack('Something went wrong please try again later!!');
+      }
     });
   }
 }

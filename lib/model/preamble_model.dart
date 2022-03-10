@@ -41,7 +41,7 @@ class PreambleModel {
   String name;
   String email;
   int target_weight;
-  String target_duration;
+  String target_duration = '30 days';
   String location;
   String lat;
   String long;
@@ -145,7 +145,7 @@ class PreambleModel {
         "uid": data.uid,
         "name": data.name,
         "email": data.email,
-        "target_weight": data.target_weight,
+        "target_weight": data.goalWeight,//data.target_weight,
         "target_duration": data.target_duration,
         "location": data.location,
         "lat": data.lat,

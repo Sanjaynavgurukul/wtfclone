@@ -395,26 +395,6 @@ class RestDatasource {
     });
   }
 
-  Future<Map<String, dynamic>> addMember(Map<String, dynamic> body) async {
-    print('adding member : $body');
-    try {
-      String token = locator<AppPrefs>().token.getValue();
-      Map<String, String> mapHeader = Map();
-      mapHeader["Authorization"] = "Bearer " + token;
-      mapHeader["Content-Type"] = "application/json";
-      var res = await _netUtil.post(
-        APIHelper.ADD_MEMBER,
-        body: body,
-        headers: mapHeader,
-      );
-      print("response addMember : " + res.toString());
-      return res;
-    } catch (e) {
-      print('add member error: $e');
-      return {};
-    }
-  }
-
   Future<Map<String, dynamic>> updateMember(Map<String, dynamic> body) async {
     String url = APIHelper.updateMember;
     print('adding member : $body');
@@ -1579,6 +1559,48 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     String url = BASE_URL + Api.saveBmrProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: data,
+      headers: mapHeader,
+    );
+    if (res != null) {
+      print('response called not null ${res['status']}');
+      return res['status'];
+    }else{
+      print('response called null');
+      return false;
+    }
+  }
+
+  // Future<Map<String, dynamic>> addMember(Map<String, dynamic> body) async {
+  //   print('adding member : $body');
+  //   try {
+  //     String token = locator<AppPrefs>().token.getValue();
+  //     Map<String, String> mapHeader = Map();
+  //     mapHeader["Authorization"] = "Bearer " + token;
+  //     mapHeader["Content-Type"] = "application/json";
+  //     var res = await _netUtil.post(
+  //       APIHelper.ADD_MEMBER,
+  //       body: body,
+  //       headers: mapHeader,
+  //     );
+  //     print("response addMember : " + res.toString());
+  //     return res;
+  //   } catch (e) {
+  //     print('add member error: $e');
+  //     return {};
+  //   }
+  // }
+  Future<bool> addMember(Map<String, dynamic> data)async{
+    data['user_id'] = locator<AppPrefs>().memberId.getValue();
+    String token = locator<AppPrefs>().token.getValue();
+    print('checking data : - $data');
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = APIHelper.ADD_MEMBER;
     log('url: $url');
     var res = await _netUtil.post(
       url,

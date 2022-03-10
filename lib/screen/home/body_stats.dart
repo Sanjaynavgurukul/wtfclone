@@ -187,7 +187,11 @@ class MyGoals extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        NavigationService.navigateTo(Routes.updateFitnessProfile);
+        //TODO check preabmle navigation :D
+        // NavigationService.navigateTo(Routes.updateFitnessProfile);
+        context.read<GymStore>().preambleFromLogin = false;
+        context.read<GymStore>().getMemberById();
+        NavigationService.navigateTo(Routes.userDetail);
       },
       child: Card(
         color: Colors.transparent,
