@@ -92,6 +92,8 @@ class GymStore extends ChangeNotifier {
   GymAddOn allLiveClasses;
 
   PreambleModel preambleModel = new PreambleModel();
+  bool preambleFromLogin = true;
+
 
   GymAddOn allAddonClasses;
 

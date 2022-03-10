@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
@@ -13,38 +14,41 @@ class Slide10 extends StatefulWidget {
 
 class _Slide10State extends State<Slide10> {
   BmrState bmrState;
-  UserController users;
+  GymStore users;
   @override
   void initState() {
-    final user = Provider.of<UserController>(context, listen: false);
-    if (locator<AppPrefs>().gender.getValue() == 'male') {
+    final user = Provider.of<GymStore>(context, listen: false);
+    // if (locator<AppPrefs>().gender.getValue() == 'male') {
+    if(user.preambleModel.gender.toLowerCase() == 'male'){
       context.read<BmrState>().bmrForMen(
-        height: 30.48 * user.heightFeet,
-        weight: user.weight,
-        age: user.age,
+        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm:user.preambleModel.heightFeet),
+        weight: user.preambleModel.weightInKg?user.preambleModel.weight:user.preambleModel.weightInLbs,
+        age: user.preambleModel.age,
         context: context,
-        fromAuth: true,
+        fromAuth: user.preambleFromLogin,
       );
     } else {
       context.read<BmrState>().bmrForWoMen(
-        height: 30.48 * user.heightFeet,
-        weight: user.weight,
-        age: user.age,
+        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm:user.preambleModel.heightFeet),
+        weight: user.preambleModel.weightInKg?user.preambleModel.weight:user.preambleModel.weightInLbs,
+        age: user.preambleModel.age,
         context: context,
-        fromAuth: true,
+        fromAuth: user.preambleFromLogin,
       );
     }
-    print(
-        'update member---->>>> ${locator<AppPrefs>().updateMemberData.getValue()}');
+    // }
+    // print(
+    //     'update member---->>>> ${locator<AppPrefs>().updateMemberData.getValue()}');
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    users = context.watch<UserController>();
+    users = context.watch<GymStore>();
     bmrState = context.watch<BmrState>();
 
-    return Consumer<UserController>(
+    return Consumer<GymStore>(
       builder: (context, store, child) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -53,7 +57,7 @@ class _Slide10State extends State<Slide10> {
             padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
             color: Color(0xff922224),
             child: Text(
-              "To reach ${store.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
+              "To reach ${store.preambleModel.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24.0,
@@ -263,5 +267,4 @@ class _Slide10State extends State<Slide10> {
       ],
     );
   }
-
 }

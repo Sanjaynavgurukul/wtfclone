@@ -265,6 +265,7 @@ class _Slide9State extends State<Slide9> {
                               });
                             }
                           /*onChanged: (value) => setState(() => _currentDoubleValue = value
+
                 ),*/
                         ),
                       ],
