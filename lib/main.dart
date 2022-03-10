@@ -159,7 +159,8 @@ class _MyAppState extends State<MyApp>
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
-        ChangeNotifierProvider<UserController>(create: (_) => UserController()),
+        //TODo cgec
+        // ChangeNotifierProvider<UserController>(create: (_) => UserController()),
         ChangeNotifierProvider<GymStore>(create: (_) => GymStore()),
         ChangeNotifierProvider<UserStore>(create: (_) => UserStore()),
         ChangeNotifierProvider(

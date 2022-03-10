@@ -23,6 +23,12 @@ class Slide9 extends StatefulWidget {
 class _Slide9State extends State<Slide9> {
   String bodyType = '';
 
+  List<Map<String ,String>> howActive = [
+    {'text': 'Almost never', 'value': 'New to Fitness'},
+    {'text': 'Sometimes', 'value': 'Worked out before'},
+    {'text': 'Actively', 'value': 'Experienced'},
+  ];
+
   List<Map<String, String>> types = [
     {
       'type': 'Lean',
@@ -129,6 +135,65 @@ class _Slide9State extends State<Slide9> {
                                 // user.setValue(bodyType: e['type']);
                               });
                             }))
+                            .toList()),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              ExpansionTileCard(
+                elevation: 0,
+                baseColor: Color(0xff922224),
+                expandedColor: Color(0xff922224),
+                title: Text('Choose your body type',
+                    style: TextStyle(color: Colors.white)),
+                subtitle: user.preambleModel.body_type == null
+                    ? null
+                    : Text(
+                  user.preambleModel.body_type ?? '',
+                  style: TextStyle(color: Colors.white),
+                ),
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xff292929),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8))),
+                    padding: EdgeInsets.all(12),
+                    width: double.infinity,
+                    child: Wrap(
+                        alignment: WrapAlignment.start,
+                        runAlignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        runSpacing: 0.0,
+                        spacing: 12.0,
+                        children: howActive
+                            .map((e){
+                              bool selected = e['value'] == user.preambleModel.howactive??'';
+                              return Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                child: InkWell(
+                                  onTap: (){
+                                    user.preambleModel.howactive = e['value'];
+                                    setState(() {
+                                    });
+                                  },
+                                  child: Container(
+                                    child: Text(
+                                      e['text'] ?? 'No Type',
+                                      style: TextStyle(color: selected ? Colors.black : Colors.white),
+                                    ),
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                                        color: selected ? Colors.white : Colors.transparent,
+                                        border: Border.all(width: 1, color: Colors.white)),
+                                  ),
+                                ),
+                              );
+                        })
                             .toList()),
                   )
                 ],
