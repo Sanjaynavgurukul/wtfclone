@@ -485,7 +485,15 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     gotoNext();
                                   }
                                 }else if(currentIndex ==4){
-
+                                  if(user.preambleModel.fitnessGoal == null || user.preambleModel.fitnessGoal.isEmpty){
+                                    displaySnack('Please select your fitness goal');
+                                    return;
+                                  }else if(user.preambleModel.fitnessGoal ==null ||user.preambleModel.fitnessGoal.isEmpty){
+                                    displaySnack('Please select your diet preference');
+                                    return;
+                                  }else{
+                                    gotoNext();
+                                  }
                                 }
                                 else {
                                   gotoNext();
