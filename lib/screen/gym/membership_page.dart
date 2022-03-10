@@ -1896,7 +1896,7 @@ class GymLiveWidget extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => element.isLive && element.isPt== 0).toList();
+  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => element.isLive).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -2190,7 +2190,8 @@ class GymAddonWidget extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive && element.isPt == 0).toList();
+  //&& element.isPt == 0
+  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -2222,7 +2223,7 @@ class GymAddonWidget extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: gymStore.selectedGymAddOns.data
+                      children: getData(gymStore.selectedGymAddOns.data)
                           .map((item) => Container(
                         width: 118,
                         padding: EdgeInsets.only(left: 8, right: 8),
