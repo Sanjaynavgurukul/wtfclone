@@ -57,13 +57,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     store.preambleModel = new PreambleModel();
-      //     NavigationService.pushName(Routes.userDetail);
-      //   },
-      //   child:Icon(Icons.add)
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          store.preambleModel = new PreambleModel();
+          NavigationService.pushName(Routes.userDetail);
+        },
+        child:Icon(Icons.add)
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);

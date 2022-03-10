@@ -30,8 +30,9 @@ class _Slide12State extends State<Slide12> {
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
-    UserController user = Provider.of<UserController>(context);
+    //UserController user = Provider.of<UserController>(context);
     return Container(
+      padding: EdgeInsets.only(left: 18,right: 18,top: 40),
       child: ListView(
         children: [
           Center(
@@ -48,11 +49,13 @@ class _Slide12State extends State<Slide12> {
             shrinkWrap: true,
             itemCount: store.dprefType1.data.length,
             itemBuilder: (context, index) {
+              bool selected = store.preambleModel.fitnessGoal == store.dprefType1.data[index].uid ?? '';
               return InkWell(
                 onTap: () {
                   setState(() {
-                    type1 = store.dprefType1.data[index].uid;
-                    user.setValue(type1: type1);
+                    store.preambleModel.fitnessGoal = store.dprefType1.data[index].uid;
+                    // type1 = store.dprefType1.data[index].uid;
+                    // user.setValue(type1: type1);
                     locator<AppPrefs>().type1.setValue(type1);
                   });
                 },
@@ -69,7 +72,7 @@ class _Slide12State extends State<Slide12> {
                           ? Color(0xFF2B2929)
                           : AppConstants.primaryColor,
                     ),
-                    color: type1 != store.dprefType1.data[index].uid
+                    color: selected
                         ? Color(0xFF2B2929)
                         : AppConstants.primaryColor,
                     borderRadius: BorderRadius.all(
@@ -149,8 +152,9 @@ class _Slide12State extends State<Slide12> {
                     .map((e) => InkWell(
                   onTap: () {
                     setState(() {
-                      type2 = e.uid;
-                      user.setValue(type2: type2);
+                      store.preambleModel.dietPreference = e.uid;
+                      // type2 = e.uid;
+                      // user.setValue(type2: type2);
                       locator<AppPrefs>().type2.setValue(type2);
                     });
                   },
@@ -161,7 +165,7 @@ class _Slide12State extends State<Slide12> {
                       children: [
                         Flexible(
                           child: SvgPicture.asset(
-                            type2 == e.uid
+                            store.preambleModel.dietPreference == e.uid
                                 ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
                                 : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
                           ),
