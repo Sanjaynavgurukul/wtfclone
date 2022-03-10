@@ -153,12 +153,12 @@ class _Slide7State extends State<Slide7> {
                         String value = data['value'];
                         String name = data['display'];
                         bool selected =
-                            user.preambleModel.existingDisease.contains(value) ??
+                            user.preambleModel.existing_disease.contains(value) ??
                                 false;
                         bool isOther =
-                        user.preambleModel.existingDisease.contains('other');
+                        user.preambleModel.existing_disease.contains('other');
                         bool none =
-                        user.preambleModel.existingDisease.contains('none');
+                        user.preambleModel.existing_disease.contains('none');
                         return Container(
                           margin: EdgeInsets.only(bottom: 12),
                           child: InkWell(
@@ -170,32 +170,32 @@ class _Slide7State extends State<Slide7> {
                                   builder: (context) => CustomTextDialog(),
                                 ).then((v) {
                                   if(v != null){
-                                    user.preambleModel.existingDisease = [];
+                                    user.preambleModel.existing_disease = [];
                                     // user.preambleModel.otherDietPreference = v;
-                                    user.preambleModel.existingDisease.add(value);
+                                    user.preambleModel.existing_disease.add(value);
                                     setState(() {});
                                   }
                                 });
                               } else if (value == 'none') {
-                                user.preambleModel.existingDisease = [];
-                                user.preambleModel.existingDisease.add(value);
+                                user.preambleModel.existing_disease = [];
+                                user.preambleModel.existing_disease.add(value);
                                 setState(() {});
                               } else {
                                 if (isOther) {
-                                  user.preambleModel.existingDisease = [];
-                                  user.preambleModel.existingDisease.add(value);
+                                  user.preambleModel.existing_disease = [];
+                                  user.preambleModel.existing_disease.add(value);
                                   setState(() {});
                                 } else if (none) {
-                                  user.preambleModel.existingDisease = [];
-                                  user.preambleModel.existingDisease.add(value);
+                                  user.preambleModel.existing_disease = [];
+                                  user.preambleModel.existing_disease.add(value);
                                   setState(() {});
                                 } else {
                                   if (selected) {
-                                    user.preambleModel.existingDisease
+                                    user.preambleModel.existing_disease
                                         .remove(value);
                                     setState(() {});
                                   } else {
-                                    user.preambleModel.existingDisease
+                                    user.preambleModel.existing_disease
                                         .add(value);
                                     setState(() {});
                                   }
@@ -427,11 +427,11 @@ class _Slide7State extends State<Slide7> {
                         ),
                       ), //Text
                       Switch(
-                        value: user.preambleModel.isDrinking,
+                        value: user.preambleModel.is_drinking,
                         onChanged: (val) {
                           setState(() {
-                            user.preambleModel.isDrinking =
-                            !user.preambleModel.isDrinking;
+                            user.preambleModel.is_drinking =
+                            !user.preambleModel.is_drinking;
                           });
                         },
                         activeColor: AppConstants.primaryColor,
@@ -440,7 +440,7 @@ class _Slide7State extends State<Slide7> {
                     ], //<Widget>[]
                   ),
                 ),
-                if (user.preambleModel.isDrinking) ...{
+                if (user.preambleModel.is_drinking) ...{
                   UIHelper.verticalSpace(6.0),
                   Container(
                     padding: EdgeInsets.only(left: 18, right: 18),
@@ -471,11 +471,11 @@ class _Slide7State extends State<Slide7> {
                         ),
                       ),
                       Switch(
-                        value: user.preambleModel.isSmoking,
+                        value: user.preambleModel.is_smoking,
                         onChanged: (val) {
                           setState(() {
-                            user.preambleModel.isSmoking =
-                            !user.preambleModel.isSmoking;
+                            user.preambleModel.is_smoking =
+                            !user.preambleModel.is_smoking;
                           });
                         },
                         activeColor: AppConstants.primaryColor,
@@ -484,7 +484,7 @@ class _Slide7State extends State<Slide7> {
                     ], //<Widget>[]
                   ),
                 ),
-                if (user.preambleModel.isSmoking) ...{
+                if (user.preambleModel.is_smoking) ...{
                   UIHelper.verticalSpace(6.0),
                   Container(
                       padding: EdgeInsets.only(left: 18, right: 18),

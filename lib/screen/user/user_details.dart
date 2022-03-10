@@ -423,7 +423,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     gotoNext();
                                   }
                                 } else if (currentIndex == 2) {
-                                  if (user.preambleModel.bodyType == null) {
+                                  if (user.preambleModel.body_type == null) {
                                     displaySnack(
                                         'Please select your body type!');
                                     return;
@@ -466,17 +466,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   if(user.preambleModel.goalWeight == null || user.preambleModel.goalWeight == 0.0){
                                     displaySnack('Please select valid goal weight!');
                                     return;
-                                  }else if(user.preambleModel.existingDisease ==null || user.preambleModel.existingDisease.isEmpty){
+                                  }else if(user.preambleModel.existing_disease ==null || user.preambleModel.existing_disease.isEmpty){
                                     displaySnack('Please select 1 medical condition!');
                                     return;
                                   }else {
                                     gotoNext();
                                   }
                                 }else if(currentIndex ==4){
-                                  if(user.preambleModel.fitnessGoal == null || user.preambleModel.fitnessGoal.isEmpty){
+                                  if(user.preambleModel.type1 == null || user.preambleModel.type1.isEmpty){
                                     displaySnack('Please select your fitness goal');
                                     return;
-                                  }else if(user.preambleModel.fitnessGoal ==null ||user.preambleModel.fitnessGoal.isEmpty){
+                                  }else if(user.preambleModel.type1 ==null ||user.preambleModel.type1.isEmpty){
                                     displaySnack('Please select your diet preference');
                                     return;
                                   }else{
@@ -557,19 +557,26 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     print('preamble Update called');
     user.updatePreamble(user.preambleModel).then((value) {
       if(value != null && value){
-        if (!user.preambleFromLogin) Navigator.pop(context);
-        if (value) {
-          // FlashHelper.successBar(context, message: 'BMR result Saved');
-          if (!user.preambleFromLogin) {
-            context.read<GymStore>().init(context: context);
-            NavigationService.navigateTo(Routes.bmrCalculatorResult);
-          }
-        } else {
-          displaySnack('Please try again!');
-        }
+        // if (!user.preambleFromLogin) Navigator.pop(context);
+        // if (value) {
+        //   // FlashHelper.successBar(context, message: 'BMR result Saved');
+        //   if (!user.preambleFromLogin) {
+        //     context.read<GymStore>().init(context: context);
+        //     NavigationService.navigateTo(Routes.bmrCalculatorResult);
+        //   }
+        // } else {
+        //   displaySnack('Please try again!');
+        // }
+        updateMember();
       }else{
         displaySnack('Something went wrong please try again later!');
       }
+    });
+  }
+
+  void updateMember(){
+    user.updateMember(context: context,data: user.preambleModel).then((value){
+      Navigator.pop(context);
     });
   }
 }

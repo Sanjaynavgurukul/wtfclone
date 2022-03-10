@@ -6,7 +6,7 @@ class PreambleModel {
 
   String user_id;
 
-  String bodyType;
+  String body_type;
 
   bool heightInCm = true;
   int heightCm = 160;
@@ -24,24 +24,40 @@ class PreambleModel {
 
   bool gainingWeight = true;
   double goalWeight = 0.25;
-  List<String> existingDisease = [];
-  bool isSmoking = false;
-  bool isDrinking = false;
+  List<String> existing_disease = [];
+  bool is_smoking = false;
+  bool is_drinking = false;
 
-  String fitnessGoal;
-  String dietPreference;
+  String type1;
+  String type2;
 
   DateTime date;
   String bmr_result;
+
+
+  //Extra For Member
+  String uid;
+  // String user_uid;
+  String name;
+  String email;
+  int target_weight;
+  String target_duration;
+  String location;
+  String lat;
+  String long;
+  String n_token;
+  String device_id;
+  String howactive;
+  String tainer_notes;
+
   PreambleModel();
 
   PreambleModel.fromJson(Map<String, dynamic> json){
     this.gender = json["gender"];
-    this.user_id = json["user_id"];
     this.age = json["age"] ?? 24;
     this.date = json['date'];
     this.bmr_result = json['bmr_result'];
-    this.bodyType = json["bodyType"];
+    this.body_type = json["body_type"];
 
     this.heightInCm = json["heightInCm"] ?? true;
     // this.heightCm = json["heightCm"] ?? 160;
@@ -61,28 +77,52 @@ class PreambleModel {
 
     this.gainingWeight = json["gainingWeight"] ?? true;
     this.goalWeight = json["goalWeight"] ?? 0.25;
-    this.existingDisease = json["existingDisease"] ?? [];
-    this.isSmoking = json["isSmoking"] ?? false;
-    this.isDrinking = json["isDrinking"] ?? false;
+    this.existing_disease = json["existing_disease"] ?? [];
+    this.is_smoking = json["is_smoking"] ?? false;
+    this.is_drinking = json["is_drinking"] ?? false;
 
-    this.fitnessGoal = json["fitnessGoal"];
-    this.dietPreference = json["dietPreference"];
+    this.type1 = json["type1"];
+    this.type2 = json["type2"];
+
+    this.uid = json["uid"];
+    this.user_id = json["user_uid"];
+    this.name = json["name"];
+    this.email = json["email"];
+    this.target_weight = json["target_weight"];
+    this.target_duration = json["target_duration"];
+    this.location = json["location"];
+    this.lat = json["lat"];
+    this.long = json["long"];
+    this.n_token = json["n_token"];
+    this.device_id = json["device_id"];
+    this.howactive = json["howactive"];
+    this.tainer_notes = json["tainer_notes"];
   }
 
-  Map<String, dynamic> toJson(PreambleModel data, {@required String userId}) =>
+  Map<String,dynamic> toJsonPreamble(PreambleModel data)=>{
+    'user_id': data.user_id,
+    "date": DateTime.now().toIso8601String(),
+    "age": data.age,
+    "gender": data.gender,
+    'height': convertHeightToJson(value:data),
+    'weight':convertWeightToJson(value: data),
+    "bmr_result": data.bmr_result,
+  };
+
+  Map<String, dynamic> toJsonMember(PreambleModel data) =>
       {
         "gender": data.gender,
         "age": data.age,
-        'user_id': userId,
-        "bodyType": data.bodyType,
+        'user_uid': data.user_id,
+        "body_type": data.body_type,
 
         "heightInCm": data.heightInCm,
         "heightCm": data.heightCm,
         "heightFeet": data.heightFeet,
         'height': convertHeightToJson(value:data),
 
-        "date": DateTime.now().toIso8601String(),
-        "bmr_result": data.bmr_result,
+        //"date": DateTime.now().toIso8601String(),
+        //"bmr_result": data.bmr_result,
 
         "weightInKg": data.weightInKg,
         "weightKg": data.weightKg,
@@ -95,14 +135,27 @@ class PreambleModel {
         "gainingWeight": data.gainingWeight,
 
         "goalWeight": data.goalWeight,
-        "existingDisease": data.existingDisease,
-        "isSmoking": data.isSmoking,
-        "isDrinking": data.isDrinking,
+        "existing_disease": data.existing_disease,
+        "is_smoking": data.is_smoking,
+        "is_drinking": data.is_drinking,
 
-        "fitnessGoal": data.fitnessGoal,
-        "dietPreference": data.dietPreference,
+        "type1": data.type1,
+        "type2": data.type2,
+
+        "uid": data.uid,
+        "name": data.name,
+        "email": data.email,
+        "target_weight": data.target_weight,
+        "target_duration": data.target_duration,
+        "location": data.location,
+        "lat": data.lat,
+        "long": data.long,
+        "n_token": data.n_token,
+        "device_id": data.device_id,
+        "howactive": data.howactive,
+        "tainer_notes": data.tainer_notes,
+        'status':'active'
       };
-
 
   String convertHeightToJson({PreambleModel value}){
       if(value.heightInCm){

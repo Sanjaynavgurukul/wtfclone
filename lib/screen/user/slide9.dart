@@ -94,10 +94,10 @@ class _Slide9State extends State<Slide9> {
                 expandedColor: Color(0xff922224),
                 title: Text('Choose your body type',
                     style: TextStyle(color: Colors.white)),
-                subtitle: user.preambleModel.bodyType == null
+                subtitle: user.preambleModel.body_type == null
                     ? null
                     : Text(
-                  user.preambleModel.bodyType ?? '',
+                  user.preambleModel.body_type ?? '',
                   style: TextStyle(color: Colors.white),
                 ),
                 children: [
@@ -118,14 +118,14 @@ class _Slide9State extends State<Slide9> {
                         children: types
                             .map((e) => newUI(
                             data: e,
-                            selected: user.preambleModel.bodyType == null
+                            selected: user.preambleModel.body_type == null
                                 ? false
-                                : user.preambleModel.bodyType == e['type'],
+                                : user.preambleModel.body_type == e['type'],
                             onClick: () {
                               // print('clicked value');
                               setState(() {
                                 bodyType = e['type'];
-                                user.preambleModel.bodyType = bodyType;
+                                user.preambleModel.body_type = bodyType;
                                 // user.setValue(bodyType: e['type']);
                               });
                             }))

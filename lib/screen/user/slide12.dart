@@ -49,11 +49,11 @@ class _Slide12State extends State<Slide12> {
             shrinkWrap: true,
             itemCount: store.dprefType1.data.length,
             itemBuilder: (context, index) {
-              bool selected = store.preambleModel.fitnessGoal == store.dprefType1.data[index].uid ?? '';
+              bool selected = store.preambleModel.type1 == store.dprefType1.data[index].uid ?? '';
               return InkWell(
                 onTap: () {
                   setState(() {
-                    store.preambleModel.fitnessGoal = store.dprefType1.data[index].uid;
+                    store.preambleModel.type1 = store.dprefType1.data[index].uid;
                     // type1 = store.dprefType1.data[index].uid;
                     // user.setValue(type1: type1);
                     locator<AppPrefs>().type1.setValue(type1);
@@ -152,7 +152,7 @@ class _Slide12State extends State<Slide12> {
                     .map((e) => InkWell(
                   onTap: () {
                     setState(() {
-                      store.preambleModel.dietPreference = e.uid;
+                      store.preambleModel.type2 = e.uid;
                       // type2 = e.uid;
                       // user.setValue(type2: type2);
                       locator<AppPrefs>().type2.setValue(type2);
@@ -165,7 +165,7 @@ class _Slide12State extends State<Slide12> {
                       children: [
                         Flexible(
                           child: SvgPicture.asset(
-                            store.preambleModel.dietPreference == e.uid
+                            store.preambleModel.type2 == e.uid
                                 ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
                                 : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
                           ),

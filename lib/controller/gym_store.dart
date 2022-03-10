@@ -2251,8 +2251,63 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<bool> updatePreamble(PreambleModel data)async{
-    Map<String,dynamic> dataJson =  PreambleModel().toJson(data);
+    Map<String,dynamic> dataJson =  PreambleModel().toJsonPreamble(data);
     bool status = await RestDatasource().updatePreamble(dataJson);
     return status;
+  }
+
+  Future<dynamic> updateMember({BuildContext context,PreambleModel data}) async {
+    loading = true;
+    notifyListeners();
+    data.uid = locator<AppPrefs>().memberData.getValue().uid;
+    data.user_id = locator<AppPrefs>().memberId.getValue();
+    data.name =  locator<AppPrefs>().userName.getValue();
+    data.email =  locator<AppPrefs>().userEmail.getValue();
+    // 'location': address,
+
+    data.lat = '${context.read<GymStore>().currentPosition?.latitude ??
+        locator<AppPrefs>().memberData.getValue().lat}';
+    data.long =  '${context.read<GymStore>().currentPosition?.longitude ??
+        locator<AppPrefs>().memberData.getValue().long}';
+
+    // 'target_weight': targetWeight,
+    // 'target_duration': goalWeight.toStringAsFixed(2),
+    // status: 'active',
+    // Map<String, dynamic> body = {
+    //
+    //   'name': locator<AppPrefs>().userName.getValue(),
+    //   'email': locator<AppPrefs>().userEmail.getValue(),
+    //   'age': age,
+    //   'gender': gender,
+    //   'location': address,
+    //   'lat': context.read<GymStore>().currentPosition?.latitude ??
+    //       locator<AppPrefs>().memberData.getValue().lat,
+    //   'long': context.read<GymStore>().currentPosition?.longitude ??
+    //       locator<AppPrefs>().memberData.getValue().long,
+    //   'body_type': body_type,
+    //   "is_smoking": is_smoking,
+    //   "is_drinking": is_drinking,
+    //   'height': heightFeet,
+    //   'weight': weight,
+    //   'target_weight': targetWeight,
+    //   'target_duration': goalWeight.toStringAsFixed(2),
+    //   'existing_disease': existing_disease.join(','),
+    //   'type1': type1,
+    //   'type2': type2,
+    //   'status': 'active',
+    // };
+
+    // print('body: $body');
+
+    Map<String ,dynamic> body = PreambleModel().toJsonMember(data);
+    locator<AppPrefs>().updateMemberData.setValue(false);
+    Map<String, dynamic> res = await RestDatasource().updateMember(body);
+    print('controller response: $res');
+    loading = false;
+    if (res['status'] == true) {
+      FlashHelper.successBar(context, message: 'Profile Updates Successfully');
+    }
+    notifyListeners();
+    return res;
   }
 }
