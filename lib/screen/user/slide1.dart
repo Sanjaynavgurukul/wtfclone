@@ -173,81 +173,81 @@ class _Slide1State extends State<Slide1> {
     );
   }
 
-  Widget oldUI(UserController user){
-    return Column(
-      children: [
-        // GenderSelectionTopBar(),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            GenderItem(
-              title: genderList[0],
-              isSelected: user.gender == genderList[0],
-              onPress: (str) {
-                setState(() {
-                  user.gender = str;
-                  locator<AppPrefs>().gender.setValue(str);
-                });
-              },
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            GenderItem(
-              title: genderList[1],
-              isSelected: user.gender == genderList[1],
-              onPress: (str) {
-                setState(() {
-                  user.gender = str;
-                  locator<AppPrefs>().gender.setValue(str);
-                });
-              },
-            ),
-          ],
-        ),
-        UIHelper.verticalSpace(20.0),
-        InkWell(
-          onTap: () async {
-            setState(() {
-              user.gender = 'other';
-              locator<AppPrefs>().gender.setValue('other');
-            });
-          },
-          child: Container(
-            width: MediaQuery.of(context).size.width * .78,
-            padding: const EdgeInsets.all(12.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: user.gender == 'other'
-                  ? AppConstants.primaryColor
-                  : Colors.transparent,
-              border: Border.all(
-                color: user.gender == 'other'
-                    ? AppConstants.primaryColor
-                    : Colors.white,
-              ),
-            ),
-            margin: const EdgeInsets.symmetric(
-              horizontal: 4.0,
-              vertical: 6.0,
-            ),
-            child: Text(
-              'Other',
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 12,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget oldUI(UserController user){
+  //   return Column(
+  //     children: [
+  //       // GenderSelectionTopBar(),
+  //       SizedBox(
+  //         height: 10,
+  //       ),
+  //       Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //         children: [
+  //           GenderItem(
+  //             title: genderList[0],
+  //             isSelected: user.gender == genderList[0],
+  //             onPress: (str) {
+  //               setState(() {
+  //                 user.gender = str;
+  //                 locator<AppPrefs>().gender.setValue(str);
+  //               });
+  //             },
+  //           ),
+  //           SizedBox(
+  //             width: 5,
+  //           ),
+  //           GenderItem(
+  //             title: genderList[1],
+  //             isSelected: user.gender == genderList[1],
+  //             onPress: (str) {
+  //               setState(() {
+  //                 user.gender = str;
+  //                 locator<AppPrefs>().gender.setValue(str);
+  //               });
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //       UIHelper.verticalSpace(20.0),
+  //       InkWell(
+  //         onTap: () async {
+  //           setState(() {
+  //             user.gender = 'other';
+  //             locator<AppPrefs>().gender.setValue('other');
+  //           });
+  //         },
+  //         child: Container(
+  //           width: MediaQuery.of(context).size.width * .78,
+  //           padding: const EdgeInsets.all(12.0),
+  //           alignment: Alignment.center,
+  //           decoration: BoxDecoration(
+  //             color: user.gender == 'other'
+  //                 ? AppConstants.primaryColor
+  //                 : Colors.transparent,
+  //             border: Border.all(
+  //               color: user.gender == 'other'
+  //                   ? AppConstants.primaryColor
+  //                   : Colors.white,
+  //             ),
+  //           ),
+  //           margin: const EdgeInsets.symmetric(
+  //             horizontal: 4.0,
+  //             vertical: 6.0,
+  //           ),
+  //           child: Text(
+  //             'Other',
+  //             textAlign: TextAlign.center,
+  //             maxLines: 2,
+  //             style: TextStyle(
+  //               fontWeight: FontWeight.bold,
+  //               color: Colors.white,
+  //               fontSize: 12,
+  //               letterSpacing: 0.5,
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

@@ -428,6 +428,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                         'Please select your body type!');
                                     return;
                                   }//validating in height in cm
+                                  else if(user.preambleModel.howactive == null || user.preambleModel.howactive.isEmpty){
+                                    displaySnack('Please choose your workout experience');
+                                    return;
+                                  }
                                   else if(user.preambleModel.heightInCm && (user.preambleModel.heightCm == null || user.preambleModel.heightCm == 0)){
                                     displaySnack(
                                         'Please choose your valid height in cm!');

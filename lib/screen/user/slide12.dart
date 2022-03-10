@@ -23,8 +23,8 @@ class _Slide12State extends State<Slide12> {
   @override
   void initState() {
     super.initState();
-    type1 = context.read<UserController>().type1;
-    type2 = context.read<UserController>().type2;
+    // type1 = context.read<UserController>().type1;
+    // type2 = context.read<UserController>().type2;
   }
 
   @override

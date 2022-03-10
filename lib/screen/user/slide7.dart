@@ -529,61 +529,61 @@ class _Slide7State extends State<Slide7> {
     );
   }
 
-  Widget oldUI(UserController user) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            "How fast do you want to ${user.targetWeight > user.weight ? 'gain your weight' : 'lose your weight'}?",
-            style: TextStyle(
-              fontSize: 22.0,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            AppConstants.confidentialInfo,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.white,
-            ),
-          ),
-          // TextField(),
-          SizedBox(
-            height: 30,
-          ),
-          Center(
-            child: Text(
-              '${user.goalWeight.toStringAsFixed(2)} kg / week',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          UIHelper.verticalSpace(70.0),
-          FluidSlider(
-            value: user.goalWeight,
-            onChanged: (double newValue) {
-              setState(() {
-                user.setValue(
-                  goalWeight: newValue.toString(),
-                );
-              });
-            },
-            min: 0.0,
-            max: 1.5,
-            sliderColor: AppConstants.primaryColor,
-            showDecimalValue: true,
-            start: Container(),
-            end: Container(),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget oldUI(UserController user) {
+  //   return Center(
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           "How fast do you want to ${user.targetWeight > user.weight ? 'gain your weight' : 'lose your weight'}?",
+  //           style: TextStyle(
+  //             fontSize: 22.0,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //         SizedBox(height: 10),
+  //         Text(
+  //           AppConstants.confidentialInfo,
+  //           style: TextStyle(
+  //             fontSize: 12.0,
+  //             color: Colors.white,
+  //           ),
+  //         ),
+  //         // TextField(),
+  //         SizedBox(
+  //           height: 30,
+  //         ),
+  //         Center(
+  //           child: Text(
+  //             '${user.goalWeight.toStringAsFixed(2)} kg / week',
+  //             style: TextStyle(
+  //                 color: Colors.white,
+  //                 fontSize: 22,
+  //                 fontWeight: FontWeight.bold),
+  //           ),
+  //         ),
+  //         UIHelper.verticalSpace(70.0),
+  //         FluidSlider(
+  //           value: user.goalWeight,
+  //           onChanged: (double newValue) {
+  //             setState(() {
+  //               user.setValue(
+  //                 goalWeight: newValue.toString(),
+  //               );
+  //             });
+  //           },
+  //           min: 0.0,
+  //           max: 1.5,
+  //           sliderColor: AppConstants.primaryColor,
+  //           showDecimalValue: true,
+  //           start: Container(),
+  //           end: Container(),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Future<String> otherMedical(BuildContext context) async {
     return await showDialog<String>(

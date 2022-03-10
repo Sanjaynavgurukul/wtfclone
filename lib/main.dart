@@ -160,7 +160,7 @@ class _MyAppState extends State<MyApp>
       providers: [
         ChangeNotifierProvider<AuthController>(create: (_) => AuthController()),
         //TODo cgec
-        // ChangeNotifierProvider<UserController>(create: (_) => UserController()),
+        ChangeNotifierProvider<UserController>(create: (_) => UserController()),
         ChangeNotifierProvider<GymStore>(create: (_) => GymStore()),
         ChangeNotifierProvider<UserStore>(create: (_) => UserStore()),
         ChangeNotifierProvider(

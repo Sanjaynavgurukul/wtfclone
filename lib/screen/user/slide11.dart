@@ -49,10 +49,10 @@ class _Slide11State extends State<Slide11> {
 
   @override
   void initState() {
-    final user = Provider.of<UserController>(context, listen: false);
-    if (user.activeType != null && user.activeType != '') {
-      activeType = user.activeType;
-    }
+    // final user = Provider.of<UserController>(context, listen: false);
+    // if (user.activeType != null && user.activeType != '') {
+    //   activeType = user.activeType;
+    // }
     super.initState();
   }
 
@@ -95,9 +95,9 @@ class _Slide11State extends State<Slide11> {
                     setState(() {
                       activeType = types[index]['value'];
                       print('Body Type: ${types[index]}');
-                      user.setValue(
-                        activeType: types[index]['value'],
-                      );
+                      // user.setValue(
+                      //   activeType: types[index]['value'],
+                      // );
                     });
                   },
                   isSelected: activeType == types[index]['value'],

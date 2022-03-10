@@ -103,38 +103,39 @@ class _WeightState extends State<Weight> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserController>(builder: (context, user, snapshot) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
-          NumberPicker(
-            textStyle: TextStyle(fontSize: 25, color: Colors.white),
-            selectedTextStyle: TextStyle(
-              fontSize: 45,
-              color: AppConstants.white,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: BoxDecoration(
-              color: AppConstants.primaryColor.withOpacity(0.6),
-            ),
-            itemHeight: 60,
-            value: user.weight,
-            minValue: 0,
-            maxValue: 150,
-            step: 1,
-            haptics: true,
-            onChanged: (value) {
-              user.setValue(weight: value);
-            },
-
-            /* onChanged: (value) => setState(() => _currentIntValue = value),*/
-          ),
-          SizedBox(height: 10),
-        ],
-      );
+      return Container();
+      // return Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: <Widget>[
+      //     SizedBox(
+      //       height: 10,
+      //     ),
+      //     NumberPicker(
+      //       textStyle: TextStyle(fontSize: 25, color: Colors.white),
+      //       selectedTextStyle: TextStyle(
+      //         fontSize: 45,
+      //         color: AppConstants.white,
+      //         fontWeight: FontWeight.bold,
+      //       ),
+      //       decoration: BoxDecoration(
+      //         color: AppConstants.primaryColor.withOpacity(0.6),
+      //       ),
+      //       itemHeight: 60,
+      //       value: user.weight,
+      //       minValue: 0,
+      //       maxValue: 150,
+      //       step: 1,
+      //       haptics: true,
+      //       onChanged: (value) {
+      //         user.setValue(weight: value);
+      //       },
+      //
+      //       /* onChanged: (value) => setState(() => _currentIntValue = value),*/
+      //     ),
+      //     SizedBox(height: 10),
+      //   ],
+      // );
     });
   }
 }

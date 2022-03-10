@@ -86,39 +86,40 @@ class _AgeState extends State<Age> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserController>(builder: (context, user, snapshot) {
-      return SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 6),
-            NumberPicker(
-              textStyle: TextStyle(
-                fontSize: 25,
-                color: Colors.white,
-              ),
-              selectedTextStyle: TextStyle(
-                fontSize: 45,
-                color: AppConstants.white,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: BoxDecoration(
-                color: AppConstants.primaryColor.withOpacity(0.6),
-              ),
-              itemHeight: 60,
-              value: user.age,
-              minValue: 1,
-              maxValue: 100,
-              step: 1,
-              haptics: true,
-              onChanged: (value) {
-                setState(() {
-                  user.setValue(age: value);
-                });
-              },
-            ),
-            SizedBox(height: 5),
-          ],
-        ),
-      );
+      return Container();
+      // return SingleChildScrollView(
+      //   child: Column(
+      //     children: <Widget>[
+      //       SizedBox(height: 6),
+      //       NumberPicker(
+      //         textStyle: TextStyle(
+      //           fontSize: 25,
+      //           color: Colors.white,
+      //         ),
+      //         selectedTextStyle: TextStyle(
+      //           fontSize: 45,
+      //           color: AppConstants.white,
+      //           fontWeight: FontWeight.bold,
+      //         ),
+      //         decoration: BoxDecoration(
+      //           color: AppConstants.primaryColor.withOpacity(0.6),
+      //         ),
+      //         itemHeight: 60,
+      //         value: user.age,
+      //         minValue: 1,
+      //         maxValue: 100,
+      //         step: 1,
+      //         haptics: true,
+      //         onChanged: (value) {
+      //           setState(() {
+      //             user.setValue(age: value);
+      //           });
+      //         },
+      //       ),
+      //       SizedBox(height: 5),
+      //     ],
+      //   ),
+      // );
     });
   }
 }

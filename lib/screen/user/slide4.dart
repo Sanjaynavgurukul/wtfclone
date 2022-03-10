@@ -182,87 +182,88 @@ class HeightCm extends StatefulWidget {
 class _HeightCmState extends State<HeightCm> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Consumer<UserController>(builder: (context, user, snapshot) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            UIHelper.verticalSpace(30.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Feet',
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                UIHelper.horizontalSpace(80.0),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Inches',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            DecimalNumberPicker(
-                textStyle: TextStyle(
-                  fontSize: 22,
-                  color: Colors.white54,
-                ),
-                selectedTextStyle: TextStyle(
-                  fontSize: 45,
-                  color: AppConstants.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                integerDecoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withOpacity(0.6),
-                ),
-                decimalDecoration: BoxDecoration(
-                  color: AppConstants.primaryColor.withOpacity(0.6),
-                ),
-                itemHeight: 60,
-                value: user.heightFeet,
-                minValue: 1,
-                maxValue: 9,
-                haptics: true,
-                decimalPlaces: 2,
-                decimalTextMapper: (text) {
-                  print('text: $text');
-                  int dec = int.tryParse(text);
-                  return dec < 12 ? text : '';
-                },
-                onChanged: (value) {
-                  setState(() {
-                    user.setValue(heightFeet: value);
-                  });
-                }
-
-              /*onChanged: (value) => setState(() => _currentDoubleValue = value
-
-                ),*/
-            ),
-          ],
-        );
-      }),
-    );
+    // return WillPopScope(
+    //   onWillPop: () async {
+    //     return false;
+    //   },
+    //   child: Consumer<UserController>(builder: (context, user, snapshot) {
+    //     return Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       children: <Widget>[
+    //         UIHelper.verticalSpace(30.0),
+    //         Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //           children: [
+    //             Expanded(
+    //               flex: 1,
+    //               child: Text(
+    //                 'Feet',
+    //                 textAlign: TextAlign.end,
+    //                 style: TextStyle(
+    //                   fontSize: 12.0,
+    //                   color: Colors.white,
+    //                   fontWeight: FontWeight.w600,
+    //                 ),
+    //               ),
+    //             ),
+    //             UIHelper.horizontalSpace(80.0),
+    //             Expanded(
+    //               flex: 1,
+    //               child: Text(
+    //                 'Inches',
+    //                 textAlign: TextAlign.left,
+    //                 style: TextStyle(
+    //                   fontSize: 12.0,
+    //                   color: Colors.white,
+    //                   fontWeight: FontWeight.w600,
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         DecimalNumberPicker(
+    //             textStyle: TextStyle(
+    //               fontSize: 22,
+    //               color: Colors.white54,
+    //             ),
+    //             selectedTextStyle: TextStyle(
+    //               fontSize: 45,
+    //               color: AppConstants.white,
+    //               fontWeight: FontWeight.bold,
+    //             ),
+    //             integerDecoration: BoxDecoration(
+    //               color: AppConstants.primaryColor.withOpacity(0.6),
+    //             ),
+    //             decimalDecoration: BoxDecoration(
+    //               color: AppConstants.primaryColor.withOpacity(0.6),
+    //             ),
+    //             itemHeight: 60,
+    //             value: user.heightFeet,
+    //             minValue: 1,
+    //             maxValue: 9,
+    //             haptics: true,
+    //             decimalPlaces: 2,
+    //             decimalTextMapper: (text) {
+    //               print('text: $text');
+    //               int dec = int.tryParse(text);
+    //               return dec < 12 ? text : '';
+    //             },
+    //             onChanged: (value) {
+    //               setState(() {
+    //                 user.setValue(heightFeet: value);
+    //               });
+    //             }
+    //
+    //           /*onChanged: (value) => setState(() => _currentDoubleValue = value
+    //
+    //             ),*/
+    //         ),
+    //       ],
+    //     );
+    //   }),
+    // );
+    return Container();
   }
 }
 

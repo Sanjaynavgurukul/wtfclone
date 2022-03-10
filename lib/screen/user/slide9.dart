@@ -140,18 +140,18 @@ class _Slide9State extends State<Slide9> {
                 ],
               ),
               SizedBox(
-                height: 40,
+                height: 12,
               ),
               ExpansionTileCard(
                 elevation: 0,
-                baseColor: Color(0xff922224),
+                baseColor: Color(0xff292929),
                 expandedColor: Color(0xff922224),
-                title: Text('Choose your body type',
+                title: Text('Workout Experience',
                     style: TextStyle(color: Colors.white)),
-                subtitle: user.preambleModel.body_type == null
+                subtitle: user.preambleModel.howactive == null
                     ? null
                     : Text(
-                  user.preambleModel.body_type ?? '',
+                  user.preambleModel.howactive ?? '',
                   style: TextStyle(color: Colors.white),
                 ),
                 children: [
@@ -778,53 +778,53 @@ class _Slide9State extends State<Slide9> {
     );
   }
 
-  Widget oldUI(UserController user) {
-    return Column(
-      children: [
-        Text(
-          "Select your body type",
-          style: TextStyle(
-            fontSize: 22.0,
-            color: Colors.white,
-          ),
-        ),
-        UIHelper.verticalSpace(20.0),
-        Container(
-          height: Get.height * 0.6,
-          width: Get.width,
-          child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: types.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            itemBuilder: (context, index) => _item(
-              title: types[index]['type'],
-              onPress: () {
-                setState(() {
-                  bodyType = types[index]['type'];
-                  print('Body Type: ${types[index]}');
-                  user.setValue(bodyType: types[index]['type']);
-                });
-              },
-              isSelected: bodyType == types[index]['type'],
-              image: types[index]['image'],
-            ),
-          ),
-        ),
-        UIHelper.verticalSpace(8.0),
-        Text(
-          AppConstants.confidentialInfo,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12.0,
-            color: AppColors.TEXT_DARK,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget oldUI(UserController user) {
+  //   return Column(
+  //     children: [
+  //       Text(
+  //         "Select your body type",
+  //         style: TextStyle(
+  //           fontSize: 22.0,
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //       UIHelper.verticalSpace(20.0),
+  //       Container(
+  //         height: Get.height * 0.6,
+  //         width: Get.width,
+  //         child: GridView.builder(
+  //           physics: NeverScrollableScrollPhysics(),
+  //           shrinkWrap: true,
+  //           itemCount: types.length,
+  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //             crossAxisCount: 2,
+  //           ),
+  //           itemBuilder: (context, index) => _item(
+  //             title: types[index]['type'],
+  //             onPress: () {
+  //               setState(() {
+  //                 bodyType = types[index]['type'];
+  //                 print('Body Type: ${types[index]}');
+  //                 user.setValue(bodyType: types[index]['type']);
+  //               });
+  //             },
+  //             isSelected: bodyType == types[index]['type'],
+  //             image: types[index]['image'],
+  //           ),
+  //         ),
+  //       ),
+  //       UIHelper.verticalSpace(8.0),
+  //       Text(
+  //         AppConstants.confidentialInfo,
+  //         textAlign: TextAlign.center,
+  //         style: TextStyle(
+  //           fontSize: 12.0,
+  //           color: AppColors.TEXT_DARK,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   _item({title, isSelected, onPress, String image}) {
     return InkWell(

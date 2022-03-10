@@ -23,10 +23,10 @@ class _Slide0State extends State<Slide0> {
   @override
   void initState() {
     super.initState();
-    final user = Provider.of<UserController>(context, listen: false);
-    if (user.name != null) {
-      _user.text = user.name;
-    }
+    // final user = Provider.of<UserController>(context, listen: false);
+    // if (user.name != null) {
+    //   _user.text = user.name;
+    // }
   }
 
   DateTime currentBackPressTime;
