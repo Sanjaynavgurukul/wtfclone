@@ -94,7 +94,6 @@ class GymStore extends ChangeNotifier {
   PreambleModel preambleModel = new PreambleModel();
   bool preambleFromLogin = true;
 
-
   GymAddOn allAddonClasses;
 
   GymAddOn selectedGymAddOns;
@@ -277,12 +276,12 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeOffer(){
+  void removeOffer() {
     chosenOffer = null;
     notifyListeners();
   }
 
-  Future<void> applyCoupon({BuildContext context, OfferData data})async{
+  Future<void> applyCoupon({BuildContext context, OfferData data}) async {
     await setOffer(context: context, data: data);
     notifyListeners();
   }
@@ -335,6 +334,7 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> init({BuildContext context}) async {
+    //getMemberById();
     getActiveSubscriptions(context: context);
     getUpcomingEvents(context: context);
     getMemberSubscriptions(context: context);
@@ -365,7 +365,8 @@ class GymStore extends ChangeNotifier {
     getAllLiveClasses(context: context);
     getAllAddonClasses(context: context);
     context.read<UserStore>().getUserById(context: context);
-    context.read<UserStore>().getMemberById(context: context);
+    // context.read<UserStore>().getMemberById(context: context);
+    getMemberById();
   }
 
   Future<void> joinLiveSession({
@@ -707,7 +708,7 @@ class GymStore extends ChangeNotifier {
     } else {
       subscriptionBody['trx_id'] = response.paymentId;
       subscriptionBody['trx_status'] = 'failed';
-      subscriptionBody['order_status'] = 'done';
+      subscriptionBody['order_status'] = 'failed';
       bool isDone = await addSubscription(
         body: subscriptionBody,
       );
@@ -731,34 +732,6 @@ class GymStore extends ChangeNotifier {
             message:
                 'Failed to subscribe, Please contact support for resolution');
       }
-    }
-  }
-
-  //TODO here is the add method
-  Future<bool> addSubscription({
-    BuildContext context,
-    Map<String, dynamic> body,
-    bool showLoader = false,
-  }) async {
-    //2293768
-    print('Payload while adding partial payment --- $body');
-    print("get Gym Details 1");
-    if (showLoader) {
-      showDialog(
-        context: context,
-        builder: (context) => ProcessingDialog(
-          message: 'Creating your order,  Please wait...',
-        ),
-      );
-    }
-    CommonModel model = await RestDatasource().addSubscritpion(body);
-    if (showLoader) {
-      Navigator.pop(context);
-    }
-    if (model.status) {
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -787,6 +760,34 @@ class GymStore extends ChangeNotifier {
       msg: "EXTERNAL_WALLET: " + response.walletName,
       timeInSecForIosWeb: 4,
     );
+  }
+
+  //TODO here is the add method
+  Future<bool> addSubscription({
+    BuildContext context,
+    Map<String, dynamic> body,
+    bool showLoader = false,
+  }) async {
+    //2293768
+    print('Payload while adding partial payment --- $body');
+    print("get Gym Details 1");
+    if (showLoader) {
+      showDialog(
+        context: context,
+        builder: (context) => ProcessingDialog(
+          message: 'Creating your order,  Please wait...',
+        ),
+      );
+    }
+    CommonModel model = await RestDatasource().addSubscritpion(body);
+    if (showLoader) {
+      Navigator.pop(context);
+    }
+    if (model.status) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> changeNavigationTab({int index}) async {
@@ -889,8 +890,8 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<OfferData> getCoupon(String couponCode,String plan_type) async {
-    return APIHelper.getCoupon(couponCode,plan_type).then((value) {
+  Future<OfferData> getCoupon(String couponCode, String plan_type) async {
+    return APIHelper.getCoupon(couponCode, plan_type).then((value) {
       if (value.isSuccessed) {
         return OfferData.fromJson(value.data[0]);
       } else {
@@ -1220,14 +1221,15 @@ class GymStore extends ChangeNotifier {
     });
   }
 
-  Future<ForceUpdateModel> getForceUpdate()async{
+  Future<ForceUpdateModel> getForceUpdate() async {
     notifyListeners();
     print('checking in gym store ---');
     ForceUpdateModel forceUpdate = await RestDatasource().getForceUpdate();
     print('checking in gym store --- ${forceUpdate.wtf_version}');
-    if(forceUpdate != null)
+    if (forceUpdate != null)
       forceUpdateModel = forceUpdate;
-    else forceUpdateModel = new ForceUpdateModel();
+    else
+      forceUpdateModel = new ForceUpdateModel();
     notifyListeners();
     return forceUpdate;
   }
@@ -1568,6 +1570,7 @@ class GymStore extends ChangeNotifier {
       print('store ->member subs error: $e');
     }
   }
+
   //GLKdIYAWDS2Q8
   Future<void> getAllEvents({BuildContext context}) async {
     AllEvents res = await RestDatasource().getAllEvents();
@@ -1607,13 +1610,12 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getAllGymOffers({String plan_uid,BuildContext context, String gymId}) async {
+  Future<void> getAllGymOffers(
+      {String plan_uid, BuildContext context, String gymId}) async {
     loading = true;
     notifyListeners();
-    GymOffers res = await RestDatasource().getAllGymOffers(
-      gymId: gymId,
-      plan_uid: plan_uid
-    );
+    GymOffers res = await RestDatasource()
+        .getAllGymOffers(gymId: gymId, plan_uid: plan_uid);
     if (res != null) {
       selectedGymOffer = res;
       notifyListeners();
@@ -2250,25 +2252,26 @@ class GymStore extends ChangeNotifier {
     return response;
   }
 
-  Future<bool> updatePreamble(PreambleModel data)async{
-    Map<String,dynamic> dataJson =  PreambleModel().toJsonPreamble(data);
+  Future<bool> updatePreamble(PreambleModel data) async {
+    Map<String, dynamic> dataJson = PreambleModel().toJsonPreamble(data);
     bool status = await RestDatasource().updatePreamble(dataJson);
     return status;
   }
 
-  Future<dynamic> updateMember({BuildContext context,PreambleModel data}) async {
+  Future<dynamic> updateMember(
+      {BuildContext context, PreambleModel data}) async {
     loading = true;
     notifyListeners();
     data.uid = locator<AppPrefs>().memberData.getValue().uid;
     data.user_id = locator<AppPrefs>().memberId.getValue();
-    data.name =  locator<AppPrefs>().userName.getValue();
-    data.email =  locator<AppPrefs>().userEmail.getValue();
+    data.name = locator<AppPrefs>().userName.getValue();
+    data.email = locator<AppPrefs>().userEmail.getValue();
     // 'location': address,
 
-    data.lat = '${context.read<GymStore>().currentPosition?.latitude ??
-        locator<AppPrefs>().memberData.getValue().lat}';
-    data.long =  '${context.read<GymStore>().currentPosition?.longitude ??
-        locator<AppPrefs>().memberData.getValue().long}';
+    data.lat =
+        '${context.read<GymStore>().currentPosition?.latitude ?? locator<AppPrefs>().memberData.getValue().lat}';
+    data.long =
+        '${context.read<GymStore>().currentPosition?.longitude ?? locator<AppPrefs>().memberData.getValue().long}';
 
     // 'target_weight': targetWeight,
     // 'target_duration': goalWeight.toStringAsFixed(2),
@@ -2299,7 +2302,7 @@ class GymStore extends ChangeNotifier {
 
     // print('body: $body');
 
-    Map<String ,dynamic> body = PreambleModel().toJsonMember(data);
+    Map<String, dynamic> body = PreambleModel().toJsonMember(data);
     locator<AppPrefs>().updateMemberData.setValue(false);
     Map<String, dynamic> res = await RestDatasource().updateMember(body);
     print('controller response: $res');
@@ -2309,5 +2312,11 @@ class GymStore extends ChangeNotifier {
     }
     notifyListeners();
     return res;
+  }
+
+  Future<void> getMemberById() async {
+    PreambleModel data = await RestDatasource().getMemberById();
+    preambleModel = data;
+    notifyListeners();
   }
 }

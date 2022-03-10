@@ -60,7 +60,8 @@ class UserStore extends ChangeNotifier {
         }
         locator<AppPrefs>().phoneNumber.setValue(res.data.mobile);
         notifyListeners();
-        getMemberById(context: context);
+        //TODO check get member by id
+        //getMemberById(context: context);
         //NavigationService.goBack;
       } catch (e) {
         print('user data update error: $e');
@@ -68,24 +69,25 @@ class UserStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getMemberById({BuildContext context}) async {
-    MemberDetails res = await RestDatasource().getMemberById(
-        id: locator<AppPrefs>().memberId.getValue(), context: context);
-    if (res != null) {
-      try {
-        if (res.status) {
-          print('member Data :::: ${res.toJson()}');
-          locator<AppPrefs>().memberData.setValue(res.data);
-          notifyListeners();
-        } else {
-          NavigationService.navigateTo(Routes.userDetail);
-          FlashHelper.informationBar(context,
-              message: 'Please add your details before using WTF services');
-        }
-        //NavigationService.goBack;
-      } catch (e) {
-        print('user data update error: $e');
-      }
-    }
-  }
+  //TODO Check get member by id
+  // Future<void> getMemberById({BuildContext context}) async {
+  //   MemberDetails res = await RestDatasource().getMemberById(
+  //       id: locator<AppPrefs>().memberId.getValue(), context: context);
+  //   if (res != null) {
+  //     try {
+  //       if (res.status) {
+  //         print('member Data :::: ${res.toJson()}');
+  //         locator<AppPrefs>().memberData.setValue(res.data);
+  //         notifyListeners();
+  //       } else {
+  //         NavigationService.navigateTo(Routes.userDetail);
+  //         FlashHelper.informationBar(context,
+  //             message: 'Please add your details before using WTF services');
+  //       }
+  //       //NavigationService.goBack;
+  //     } catch (e) {
+  //       print('user data update error: $e');
+  //     }
+  //   }
+  // }
 }

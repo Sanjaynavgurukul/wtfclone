@@ -322,24 +322,24 @@ class RestDatasource {
     return Future.value(res);
   }
 
-  Future<MemberDetails> getMemberById({BuildContext context, String id}) async {
-    Map<String, String> mapHeader = Map();
-    String url = BASE_URL + Api.getMemberById(id);
-    String token = locator<AppPrefs>().token.getValue();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    var response = await _netUtil.get(
-      url,
-      headers: mapHeader,
-    );
-    MemberDetails res;
-    if (response != null && response['status']) {
-      res = MemberDetails.fromJson(response);
-    } else {
-      res = MemberDetails(status: false);
-    }
-    return Future.value(res);
-  }
+  // Future<MemberDetails> getMemberById({BuildContext context, String id}) async {
+  //   Map<String, String> mapHeader = Map();
+  //   String url = BASE_URL + Api.getMemberById(id);
+  //   String token = locator<AppPrefs>().token.getValue();
+  //   mapHeader["Authorization"] = "Bearer " + token;
+  //   mapHeader["Content-Type"] = "application/json";
+  //   var response = await _netUtil.get(
+  //     url,
+  //     headers: mapHeader,
+  //   );
+  //   MemberDetails res;
+  //   if (response != null && response['status']) {
+  //     res = MemberDetails.fromJson(response);
+  //   } else {
+  //     res = MemberDetails(status: false);
+  //   }
+  //   return Future.value(res);
+  // }
 
   Future<bool> shiftTrainer(
       {String gymId, String memberId, String newTrainer, String reason}) async {
@@ -1585,14 +1585,32 @@ class RestDatasource {
       body: data,
       headers: mapHeader,
     );
-    bool isAdded = false;
     if (res != null) {
-      isAdded = res['status'];
       print('response called not null ${res['status']}');
       return res['status'];
     }else{
       print('response called null');
       return false;
     }
+  }
+
+  Future<PreambleModel> getMemberById()async{
+    String memberId = locator<AppPrefs>().memberId.getValue();
+    Map<String, String> mapHeader = Map();
+    String url = BASE_URL + Api.getMemberById(memberId);
+    String token = locator<AppPrefs>().token.getValue();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var response = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    PreambleModel res;
+    if (response != null && response['status']) {
+      res = PreambleModel.fromJson(response['data']);
+    } else {
+      res = new PreambleModel();
+    }
+    return Future.value(res);
   }
 }
