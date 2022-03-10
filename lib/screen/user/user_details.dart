@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
@@ -33,6 +35,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       });
     });
   }
+  GymStore user;
 
   // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
   //   Navigator.of(context).pop(false);
@@ -45,7 +48,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
-
+    user = Provider.of<GymStore>(context, listen: false);
     contents = <Widget>[
       Slide0(
         title: 'Welcome to WTF',
@@ -436,7 +439,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     return;
                                   }
                                   //validating your weight in kg
-                                  else if (user.preambleModel.weightInKg && (user.preambleModel.weight == null || user.preambleModel.weight == 0)) {
+                                  else if (user.preambleModel.weightInKg && (user.preambleModel.weightKg == null || user.preambleModel.weightKg == 0)) {
                                     displaySnack(
                                         'Please choose your valid weight in kg!');
                                     return;
@@ -480,6 +483,24 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     gotoNext();
                                   }
                                 }
+                                // else if(currentIndex == 5){
+                                //   user.updatePreamble(user.preambleModel).then((value) {
+                                //     if(value != null && value){
+                                //       if (!user.preambleFromLogin) Navigator.pop(context);
+                                //       if (value) {
+                                //         // FlashHelper.successBar(context, message: 'BMR result Saved');
+                                //         if (!user.preambleFromLogin) {
+                                //           context.read<GymStore>().init(context: context);
+                                //           NavigationService.navigateTo(Routes.bmrCalculatorResult);
+                                //         }
+                                //       } else {
+                                //         displaySnack('Please try again!');
+                                //       }
+                                //     }else{
+                                //       displaySnack('Something went wrong please try again later!');
+                                //     }
+                                //   });
+                                // }
                                 else {
                                   gotoNext();
                                 }
@@ -500,10 +521,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void gotoNext() {
-    _controller.nextPage(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeInToLinear,
-    );
+    if(currentIndex == 5){
+      updatePreamble();
+    }else{
+      _controller.nextPage(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInToLinear,
+      );
+    }
   }
 
   void displaySnack(String message) {
@@ -526,5 +551,25 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         color: currentIndex == index ? Colors.red : Colors.white,
       ),
     );
+  }
+
+  void updatePreamble(){
+    print('preamble Update called');
+    user.updatePreamble(user.preambleModel).then((value) {
+      if(value != null && value){
+        if (!user.preambleFromLogin) Navigator.pop(context);
+        if (value) {
+          // FlashHelper.successBar(context, message: 'BMR result Saved');
+          if (!user.preambleFromLogin) {
+            context.read<GymStore>().init(context: context);
+            NavigationService.navigateTo(Routes.bmrCalculatorResult);
+          }
+        } else {
+          displaySnack('Please try again!');
+        }
+      }else{
+        displaySnack('Something went wrong please try again later!');
+      }
+    });
   }
 }

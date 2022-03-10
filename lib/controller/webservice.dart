@@ -49,6 +49,7 @@ import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 
@@ -172,25 +173,6 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     String url = BASE_URL + Api.saveCalorieProgress();
-    log('url: $url');
-    var res = await _netUtil.post(
-      url,
-      body: body,
-      headers: mapHeader,
-    );
-    bool isAdded = false;
-    if (res != null) {
-      isAdded = res['status'];
-    }
-    return Future.value(isAdded);
-  }
-
-  Future<bool> saveBmrProgress({Map<String, dynamic> body}) async {
-    String token = locator<AppPrefs>().token.getValue();
-    Map<String, String> mapHeader = Map();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    String url = BASE_URL + Api.saveBmrProgress();
     log('url: $url');
     var res = await _netUtil.post(
       url,
@@ -642,14 +624,14 @@ class RestDatasource {
   }
 
   Future<GymOffers> getAllGymOffers(
-      {BuildContext context, String gymId,String plan_uid}) async {
+      {BuildContext context, String gymId, String plan_uid}) async {
     try {
       String token = locator<AppPrefs>().token.getValue();
       Map<String, String> mapHeader = Map();
       mapHeader["Authorization"] = "Bearer " + token;
       mapHeader["Content-Type"] = "application/json";
       var res = await _netUtil.get(
-        APIHelper.allGymOffers(gymId,plan_uid),
+        APIHelper.allGymOffers(gymId, plan_uid),
         headers: mapHeader,
       );
       print("response getAllGymOffers : " + res.toString());
@@ -668,12 +650,11 @@ class RestDatasource {
   //get Gym Details
   ///@Gaurav
   Future<GymDetailsModel> getGymDetails(String gymID) async {
-
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    var res = await _netUtil.get(BASE_URL + Api.GYM_DETAILS+gymID,
+    var res = await _netUtil.get(BASE_URL + Api.GYM_DETAILS + gymID,
         headers: mapHeader);
     print("response of Get GYM DETAILS : " + res.toString());
     // print('ben---- ${res['gallery']}');
@@ -685,12 +666,12 @@ class RestDatasource {
   //Get gym By Id
   Future<GymDetailsModel> getGymById(
       {String gymID, String lat, String lng}) async {
-
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    var res = await _netUtil.get(BASE_URL + Api.getGymDetailsById(gymId: gymID,lat: lat,lng: lng),
+    var res = await _netUtil.get(
+        BASE_URL + Api.getGymDetailsById(gymId: gymID, lat: lat, lng: lng),
         headers: mapHeader);
     print("response of Get GYM DETAILS : " + res.toString());
     // print('ben---- ${res['gallery']}');
@@ -707,7 +688,7 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil//https://devapi.wtfup.me/event?type=new
+    return _netUtil //https://devapi.wtfup.me/event?type=new
         .get(BASE_URL + Api.EVENTS, headers: mapHeader)
         .then((dynamic res) {
       log("response of Get ALL Events : " + res.toString());
@@ -1148,7 +1129,10 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    return _netUtil.get(BASE_URL + Api.SEARCH_GYM(lat: lat,lng: lng,query: name), headers: mapHeader).then((dynamic res) {
+    return _netUtil
+        .get(BASE_URL + Api.SEARCH_GYM(lat: lat, lng: lng, query: name),
+            headers: mapHeader)
+        .then((dynamic res) {
       print(res.toString());
       return GymSearchModel.fromJson(res);
     });
@@ -1495,15 +1479,15 @@ class RestDatasource {
     });
   }
 
-  Future<ForceUpdateModel> getForceUpdate()async{
+  Future<ForceUpdateModel> getForceUpdate() async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
 
     ForceUpdateModel model;
-    var res = await _netUtil
-        .get(BASE_URL + Api.getForceUpdate(), headers: mapHeader);
+    var res =
+        await _netUtil.get(BASE_URL + Api.getForceUpdate(), headers: mapHeader);
     if (res['status']) {
       print('Force Update Response --- $res');
       // model = (res['data'] as List)
@@ -1564,6 +1548,50 @@ class RestDatasource {
       }
     } catch (e) {
       print('add member error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> saveBmrProgress({Map<String, dynamic> body}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.saveBmrProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: body,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+    }
+    return Future.value(isAdded);
+  }
+
+  Future<bool> updatePreamble(Map<String, dynamic> data) async {
+    data['user_id'] = locator<AppPrefs>().memberId.getValue();
+    String token = locator<AppPrefs>().token.getValue();
+    print('checking data : - $data');
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.saveBmrProgress();
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: data,
+      headers: mapHeader,
+    );
+    bool isAdded = false;
+    if (res != null) {
+      isAdded = res['status'];
+      print('response called not null ${res['status']}');
+      return res['status'];
+    }else{
+      print('response called null');
       return false;
     }
   }

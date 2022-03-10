@@ -2250,9 +2250,9 @@ class GymStore extends ChangeNotifier {
     return response;
   }
 
-
-  void serPreambleValue(PreambleModel data){
-    preambleModel = data;
-    notifyListeners();
+  Future<bool> updatePreamble(PreambleModel data)async{
+    Map<String,dynamic> dataJson =  PreambleModel().toJson(data);
+    bool status = await RestDatasource().updatePreamble(dataJson);
+    return status;
   }
 }

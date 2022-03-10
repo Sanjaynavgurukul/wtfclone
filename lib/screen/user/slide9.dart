@@ -304,7 +304,7 @@ class _Slide9State extends State<Slide9> {
                 ),
                 title: Text('Enter your weight',
                     style: TextStyle(color: Colors.white, fontSize: 12)),
-                subtitle: user.preambleModel.weightInKg?valueLabel(user.preambleModel.weight):valueLabel(user.preambleModel.weightInLbs),
+                subtitle: user.preambleModel.weightInKg?valueLabel(user.preambleModel.weightKg):valueLabel(user.preambleModel.weightInLbs),
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -326,14 +326,14 @@ class _Slide9State extends State<Slide9> {
                         fontWeight: FontWeight.bold,
                       ),
                       itemHeight: 60,
-                      value: user.preambleModel.weight ?? 0,
+                      value: user.preambleModel.weightKg ?? 0,
                       minValue: 0,
                       maxValue: 200,
                       step: 1,
                       haptics: true,
                       onChanged: (value) {
                         setState(() {
-                          user.preambleModel.weight = value;
+                          user.preambleModel.weightKg = value;
                         });
                       },
                     )
