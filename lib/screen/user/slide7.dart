@@ -171,7 +171,7 @@ class _Slide7State extends State<Slide7> {
                                 ).then((v) {
                                   if(v != null){
                                     user.preambleModel.existingDisease = [];
-                                    user.preambleModel.otherDietPreference = v;
+                                    // user.preambleModel.otherDietPreference = v;
                                     user.preambleModel.existingDisease.add(value);
                                     setState(() {});
                                   }
