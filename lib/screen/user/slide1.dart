@@ -153,7 +153,7 @@ class _Slide1State extends State<Slide1> {
                   //   color: AppConstants.primaryColor.withOpacity(0.6),
                   // ),
                   itemHeight: 60,
-                  value: user.preambleModel.age,
+                  value: user.preambleModel.age??24,
                   minValue: 1,
                   maxValue: 100,
                   step: 1,
