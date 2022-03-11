@@ -15,15 +15,16 @@
     "http": "https://github.com/flutter/plugins/tree/master/packages/webview_flutter/webview_flutter_wkwebview"
   },
   "documentation_url": "https://pub.dev/packages/webview_flutter",
-  "source_files": "Classes/**/*",
+  "source_files": "Classes/**/*.{h,m}",
   "public_header_files": "Classes/**/*.h",
+  "module_map": "Classes/FlutterWebView.modulemap",
   "dependencies": {
     "Flutter": [
 
     ]
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
   "pod_target_xcconfig": {
     "DEFINES_MODULE": "YES",
