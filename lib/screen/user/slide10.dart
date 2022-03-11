@@ -22,7 +22,7 @@ class _Slide10State extends State<Slide10> {
     // if (locator<AppPrefs>().gender.getValue() == 'male') {
     if(user.preambleModel.gender.toLowerCase() == 'male'){
       context.read<BmrState>().bmrForMen(
-        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm:user.preambleModel.heightFeet),
+        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
         weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,
         age: user.preambleModel.age,
         context: context,
@@ -30,7 +30,7 @@ class _Slide10State extends State<Slide10> {
       );
     } else {
       context.read<BmrState>().bmrForWoMen(
-        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm:user.preambleModel.heightFeet),
+        height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
         weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,
         age: user.preambleModel.age,
         context: context,

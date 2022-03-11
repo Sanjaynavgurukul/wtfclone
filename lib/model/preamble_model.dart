@@ -17,12 +17,12 @@ class PreambleModel {
   String height;
 
   bool weightInKg = true;
-  int weightKg;
+  int weightKg = 45;
   int weightInLbs;
   String weight;
 
   bool targetWeightInKg = true;
-  int targetWeight;
+  int targetWeight = 50;
   int targetWeightInLbs;
 
   bool gainingWeight = true;

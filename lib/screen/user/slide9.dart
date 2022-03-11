@@ -79,7 +79,7 @@ class _Slide9State extends State<Slide9> {
   }
 
   List<String> tallList = ['in cm', 'in inches'];
-  List<String> weightList = ['in kg', 'in pound'];
+  List<String> weightList = ['in kg'];
 
   String tallLabel;
   String weightLabel;
