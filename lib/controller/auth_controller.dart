@@ -276,6 +276,7 @@ class AuthController extends ChangeNotifier {
       print('create account resp: $res1');
       var res;
       res = json.decode(res1.body);
+      print('create account resps: $res');
       if (res1 != null && res['status']) {
         res = json.decode(res1.body);
         locator<AppPrefs>().memberId.setValue(res['data']['user_id']);

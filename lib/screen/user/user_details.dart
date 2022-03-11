@@ -534,8 +534,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     displaySnack(
                                         'Please select your fitness goal');
                                     return;
-                                  } else if (user.preambleModel.type1 == null ||
-                                      user.preambleModel.type1.isEmpty) {
+                                  } else if (user.preambleModel.type2 == null ||
+                                      user.preambleModel.type2.isEmpty) {
                                     displaySnack(
                                         'Please select your diet preference');
                                     return;
@@ -648,26 +648,5 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         displaySnack('Something went wrong please try again later!!');
       }
     });
-  }
-
-  void _getPlace() {
-    print('this is address ' + user.currentAddress.addressLine);
-    // List<Placemark> newPlace = await _geolocator.placemarkFromCoordinates(_position.latitude, _position.longitude);
-    //
-    // // this is all you need
-    // Placemark placeMark  = newPlace[0];
-    // String name = placeMark.name;
-    // String subLocality = placeMark.subLocality;
-    // String locality = placeMark.locality;
-    // String administrativeArea = placeMark.administrativeArea;
-    // String postalCode = placeMark.postalCode;
-    // String country = placeMark.country;
-    // String address = "${name}, ${subLocality}, ${locality}, ${administrativeArea} ${postalCode}, ${country}";
-    //
-    // print(address);
-    //
-    // setState(() {
-    //   _address = address; // update _address
-    // });
   }
 }

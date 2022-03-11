@@ -7,6 +7,7 @@ class PreambleModel {
   int age = 24;
 
   String user_id;
+  String user_uid;
 
   String body_type;
 
@@ -87,6 +88,7 @@ class PreambleModel {
     this.user_id= json["user_id"];
     this.name= json["name"];
     this.email= json["email"];
+    this.user_uid= json["user_uid"];
     this.target_weight= double.parse(json["target_weight"]);
     this.target_duration= json["target_duration"];
     this.location= json["location"];
@@ -97,8 +99,6 @@ class PreambleModel {
     this.howactive= json["howactive"];
     this.tainer_notes= json["tainer_notes"];
   }
-
-
 
   static List<String> convertMedical(String value) {
     // var ab = json.decode(value);
@@ -129,6 +129,7 @@ class PreambleModel {
     "gender": data.gender,
     "age": data.age,
     'user_id': data.user_id,
+    'user_uid':data.user_id,
     "body_type": data.body_type,
 
     "heightInCm": data.heightInCm,

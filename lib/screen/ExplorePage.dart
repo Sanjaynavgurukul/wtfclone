@@ -61,7 +61,9 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                 ),
                 UIHelper.verticalSpace(10.0),
-                CommonBanner(bannerType: "WTF_banner",),
+                CommonBanner(
+                  bannerType: "WTF_banner",
+                ),
                 UIHelper.verticalSpace(30.0),
                 Row(
                   children: [
@@ -306,6 +308,7 @@ class _ExplorePageState extends State<ExplorePage> {
 class SectionHeader extends StatelessWidget {
   final String title;
   final String subTitle;
+
   const SectionHeader({
     Key key,
     this.subTitle,
@@ -345,6 +348,7 @@ class SectionHeader extends StatelessWidget {
 class EventCard extends StatelessWidget {
   final EventsData data;
   final bool isChallenge;
+
   const EventCard({
     Key key,
     this.data,
@@ -478,6 +482,7 @@ class LiveCard extends StatelessWidget {
   final bool isFullView;
   final bool isLiveCard;
   final bool showOnlyPt;
+
   const LiveCard({
     Key key,
     this.data,
@@ -1025,77 +1030,89 @@ class CommonAppBar extends StatelessWidget {
           UIHelper.horizontalSpace(10.0),
           Expanded(
             child: Consumer<GymStore>(
-              builder: (context, store, child) => store.activeSubscriptions != null?InkWell(
-                onTap: () async {
-                  context.read<GymStore>().getGymDetails(
-                        context: context,
-                        gymId: store.activeSubscriptions.data.gymId,
-                      );
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (_) => BuyMemberShipPage(
-                        gymId: store.activeSubscriptions.data.gymId,
-                      ),
-                    ),
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PreferenceBuilder<String>(
-                        preference: locator<AppPrefs>().userName,
-                        builder: (context, name) {
-                          return Text(
-                            'Hi! ${name.isNotEmpty ? name.capitalize() : ""}',
-                            style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14.0,
-                              color: Colors.white,
-                            ),
-                          );
-                        }),
-                    UIHelper.verticalSpace(4.0),
-                    Row(
-                      children: [
-                        Text('Welcome to',style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
-                          color: Colors.white,
-                        ),),SizedBox(width: 4,),
-                        store.activeSubscriptions != null &&
-                            store.activeSubscriptions.data != null?SizedBox(width: 0,): Image.asset(
-                          'assets/images/wtf_2.png',
-                          height: 14.0,
+              builder: (context, store, child) =>
+                  store.activeSubscriptions != null
+                      ? InkWell(
+                          onTap: () async {
+                            context.read<GymStore>().getGymDetails(
+                                  context: context,
+                                  gymId: store.activeSubscriptions.data.gymId,
+                                );
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (_) => BuyMemberShipPage(
+                                  gymId: store.activeSubscriptions.data.gymId,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PreferenceBuilder<String>(
+                                  preference: locator<AppPrefs>().userName,
+                                  builder: (context, name) {
+                                    return Text(
+                                      'Hi! ${name.isNotEmpty ? name.capitalize() : ""}',
+                                      style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  }),
+                              UIHelper.verticalSpace(4.0),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Welcome to',
+                                    style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  store.activeSubscriptions != null &&
+                                          store.activeSubscriptions.data != null
+                                      ? SizedBox(
+                                          width: 0,
+                                        )
+                                      : Image.asset(
+                                          'assets/images/wtf_2.png',
+                                          height: 14.0,
+                                        )
+                                ],
+                              ),
+                              UIHelper.verticalSpace(4.0),
+                              if (store.activeSubscriptions != null &&
+                                  store.activeSubscriptions.data != null)
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/wtf_2.png',
+                                      height: 14.0,
+                                    ),
+                                    UIHelper.horizontalSpace(6.0),
+                                    Text(
+                                      store.activeSubscriptions.data.gymName
+                                              .split(':')[1]
+                                              .trim() ??
+                                          'n/a',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16.0,
+                                        color: Colors.redAccent,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-
-                    UIHelper.verticalSpace(4.0),
-                    if (store.activeSubscriptions != null &&
-                        store.activeSubscriptions.data != null)
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/wtf_2.png',
-                            height: 14.0,
-                          ),
-                          UIHelper.horizontalSpace(6.0),
-                          Text(
-                            store.activeSubscriptions.data.gymName
-                                    .split(':')[1]
-                                    .trim() ??
-                                'n/a',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16.0,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        ],
-                      )
-                  ],
-                ),
-              ):Loader(),
+                      : Loader(),
             ),
           ),
           UIHelper.horizontalSpace(10.0),
@@ -1107,6 +1124,7 @@ class CommonAppBar extends StatelessWidget {
           PreferenceBuilder<String>(
             preference: locator<AppPrefs>().dateAdded,
             builder: (context, snapshot) {
+              print('date added value --- $snapshot');
               return snapshot != null
                   ? Text(
                       // '',
