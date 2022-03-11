@@ -57,6 +57,7 @@ class _Slide12State extends State<Slide12> {
                     // type1 = store.dprefType1.data[index].uid;
                     // user.setValue(type1: type1);
                     locator<AppPrefs>().type1.setValue(type1);
+                    print('preamble type 1 = ${store.dprefType1.data[index].uid}');
                   });
                 },
                 child: Container(
@@ -155,7 +156,8 @@ class _Slide12State extends State<Slide12> {
                       store.preambleModel.type2 = e.uid;
                       // type2 = e.uid;
                       // user.setValue(type2: type2);
-                      locator<AppPrefs>().type2.setValue(type2);
+                      locator<AppPrefs>().type2.setValue(e.uid);
+                      print('preamble type 1 = ${e.uid}');
                     });
                   },
                   child: Container(

@@ -2294,7 +2294,6 @@ class GymStore extends ChangeNotifier {
     // };
 
     // print('body: $body');
-
     if(isLogin){
       data.uid = locator<AppPrefs>().memberData
           .getValue()

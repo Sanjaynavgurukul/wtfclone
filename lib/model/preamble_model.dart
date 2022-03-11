@@ -100,11 +100,24 @@ class PreambleModel {
     this.tainer_notes= json["tainer_notes"];
   }
 
+  String convertListToString(List<String> data){
+    if(data.isEmpty || data == null) return '';
+    else{
+      String commaSeparatedNames= data
+          .map((item) => item)
+          .toList()
+          .join(",");
+      print("convert of string  -- $commaSeparatedNames");
+      return commaSeparatedNames;
+    }
+  }
   static List<String> convertMedical(String value) {
     // var ab = json.decode(value);
     print('something $value');
+    var ab = (value.split(','));
+    print('something $ab');
     // List<String> v = json.decode(value).cast < List<String>();
-    return [];
+    return ab;
   }
 
   static bool convertBool(var value) {
@@ -150,7 +163,8 @@ class PreambleModel {
     "targetWeightInLbs": data.targetWeightInLbs,
     "gainingWeight": data.gainingWeight,
     "goalWeight": data.goalWeight,
-    "existing_disease": data.existing_disease.toString(),
+    // "existing_disease": data.existing_disease.toString(),
+    "existing_disease": convertListToString(data.existing_disease),
     "is_smoking": data.is_smoking,
     "is_drinking": data.is_drinking,
 
