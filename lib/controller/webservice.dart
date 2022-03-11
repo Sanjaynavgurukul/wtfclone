@@ -1555,7 +1555,7 @@ class RestDatasource {
 
   Future<bool> updateMember(Map<String, dynamic> body) async {
     print('response from update member data : $body');
-    body['user_id'] = locator<AppPrefs>().memberId.getValue();
+    // body['user_id'] = locator<AppPrefs>().memberId.getValue();
     // String id =  locator<AppPrefs>().memberId.getValue();
     // print('response from update member data : $id');
     String url = APIHelper.updateMember;

@@ -53,62 +53,95 @@ class PreambleModel {
   String tainer_notes;
   String diet_category_id;
 
-  PreambleModel();
+  PreambleModel(
+      {this.type2,
+      this.target_weight,
+      this.target_duration,
+      this.tainer_notes,
+      this.n_token,
+      this.long,
+      this.is_smoking,
+      this.is_drinking,
+      this.existing_disease,
+      this.email,
+      this.device_id,
+      this.body_type,
+      this.type1,
+      this.age,
+      this.name,
+      this.targetWeightInLbs,
+      this.targetWeightInKg,
+      this.gainingWeight,
+      this.gender,
+      this.weight,
+      this.goalWeight,
+      this.date,
+      this.bmr_result,
+      this.height,
+      this.heightInCm,
+      this.heightFeet,
+      this.heightCm,
+      this.weightInKg,
+      this.weightKg,
+      this.weightInLbs,
+      this.uid,
+      this.user_id,
+      this.howactive,
+      this.lat,
+      this.location,
+      this.targetWeight,
+      this.diet_category_id});
 
-  PreambleModel.fromJson(Map<String, dynamic> json) {
-    this.gender = json["gender"];
-    this.age = json["age"] ?? 24;
-    this.date = json['date'];
-    this.bmr_result = json['bmr_result'];
-    this.diet_category_id = json['diet_category_id'];
-    this.body_type = json["body_type"];
+  factory PreambleModel.fromJson(Map<String, dynamic> json) => PreambleModel(
+      gender: json["gender"],
+      age: json["age"] ?? 24,
+      date: json['date'],
+      bmr_result: json['bmr_result'],
+      diet_category_id: json['diet_category_id'],
+      body_type: json["body_type"],
+      heightInCm: json["heightInCm"] ?? true,
+      // this.heightCm = json["heightCm"] ?? 160;
+      // this.heightFeet = json["heightFeet"] ?? 5.0;
+      heightCm: convertHeightFromJson(value: json['height']),
+      heightFeet: convertHeightFromJsonFeet(value: json['height']),
+      weightInKg: json["weightInKg"] ?? true,
+      // this.weightKg = json["weightKg"];
+      // this.weightInLbs = json["weightInLbs"];
+      weightKg: convertWeightFromJson(value: json['weight']),
+      weightInLbs: convertWeightFromJson(value: json['weight']),
+      targetWeightInKg: json["targetWeightInKg"] ?? true,
+      targetWeight: json["targetWeight"],
+      targetWeightInLbs: json["targetWeightInLbs"],
+      gainingWeight: json["gainingWeight"] ?? true,
+      goalWeight: json["goalWeight"] ?? 0.25,
+      existing_disease: convertMedical(json["existing_disease"] ?? []),
+      // this.existing_disease = json["existing_disease"] as List;
+      is_smoking: convertBool(json["is_smoking"]) ?? false,
+      is_drinking: convertBool(json["is_drinking"]) ?? false,
+      type1: json["type1"],
+      type2: json["type2"],
+      uid: json["uid"],
+      user_id: json["user_id"],
+      name: json["name"],
+      email: json["email"],
+      target_weight: double.parse(json["target_weight"]),
+      target_duration: json["target_duration"],
+      location: json["location"],
+      lat: json["lat"],
+      long: json["long"],
+      n_token: json["n_token"],
+      device_id: json["device_id"],
+      howactive: json["howactive"],
+      tainer_notes: json["tainer_notes"]);
 
-    this.heightInCm = json["heightInCm"] ?? true;
-    // this.heightCm = json["heightCm"] ?? 160;
-    // this.heightFeet = json["heightFeet"] ?? 5.0;
-    this.heightCm = convertHeightFromJson(value: json['height']);
-    this.heightFeet = convertHeightFromJsonFeet(value: json['height']);
-
-    this.weightInKg = json["weightInKg"] ?? true;
-    // this.weightKg = json["weightKg"];
-    // this.weightInLbs = json["weightInLbs"];
-    this.weightKg = convertWeightFromJson(value: json['weight']);
-    this.weightInLbs = convertWeightFromJson(value: json['weight']);
-
-    this.targetWeightInKg = json["targetWeightInKg"] ?? true;
-    this.targetWeight = json["targetWeight"];
-    this.targetWeightInLbs = json["targetWeightInLbs"];
-
-    this.gainingWeight = json["gainingWeight"] ?? true;
-    this.goalWeight = json["goalWeight"] ?? 0.25;
-    // this.existing_disease = json["existing_disease"] as List;
-    this.is_smoking = convertBool(json["is_smoking"]) ?? false;
-    this.is_drinking = convertBool(json["is_drinking"]) ?? false;
-
-    this.type1 = json["type1"];
-    this.type2 = json["type2"];
-
-    this.uid = json["uid"];
-    this.user_id = json["user_id"];
-    this.name = json["name"];
-    this.email = json["email"];
-    this.target_weight = double.parse(json["target_weight"]);
-    this.target_duration = json["target_duration"];
-    this.location = json["location"];
-    this.lat = json["lat"];
-    this.long = json["long"];
-    this.n_token = json["n_token"];
-    this.device_id = json["device_id"];
-    this.howactive = json["howactive"];
-    this.tainer_notes = json["tainer_notes"];
+  static List<String> convertMedical(String value) {
+    // var ab = json.decode(value);
+    print('something $value');
+    // List<String> v = json.decode(value).cast < List<String>();
+    return [];
   }
 
-  List<String> convertMedical(String value) {
-    List<String> v = json.decode(value).cast < List<String>();
-    return v ?? [];
-  }
-
-  bool convertBool(var value) {
+  static bool convertBool(var value) {
     if (value == 'false') {
       return false;
     } else {
@@ -173,7 +206,7 @@ class PreambleModel {
         'status': 'active'
       };
 
-  String convertHeightToJson({PreambleModel value}) {
+  static String convertHeightToJson({PreambleModel value}) {
     if (value.heightInCm) {
       String d = value.heightCm.toString();
       d += '_cm';
@@ -185,7 +218,7 @@ class PreambleModel {
     }
   }
 
-  dynamic convertHeightFromJson({String value}) {
+  static dynamic convertHeightFromJson({String value}) {
     bool isCm = value.contains(RegExp('_cm'));
 
     if (isCm) {
@@ -197,7 +230,7 @@ class PreambleModel {
     }
   }
 
-  dynamic convertHeightFromJsonFeet({String value}) {
+  static dynamic convertHeightFromJsonFeet({String value}) {
     bool isCm = value.contains(RegExp('_ft'));
 
     if (isCm) {
@@ -208,7 +241,7 @@ class PreambleModel {
     }
   }
 
-  String convertWeightToJson({PreambleModel value}) {
+  static String convertWeightToJson({PreambleModel value}) {
     if (value.weightInKg) {
       String d = value.weightKg.toString();
       d += '_kg';
@@ -220,7 +253,7 @@ class PreambleModel {
     }
   }
 
-  int convertWeightFromJson({String value}) {
+  static int convertWeightFromJson({String value}) {
     bool isKg = value.contains(RegExp('_kg'));
 
     if (isKg) {

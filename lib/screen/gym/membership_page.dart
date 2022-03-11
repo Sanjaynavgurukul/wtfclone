@@ -1854,7 +1854,7 @@ class BookPTWidget extends StatelessWidget {
                     gymStore.setAddOnSlot(
                       context: context,
                       data: gymStore.selectedGymAddOns.data
-                          .where((element) => element.isPt == '1')
+                          .where((element) => element.isPt == 1)
                           .toList()[0],
                     );
                     NavigationService.navigateTo(

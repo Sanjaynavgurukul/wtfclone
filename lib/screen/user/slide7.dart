@@ -150,15 +150,15 @@ class _Slide7State extends State<Slide7> {
                       runSpacing: 0.0,
                       spacing: 12.0,
                       children: datSource.map((data) {
-                        String value = data['value'];
-                        String name = data['display'];
+                        String value = data['value'].toString();
+                        String name = data['display'].toString();
                         bool selected =
                             user.preambleModel.existing_disease.contains(value) ??
                                 false;
                         bool isOther =
-                        user.preambleModel.existing_disease.contains('other');
+                        user.preambleModel.existing_disease.contains('other')??false;
                         bool none =
-                        user.preambleModel.existing_disease.contains('none');
+                        user.preambleModel.existing_disease.contains('none')??false;
                         return Container(
                           margin: EdgeInsets.only(bottom: 12),
                           child: InkWell(
