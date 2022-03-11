@@ -962,8 +962,9 @@ class GymStore extends ChangeNotifier {
   Future<void> getNewTrainers() async {
     loading = true;
     notifyListeners();
+    print('active subscription id -- ${activeSubscriptions.data.userId}');
     return RestDatasource()
-        .getNewTrainers(gymId: activeSubscriptions.data.userId)
+        .getNewTrainers(gymId: activeSubscriptions.data.gymId)
         .then((value) {
       print('new trainers $value');
       newTrainers = value;

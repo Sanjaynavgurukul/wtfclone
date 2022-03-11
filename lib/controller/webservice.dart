@@ -93,7 +93,7 @@ class RestDatasource {
   }
 
   Future<NewTrainersModel> getNewTrainers({gymId}) async {
-    print("shift trainer");
+    print("shift trainer");//
     String url = BASE_URL + Api.newTrainers(gymId);
     log(url);
     String token = locator<AppPrefs>().token.getValue();
