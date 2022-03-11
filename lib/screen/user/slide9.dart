@@ -22,6 +22,13 @@ class Slide9 extends StatefulWidget {
 
 class _Slide9State extends State<Slide9> {
   String bodyType = '';
+  final GlobalKey<ExpansionTileCardState> cardBodyType = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardWorkout = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardHeight = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardWeight = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardTWeight = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> card = new GlobalKey();
+
 
   List<Map<String ,String>> howActive = [
     {'text': 'Almost never', 'value': 'New to Fitness'},
@@ -96,6 +103,10 @@ class _Slide9State extends State<Slide9> {
               //Body Type Card :D
               ExpansionTileCard(
                 elevation: 0,
+                key: cardBodyType,
+                onExpansionChanged: (bool){
+                  controlCard(0);
+                },
                 baseColor: Color(0xff922224),
                 expandedColor: Color(0xff922224),
                 title: Text('Choose your body type',
@@ -144,6 +155,10 @@ class _Slide9State extends State<Slide9> {
               ),
               ExpansionTileCard(
                 elevation: 0,
+                key: cardWorkout,
+                onExpansionChanged: (bool){
+                  controlCard(1);
+                },
                 baseColor: Color(0xff292929),
                 expandedColor: Color(0xff922224),
                 title: Text('Workout Experience',
@@ -204,6 +219,10 @@ class _Slide9State extends State<Slide9> {
               //Your height Card :D
               ExpansionTileCard(
                 elevation: 0,
+                key: cardHeight,
+                onExpansionChanged: (bool){
+                  controlCard(2);
+                },
                 baseColor: Color(0xff292929),
                 expandedColor: Color(0xff922224),
                 trailing: PopupMenuButton<String>(
@@ -344,6 +363,10 @@ class _Slide9State extends State<Slide9> {
               // //Your weight card :D
               ExpansionTileCard(
                 elevation: 0,
+                key: cardWeight,
+                onExpansionChanged: (bool){
+                  controlCard(3);
+                },
                 baseColor: Color(0xff292929),
                 expandedColor: Color(0xff922224),
                 trailing: PopupMenuButton<String>(
@@ -433,6 +456,10 @@ class _Slide9State extends State<Slide9> {
               //Target weight card :D
               ExpansionTileCard(
                 elevation: 0,
+                key: cardTWeight,
+                onExpansionChanged: (bool){
+                  controlCard(4);
+                },
                 baseColor: Color(0xff292929),
                 expandedColor: Color(0xff922224),
                 trailing: PopupMenuButton<String>(
@@ -546,6 +573,42 @@ class _Slide9State extends State<Slide9> {
       return Text('$value',style:TextStyle(color: Colors.white));
     }
   }
+
+  void controlCard(int cardPos){
+    switch(cardPos){
+      case 0:
+        cardWorkout.currentState.collapse();
+        cardHeight.currentState.collapse();
+        cardWeight.currentState.collapse();
+        cardTWeight.currentState.collapse();
+        break;
+      case 1:
+        cardBodyType.currentState.collapse();
+        cardHeight.currentState.collapse();
+        cardWeight.currentState.collapse();
+        cardTWeight.currentState.collapse();
+        break;
+      case 2:
+        cardBodyType.currentState.collapse();
+        cardWorkout.currentState.collapse();
+        cardWeight.currentState.collapse();
+        cardTWeight.currentState.collapse();
+        break;
+      case 3:
+        cardBodyType.currentState.collapse();
+        cardWorkout.currentState.collapse();
+        cardHeight.currentState.collapse();
+        cardTWeight.currentState.collapse();
+        break;
+      default:
+        cardBodyType.currentState.collapse();
+        cardWorkout.currentState.collapse();
+        cardHeight.currentState.collapse();
+        cardWeight.currentState.collapse();
+        break;
+    }
+  }
+
 
   // Widget so(BuildContext context){
   //   return Consumer<UserController>(
