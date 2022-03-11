@@ -2191,7 +2191,7 @@ class GymAddonWidget extends StatelessWidget {
   }) : super(key: key);
 
   //&& element.isPt == 0
-  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive).toList();
+  List<AddOnData> getData(List<AddOnData> data)=> data.where((element) => !element.isLive && element.isPt == 0).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -2423,8 +2423,6 @@ class GymAddonWidget extends StatelessWidget {
   }
 
 }
-
-
 
 class TextIconCard extends StatelessWidget {
   const TextIconCard({
