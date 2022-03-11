@@ -3,6 +3,7 @@ import 'package:wtf/model/User.dart';
 import 'package:wtf/model/member_detils.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/model/preamble_model.dart';
 
 class AppPrefs {
   final StreamingSharedPreferences preferences;
@@ -31,9 +32,9 @@ class AppPrefs {
         ),
         memberData = preferences.getCustomValue(
           PrefsConstants.memberData,
-          defaultValue: MemberData(),
+          defaultValue: PreambleModel(),
           adapter: JsonAdapter(
-            deserializer: (val) => MemberData.fromJson(val),
+            deserializer: (val) => PreambleModel.fromJson(val),
           ),
         ),
         activeScheduleData = preferences.getCustomValue(
@@ -111,7 +112,7 @@ class AppPrefs {
   final Preference<String> selectedMyScheduleName;
   final Preference<String> selectedWorkoutDate;
   final Preference<MyScheduleAddonData> selectedMyScheduleData;
-  final Preference<MemberData> memberData;
+  Preference<PreambleModel> memberData;
   final Preference<WorkoutScheduleData> activeScheduleData;
   final Preference<String> avatar;
   final Preference<String> otp;
@@ -157,6 +158,7 @@ class AppPrefs {
 
   printBefore({String key, value}) =>
       print('Saving Key: $key &  value: $value');
+
 }
 
 class PrefsConstants {

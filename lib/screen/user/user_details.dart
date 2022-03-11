@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -11,13 +12,13 @@ import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
 import 'package:wtf/screen/user/slide12.dart';
 import 'package:wtf/screen/user/slide7.dart';
 import 'package:wtf/screen/user/slide9.dart';
-
 
 class UserDetailsPage extends StatefulWidget {
   @override
@@ -39,6 +40,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       });
     });
   }
+
   GymStore user;
 
   // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
@@ -57,7 +59,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       Slide0(
         title: 'Welcome to WTF',
         subTitle:
-        'To help us serve you better and give you a wholesome experience, please complete \n your fitness profile.',
+            'To help us serve you better and give you a wholesome experience, please complete \n your fitness profile.',
       ), //
       Slide1(), //
       Slide9(), //
@@ -165,41 +167,41 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       children: [
                         currentIndex == 0
                             ? Container(
-                          height: 50,
-                        )
+                                height: 50,
+                              )
                             : Container(
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: GestureDetector(
-                              onTap: () {
-                                _controller.previousPage(
-                                    duration: Duration(milliseconds: 500),
-                                    curve: Curves.easeInToLinear);
-                              },
-                              child: Padding(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 15),
-                                child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(60),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.arrow_back_outlined,
-                                      color: AppConstants.primaryColor,
+                                height: 50,
+                                child: Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _controller.previousPage(
+                                          duration: Duration(milliseconds: 500),
+                                          curve: Curves.easeInToLinear);
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 15),
+                                      child: Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(60),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.arrow_back_outlined,
+                                            color: AppConstants.primaryColor,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(
@@ -210,7 +212,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   : MainAxisAlignment.center,
                               children: List.generate(
                                 contents.length,
-                                    (index) => buildDot(index, context),
+                                (index) => buildDot(index, context),
                               ),
                             ),
                           ),
@@ -222,7 +224,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                             width: 50,
                             decoration: BoxDecoration(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(170)),
+                                  BorderRadius.all(Radius.circular(170)),
                               color: Colors.white,
                             ),
                             child: IconButton(
@@ -449,63 +451,95 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     displaySnack(
                                         'Please select your body type!');
                                     return;
-                                  }//validating in height in cm
-                                  else if(user.preambleModel.howactive == null || user.preambleModel.howactive.isEmpty){
-                                    displaySnack('Please choose your workout experience');
+                                  } //validating in height in cm
+                                  else if (user.preambleModel.howactive ==
+                                          null ||
+                                      user.preambleModel.howactive.isEmpty) {
+                                    displaySnack(
+                                        'Please choose your workout experience');
                                     return;
-                                  }
-                                  else if(user.preambleModel.heightInCm && (user.preambleModel.heightCm == null || user.preambleModel.heightCm == 0)){
+                                  } else if (user.preambleModel.heightInCm &&
+                                      (user.preambleModel.heightCm == null ||
+                                          user.preambleModel.heightCm == 0)) {
                                     displaySnack(
                                         'Please choose your valid height in cm!');
                                     return;
-                                  }//validating in height in Feet
-                                  else if(!user.preambleModel.heightInCm && (user.preambleModel.heightFeet == null || user.preambleModel.heightFeet == 0)){
+                                  } //validating in height in Feet
+                                  else if (!user.preambleModel.heightInCm &&
+                                      (user.preambleModel.heightFeet == null ||
+                                          user.preambleModel.heightFeet == 0)) {
                                     displaySnack(
                                         'Please choose your valid height in feet!');
                                     return;
                                   }
                                   //validating your weight in kg
-                                  else if (user.preambleModel.weightInKg && (user.preambleModel.weightKg == null || user.preambleModel.weightKg == 0)) {
+                                  else if (user.preambleModel.weightInKg &&
+                                      (user.preambleModel.weightKg == null ||
+                                          user.preambleModel.weightKg == 0)) {
                                     displaySnack(
                                         'Please choose your valid weight in kg!');
                                     return;
-                                  }//validating your weight in pound
-                                  else if (!user.preambleModel.weightInKg && (user.preambleModel.weightInLbs == null || user.preambleModel.weightInLbs == 0)) {
+                                  } //validating your weight in pound
+                                  else if (!user.preambleModel.weightInKg &&
+                                      (user.preambleModel.weightInLbs == null ||
+                                          user.preambleModel.weightInLbs ==
+                                              0)) {
                                     displaySnack(
                                         'Please choose your valid weight in lbs!');
                                     return;
-                                  }//validating target weight in kg
-                                  else if(user.preambleModel.targetWeightInKg && (user.preambleModel.targetWeight == null || user.preambleModel.targetWeight == 0)){
+                                  } //validating target weight in kg
+                                  else if (user
+                                          .preambleModel.targetWeightInKg &&
+                                      (user.preambleModel.targetWeight ==
+                                              null ||
+                                          user.preambleModel.targetWeight ==
+                                              0)) {
                                     displaySnack(
                                         'Please choose your valid target weight in kg!');
                                     return;
-                                  }//validating target weight in lbs
-                                  else if(!user.preambleModel.targetWeightInKg && (user.preambleModel.targetWeightInLbs == null || user.preambleModel.targetWeightInLbs == 0)){
+                                  } //validating target weight in lbs
+                                  else if (!user
+                                          .preambleModel.targetWeightInKg &&
+                                      (user.preambleModel.targetWeightInLbs ==
+                                              null ||
+                                          user.preambleModel
+                                                  .targetWeightInLbs ==
+                                              0)) {
                                     displaySnack(
                                         'Please choose your valid target weight in lbs!');
                                     return;
-                                  }else{
+                                  } else {
                                     gotoNext();
                                   }
-                                }
-                                else if(currentIndex == 3){
-                                  if(user.preambleModel.goalWeight == null || user.preambleModel.goalWeight == 0.0){
-                                    displaySnack('Please select valid goal weight!');
+                                } else if (currentIndex == 3) {
+                                  if (user.preambleModel.goalWeight == null ||
+                                      user.preambleModel.goalWeight == 0.0) {
+                                    displaySnack(
+                                        'Please select valid goal weight!');
                                     return;
-                                  }else if(user.preambleModel.existing_disease ==null || user.preambleModel.existing_disease.isEmpty){
-                                    displaySnack('Please select 1 medical condition!');
+                                  } else if (user
+                                              .preambleModel.existing_disease ==
+                                          null ||
+                                      user.preambleModel.existing_disease
+                                          .isEmpty) {
+                                    displaySnack(
+                                        'Please select 1 medical condition!');
                                     return;
-                                  }else {
+                                  } else {
                                     gotoNext();
                                   }
-                                }else if(currentIndex ==4){
-                                  if(user.preambleModel.type1 == null || user.preambleModel.type1.isEmpty){
-                                    displaySnack('Please select your fitness goal');
+                                } else if (currentIndex == 4) {
+                                  if (user.preambleModel.type1 == null ||
+                                      user.preambleModel.type1.isEmpty) {
+                                    displaySnack(
+                                        'Please select your fitness goal');
                                     return;
-                                  }else if(user.preambleModel.type1 ==null ||user.preambleModel.type1.isEmpty){
-                                    displaySnack('Please select your diet preference');
+                                  } else if (user.preambleModel.type1 == null ||
+                                      user.preambleModel.type1.isEmpty) {
+                                    displaySnack(
+                                        'Please select your diet preference');
                                     return;
-                                  }else{
+                                  } else {
                                     gotoNext();
                                   }
                                 }
@@ -547,9 +581,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void gotoNext() {
-    if(currentIndex == 5){
-      updatePreamble();
-    }else{
+    if (currentIndex == 5) {
+      user.preambleModel.location = user.currentAddress.addressLine;
+      updatePreambleData();
+    } else {
       _controller.nextPage(
         duration: Duration(milliseconds: 500),
         curve: Curves.easeInToLinear,
@@ -579,44 +614,60 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  void updatePreamble(){
-    print('preamble Update called');
-    user.updatePreamble(user.preambleModel).then((value) {
-      if(value != null && value){
-        // if (!user.preambleFromLogin) Navigator.pop(context);
-        // if (value) {
-        //   // FlashHelper.successBar(context, message: 'BMR result Saved');
-        //   if (!user.preambleFromLogin) {
-        //     context.read<GymStore>().init(context: context);
-        //     NavigationService.navigateTo(Routes.bmrCalculatorResult);
-        //   }
-        // } else {
-        //   displaySnack('Please try again!');
+  void updatePreambleData() {
+    user.updatePreamble(data: user.preambleModel).then((value) {
+      if (value) {
+        // if(user.preambleFromLogin){
+        //   addMember();
+        // }else{
+        //   updateMember();
         // }
         updateMember();
-      }else{
-        displaySnack('Something went wrong please try again later!');
+      } else {
+        displaySnack('Something went wrong while saving BMR!!');
       }
     });
   }
 
-  void addMember(){
-
-  }
-
-  void updateMember(){
-    user.updateMember(context: context,data: user.preambleModel,isLogin:user.preambleFromLogin).then((value){
+  void updateMember() {
+    user
+        .updateMember(
+            context: context,
+            data: user.preambleModel,
+            isLogin: user.preambleFromLogin)
+        .then((value) {
       // Navigator.pop(context);
-      if(value != null){
-        if(user.preambleFromLogin){
+      if (value) {
+        if (user.preambleFromLogin) {
           NavigationService.navigateToReplacement(Routes.homePage);
-        }else{
+        } else {
           // NavigationService.navigateTo(Routes.bmrCalculatorResult);
           NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
         }
-      }else{
+      } else {
         displaySnack('Something went wrong please try again later!!');
       }
     });
+  }
+
+  void _getPlace() {
+    print('this is address ' + user.currentAddress.addressLine);
+    // List<Placemark> newPlace = await _geolocator.placemarkFromCoordinates(_position.latitude, _position.longitude);
+    //
+    // // this is all you need
+    // Placemark placeMark  = newPlace[0];
+    // String name = placeMark.name;
+    // String subLocality = placeMark.subLocality;
+    // String locality = placeMark.locality;
+    // String administrativeArea = placeMark.administrativeArea;
+    // String postalCode = placeMark.postalCode;
+    // String country = placeMark.country;
+    // String address = "${name}, ${subLocality}, ${locality}, ${administrativeArea} ${postalCode}, ${country}";
+    //
+    // print(address);
+    //
+    // setState(() {
+    //   _address = address; // update _address
+    // });
   }
 }

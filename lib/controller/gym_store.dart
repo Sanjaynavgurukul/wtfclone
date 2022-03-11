@@ -2030,7 +2030,7 @@ class GymStore extends ChangeNotifier {
       "meal_id": mealId,
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "dietcategory_id":
-          locator<AppPrefs>().memberData.getValue().dietcategoryid,
+          locator<AppPrefs>().memberData.getValue().diet_category_id,
       "status": "active",
       "date": date,
       "image": image,
@@ -2252,27 +2252,20 @@ class GymStore extends ChangeNotifier {
     return response;
   }
 
-  Future<bool> updatePreamble(PreambleModel data) async {
+  Future<bool> updatePreamble({@required PreambleModel data}) async {
+    loading = true;
+    notifyListeners();
     Map<String, dynamic> dataJson = PreambleModel().toJsonPreamble(data);
+    print('check preamble data set - $dataJson');
     bool status = await RestDatasource().updatePreamble(dataJson);
     return status;
   }
 
-  Future<dynamic> updateMember(
-      {BuildContext context, PreambleModel data,bool isLogin = false}) async {
-    loading = true;
-    notifyListeners();
-    data.uid = locator<AppPrefs>().memberData.getValue().uid;
-    data.user_id = locator<AppPrefs>().memberId.getValue();
-    data.name = locator<AppPrefs>().userName.getValue();
-    data.email = locator<AppPrefs>().userEmail.getValue();
-    // 'location': address,
-
-    data.lat =
-        '${context.read<GymStore>().currentPosition?.latitude ?? locator<AppPrefs>().memberData.getValue().lat}';
-    data.long =
-        '${context.read<GymStore>().currentPosition?.longitude ?? locator<AppPrefs>().memberData.getValue().long}';
-
+  Future<bool> updateMember(
+      {@required BuildContext context, @required PreambleModel data,@required bool isLogin}) async {
+    // loading = true;
+    // notifyListeners();
+  // }
     // 'target_weight': targetWeight,
     // 'target_duration': goalWeight.toStringAsFixed(2),
     // status: 'active',
@@ -2302,20 +2295,50 @@ class GymStore extends ChangeNotifier {
 
     // print('body: $body');
 
+    if(isLogin){
+      data.uid = locator<AppPrefs>().memberData
+          .getValue()
+          .uid;
+      data.user_id = locator<AppPrefs>().memberId.getValue();
+      data.name = locator<AppPrefs>().userName.getValue();
+      data.email = locator<AppPrefs>().userEmail.getValue();
+      data.lat =
+      '${context
+          .read<GymStore>()
+          .currentPosition
+          ?.latitude ?? locator<AppPrefs>().memberData
+          .getValue()
+          .lat}';
+      data.long =
+      '${context
+          .read<GymStore>()
+          .currentPosition
+          ?.longitude ?? locator<AppPrefs>().memberData
+          .getValue()
+          .long}';
+    }
+
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
     locator<AppPrefs>().updateMemberData.setValue(false);
+
     bool res = isLogin?await RestDatasource().addMember(body):await RestDatasource().updateMember(body);
-    print('controller response: $res');
-    loading = false;
-    if (res == false) {
+
+    print('Preamble member CRUD status: $res');
+    // loading = false;
+    if (res) {
       FlashHelper.successBar(context, message: 'Profile Updates Successfully');
+      getMemberById();
+    }else{
+      FlashHelper.errorBar(context, message: 'Profile Updates Failed');
     }
+    loading = false;
     notifyListeners();
     return res;
   }
 
   Future<void> getMemberById() async {
     PreambleModel data = await RestDatasource().getMemberById();
+    locator<AppPrefs>().memberData.setValue(data);
     preambleModel = data;
     notifyListeners();
   }

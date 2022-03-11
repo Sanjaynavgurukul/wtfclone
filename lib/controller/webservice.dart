@@ -395,28 +395,6 @@ class RestDatasource {
     });
   }
 
-  Future<bool> updateMember(Map<String, dynamic> body) async {
-    String url = APIHelper.updateMember;
-    print('adding member : $body');
-    print('adding member : $url');
-    try {
-      String token = locator<AppPrefs>().token.getValue();
-      Map<String, String> mapHeader = Map();
-      mapHeader["Authorization"] = "Bearer " + token;
-      mapHeader["Content-Type"] = "application/json";
-      var res = await _netUtil.put(
-        url,
-        body: body,
-        headers: mapHeader,
-      );
-      print("response updateMember : " + res.toString());
-      return res['status'];
-    } catch (e) {
-      print('update member error: $e');
-      return false;
-    }
-  }
-
   Future<WhyChooseWtf> whyChooseWtf() async {
     try {
       String token = locator<AppPrefs>().token.getValue();
@@ -1532,6 +1510,99 @@ class RestDatasource {
     }
   }
 
+  // Future<Map<String, dynamic>> addMember(Map<String, dynamic> body) async {
+  //   print('adding member : $body');
+  //   try {
+  //     String token = locator<AppPrefs>().token.getValue();
+  //     Map<String, String> mapHeader = Map();
+  //     mapHeader["Authorization"] = "Bearer " + token;
+  //     mapHeader["Content-Type"] = "application/json";
+  //     var res = await _netUtil.post(
+  //       APIHelper.ADD_MEMBER,
+  //       body: body,
+  //       headers: mapHeader,
+  //     );
+  //     print("response addMember : " + res.toString());
+  //     return res;
+  //   } catch (e) {
+  //     print('add member error: $e');
+  //     return {};
+  //   }
+  // }
+  Future<bool> addMember(Map<String, dynamic> data)async{
+    data['user_id'] = locator<AppPrefs>().memberId.getValue();
+    print('response from add member data : $data');
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = APIHelper.ADD_MEMBER;
+    log('url: $url');
+    var res = await _netUtil.post(
+      url,
+      body: data,
+      headers: mapHeader,
+    );
+    print('response from add member : $res');
+    if (res != null) {
+      print('response called not null ${res['status']}');
+      return res['status'];
+    }else{
+      print('response called null');
+      return false;
+    }
+  }
+
+  Future<bool> updateMember(Map<String, dynamic> body) async {
+    print('response from update member data : $body');
+    body['user_id'] = locator<AppPrefs>().memberId.getValue();
+    // String id =  locator<AppPrefs>().memberId.getValue();
+    // print('response from update member data : $id');
+    String url = APIHelper.updateMember;
+    print('adding member : $url');
+    try {
+      String token = locator<AppPrefs>().token.getValue();
+      Map<String, String> mapHeader = Map();
+      mapHeader["Authorization"] = "Bearer " + token;
+      mapHeader["Content-Type"] = "application/json";
+      var res = await _netUtil.put(
+        url,
+        body: body,
+        headers: mapHeader,
+      );
+      print('response from update member : $res');
+      return res['status'];
+    } catch (e) {
+      print('update member error: $e');
+      return false;
+    }
+  }
+
+  Future<PreambleModel> getMemberById()async{
+    String memberId = locator<AppPrefs>().memberId.getValue();
+    print('checking member id : --- $memberId');
+    Map<String, String> mapHeader = Map();
+    String url = BASE_URL + Api.getMemberById(memberId);
+    String token = locator<AppPrefs>().token.getValue();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var response = await _netUtil.get(
+      url,
+      headers: mapHeader,
+    );
+    print('get member  by id  response - : $response');
+    PreambleModel res;
+    if (response != null) {
+      print('response not nul called');
+      res = PreambleModel.fromJson(response['data']);
+      print('check model data --- ${PreambleModel().toJsonMember(res)}');
+    } else {
+      print('response nul called');
+      res = new PreambleModel();
+    }
+    return Future.value(res);
+  }
+
   Future<bool> saveBmrProgress({Map<String, dynamic> body}) async {
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -1572,67 +1643,5 @@ class RestDatasource {
       print('response called null');
       return false;
     }
-  }
-
-  // Future<Map<String, dynamic>> addMember(Map<String, dynamic> body) async {
-  //   print('adding member : $body');
-  //   try {
-  //     String token = locator<AppPrefs>().token.getValue();
-  //     Map<String, String> mapHeader = Map();
-  //     mapHeader["Authorization"] = "Bearer " + token;
-  //     mapHeader["Content-Type"] = "application/json";
-  //     var res = await _netUtil.post(
-  //       APIHelper.ADD_MEMBER,
-  //       body: body,
-  //       headers: mapHeader,
-  //     );
-  //     print("response addMember : " + res.toString());
-  //     return res;
-  //   } catch (e) {
-  //     print('add member error: $e');
-  //     return {};
-  //   }
-  // }
-  Future<bool> addMember(Map<String, dynamic> data)async{
-    data['user_id'] = locator<AppPrefs>().memberId.getValue();
-    String token = locator<AppPrefs>().token.getValue();
-    print('checking data : - $data');
-    Map<String, String> mapHeader = Map();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    String url = APIHelper.ADD_MEMBER;
-    log('url: $url');
-    var res = await _netUtil.post(
-      url,
-      body: data,
-      headers: mapHeader,
-    );
-    if (res != null) {
-      print('response called not null ${res['status']}');
-      return res['status'];
-    }else{
-      print('response called null');
-      return false;
-    }
-  }
-
-  Future<PreambleModel> getMemberById()async{
-    String memberId = locator<AppPrefs>().memberId.getValue();
-    Map<String, String> mapHeader = Map();
-    String url = BASE_URL + Api.getMemberById(memberId);
-    String token = locator<AppPrefs>().token.getValue();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    var response = await _netUtil.get(
-      url,
-      headers: mapHeader,
-    );
-    PreambleModel res;
-    if (response != null && response['status']) {
-      res = PreambleModel.fromJson(response['data']);
-    } else {
-      res = new PreambleModel();
-    }
-    return Future.value(res);
   }
 }

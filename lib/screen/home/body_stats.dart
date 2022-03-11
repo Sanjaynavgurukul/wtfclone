@@ -11,6 +11,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/member_detils.dart';
+import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 import '../../main.dart';
@@ -252,7 +253,7 @@ class MyGoals extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    PreferenceBuilder<MemberData>(
+                    PreferenceBuilder<PreambleModel>(
                       preference: locator<AppPrefs>().memberData,
                       builder: (context, snapshot) {
                         return RichText(
@@ -268,7 +269,7 @@ class MyGoals extends StatelessWidget {
                               if (snapshot != null &&
                                   snapshot.targetWeight != null)
                                 TextSpan(
-                                  text: snapshot.targetWeight + " Kg",
+                                  text: snapshot.targetWeight.toString() + " Kg",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -288,7 +289,7 @@ class MyGoals extends StatelessWidget {
                       ),
                     ),
                     UIHelper.verticalSpace(6.0),
-                    PreferenceBuilder<MemberData>(
+                    PreferenceBuilder<PreambleModel>(
                       preference: locator<AppPrefs>().memberData,
                       builder: (context, snapshot) {
                         return RichText(

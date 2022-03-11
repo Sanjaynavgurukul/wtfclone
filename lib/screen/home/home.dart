@@ -60,6 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           store.preambleModel = new PreambleModel();
+          store.preambleFromLogin = false;
           NavigationService.pushName(Routes.userDetail);
         },
         child:Icon(Icons.add)

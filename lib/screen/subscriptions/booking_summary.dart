@@ -75,12 +75,15 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     if (context.read<GymStore>().chosenOffer != null) {
       print('chosenOffer called not null');
       if (context.read<GymStore>().chosenOffer.type == 'flat') {
+
         int couponValue =
             int.tryParse(context.read<GymStore>().chosenOffer.value);
-        discountAmount = couponValue >
-                int.tryParse(context.read<GymStore>().chosenOffer.value??'0')
-            ? int.tryParse(context.read<GymStore>().selectedEventData.price)
-            : couponValue;
+
+        // discountAmount = couponValue >
+        //         int.tryParse(context.read<GymStore>().selectedEventData.price??'0')
+        //     ? int.tryParse(context.read<GymStore>().selectedEventData.price)
+        //     : couponValue;
+
       } else {
 
         print('price: ${context.read<GymStore>().selectedGymPlan.plan_price}');
@@ -94,6 +97,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     }else{
       print('chosenOffer called null');
     }
+
     totalAmount =
         int.tryParse(context.read<GymStore>().selectedGymPlan.plan_price) -
             discountAmount;
