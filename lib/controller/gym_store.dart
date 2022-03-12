@@ -350,6 +350,7 @@ class GymStore extends ChangeNotifier {
         DateTime.now().toIso8601String(),
       ),
     );
+    getLastSeen();
     getStats(context: context);
     getAllEvents(context: context);
     getTerms();
@@ -2346,5 +2347,9 @@ class GymStore extends ChangeNotifier {
     return data.hasData;
   }
 
+
+  Future<void> getLastSeen()async{
+    await RestDatasource().getLastSeen();
+  }
 
 }

@@ -1132,7 +1132,6 @@ class RestDatasource {
   Future<CommonModel> addSubscritpion(Map<String, dynamic> body) async {
     print('add sub map -- $body');
     String token = locator<AppPrefs>().token.getValue();
-    String userId = locator<AppPrefs>().memberId.getValue();
     var headers = {
       'content-type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -1645,5 +1644,41 @@ class RestDatasource {
       print('response called null');
       return false;
     }
+  }
+
+
+  Future<void> getLastSeen()async{
+    String userId = locator<AppPrefs>().memberId.getValue();
+    print('checking member id : --- $userId');
+
+    String url = BASE_URL + Api.getLastSeen();
+    print('cehck get last seen url - $url');
+
+    String token = locator<AppPrefs>().token.getValue();
+
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    var res = await _netUtil.post(
+      url,
+      body: {
+        "user_id":"$userId"
+      },
+      headers: mapHeader,
+    );
+    // print('get member  by id  response - : $response');
+    // PreambleModel res;
+    // if (response != null && response['status']) {
+    //   print('response not nul called');
+    //   res = PreambleModel.fromJson(response['data']);
+    //   res.hasData = response['status'];
+    //   print('check model data --- ${PreambleModel().toJsonMember(res)}');
+    // } else {
+    //   print('response nul called');
+    //   res = new PreambleModel();
+    //   res.hasData = false;
+    // }
+    print('last seen response -- $res');
+    return true;
   }
 }

@@ -104,4 +104,5 @@ class Api {
   static String getForceUpdate()=>'version/latest';
   static String fetchSessionDuration({String addOnId})=>'session/addon?addon=$addOnId';
   static String checkCoupon({String coupon, String plan_type})=>'offer/code?code=$coupon&type_id=$plan_type';
+  static String getLastSeen()=>'user/last_seen';
 }
