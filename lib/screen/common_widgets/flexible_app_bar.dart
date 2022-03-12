@@ -23,7 +23,7 @@ class FlexibleAppBar extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         child: CarouselSlider(
             options: CarouselOptions(
-              height: 300.0,
+              height: 330.0,
               viewportFraction: 1,
               enlargeCenterPage: false,
               autoPlay: true,

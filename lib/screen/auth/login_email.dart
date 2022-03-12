@@ -225,9 +225,11 @@ class _LoginEmailState extends State<LoginEmail> {
                                 context.read<GymStore>().init(context: context);
 
                                 if (res['memDetail']) {
+                                  locator<AppPrefs>().memberAdded.setValue(true);
                                   NavigationService.navigateToReplacement(
                                       Routes.homePage);
                                 } else {
+                                  locator<AppPrefs>().memberAdded.setValue(false);
                                   NavigationService.navigateToReplacement(
                                       Routes.userDetail);
                                 }

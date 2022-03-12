@@ -38,32 +38,49 @@ class _LoaderPageState extends State<LoaderPage> {
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
           print('preamble check login init checked');
-          context.read<GymStore>().getMemberById().then((value){
-            print('preamble check login $value');
-            if(value){
-              context.read<GymStore>().getForceUpdate().then((value){
-                print('checking from loader --- ${value.wtf_version}');
-                if(isAndroid()){
-                  if(!value.wtf_version.contains(Api.currentVersion)) {
-                    navToForceUpdate(value);
-                  } else{
-                    navToHome();
-                  }
-                }else{
-                  if(!value.apple_version.contains(Api.currentVersion)){
-                    navToForceUpdate(value);
-                  }
-                  else {
-                    navToHome();
-                  }
+          // context.read<GymStore>().getForceUpdate().then((value){
+          //   print('checking from loader --- ${value.wtf_version}');
+          //   if(isAndroid()){
+          //     if(!value.wtf_version.contains(Api.currentVersion)) {
+          //       navToForceUpdate(value);
+          //     } else{
+          //       navToHome();
+          //     }
+          //   }else{
+          //     if(!value.apple_version.contains(Api.currentVersion)){
+          //       navToForceUpdate(value);
+          //     }
+          //     else {
+          //       navToHome();
+          //     }
+          //   }
+          // });
+
+          bool memberAdded = locator<AppPrefs>().memberAdded.getValue();
+          print('member added -- $memberAdded');
+          if(memberAdded){
+            context.read<GymStore>().getForceUpdate().then((value){
+              print('checking from loader --- ${value.wtf_version}');
+              if(isAndroid()){
+                if(!value.wtf_version.contains(Api.currentVersion)) {
+                  navToForceUpdate(value);
+                } else{
+                  navToHome();
                 }
-              });
-            }else{
-              NavigationService
-                  .navigateToReplacement(
-                  Routes.userDetail);
-            }
-          });
+              }else{
+                if(!value.apple_version.contains(Api.currentVersion)){
+                  navToForceUpdate(value);
+                }
+                else {
+                  navToHome();
+                }
+              }
+            });
+          }else{
+            NavigationService
+                .navigateToReplacement(
+                Routes.userDetail);
+          }
         } else {
           NavigationService.navigateToReplacement(Routes.splash);
         }

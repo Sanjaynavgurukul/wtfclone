@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen>
             }
           },
           child: Scaffold(
-            backgroundColor: AppColors.PRIMARY_COLOR,
+            backgroundColor: AppColors.BACK_GROUND_BG,
             bottomNavigationBar: BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
@@ -271,11 +271,6 @@ class _HomeScreenState extends State<HomeScreen>
                 if (store.currentIndex != 2)
                   IntrinsicHeight(
                     child: CommonAppBar(),
-                  ),
-                if (store.currentIndex != 2)
-                  Divider(
-                    thickness: 1.2,
-                    color: Colors.white10,
                   ),
                 Expanded(
                   flex: 4,

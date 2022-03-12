@@ -548,17 +548,7 @@ class _Slide9State extends State<Slide9> {
               SizedBox(
                 height: 12,
               ),
-              SwitchListTile(
-                tileColor: Color(0xff292929),
-                title: const Text('Gaining Weight'),
-                value: user.preambleModel.gainingWeight,
-                onChanged: (bool value) {
-                  setState(() {
-                    user.preambleModel.gainingWeight = value;
-                  });
-                },
-                secondary: const Icon(Icons.lightbulb_outline),
-              )
+              //
             ],
           ),
         ),

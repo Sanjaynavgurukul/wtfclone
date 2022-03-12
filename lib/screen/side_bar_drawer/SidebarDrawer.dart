@@ -229,6 +229,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                         },
                         b1Text: 'Cancel',
                         b2Tap: (selection) {
+                          locator<AppPrefs>().memberAdded.setValue(false);
                           Navigator.pop(context, selection);
                         },
                         b2Text: 'Yes',

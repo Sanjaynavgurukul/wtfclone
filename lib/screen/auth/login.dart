@@ -299,10 +299,12 @@ class _LoginPageState extends State<LoginPage> {
                                         print(
                                             'member details available:: ${res['data']['memDetail']}');
                                         if (res['data']['memDetail']) {
+                                          locator<AppPrefs>().memberAdded.setValue(true);
                                           NavigationService
                                               .navigateToReplacement(
                                                   Routes.homePage);
                                         } else {
+                                          locator<AppPrefs>().memberAdded.setValue(false);
                                           NavigationService
                                               .navigateToReplacement(
                                                   Routes.userDetail);

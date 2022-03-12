@@ -22,7 +22,7 @@ class _CategoriesState extends State<Categories> {
     },
     {
       'name': 'Daily Schedule',
-      'img': 'assets/images/personal_training.png',
+      'img': 'assets/images/schedule.png',
     },
     {
       'name': 'Nutrition',
@@ -134,7 +134,7 @@ class _CategoriesState extends State<Categories> {
   Widget newUI({Map data, Function onClick}) {
     return Container(
       width: 76,
-      margin: EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

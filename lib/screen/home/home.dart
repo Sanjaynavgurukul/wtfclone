@@ -57,14 +57,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          store.preambleModel = new PreambleModel();
-          store.preambleFromLogin = true;
-          NavigationService.pushName(Routes.userDetail);
-        },
-        child:Icon(Icons.add)
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     store.preambleModel = new PreambleModel();
+      //     store.preambleFromLogin = true;
+      //     NavigationService.pushName(Routes.userDetail);
+      //   },
+      //   child:Icon(Icons.add)
+      // ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);
@@ -80,6 +80,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               CommonBanner(
                 bannerType: "FC_banner",
                 second_banner_pref: 'WTF_banner',
+                fraction: 1,
+                height: 400,
               ),
               SizedBox(
                 height: 16.0,
@@ -270,10 +272,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                 ],
               ),
-              Divider(
-                  thickness: 1.2,
-                  color: Colors.white10,
-                ),
               UIHelper.verticalSpace(10.0),
               Categories(),
               UIHelper.verticalSpace(25.0),

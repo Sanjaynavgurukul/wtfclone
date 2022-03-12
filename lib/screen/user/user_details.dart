@@ -641,9 +641,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       // Navigator.pop(context);
       if (value) {
         if (user.preambleFromLogin) {
+          locator<AppPrefs>().memberAdded.setValue(true);
           NavigationService.navigateToReplacement(Routes.homePage);
         } else {
           // NavigationService.navigateTo(Routes.bmrCalculatorResult);
+          locator<AppPrefs>().memberAdded.setValue(true);
           NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
         }
       } else {

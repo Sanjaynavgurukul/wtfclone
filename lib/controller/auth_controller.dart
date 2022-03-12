@@ -286,6 +286,7 @@ class AuthController extends ChangeNotifier {
         locator<AppPrefs>().token.setValue(res['data']['token']);
         // locator<AppPrefs>().avatar.setValue(res['data']['profile'] ??'');
         locator<AppPrefs>().isLoggedIn.setValue(true);
+        print('auth chck date added --- ${res['data']['date_added']}');
         locator<AppPrefs>().dateAdded.setValue(
               res['data']['date_added'],
             );

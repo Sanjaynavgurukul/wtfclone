@@ -84,7 +84,7 @@ class _Slide7State extends State<Slide7> {
                   child: Column(
                     children: [
                       Text(
-                        "How fast do you want to ${user.preambleModel.gainingWeight ? 'gain your weight' : 'lose your weight'}?",
+                        "How fast do you want to ${user.preambleModel.targetWeight > user.preambleModel.weightKg ? 'gain your weight' : 'lose your weight'}?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
@@ -18,6 +19,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/main.dart';
 import 'package:wtf/widget/app_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 import 'package:wtf/widget/text_field.dart';
@@ -568,6 +570,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 .read<GymStore>()
                                                 .init(context: context);
                                             auth.registerMethod = null;
+                                            locator<AppPrefs>().memberAdded.setValue(false);
                                             Future.delayed(
                                                 Duration(seconds: 1),
                                                 () => NavigationService

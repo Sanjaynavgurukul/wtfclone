@@ -11,6 +11,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
@@ -46,7 +47,6 @@ class _ExplorePageState extends State<ExplorePage> {
           context.read<GymStore>().init(context: context);
         },
         color: AppConstants.primaryColor,
-        backgroundColor: Colors.white,
         child: Padding(
           padding: const EdgeInsets.only(top: 6),
           child: SingleChildScrollView(
@@ -111,12 +111,13 @@ class _ExplorePageState extends State<ExplorePage> {
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                   ),
-                  height: 220.0,
+                  height: 185.0,
                   child: ListView.builder(
                     itemCount: 2,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
+
                       return InkWell(
                         onTap: () {
                           if (index == 0) {
@@ -138,19 +139,20 @@ class _ExplorePageState extends State<ExplorePage> {
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.46,
-                          height: 220.0,
+                          height: 185.0,
                           margin: EdgeInsets.only(right: 15),
                           child: Stack(
                             children: [
-                              GradientImageWidget(
-                                // assets: 'assets/images/gym_cover.png',
-                                network:
-                                    index == 0 ? Images.arena : Images.studio,
-                                gragientColor: [
-                                  Color(0xffB0C9D6).withOpacity(0.2),
-                                  Colors.black.withOpacity(0.9),
-                                ],
-                              ),
+                              Image.asset(index == 0?'assets/images/gym_bg.png':'assets/images/studio_bg.png'),
+                              // GradientImageWidget(
+                              //   // assets: 'assets/images/gym_cover.png',
+                              //   network:
+                              //       index == 0 ? Images.arena : Images.studio,
+                              //   gragientColor: [
+                              //     Color(0xffB0C9D6).withOpacity(0.2),
+                              //     Colors.black.withOpacity(0.9),
+                              //   ],
+                              // ),
                               Padding(
                                 padding: const EdgeInsets.only(
                                   bottom: 10,
@@ -840,7 +842,7 @@ class CommonAppBar extends StatelessWidget {
         top: 12.0,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           UIHelper.horizontalSpace(6.0),
@@ -964,15 +966,18 @@ class CommonAppBar extends StatelessWidget {
             preference: locator<AppPrefs>().dateAdded,
             builder: (context, snapshot) {
               return snapshot != null
-                  ? Text(
-                      // '',
-                      'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11.0,
-                        color: Colors.white,
+                  ? Align(
+                alignment: Alignment.topCenter,
+                    child: Text(
+                        // '',
+                        'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 11.0,
+                          color: Colors.white,
+                        ),
                       ),
-                    )
+                  )
                   : Container();
             },
           ),
@@ -986,6 +991,7 @@ class CommonAppBar extends StatelessWidget {
         bottom: 12.0,
         top: 20.0,
       ),
+      color: AppColors.BACK_GROUND_BG,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
