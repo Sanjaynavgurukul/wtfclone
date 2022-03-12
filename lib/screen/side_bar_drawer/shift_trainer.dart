@@ -141,7 +141,7 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
             ),
             UIHelper.verticalSpace(20.0),
             ElevatedButton(
-              onPressed: ()=>FlashHelper.informationBar(context, message: 'Feature each coming soon!'),
+              onPressed: ()=>FlashHelper.informationBar(context, message: 'Feature is coming soon!'),
               // onPressed: () => gymStore.newTrainers == null ?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               //   content: Text(
               //     'Please  buy subscription',
