@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 
 class ShiftTrainer extends StatefulWidget {
@@ -140,16 +141,17 @@ class _ShiftTrainerState extends State<ShiftTrainer> {
             ),
             UIHelper.verticalSpace(20.0),
             ElevatedButton(
-              onPressed: () => gymStore.newTrainers == null ?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  'Please  buy subscription',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )): _modalBottomSheetMenu(context),
+              onPressed: ()=>FlashHelper.informationBar(context, message: 'Feature coming soon!'),
+              // onPressed: () => gymStore.newTrainers == null ?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //   content: Text(
+              //     'Please  buy subscription',
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontSize: 16.0,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // )): _modalBottomSheetMenu(context),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

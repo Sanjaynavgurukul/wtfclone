@@ -585,6 +585,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   void gotoNext() {
     if (currentIndex == 5) {
       user.preambleModel.location = user.currentAddress.addressLine;
+      print('check uid -- ${user.preambleModel.uid}');
       updatePreambleData();
     } else {
       _controller.nextPage(

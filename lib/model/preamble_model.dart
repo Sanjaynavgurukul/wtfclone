@@ -41,8 +41,6 @@ class PreambleModel {
 
   //Extra For Member
   String uid;
-
-  // String user_uid;
   String name;
   String email;
   double target_weight;
@@ -59,48 +57,49 @@ class PreambleModel {
   PreambleModel();
 
   PreambleModel.fromJson(Map<String,dynamic> json){
-
+    print('uid check --- ${json['uid']}');
+    this.uid = json["uid"];
+    print('uid check a--- ${uid}');
     this.gender =  json["gender"];
-    this.age= json["age"] ?? 24;
-    this.date= json['date'];
-    this.bmr_result= json['bmr_result'];
-    this.diet_category_id= json['diet_category_id'];
-    this.body_type= json["body_type"];
-    this.heightInCm= json["heightInCm"] ?? true;
+    this.age = int.parse(json["age"].toString()??'0');
+    this.date = json['date'];
+    this.bmr_result = json['bmr_result'];
+    this.diet_category_id = json['diet_category_id'];
+    this.body_type = json["body_type"];
+    this.heightInCm = json["heightInCm"] ?? true;
     // this.heightCm = json["heightCm"] ?? 160;
     // this.heightFeet = json["heightFeet"] ?? 5.0;
-    this.heightCm= convertHeightFromJson(value:json['height']);
-    this.heightFeet= convertHeightFromJsonFeet(value: json['height']);
-    this.weightInKg= json["weightInKg"] ?? true;
+    this.heightCm = convertHeightFromJson(value:json['height']);
+    this.heightFeet = convertHeightFromJsonFeet(value: json['height']);
+    this.weightInKg = json["weightInKg"] ?? true;
     // this.weightKg = json["weightKg"];
     // this.weightInLbs = json["weightInLbs"];
-    this.weightKg= convertWeightFromJson(value:json['weight']);
-    this.weightInLbs= convertWeightFromJson(value: json['weight']);
-    this.targetWeightInKg= json["targetWeightInKg"] ?? true;
-    this.targetWeight= json["targetWeight"];
-    this.targetWeightInLbs= json["targetWeightInLbs"];
-    this.gainingWeight= json["gainingWeight"] ?? true;
-    this.goalWeight= json["goalWeight"] ?? 0.25;
-    this.existing_disease= convertMedical(json["existing_disease"] ?? []);
+    this.weightKg = convertWeightFromJson(value:json['weight']);
+    this.weightInLbs = convertWeightFromJson(value: json['weight']);
+    this.targetWeightInKg = json["targetWeightInKg"] ?? true;
+    this.targetWeight = json["targetWeight"];
+    this.targetWeightInLbs = json["targetWeightInLbs"];
+    this.gainingWeight = json["gainingWeight"] ?? true;
+    this.goalWeight = json["goalWeight"] ?? 0.25;
+    this.existing_disease = convertMedical(json["existing_disease"] ?? []);
     // this.existing_disease = json["existing_disease"] as List;
-    this.is_smoking= convertBool(json["is_smoking"]) ?? false;
-    this.is_drinking= convertBool(json["is_drinking"]) ?? false;
-    this.type1= json["type1"];
-    this.type2= json["type2"];
-    this.uid= json["uid"];
-    this.user_id= json["user_id"];
-    this.name= json["name"];
-    this.email= json["email"];
-    this.user_uid= json["user_uid"];
-    this.target_weight= double.parse(json["target_weight"]);
-    this.target_duration= json["target_duration"];
-    this.location= json["location"];
-    this.lat= json["lat"];
-    this.long= json["long"];
-    this.n_token= json["n_token"];
-    this.device_id= json["device_id"];
-    this.howactive= json["howactive"];
-    this.tainer_notes= json["tainer_notes"];
+    this.is_smoking = convertBool(json["is_smoking"]) ?? false;
+    this.is_drinking = convertBool(json["is_drinking"]) ?? false;
+    this.type1 = json["type1"];
+    this.type2 = json["type2"];
+    this.user_id = json["user_id"];
+    this.name = json["name"];
+    this.email = json["email"];
+    this.user_uid = json["user_uid"];
+    this.target_weight = double.parse(json["target_weight"]);
+    this.target_duration = json["target_duration"];
+    this.location = json["location"];
+    this.lat = json["lat"];
+    this.long = json["long"];
+    this.n_token = json["n_token"];
+    this.device_id = json["device_id"];
+    this.howactive = json["howactive"];
+    this.tainer_notes = json["tainer_notes"];
   }
 
   String convertListToString(List<String> data){

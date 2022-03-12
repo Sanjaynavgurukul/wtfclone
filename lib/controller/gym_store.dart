@@ -2317,8 +2317,11 @@ class GymStore extends ChangeNotifier {
           ?.longitude ?? locator<AppPrefs>().memberData
           .getValue()
           .long}';
-    }else{
+    }
+
+    if(!isLogin){
       data.diet_category_id = null;
+      data.uid = preambleModel.uid;
     }
 
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
