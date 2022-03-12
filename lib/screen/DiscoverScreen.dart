@@ -31,7 +31,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
     return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
         elevation: 0,
         title: Text(
@@ -43,13 +42,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: AppConstants.bgColor,
+        backgroundColor: AppColors.BACK_GROUND_BG,
       ),
       body: Column(
         children: [
           //Search Bar :D
           Container(
-            color: AppConstants.bgColor,
+            color: AppColors.BACK_GROUND_BG,
             padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: SearchBar(),
           ),
@@ -140,7 +139,6 @@ class SearchBar extends StatefulWidget {
   const SearchBar({
     Key key,
   }) : super(key: key);
-
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
@@ -203,7 +201,7 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                   ),
                   filled: true,
-                  fillColor: Colors.black,
+                  fillColor: Color(0xff2d2d2d),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(4.0),

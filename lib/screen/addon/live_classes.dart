@@ -26,33 +26,6 @@ class _LiveClassesState extends State<LiveClasses> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: ScaffoldGradientBackground(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          actions: [
-            Container(
-              padding: EdgeInsets.only(right: 12),
-              child: Row(
-                children: [
-                  Text('Live'),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                        color: Colors.white,
-                        border: Border.all(
-                            width: 2, color: AppConstants.boxBorderColor)),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
         gradient: LinearGradient(
           end: Alignment.topLeft,
           begin: Alignment.bottomRight,
@@ -67,14 +40,40 @@ class _LiveClassesState extends State<LiveClasses> {
           child: Column(
             children: [
               Container(
-                height: 306,
+                height: 400,
                 child: Stack(
                   children: [
                     CommonBanner(
                       bannerType: 'LIVE_banner',
                       width: double.infinity,
-                      height: 270,
+                      height: 400,
                       fraction: 1,
+                    ),
+                    AppBar(
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      actions: [
+                        Container(
+                          padding: EdgeInsets.only(right: 12),
+                          child: Row(
+                            children: [
+                              Text('Live'),
+                              SizedBox(
+                                width: 6,
+                              ),
+                              Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        width: 2, color: AppConstants.boxBorderColor)),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     ),
                     // Align(
                     //     alignment: Alignment.bottomCenter,

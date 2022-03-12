@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -39,6 +42,11 @@ class _NotificationsState extends State<Notifications> with TickerProviderStateM
        return Scaffold(
          backgroundColor: AppColors.BACK_GROUND_BG,
          appBar: AppBar(
+           systemOverlayStyle: SystemUiOverlayStyle(
+             statusBarColor: AppConstants.bgColor,
+             statusBarBrightness:
+             Platform.isAndroid ? Brightness.light : Brightness.dark,
+           ),
            backgroundColor: AppConstants.bgColor,
            title: Text("Notification"),
            bottom:  new TabBar(

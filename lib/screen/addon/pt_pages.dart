@@ -29,6 +29,7 @@ class _PTPagesState extends State<PTPages> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
+
         body: Stack(
           children: [
             Container(
@@ -57,10 +58,13 @@ class _PTPagesState extends State<PTPages> {
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                           ),
-                          height: 350.0,
-                          child: CommonBanner(bannerType: 'PT_banner',height: 350,fraction: 1,),
+                          height: 400.0,
+                          child: CommonBanner(bannerType: 'PT_banner',height: 400,fraction: 1,),
                         ),
-
+                        AppBar(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                        ),
                         // Positioned(
                         //   top: 66.0,
                         //   left: 0.0,
