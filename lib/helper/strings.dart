@@ -46,7 +46,7 @@ class Logos {
 }
 
 class Fonts {
-  static const String RALEWAY = 'Railway';
+  static const String RALEWAY = 'opensans';
   static const String ROBOTO = 'Roboto';
 }
 
