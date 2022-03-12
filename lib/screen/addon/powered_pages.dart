@@ -33,151 +33,133 @@ class _PoweredPagesState extends State<PoweredPages> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  end: Alignment.topLeft,
-                  begin: Alignment.bottomRight,
-                  colors: [
-                    Color(0xff046A58).withOpacity(0.4),
-                    Colors.black,
-                    Color(0xff046A58).withOpacity(0.4),
-                    Colors.black,
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height - 24,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+        body:  Container(
+          height: MediaQuery.of(context).size.height - 24,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              colorFilter: ColorFilter.mode(
-                                Color(0xff046A58).withOpacity(0.5),
-                                BlendMode.dstIn,
-                              ),
-                              image: AssetImage(
-                                'assets/images/powered_bg.png',
-                              ),
-                            ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          colorFilter: ColorFilter.mode(
+                            Color(0xff046A58).withOpacity(0.5),
+                            BlendMode.dstIn,
                           ),
-                          height: 350.0,
-                        ),
-                        Positioned(
-                          top: 150.0,
-                          left: 20.0,
-                          child: SvgPicture.asset(
-                            'assets/svg/fitness_fullstop.svg',
+                          image: AssetImage(
+                            'assets/images/powered_bg.png',
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 50.0,
-                            left: 12.0,
-                            right: 12.0,
-                          ),
-                          child: PageAppBar(isLive: false),
-                        ),
-                        // Positioned(
-                        //   top: 10.0,
-                        //   left: 0.0,
-                        //   child: Container(
-                        //     decoration: BoxDecoration(
-                        //       gradient: RadialGradient(
-                        //         colors: [
-                        //           Color(0xff046A58).withOpacity(0.6),
-                        //           Colors.black,
-                        //           Color(0xff046A58).withOpacity(0.6),
-                        //           Colors.black,
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   top: 10.0,
-                        //   right: 0.0,
-                        //   child: Container(
-                        //     decoration: BoxDecoration(
-                        //       gradient: RadialGradient(
-                        //         colors: [
-                        //           Color(0xff046A58).withOpacity(0.6),
-                        //           Colors.black,
-                        //           Color(0xff046A58).withOpacity(0.6),
-                        //           Colors.black,
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
+                      ),
+                      height: 400.0,
                     ),
-                    UIHelper.verticalSpace(24.0),
-                    PagePriceTag(
-                      text1: 'Start only from ',
-                      text2: '199 Rs.',
-                      image2: 'right_dot_blue',
-                      image1: 'left_dot_blue',
-                    ),
-                    UIHelper.verticalSpace(22.0),
-                    PageSectionHeader(
-                      onFilterTap: () {
-                        //todo:
-                      },
-                      sectionHeading: 'Activities',
-                    ),
-                    UIHelper.verticalSpace(12.0),
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        store.getAllLiveClasses(context: context);
-                      },
-                      color: AppConstants.white,
-                      child: Consumer<GymStore>(
-                        builder: (context, store, child) => store
-                                    .allAddonClasses !=
-                                null
-                            ? store.allAddonClasses.data != null &&
-                                    store.allAddonClasses.data.isNotEmpty
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    itemCount:
-                                        store.allAddonClasses.data.length,
-                                    scrollDirection: Axis.vertical,
-                                    itemBuilder: (context, index) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0,
-                                      ),
-                                      child: LiveCard(
-                                        data: store.allAddonClasses.data[index],
-                                        isFullView: true,
-                                      ),
-                                    ),
-                                  )
-                                : Center(
-                                    child: Text(
-                                      'No live Classes found',
-                                    ),
-                                  )
-                            : Loading(),
+                    Positioned(
+                      top: 150.0,
+                      left: 20.0,
+                      child: SvgPicture.asset(
+                        'assets/svg/fitness_fullstop.svg',
                       ),
                     ),
-                    UIHelper.verticalSpace(120.0),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 50.0,
+                        left: 12.0,
+                        right: 12.0,
+                      ),
+                      child: PageAppBar(isLive: false),
+                    ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   left: 0.0,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       gradient: RadialGradient(
+                    //         colors: [
+                    //           Color(0xff046A58).withOpacity(0.6),
+                    //           Colors.black,
+                    //           Color(0xff046A58).withOpacity(0.6),
+                    //           Colors.black,
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Positioned(
+                    //   top: 10.0,
+                    //   right: 0.0,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       gradient: RadialGradient(
+                    //         colors: [
+                    //           Color(0xff046A58).withOpacity(0.6),
+                    //           Colors.black,
+                    //           Color(0xff046A58).withOpacity(0.6),
+                    //           Colors.black,
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
-              ),
+                UIHelper.verticalSpace(24.0),
+                PagePriceTag(
+                  text1: 'Start only from ',
+                  text2: '199 Rs.',
+                  image2: 'right_dot_blue',
+                  image1: 'left_dot_blue',
+                ),
+                UIHelper.verticalSpace(22.0),
+                PageSectionHeader(
+                  onFilterTap: () {
+                    //todo:
+                  },
+                  sectionHeading: 'Activities',
+                ),
+                UIHelper.verticalSpace(12.0),
+                RefreshIndicator(
+                  onRefresh: () async {
+                    store.getAllLiveClasses(context: context);
+                  },
+                  color: AppConstants.white,
+                  child: Consumer<GymStore>(
+                    builder: (context, store, child) => store
+                        .allAddonClasses !=
+                        null
+                        ? store.allAddonClasses.data != null &&
+                        store.allAddonClasses.data.isNotEmpty
+                        ? ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount:
+                      store.allAddonClasses.data.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20.0,
+                        ),
+                        child: LiveCard(
+                          data: store.allAddonClasses.data[index],
+                          isFullView: true,
+                        ),
+                      ),
+                    )
+                        : Center(
+                      child: Text(
+                        'No live Classes found',
+                      ),
+                    )
+                        : Loading(),
+                  ),
+                ),
+                UIHelper.verticalSpace(120.0),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -232,6 +214,9 @@ class PagePriceTag extends StatelessWidget {
               start: 0.2,
               child: Container(
                 height: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(16))
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -290,7 +275,7 @@ class PageAppBar extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.centerLeft,
                   child: Icon(
-                    Icons.arrow_back_ios,
+                    Icons.arrow_back,
                     color: AppConstants.white,
                     size: 20.0,
                   ),
@@ -298,41 +283,41 @@ class PageAppBar extends StatelessWidget {
               ),
             ),
           ),
-          if (showText)
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset('assets/images/wtf_2.png'),
-                      UIHelper.horizontalSpace(4.0),
-                      Text(
-                        'Powered',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 24.0,
-                          color: AppConstants.white.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (isLive) ...{
-                    UIHelper.verticalSpace(2.0),
-                    GradientText(
-                      text: 'Live Class',
-                      colors: <Color>[Colors.redAccent, Colors.white],
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  }
-                ],
-              ),
-            ),
+          // if (showText)
+          //   Expanded(
+          //     flex: 2,
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       crossAxisAlignment: CrossAxisAlignment.center,
+          //       children: [
+          //         Row(
+          //           children: [
+          //             Image.asset('assets/images/wtf_2.png'),
+          //             UIHelper.horizontalSpace(4.0),
+          //             Text(
+          //               'Powered',
+          //               style: TextStyle(
+          //                 fontWeight: FontWeight.normal,
+          //                 fontSize: 24.0,
+          //                 color: AppConstants.white.withOpacity(0.8),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         if (isLive) ...{
+          //           UIHelper.verticalSpace(2.0),
+          //           GradientText(
+          //             text: 'Live Class',
+          //             colors: <Color>[Colors.redAccent, Colors.white],
+          //             style: TextStyle(
+          //               fontSize: 24.0,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //           ),
+          //         }
+          //       ],
+          //     ),
+          //   ),
           Flexible(
             flex: 1,
             child: Container(),
@@ -359,34 +344,35 @@ class PageSectionHeader extends StatelessWidget {
     return InkWell(
       onTap: onHeaderTap != null ? onHeaderTap : null,
       child: Container(
-        height: 36.0,
-        margin: const EdgeInsets.symmetric(
-          horizontal: 6.0,
-        ),
+       padding: EdgeInsets.only(left: 16,right: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               sectionHeading,
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 22.0,
               ),
             ),
             InkWell(
               onTap: onFilterTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 6.0,
-                  horizontal: 8.0,
+                // padding: const EdgeInsets.symmetric(
+                //   vertical: 6.0,
+                //   horizontal: 8.0,
+                // ),
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                  color: Color(0xff383838),
                 ),
-                color: Color(0xff383838),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Filter',
                       style: TextStyle(
-                        fontSize: 12.0,
+                        fontSize: 16.0,
                       ),
                     ),
                     UIHelper.horizontalSpace(6.0),

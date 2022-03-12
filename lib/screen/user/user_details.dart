@@ -61,7 +61,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       Slide0(
         title: 'Welcome to WTF',
         subTitle:
-            'To help us serve you better and give you a wholesome experience, please complete \n your fitness profile.',
+            'To help us serve you better and give you a wholesome experience, please complete your fitness profile.',
       ), //
       Slide1(), //
       Slide9(), //

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/controller/user_controller.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/screen/calculators/bmr_calculator/bmr_state.dart';
 
@@ -57,7 +58,7 @@ class _Slide10State extends State<Slide10> {
           children: [
             Container(
               padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
-              color: Color(0xff922224),
+              color: AppColors.BACK_GROUND_BG,
               child: Text(
                 "To reach ${store.preambleModel.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
                 textAlign: TextAlign.center,
@@ -99,7 +100,7 @@ class _Slide10State extends State<Slide10> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk minimum'),
+                    child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk Minimum'),
                   ),
                   SizedBox(width: 20,),
                   Expanded(

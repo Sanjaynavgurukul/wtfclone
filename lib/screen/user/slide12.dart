@@ -61,23 +61,14 @@ class _Slide12State extends State<Slide12> {
                   });
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12.0,
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 12.0,
-                  ),
+                  height: 54,
+                  margin: EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: type1 != store.dprefType1.data[index].uid
-                          ? Color(0xFF2B2929)
-                          : AppConstants.primaryColor,
-                    ),
                     color: selected
-                        ? Color(0xFF2B2929)
-                        : AppConstants.primaryColor,
+                        ? Color(0xFF922224)
+                        : Color(0xff292929),
                     borderRadius: BorderRadius.all(
-                      Radius.circular(6.0),
+                      Radius.circular(4.0),
                     ),
                   ),
                   alignment: Alignment.center,
@@ -144,92 +135,89 @@ class _Slide12State extends State<Slide12> {
             ],
           ),
           SizedBox(height: 40),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ...store.dprefType2.data
-                    .map((e) => InkWell(
-                  onTap: () {
-                    setState(() {
-                      store.preambleModel.type2 = e.uid;
-                      // type2 = e.uid;
-                      // user.setValue(type2: type2);
-                      locator<AppPrefs>().type2.setValue(e.uid);
-                      print('preamble type 1 = ${e.uid}');
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(6.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: SvgPicture.asset(
-                            store.preambleModel.type2 == e.uid
-                                ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
-                                : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
-                          ),
-                        ),
-                        UIHelper.verticalSpace(10.0),
-                        Flexible(
-                          child: Text(
-                            e.value,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children:store.dprefType2.data
+                .map((e) => InkWell(
+              onTap: () {
+                setState(() {
+                  store.preambleModel.type2 = e.uid;
+                  // type2 = e.uid;
+                  // user.setValue(type2: type2);
+                  locator<AppPrefs>().type2.setValue(e.uid);
+                  print('preamble type 1 = ${e.uid}');
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(6.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: SvgPicture.asset(
+                        store.preambleModel.type2 == e.uid
+                            ? 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}_selected.svg'
+                            : 'assets/svg/${e.value.contains('Egg') ? 'egg' : e.value.contains('Non') ? 'nonveg' : 'vegeterian'}.svg',
+                      ),
                     ),
-                  ),
-                  // Row(
-                  //   children: <Widget>[
-                  //     SizedBox(height: 30),
-                  //     Container(
-                  //       height: 15,
-                  //       width: 15,
-                  //       decoration: BoxDecoration(
-                  //         border: Border.all(
-                  //             color: type2 != store.dprefType2.data[index].uid
-                  //                 ? Color(0xFFCBD4DE)
-                  //                 : AppConstants.primaryColor),
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(30),
-                  //         ),
-                  //       ),
-                  //       child: Container(
-                  //         margin: EdgeInsets.all(2),
-                  //         width: 5,
-                  //         height: 5,
-                  //         decoration: BoxDecoration(
-                  //           color: type2 != store.dprefType2.data[index].uid
-                  //               ? Colors.transparent
-                  //               : AppConstants.primaryColor,
-                  //           borderRadius: BorderRadius.all(Radius.circular(30)),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     SizedBox(width: 10),
-                  //     Text(
-                  //       store.dprefType2.data[index].value,
-                  //       style: TextStyle(
-                  //         fontSize: 14.0,
-                  //         color: Colors.white,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //     SizedBox(height: 30),
-                  //   ],
-                  // ),
-                ))
-                    .toList(),
-              ],
-            ),
-          )
+                    UIHelper.verticalSpace(10.0),
+                    Flexible(
+                      child: Text(
+                        e.value,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Row(
+              //   children: <Widget>[
+              //     SizedBox(height: 30),
+              //     Container(
+              //       height: 15,
+              //       width: 15,
+              //       decoration: BoxDecoration(
+              //         border: Border.all(
+              //             color: type2 != store.dprefType2.data[index].uid
+              //                 ? Color(0xFFCBD4DE)
+              //                 : AppConstants.primaryColor),
+              //         borderRadius: BorderRadius.all(
+              //           Radius.circular(30),
+              //         ),
+              //       ),
+              //       child: Container(
+              //         margin: EdgeInsets.all(2),
+              //         width: 5,
+              //         height: 5,
+              //         decoration: BoxDecoration(
+              //           color: type2 != store.dprefType2.data[index].uid
+              //               ? Colors.transparent
+              //               : AppConstants.primaryColor,
+              //           borderRadius: BorderRadius.all(Radius.circular(30)),
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(width: 10),
+              //     Text(
+              //       store.dprefType2.data[index].value,
+              //       style: TextStyle(
+              //         fontSize: 14.0,
+              //         color: Colors.white,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //     SizedBox(height: 30),
+              //   ],
+              // ),
+            ))
+                .toList(),
+          ),
         ],
       ),
     );

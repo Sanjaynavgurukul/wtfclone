@@ -141,7 +141,7 @@ class _MyWtfState extends State<MyWtf> {
                           'My',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 20.0,
+                            fontSize: 28.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -265,7 +265,7 @@ class MyWtfCard extends StatelessWidget {
       child: Container(
         height: 100.0,
         decoration: BoxDecoration(
-          color: AppConstants.primaryColor,
+          color: AppConstants.bgColor,
           borderRadius: BorderRadius.circular(10.0),
         ),
         // alignment: Alignment.center,
@@ -318,7 +318,7 @@ class MyWtfSubscriptionCard extends StatelessWidget {
           return Container(
             height: 100.0,
             decoration: BoxDecoration(
-              color: AppConstants.primaryColor,
+              color: AppConstants.bgColor,
               borderRadius: BorderRadius.circular(10.0),
             ),
             alignment: Alignment.center,

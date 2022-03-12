@@ -20,7 +20,7 @@ class CustomActionButton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomLeft,

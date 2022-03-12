@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/widget/custom_action_button.dart';
@@ -29,9 +30,8 @@ class _ShoppingScreenState extends State<ShoppingScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(store.offerCategory),
-          backgroundColor: AppConstants.primaryColor,
+          backgroundColor: AppColors.BACK_GROUND_BG,
         ),
-        backgroundColor: AppConstants.appBackground,
         body: store.offers != null
             ? store.offers.data != null && store.offers.data.isNotEmpty
                 ? Container(

@@ -27,15 +27,16 @@ class CoinCategoriesIcon extends StatelessWidget {
     GymStore store = Provider.of<GymStore>(context);
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: AppConstants.stcoinbgColor),
+          // border: Border.all(color: AppConstants.stcoinbgColor),
           borderRadius: BorderRadius.all(Radius.circular(10.0.r)),
-          color: AppColors.BACK_GROUND_COIN,
-          gradient: LinearGradient(
-            begin: FractionalOffset.topCenter,
-            end: FractionalOffset.bottomCenter,
-            colors: [Colors.transparent, Colors.white12, Colors.transparent],
-            stops: [0.0, 0.5, 1.0],
-          )),
+          color: AppColors.BACK_GROUND_BG,
+          // gradient: LinearGradient(
+          //   begin: FractionalOffset.topCenter,
+          //   end: FractionalOffset.bottomCenter,
+          //   colors: [Colors.transparent, Colors.white12, Colors.transparent],
+          //   stops: [0.0, 0.5, 1.0],
+          // )
+      ),
       child: ListView(
         controller: ScrollController(keepScrollOffset: false),
         children: [

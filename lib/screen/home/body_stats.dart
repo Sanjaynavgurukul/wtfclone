@@ -201,21 +201,22 @@ class MyGoals extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: index.isEven
-                      ? [
-                          Colors.transparent,
-                          AppConstants.primaryColor,
-                        ]
-                      : [
-                          Colors.transparent,
-                          Colors.white12,
-                          Colors.transparent
-                        ],
-                  stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
-                ),
+                  color:Color(0xff2d2d2d)
+                // gradient: LinearGradient(
+                //   begin: FractionalOffset.topCenter,
+                //   end: FractionalOffset.bottomCenter,
+                //   colors: index.isEven
+                //       ? [
+                //           Colors.transparent,
+                //           AppConstants.primaryColor,
+                //         ]
+                //       : [
+                //           Colors.transparent,
+                //           Colors.white12,
+                //           Colors.transparent
+                //         ],
+                //   stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
+                // ),
               ),
             ),
             Positioned(
@@ -349,21 +350,22 @@ class MyCalories extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: index.isEven
-                      ? [
-                          Colors.transparent,
-                          AppConstants.primaryColor,
-                        ]
-                      : [
-                          Colors.transparent,
-                          Colors.white12,
-                          Colors.transparent
-                        ],
-                  stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
-                ),
+                color:Color(0xff2d2d2d)
+                // gradient: LinearGradient(
+                //   begin: FractionalOffset.topCenter,
+                //   end: FractionalOffset.bottomCenter,
+                //   colors: index.isEven
+                //       ? [
+                //           Colors.transparent,
+                //           AppConstants.bgColor,
+                //         ]
+                //       : [
+                //           Colors.transparent,
+                //           Colors.white12,
+                //           Colors.transparent
+                //         ],
+                //   stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
+                // ),
               ),
             ),
             Positioned(
@@ -488,21 +490,22 @@ class MyBmr extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: index.isEven
-                      ? [
-                          Colors.transparent,
-                          AppConstants.primaryColor,
-                        ]
-                      : [
-                          Colors.transparent,
-                          Colors.white12,
-                          Colors.transparent
-                        ],
-                  stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
-                ),
+                  color:Color(0xff2d2d2d)
+                // gradient: LinearGradient(
+                //   begin: FractionalOffset.topCenter,
+                //   end: FractionalOffset.bottomCenter,
+                //   colors: index.isEven
+                //       ? [
+                //           Colors.transparent,
+                //           AppConstants.primaryColor,
+                //         ]
+                //       : [
+                //           Colors.transparent,
+                //           Colors.white12,
+                //           Colors.transparent
+                //         ],
+                //   stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
+                // ),
               ),
             ),
             Positioned(
@@ -606,21 +609,22 @@ class MyBodyFat extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
-                gradient: LinearGradient(
-                  begin: FractionalOffset.topCenter,
-                  end: FractionalOffset.bottomCenter,
-                  colors: index.isEven
-                      ? [
-                          Colors.transparent,
-                          AppConstants.primaryColor,
-                        ]
-                      : [
-                          Colors.transparent,
-                          Colors.white12,
-                          Colors.transparent
-                        ],
-                  stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
-                ),
+                  color:Color(0xff2d2d2d)
+                // gradient: LinearGradient(
+                //   begin: FractionalOffset.topCenter,
+                //   end: FractionalOffset.bottomCenter,
+                //   colors: index.isEven
+                //       ? [
+                //           Colors.transparent,
+                //           AppConstants.primaryColor,
+                //         ]
+                //       : [
+                //           Colors.transparent,
+                //           Colors.white12,
+                //           Colors.transparent
+                //         ],
+                //   stops: index.isEven ? [0.1, 1.0] : [0.0, 0.5, 1.0],
+                // ),
               ),
               child: store.memberStats.data.bodyfatCal.isNotEmpty
                   ? Column(

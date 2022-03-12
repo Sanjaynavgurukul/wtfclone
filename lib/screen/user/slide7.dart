@@ -75,16 +75,17 @@ class _Slide7State extends State<Slide7> {
     return Consumer<GymStore>(
       builder: (context, user, snapshot) {
         return Scaffold(
+
           body: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
                   padding: EdgeInsets.only(top: 40, left: 18, right: 18),
-                  color: Color(0xff922224),
+                  color: AppColors.BACK_GROUND_BG,
                   child: Column(
                     children: [
                       Text(
-                        "How fast do you want to ${user.preambleModel.targetWeight > user.preambleModel.weightKg ? 'gain your weight' : 'lose your weight'}?",
+                        user.preambleFromLogin ? 'How fast do you want to achieve this goal':"How fast do you want to ${user.preambleModel.targetWeight > user.preambleModel.weightKg ? 'gain your weight' : 'lose your weight'}?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,
@@ -119,7 +120,7 @@ class _Slide7State extends State<Slide7> {
                           },
                           min: 0.0,
                           max: 1.5,
-                          sliderColor: AppConstants.white,
+                          sliderColor: Color(0xff2d2d2d),
                           showDecimalValue: true,
                           start: Container(),
                           end: Container(),
@@ -206,18 +207,17 @@ class _Slide7State extends State<Slide7> {
                               child: Text(
                                 name ?? 'No Type',
                                 style: TextStyle(
-                                    color:
-                                    selected ? Colors.black : Colors.white),
+                                    color:Colors.white),
                               ),
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(4)),
                                   color: selected
-                                      ? Colors.white
+                                      ? Color(0xff922224)
                                       : Colors.transparent,
                                   border: Border.all(
-                                      width: 1, color: Colors.white)),
+                                      width: 1, color:selected?Color(0xff922224): Colors.white)),
                             ),
                           ),
                         );

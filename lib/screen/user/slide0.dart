@@ -57,8 +57,8 @@ class _Slide0State extends State<Slide0> {
                 Text(
                   'Hey ${locator<AppPrefs>().userName.getValue()}!',
                   style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
+                    fontSize: 22.0,
+                    color: Colors.white.withOpacity(0.5),
                   ),
                 ),
                 UIHelper.verticalSpace(10.0),
@@ -66,17 +66,16 @@ class _Slide0State extends State<Slide0> {
                   widget.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: 30.0,
                     color: Colors.white,
                   ),
                 ),
-                UIHelper.verticalSpace(30.0),
+                UIHelper.verticalSpace(12.0),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.center,
                   child: Text(
                     widget.subTitle,
-                    // "We are happy you have taken the  first step towards healthier you. We need a few details to kickstart your journey.",
                     style: TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,

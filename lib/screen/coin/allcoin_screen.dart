@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/widget/Shimmer/widgets/coincategories.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
@@ -22,9 +23,8 @@ class _AllCoinScreenState extends State<AllCoinScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('All Categories'),
-          backgroundColor: AppConstants.primaryColor,
+          backgroundColor: AppColors.BACK_GROUND_BG,
         ),
-        backgroundColor: AppConstants.appBackground,
         body: Padding(
           padding: EdgeInsets.all(12.r),
           child: store.shoppingCategories != null

@@ -83,7 +83,7 @@ class OpenCalButon extends StatelessWidget {
         width: 110.0,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0),
-            color: AppConstants.primaryColor),
+            color: AppConstants.bgColor),
         alignment: Alignment.bottomCenter,
         padding: EdgeInsets.all(10.0),
         child: Column(
@@ -99,7 +99,7 @@ class OpenCalButon extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16.0,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.normal,
               ),
             ),
           ],

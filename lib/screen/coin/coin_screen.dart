@@ -53,7 +53,8 @@ class _CoinScreenState extends State<CoinScreen> {
                               Spacer(),
                               store.coinBalance.data != null
                                   ? CoinBalanceWidget(
-                                      gradient: true,
+                                      gradient: false,
+                                      color: AppConstants.bgColor,
                                       headerText: 'WTF Coin \nBalance',
                                       amount: store
                                           .coinBalance.data.first.wtfCoins
@@ -285,10 +286,12 @@ class CoinBalanceWidget extends StatelessWidget {
   final String buttonText;
   final Function onTap;
   final bool gradient;
+  final Color color;
   const CoinBalanceWidget({
     Key key,
     this.headerText,
     this.amount,
+    this.color = AppConstants.cardBg2,
     this.buttonText,
     this.onTap,
     this.gradient,
@@ -300,7 +303,7 @@ class CoinBalanceWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-            color: AppConstants.cardBg2,
+            color: color,
             gradient: gradient
                 ? LinearGradient(
                     begin: Alignment.topLeft,
@@ -345,11 +348,11 @@ class CoinBalanceWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 10.r),
                 child: Container(
-                  height: .03.sh,
+                  height: .04.sh,
                   width: .4.sw,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: AppConstants.cardBg2,
+                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    color: color,
                     gradient: gradient
                         ? LinearGradient(
                             begin: Alignment.topLeft,

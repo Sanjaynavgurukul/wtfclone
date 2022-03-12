@@ -107,72 +107,107 @@ class _ExplorePageState extends State<ExplorePage> {
                 SizedBox(
                   height: 20.0,
                 ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 12.0,
+                //   ),
+                //   height: 185.0,
+                //   child: ListView.builder(
+                //     itemCount: 2,
+                //     scrollDirection: Axis.horizontal,
+                //     shrinkWrap: true,
+                //     itemBuilder: (context, index) {
+                //
+                //       return InkWell(
+                //         onTap: () {
+                //           if (index == 0) {
+                //             context.read<GymStore>().getDiscoverNow(
+                //                   context: context,
+                //                   type: 'gym',
+                //                 );
+                //           } else {
+                //             context.read<GymStore>().getDiscoverNow(
+                //                   context: context,
+                //                   type: 'studio',
+                //                 );
+                //           }
+                //           NavigationService.navigateTo(Routes.discoverNow);
+                //           // Navigator.push(
+                //           //   context,
+                //           //   MaterialPageRoute(builder: (context) => GymListScreen()),
+                //           // );
+                //         },
+                //         child: Container(
+                //           width: MediaQuery.of(context).size.width * 0.46,
+                //           height: 185.0,
+                //           margin: EdgeInsets.only(right: 15),
+                //           child: Stack(
+                //             children: [
+                //               Image.asset(index == 0?'assets/images/gym_bg.png':'assets/images/studio_bg.png'),
+                //               // GradientImageWidget(
+                //               //   // assets: 'assets/images/gym_cover.png',
+                //               //   network:
+                //               //       index == 0 ? Images.arena : Images.studio,
+                //               //   gragientColor: [
+                //               //     Color(0xffB0C9D6).withOpacity(0.2),
+                //               //     Colors.black.withOpacity(0.9),
+                //               //   ],
+                //               // ),
+                //               Padding(
+                //                 padding: const EdgeInsets.only(
+                //                   bottom: 10,
+                //                   left: 10,
+                //                 ),
+                //                 child: Align(
+                //                   alignment: Alignment.bottomCenter,
+                //                   child: SvgPicture.asset(index == 0
+                //                       ? 'assets/svg/you_get/gyms.svg'
+                //                       : 'assets/svg/you_get/studios.svg'),
+                //                 ),
+                //               ),
+                //               SizedBox(
+                //                 height: 5.0,
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                  ),
                   height: 185.0,
-                  child: ListView.builder(
-                    itemCount: 2,
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: discoverItem(
+                            image1: 'assets/images/gym_bg.png',
+                            image2: 'assets/svg/you_get/gyms.svg',
+                            onClick: () {
+                              context.read<GymStore>().getDiscoverNow(
+                                    context: context,
+                                    type: 'gym',
+                                  );
 
-                      return InkWell(
-                        onTap: () {
-                          if (index == 0) {
-                            context.read<GymStore>().getDiscoverNow(
-                                  context: context,
-                                  type: 'gym',
-                                );
-                          } else {
-                            context.read<GymStore>().getDiscoverNow(
-                                  context: context,
-                                  type: 'studio',
-                                );
-                          }
-                          NavigationService.navigateTo(Routes.discoverNow);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => GymListScreen()),
-                          // );
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.46,
-                          height: 185.0,
-                          margin: EdgeInsets.only(right: 15),
-                          child: Stack(
-                            children: [
-                              Image.asset(index == 0?'assets/images/gym_bg.png':'assets/images/studio_bg.png'),
-                              // GradientImageWidget(
-                              //   // assets: 'assets/images/gym_cover.png',
-                              //   network:
-                              //       index == 0 ? Images.arena : Images.studio,
-                              //   gragientColor: [
-                              //     Color(0xffB0C9D6).withOpacity(0.2),
-                              //     Colors.black.withOpacity(0.9),
-                              //   ],
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 10,
-                                  left: 10,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: SvgPicture.asset(index == 0
-                                      ? 'assets/svg/you_get/gyms.svg'
-                                      : 'assets/svg/you_get/studios.svg'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                              NavigationService.navigateTo(Routes.discoverNow);
+                            }),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: discoverItem(
+                            image1: 'assets/images/studio_bg.png',
+                            image2: 'assets/svg/you_get/studios.svg',
+                            onClick: () {
+                              context.read<GymStore>().getDiscoverNow(
+                                    context: context,
+                                    type: 'studio',
+                                  );
+
+                              NavigationService.navigateTo(Routes.discoverNow);
+                            }),
+                      )
+                    ],
                   ),
                 ),
                 UIHelper.verticalSpace(25.0),
@@ -301,6 +336,29 @@ class _ExplorePageState extends State<ExplorePage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget discoverItem({Function onClick, String image1, String image2}) {
+    return Container(
+      alignment: Alignment.center,
+      height: 185.0,
+      child: InkWell(
+        onTap: onClick,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(image1),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: SvgPicture.asset(image2),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -967,8 +1025,8 @@ class CommonAppBar extends StatelessWidget {
             builder: (context, snapshot) {
               return snapshot != null
                   ? Align(
-                alignment: Alignment.topCenter,
-                    child: Text(
+                      alignment: Alignment.topCenter,
+                      child: Text(
                         // '',
                         'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
                         style: TextStyle(
@@ -977,7 +1035,7 @@ class CommonAppBar extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                  )
+                    )
                   : Container();
             },
           ),
@@ -1076,7 +1134,7 @@ class CommonAppBar extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14.0,
                                       color: Colors.white,
-                                    ),
+                                    )
                                   ),
                                   SizedBox(
                                     width: 4,
@@ -1110,7 +1168,7 @@ class CommonAppBar extends StatelessWidget {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16.0,
-                                        color: Colors.redAccent,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
