@@ -84,7 +84,7 @@ class AppPrefs {
             .getString(PrefsConstants.livePtVerificationId, defaultValue: 'en'),
         liveExerciseId = preferences.getString(PrefsConstants.liveExerciseId,
             defaultValue: 'en'),
-        updateMemberData = preferences.getBool(PrefsConstants.updateMemberData,
+        memberAdded = preferences.getBool(PrefsConstants.updateMemberData,
             defaultValue: false),
         memberId =
             preferences.getString(PrefsConstants.userId, defaultValue: ''),
@@ -105,7 +105,7 @@ class AppPrefs {
   final Preference<String> userEmail;
   final Preference<UserData> userData;
   final Preference<String> gender;
-  final Preference<bool> updateMemberData;
+  final Preference<bool> memberAdded;
   // final Preference<String> currentWorkoutDaySelected;
   final Preference<String> selectedMySchedule;
   final Preference<String> selectedSubmission;

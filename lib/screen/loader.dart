@@ -30,29 +30,38 @@ class _LoaderPageState extends State<LoaderPage> {
   void initState() {
     print('init method called');
     // if (Platform.isAndroid) checkForUpdate();
+    final user = Provider.of<GymStore>(context, listen: false);
     Future.delayed(
       Duration(seconds: 5),
       () {
         context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
-          // context.read<GymStore>().getForceUpdate().then((value) => gotForceUpdate(value));
-          // // context.read<GymStore>().getForceUpdate().then((value) => print('new method called'));
-          context.read<GymStore>().getForceUpdate().then((value){
-            print('checking from loader --- ${value.wtf_version}');
-            if(isAndroid()){
-              if(!value.wtf_version.contains(Api.currentVersion)) {
-                navToForceUpdate(value);
-              } else{
-                navToHome();
-              }
+          print('preamble check login init checked');
+          context.read<GymStore>().getMemberById().then((value){
+            print('preamble check login $value');
+            if(value){
+              context.read<GymStore>().getForceUpdate().then((value){
+                print('checking from loader --- ${value.wtf_version}');
+                if(isAndroid()){
+                  if(!value.wtf_version.contains(Api.currentVersion)) {
+                    navToForceUpdate(value);
+                  } else{
+                    navToHome();
+                  }
+                }else{
+                  if(!value.apple_version.contains(Api.currentVersion)){
+                    navToForceUpdate(value);
+                  }
+                  else {
+                    navToHome();
+                  }
+                }
+              });
             }else{
-              if(!value.apple_version.contains(Api.currentVersion)){
-                navToForceUpdate(value);
-              }
-              else {
-                navToHome();
-              }
+              NavigationService
+                  .navigateToReplacement(
+                  Routes.userDetail);
             }
           });
         } else {

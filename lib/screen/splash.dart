@@ -67,6 +67,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void manageLogin() {}
+
   @override
   void dispose() {
     // TODO: implement dispose

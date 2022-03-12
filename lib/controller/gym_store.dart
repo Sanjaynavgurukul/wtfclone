@@ -2316,11 +2316,11 @@ class GymStore extends ChangeNotifier {
           ?.longitude ?? locator<AppPrefs>().memberData
           .getValue()
           .long}';
+    }else{
+      data.diet_category_id = null;
     }
 
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
-    locator<AppPrefs>().updateMemberData.setValue(false);
-
     bool res = isLogin?await RestDatasource().addMember(body):await RestDatasource().updateMember(body);
 
     print('Preamble member CRUD status: $res');
@@ -2336,11 +2336,14 @@ class GymStore extends ChangeNotifier {
     return res;
   }
 
-  Future<void> getMemberById() async {
+  Future<bool> getMemberById() async {
+    print('get member method called');
     PreambleModel data = await RestDatasource().getMemberById();
-    locator<AppPrefs>().memberData.setValue(data);
+    print('preamble check login store -- ${data.hasData}');
+    // locator<AppPrefs>().memberData.setValue(data);
     preambleModel = data;
     notifyListeners();
+    return data.hasData;
   }
 
 

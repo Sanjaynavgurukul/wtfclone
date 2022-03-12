@@ -197,7 +197,7 @@ class _LoginEmailState extends State<LoginEmail> {
                               jsonResp = json.decode(res.body);
                               if (jsonResp['status']) {
                                 final res = jsonResp['data'];
-                                print('RESP DATA:: ${res}');
+                                print('RESP DATA:: $res');
                                 locator<AppPrefs>()
                                     .memberId
                                     .setValue(res['uid']);

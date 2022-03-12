@@ -1592,13 +1592,15 @@ class RestDatasource {
     );
     print('get member  by id  response - : $response');
     PreambleModel res;
-    if (response != null) {
+    if (response != null && response['status']) {
       print('response not nul called');
       res = PreambleModel.fromJson(response['data']);
+      res.hasData = response['status'];
       print('check model data --- ${PreambleModel().toJsonMember(res)}');
     } else {
       print('response nul called');
       res = new PreambleModel();
+      res.hasData = false;
     }
     return Future.value(res);
   }

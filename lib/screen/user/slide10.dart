@@ -43,7 +43,6 @@ class _Slide10State extends State<Slide10> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     users = context.watch<GymStore>();

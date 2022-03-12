@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class PreambleModel {
+  bool hasData = false;
+
   String gender = 'Male';
   int age = 24;
 
@@ -57,6 +59,7 @@ class PreambleModel {
   PreambleModel();
 
   PreambleModel.fromJson(Map<String,dynamic> json){
+
     this.gender =  json["gender"];
     this.age= json["age"] ?? 24;
     this.date= json['date'];
