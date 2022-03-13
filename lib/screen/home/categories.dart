@@ -65,6 +65,7 @@ class _CategoriesState extends State<Categories> {
         NavigationService.navigateTo(Routes.mySchedule);
         break;
       case 2:
+        print('checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');
         NavigationService.navigateTo(Routes.myDietSchedule);
         // showDialog(
         //   context: context,

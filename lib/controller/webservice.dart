@@ -1260,13 +1260,15 @@ class RestDatasource {
   }
 
   //get diet pref
-  Future<DietItem> getDietCat(String day, String date) async {
+  Future<DietItem> getDietCat(String day, String date,String diet_cat_id) async {
+    print('check diet cat id --  web -- $diet_cat_id');
+
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     return _netUtil
-        .get(BASE_URL + Api.getDietCat(day, date), headers: mapHeader)
+        .get(BASE_URL + Api.getDietCat(day, date,diet_cat_id), headers: mapHeader)
         .then((dynamic res) {
       print("response of getDietCat : " + res.toString());
       DietItem model;

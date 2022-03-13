@@ -5,7 +5,7 @@ import '../main.dart';
 
 class Api {
   //This helps to update the app
-  static String currentVersion = '1';
+  static String currentVersion = '190';
   static String getGyms(String lat, String lng) =>
       'gym?status=active&lat=$lat&long=$lng';
   // static const String SEARCH_GYM = 'gym/search';
@@ -85,8 +85,9 @@ class Api {
   static String getRedeemHistory() =>
       "coins/redeemhistory?user_id=${locator<AppPrefs>().memberId.getValue()}";
   static String dietPref(String type) => "diettype/getall?page=1&type=$type";
-  static String getDietCat(String day, String date) =>
-      'dietcat/getbyId?uid=${locator<AppPrefs>().memberData.getValue().diet_category_id}&day=$day&user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
+  //TODO diet cat id
+  static String getDietCat(String day, String date,String diet_cat_id) =>
+      'dietcat/getbyId?uid=$diet_cat_id&day=$day&user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
   static String getConsumedDiet(String date) =>
       "dietmapping?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date";
   static String eventSubmissionAdd() => "eventsubmission/add";

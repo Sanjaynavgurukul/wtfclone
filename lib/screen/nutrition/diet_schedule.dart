@@ -29,12 +29,12 @@ class _DietScheduleState extends State<DietSchedule> {
   String date;
   String day;
   GymStore store;
+  String dietCatId;
 
   DatePickerController datePickerController = DatePickerController();
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, loadSchedules);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       datePickerController.jumpToSelection();
       // datePickerController.animateToSelection(
@@ -48,7 +48,7 @@ class _DietScheduleState extends State<DietSchedule> {
     day = DateFormat('EEEE').format(tdate).toLowerCase();
     final df = DateFormat('dd-MM-yyyy');
     date = df.format(tdate).toString();
-    store.getdietcat(context: context, day: day, date: date);
+    store.getdietcat(context: context, day: day, date: date,dietCatId: dietCatId);
     isConValid();
     //store.getdietConsumed(context: context, date: date);
   }
@@ -96,6 +96,10 @@ class _DietScheduleState extends State<DietSchedule> {
   Widget build(BuildContext context) {
     userStore = context.watch<UserStore>();
     store = context.watch<GymStore>();
+    print('check diet cat id build -- ${store.preambleModel.diet_category_id}');
+    dietCatId = store.preambleModel.diet_category_id;
+    print('check diet cat id build text -- $dietCatId');
+    Future.delayed(Duration.zero, loadSchedules);
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.PRIMARY_COLOR,
@@ -132,7 +136,7 @@ class _DietScheduleState extends State<DietSchedule> {
                   day = DateFormat('EEEE').format(cdate).toLowerCase();
                   date = df.format(cdate).toString();
                   if (day != null) {
-                    store.getdietcat(context: context, day: day, date: date);
+                    store.getdietcat(context: context, day: day, date: date,dietCatId: dietCatId);
                     isConValid();
                     // store.getdietConsumed(context: context, date: date);
                   }

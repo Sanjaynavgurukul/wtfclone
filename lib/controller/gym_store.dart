@@ -334,7 +334,7 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> init({BuildContext context}) async {
-    //getMemberById();
+    getMemberById();
     getActiveSubscriptions(context: context);
     getUpcomingEvents(context: context);
     getMemberSubscriptions(context: context);
@@ -367,7 +367,6 @@ class GymStore extends ChangeNotifier {
     getAllAddonClasses(context: context);
     context.read<UserStore>().getUserById(context: context);
     // context.read<UserStore>().getMemberById(context: context);
-    getMemberById();
   }
 
   Future<void> joinLiveSession({
@@ -2004,11 +2003,15 @@ class GymStore extends ChangeNotifier {
   }
 
 //dietcat
+  //TODO diet cat
   Future<void> getdietcat(
-      {BuildContext context, String day, String date}) async {
+      {BuildContext context, String day, String date,String dietCatId}) async {
+    // bool notified = false;
     dietItem = null;
-    notifyListeners();
-    DietItem res = await RestDatasource().getDietCat(day, date);
+    print('check diet cat id -- $dietCatId');
+
+    // notifyListeners();
+    DietItem res = await RestDatasource().getDietCat(day, date,dietCatId);
     if (res != null) {
       dietItem = res;
       notifyListeners();
@@ -2346,7 +2349,7 @@ class GymStore extends ChangeNotifier {
     print('preamble check login store -- ${data.hasData}');
     // locator<AppPrefs>().memberData.setValue(data);
     preambleModel = data;
-    notifyListeners();
+    // notifyListeners();
     return data.hasData;
   }
 

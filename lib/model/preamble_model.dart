@@ -202,26 +202,63 @@ class PreambleModel {
   }
 
   static dynamic convertHeightFromJson({String value}) {
-    bool isCm = value.contains(RegExp('_cm'));
+    // bool isCm = value.contains(RegExp('_cm'));
+    //
+    // if (isCm) {
+    //   int d = int.parse(value.replaceAll(RegExp('_cm'), ''));
+    //   return d;
+    // } else {
+    //   double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
+    //   return d;
+    // }
 
+    bool isCm = value.contains(RegExp('_cm'));
+    // bool isFeet = value.contains(RegExp('_ft'));
+    bool inDouble = value.contains(RegExp('.'));
+
+    // print("check data types -- $isCm $isFeet $inDouble");
     if (isCm) {
       int d = int.parse(value.replaceAll(RegExp('_cm'), ''));
       return d;
-    } else {
-      double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
-      return d;
+    }else{
+      return 0;
     }
+    //
+    // else if(isFeet){
+    //   double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
+    //   return d;
+    // }
+    //
+    // else if(inDouble){
+    //   double d = double.parse(value);
+    //   return d;
+    // }else{
+    //   int d = int.parse(value);
+    //   return d;
+    // }
   }
 
   static dynamic convertHeightFromJsonFeet({String value}) {
-    bool isCm = value.contains(RegExp('_ft'));
+    bool isFeet = value.contains(RegExp('_ft'));
+    bool inDouble = value.contains(RegExp('.'));
 
-    if (isCm) {
+     if(isFeet){
       double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
       return d;
-    } else {
-      return null;
     }
+    else if(inDouble){
+      double d = double.parse(value);
+      return d;
+    }else{
+      return 0.0;
+    }
+    //
+    // if (isCm) {
+    //   double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
+    //   return d;
+    // } else {
+    //   return null;
+    // }
   }
 
   static String convertWeightToJson({PreambleModel value}) {
