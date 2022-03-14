@@ -73,7 +73,8 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     print('Curent lat and long --- ' + lat + " " + lng);
     mapHeader["Authorization"] = "Bearer " + token;
-    String url = BASE_URL + Api.getGyms(lat, lng);
+    String url = BASE_URL + Api.getNearByGym(lat,lng,'');
+    // String url = BASE_URL + Api.getGyms(lat, lng);
     log('URL: $url');
     return _netUtil
         .get(
