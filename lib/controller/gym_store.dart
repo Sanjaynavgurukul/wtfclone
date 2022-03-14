@@ -2002,23 +2002,22 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-//dietcat
+  //dietcat
   //TODO diet cat
   Future<void> getdietcat(
-      {BuildContext context, String day, String date,String dietCatId}) async {
+      {BuildContext context, String day, String date}) async {
     // bool notified = false;
     dietItem = null;
-    print('check diet cat id -- $dietCatId');
-
-    // notifyListeners();
-    DietItem res = await RestDatasource().getDietCat(day, date,dietCatId);
+    print('check diet cat id -- ${preambleModel.diet_category_id}');
+    notifyListeners();
+    DietItem res = await RestDatasource().getDietCat(day, date,preambleModel.diet_category_id);
     if (res != null) {
       dietItem = res;
       notifyListeners();
     }
   }
 
-  //dietcon
+  // diet con
   Future<void> dietConsume(
       {BuildContext context,
       String mealId,

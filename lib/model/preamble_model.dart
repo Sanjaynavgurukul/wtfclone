@@ -241,6 +241,10 @@ class PreambleModel {
   static dynamic convertHeightFromJsonFeet({String value}) {
     bool isFeet = value.contains(RegExp('_ft'));
     bool inDouble = value.contains(RegExp('.'));
+    bool isCm = value.contains(RegExp('_cm'));
+    if(isCm){
+      return 0.0;
+    }else{
 
      if(isFeet){
       double d = double.parse(value.replaceAll(RegExp('_ft'), ''));
@@ -251,7 +255,7 @@ class PreambleModel {
       return d;
     }else{
       return 0.0;
-    }
+    }}
     //
     // if (isCm) {
     //   double d = double.parse(value.replaceAll(RegExp('_ft'), ''));

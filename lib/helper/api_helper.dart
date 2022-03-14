@@ -70,6 +70,7 @@ class APIHelper {
       return null;
     }
   }
+
   static Future<ResponseData> getCoupon(String coupon,String plan_type) async {
     try {
       return fetchData(

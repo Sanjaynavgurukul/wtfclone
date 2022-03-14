@@ -5,7 +5,7 @@ import '../main.dart';
 
 class Api {
   //This helps to update the app
-  static String currentVersion = '190';
+  static String currentVersion = '189';
   static String getGyms(String lat, String lng) =>
       'gym?status=active&lat=$lat&long=$lng';
   // static const String SEARCH_GYM = 'gym/search';

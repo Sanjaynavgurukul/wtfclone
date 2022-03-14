@@ -29,12 +29,12 @@ class _DietScheduleState extends State<DietSchedule> {
   String date;
   String day;
   GymStore store;
-  String dietCatId;
 
   DatePickerController datePickerController = DatePickerController();
 
   @override
   void initState() {
+    Future.delayed(Duration.zero, loadSchedules);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       datePickerController.jumpToSelection();
       // datePickerController.animateToSelection(
@@ -48,7 +48,7 @@ class _DietScheduleState extends State<DietSchedule> {
     day = DateFormat('EEEE').format(tdate).toLowerCase();
     final df = DateFormat('dd-MM-yyyy');
     date = df.format(tdate).toString();
-    store.getdietcat(context: context, day: day, date: date,dietCatId: dietCatId);
+    store.getdietcat(context: context, day: day, date: date);
     isConValid();
     //store.getdietConsumed(context: context, date: date);
   }
@@ -96,10 +96,6 @@ class _DietScheduleState extends State<DietSchedule> {
   Widget build(BuildContext context) {
     userStore = context.watch<UserStore>();
     store = context.watch<GymStore>();
-    print('check diet cat id build -- ${store.preambleModel.diet_category_id}');
-    dietCatId = store.preambleModel.diet_category_id;
-    print('check diet cat id build text -- $dietCatId');
-    Future.delayed(Duration.zero, loadSchedules);
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.PRIMARY_COLOR,
@@ -136,7 +132,7 @@ class _DietScheduleState extends State<DietSchedule> {
                   day = DateFormat('EEEE').format(cdate).toLowerCase();
                   date = df.format(cdate).toString();
                   if (day != null) {
-                    store.getdietcat(context: context, day: day, date: date,dietCatId: dietCatId);
+                    store.getdietcat(context: context, day: day, date: date);
                     isConValid();
                     // store.getdietConsumed(context: context, date: date);
                   }
@@ -147,85 +143,85 @@ class _DietScheduleState extends State<DietSchedule> {
               height: MediaQuery.of(context).size.height - 165 - kToolbarHeight,
               child: store.dietItem != null
                   ? store.dietItem.data != null &&
-                          store.dietItem.data.isNotEmpty &&
-                          store.dietItem.data.first.day != null
-                      ? ListView(
-                          shrinkWrap: true,
-                          children: [
-                            Nutritioncard(
-                              nutrionType: store.dietItem.data.first.day
-                                  .breakfast.first.category,
-                              breakfast:
-                                  store.dietItem.data.first.day.breakfast,
-                              date: date,
-                              day: day,
-                            ),
-                            Nutritioncard(
-                              nutrionType: store
-                                  .dietItem.data.first.day.lunch.first.category,
-                              breakfast: store.dietItem.data.first.day.lunch,
-                              date: date,
-                              day: day,
-                            ),
-                            Nutritioncard(
-                              nutrionType: store.dietItem.data.first.day.snacks
-                                  .first.category,
-                              breakfast: store.dietItem.data.first.day.snacks,
-                              date: date,
-                              day: day,
-                            ),
-                            Nutritioncard(
-                              nutrionType: store.dietItem.data.first.day.dinner
-                                  .first.category,
-                              breakfast: store.dietItem.data.first.day.dinner,
-                              date: date,
-                              day: day,
-                            ),
-                          ],
-                        )
-                      : Center(
-                          child: Text(
-                            'No Diet Records Found!',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20,
-                                color: Colors.white70),
-                          ),
-                        )
+                  store.dietItem.data.isNotEmpty &&
+                  store.dietItem.data.first.day != null
+                  ? ListView(
+                shrinkWrap: true,
+                children: [
+                  Nutritioncard(
+                    nutrionType: store.dietItem.data.first.day
+                        .breakfast.first.category,
+                    breakfast:
+                    store.dietItem.data.first.day.breakfast,
+                    date: date,
+                    day: day,
+                  ),
+                  Nutritioncard(
+                    nutrionType: store
+                        .dietItem.data.first.day.lunch.first.category,
+                    breakfast: store.dietItem.data.first.day.lunch,
+                    date: date,
+                    day: day,
+                  ),
+                  Nutritioncard(
+                    nutrionType: store.dietItem.data.first.day.snacks
+                        .first.category,
+                    breakfast: store.dietItem.data.first.day.snacks,
+                    date: date,
+                    day: day,
+                  ),
+                  Nutritioncard(
+                    nutrionType: store.dietItem.data.first.day.dinner
+                        .first.category,
+                    breakfast: store.dietItem.data.first.day.dinner,
+                    date: date,
+                    day: day,
+                  ),
+                ],
+              )
+                  : Center(
+                child: Text(
+                  'No Diet Records Found!',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: Colors.white70),
+                ),
+              )
                   : Align(
-                      alignment: Alignment.topCenter,
-                      child: Loading(),
-                    ),
+                alignment: Alignment.topCenter,
+                child: Loading(),
+              ),
             ),
             store.dietItem != null && isConValid()
                 ? Container(
-                    child: TextButton(
-                      onPressed: () {
-                        store.collectDietRewards(
-                          context: context,
-                          date: date,
-                        );
-                      },
-                      child: Container(
-                        height: 35,
-                        width: MediaQuery.of(context).size.width * .95,
-                        decoration: BoxDecoration(
-                          color: AppConstants.primaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Claim WTF Coins",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+              child: TextButton(
+                onPressed: () {
+                  store.collectDietRewards(
+                    context: context,
+                    date: date,
+                  );
+                },
+                child: Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width * .95,
+                  decoration: BoxDecoration(
+                    color: AppConstants.primaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Claim WTF Coins",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  )
+                  ),
+                ),
+              ),
+            )
                 : CollecReward(),
           ],
         ),
@@ -247,7 +243,7 @@ class CollecReward extends StatelessWidget {
           FlashHelper.informationBar(
             context,
             message:
-                "You have to consume all the meals before collecting the reward ",
+            "You have to consume all the meals before collecting the reward ",
           );
         },
         child: Container(
@@ -288,9 +284,9 @@ class DietCard extends StatefulWidget {
 
   @override
   _DietCardState createState() => _DietCardState(
-        this.data,
-        // this.isMarked,
-      );
+    this.data,
+    // this.isMarked,
+  );
 }
 
 class _DietCardState extends State<DietCard> {
@@ -298,9 +294,9 @@ class _DietCardState extends State<DietCard> {
   // bool isMarked;
 
   _DietCardState(
-    this.data,
-    // this.isMarked,
-  );
+      this.data,
+      // this.isMarked,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -328,8 +324,8 @@ class _DietCardState extends State<DietCard> {
                         color: Colors.red.withOpacity(0.1),
                         child: Image.network(
                           data.coImage.isEmpty ||
-                                  data.coImage == null ||
-                                  data.coImage == "null"
+                              data.coImage == null ||
+                              data.coImage == "null"
                               ? Images.noImageFound
                               : data.coImage,
                           fit: BoxFit.cover,
@@ -394,64 +390,64 @@ class _DietCardState extends State<DietCard> {
             right: 10.0,
             child: (!data.consumptionStatus)
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        value: data.consumptionStatus,
-                        activeColor: AppConstants.primaryColor,
-                        side: BorderSide(
-                          color: Colors.black,
-                        ),
-                        shape: CircleBorder(),
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        onChanged: (val) {
-                          // setState(() {
-                          //   isMarked = val;
-                          // });
-                          widget.onMarked();
-                        },
-                      ),
-                      Text(
-                        ' Click here\nto consume',
-                        style: TextStyle(
-                          color: AppConstants.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.0,
-                        ),
-                      ),
-                      UIHelper.verticalSpace(4.0),
-                      DietDataInfo(data: data),
-                    ],
-                  )
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  value: data.consumptionStatus,
+                  activeColor: AppConstants.primaryColor,
+                  side: BorderSide(
+                    color: Colors.black,
+                  ),
+                  shape: CircleBorder(),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  onChanged: (val) {
+                    // setState(() {
+                    //   isMarked = val;
+                    // });
+                    widget.onMarked();
+                  },
+                ),
+                Text(
+                  ' Click here\nto consume',
+                  style: TextStyle(
+                    color: AppConstants.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.0,
+                  ),
+                ),
+                UIHelper.verticalSpace(4.0),
+                DietDataInfo(data: data),
+              ],
+            )
                 : Column(
-                    children: [
-                      Container(
-                        width: 24.0,
-                        height: 24.0,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                          vertical: 20.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.green,
-                              blurRadius: 2.0,
-                              spreadRadius: 5.0,
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.check,
-                          color: AppConstants.white,
-                        ),
+              children: [
+                Container(
+                  width: 24.0,
+                  height: 24.0,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 20.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green,
+                        blurRadius: 2.0,
+                        spreadRadius: 5.0,
                       ),
-                      UIHelper.verticalSpace(4.0),
-                      DietDataInfo(data: data),
                     ],
                   ),
+                  child: Icon(
+                    Icons.check,
+                    color: AppConstants.white,
+                  ),
+                ),
+                UIHelper.verticalSpace(4.0),
+                DietDataInfo(data: data),
+              ],
+            ),
           ),
         ],
       ),

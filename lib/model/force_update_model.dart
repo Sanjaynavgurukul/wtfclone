@@ -37,7 +37,7 @@ class ForceUpdateModel {
           apple_version: json["apple_version"],
           google_version: json["google_version"],
           description: json["description"],
-          force_update: json["force_update"],
+          force_update: json["force_update"]??0,
           link: json["link"],
           wtf_version: json["wtf_version"]);
 
