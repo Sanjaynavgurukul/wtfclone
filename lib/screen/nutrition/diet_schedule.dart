@@ -98,9 +98,8 @@ class _DietScheduleState extends State<DietSchedule> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppColors.PRIMARY_COLOR,
         appBar: AppBar(
-          backgroundColor: AppConstants.primaryColor,
+          backgroundColor: AppColors.BACK_GROUND_BG,
           elevation: 1.0,
           title: Text(
             'Diet Schedule',
@@ -117,16 +116,19 @@ class _DietScheduleState extends State<DietSchedule> {
           cacheExtent: 200000.0,
           children: [
             Container(
-              color: Colors.white,
+              color: Color(0xff2d2d2d),
               height: 90.0,
               child: DatePicker(
                 DateTime(calendetDate.year, calendetDate.month - 1,
                     calendetDate.day),
                 initialSelectedDate: selectedValue,
                 controller: datePickerController,
-                selectionColor: AppConstants.primaryColor,
+                selectionColor: AppConstants.bgColor,
                 selectedTextColor: Colors.white,
                 deactivatedColor: Colors.white,
+                monthTextStyle: TextStyle(color: Colors.white),
+                dateTextStyle: TextStyle(color: Colors.white),
+                dayTextStyle: TextStyle(color: Colors.white),
                 onDateChange: (cdate) {
                   final df = DateFormat('dd-MM-yyyy');
                   day = DateFormat('EEEE').format(cdate).toLowerCase();
@@ -183,7 +185,7 @@ class _DietScheduleState extends State<DietSchedule> {
                 child: Text(
                   'No Diet Records Found!',
                   style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.normal,
                       fontSize: 20,
                       color: Colors.white70),
                 ),
@@ -203,10 +205,10 @@ class _DietScheduleState extends State<DietSchedule> {
                   );
                 },
                 child: Container(
-                  height: 35,
+                  height: 54,
                   width: MediaQuery.of(context).size.width * .95,
                   decoration: BoxDecoration(
-                    color: AppConstants.primaryColor,
+                    color: AppConstants.bgColor,
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   child: Center(
@@ -247,10 +249,10 @@ class CollecReward extends StatelessWidget {
           );
         },
         child: Container(
-          height: 35,
+          height: 54,
           width: MediaQuery.of(context).size.width * .95,
           decoration: BoxDecoration(
-            color: AppConstants.primaryColor,
+            color: AppConstants.bgColor,
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           child: Center(
@@ -345,9 +347,9 @@ class _DietCardState extends State<DietCard> {
                               maxLines: 4,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                           ),
@@ -366,7 +368,7 @@ class _DietCardState extends State<DietCard> {
                                     Text(
                                       '${data.cal ?? 0} Cal' ?? 'n/a',
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 14.0,
                                       ),
@@ -394,9 +396,9 @@ class _DietCardState extends State<DietCard> {
               children: [
                 Checkbox(
                   value: data.consumptionStatus,
-                  activeColor: AppConstants.primaryColor,
+                  activeColor: AppConstants.bgColor,
                   side: BorderSide(
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                   shape: CircleBorder(),
                   materialTapTargetSize: MaterialTapTargetSize.padded,
@@ -410,8 +412,8 @@ class _DietCardState extends State<DietCard> {
                 Text(
                   ' Click here\nto consume',
                   style: TextStyle(
-                    color: AppConstants.black,
-                    fontWeight: FontWeight.bold,
+                    color: AppConstants.white,
+                    fontWeight: FontWeight.normal,
                     fontSize: 10.0,
                   ),
                 ),
@@ -491,7 +493,7 @@ class DietDataInfo extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.close),
+                  icon: Icon(Icons.close,color: Colors.white,),
                 ),
               ],
             ),
@@ -512,7 +514,7 @@ class DietDataInfo extends StatelessWidget {
       },
       child: Icon(
         Icons.info_outline,
-        color: AppConstants.black,
+        color: AppConstants.white,
       ),
     );
   }
@@ -525,7 +527,7 @@ class ChipBox extends StatelessWidget {
 
   ChipBox({
     this.text,
-    this.bgColor = Colors.red,
+    this.bgColor = AppConstants.bgColor,
     this.size = 12.0,
   });
 
@@ -534,14 +536,14 @@ class ChipBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(2.0),
         color: bgColor,
       ),
       child: Text(
         text,
         style: TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.normal,
           fontSize: size,
         ),
       ),

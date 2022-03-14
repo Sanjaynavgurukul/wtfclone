@@ -1268,6 +1268,8 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
+    print('check diet cat date : day $day date $date cat id $diet_cat_id');
+    print('check diet url : ${BASE_URL + Api.getDietCat(day, date,diet_cat_id)}');
     return _netUtil
         .get(BASE_URL + Api.getDietCat(day, date,diet_cat_id), headers: mapHeader)
         .then((dynamic res) {

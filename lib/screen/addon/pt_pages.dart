@@ -48,10 +48,7 @@ class _PTPagesState extends State<PTPages> {
               ),
             ),
             Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height - 24,
+              height: MediaQuery.of(context).size.height - 24,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -64,7 +61,10 @@ class _PTPagesState extends State<PTPages> {
                           ),
                           height: 400.0,
                           child: CommonBanner(
-                            bannerType: 'PT_banner', height: 400, fraction: 1,),
+                            bannerType: 'PT_banner',
+                            height: 400,
+                            fraction: 1,
+                          ),
                         ),
                         AppBar(
                           backgroundColor: Colors.transparent,
@@ -175,39 +175,44 @@ class _PTPagesState extends State<PTPages> {
                       },
                       color: AppConstants.white,
                       child: Consumer<GymStore>(
-                        builder: (context, store, child) =>
-                        store
-                            .allAddonClasses !=
-                            null
+                        builder: (context, store, child) => store
+                                    .allAddonClasses !=
+                                null
                             ? store.allAddonClasses.data != null &&
-                            store.allAddonClasses.data.isNotEmpty &&
-                            getFilterData(data: store.allAddonClasses.data)
-                                .isNotEmpty && getFilterData(
-                            data: store.allAddonClasses.data) != null
-                            ? ListView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          itemCount: getFilterData(
-                              data: store.allAddonClasses.data).length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            AddOnData item = getFilterData(data:store.allAddonClasses.data)[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20.0,
-                              ),
-                              child: LiveCard(
-                                data: item,
-                                isFullView: true,
-                              ),
-                            );
-                          },
-                        )
-                            : Center(
-                          child: Text(
-                            'No live Classes found',
-                          ),
-                        )
+                                    store.allAddonClasses.data.isNotEmpty &&
+                                    getFilterData(
+                                            data: store.allAddonClasses.data)
+                                        .isNotEmpty &&
+                                    getFilterData(
+                                            data: store.allAddonClasses.data) !=
+                                        null
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    itemCount: getFilterData(
+                                            data: store.allAddonClasses.data)
+                                        .length,
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (context, index) {
+                                      AddOnData item = getFilterData(
+                                          data: store
+                                              .allAddonClasses.data)[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 20.0,
+                                        ),
+                                        child: LiveCard(
+                                          data: item,
+                                          isFullView: true,
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'No live Classes found',
+                                    ),
+                                  )
                             : Loading(),
                       ),
                     ),
@@ -223,7 +228,9 @@ class _PTPagesState extends State<PTPages> {
   }
 
   List<AddOnData> getFilterData({@required List<AddOnData> data}) {
-    return data.where((element) =>
-    element.isPt == 1 && int.parse(element.price ?? '0') > 0).toList();
+    return data
+        .where((element) =>
+            element.isPt == 1 && int.parse(element.price ?? '0') > 0)
+        .toList();
   }
 }

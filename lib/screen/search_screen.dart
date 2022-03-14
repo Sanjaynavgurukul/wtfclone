@@ -49,9 +49,8 @@ class _SearchScreenState extends State<SearchScreen>
     lat = store.currentPosition.latitude.toString();
     lng = store.currentPosition.longitude.toString();
     return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
-        backgroundColor: AppConstants.primaryColor,
+        backgroundColor: AppColors.BACK_GROUND_BG,
         title: Text(
           'Explore',
           style: TextStyle(
@@ -120,39 +119,86 @@ class _SearchScreenState extends State<SearchScreen>
                         TextStyle(color: Colors.white, fontSize: 15),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 17),
-                          hintText:
-                          '${store.currentAddressResult.formattedAddress}',
+                            top: 0.0,
+                            bottom: 0.0,
+                            left: 17,
+                          ),
+                          hintText: '${store.currentAddressResult.formattedAddress}',
                           hintStyle: TextStyle(
-                              color: Colors.white70, fontSize: 15),
+                            color: Colors.white70,
+                            fontSize: 13.0,
+                          ),
                           suffixIcon: InkWell(
-                            onTap: () async {
-                              FocusScope.of(context).unfocus();
-                              await searchGyms(_searchController.text);
+                            onTap: () {
+                              // store.determinePosition();
+                              // NavigationService.navigateTo(
+                              //     Routes.searchScreen);
                             },
                             child: Container(
-                              margin: EdgeInsets.all(7),
+                              margin: EdgeInsets.all(5.0),
                               height: 25,
                               width: 25,
                               decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius:
-                                  BorderRadius.circular(50.0)),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xffBA1406),
+                                      Color(0xff490000),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(4.0)),
                               child: Center(
                                 child: Icon(
                                   Icons.search,
                                   color: Colors.white,
+                                  size: 16.0,
                                 ),
                               ),
                             ),
                           ),
                           filled: true,
-                          fillColor: Colors.black,
+                          fillColor: Color(0xff2d2d2d),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50.0),
+                            borderRadius: BorderRadius.circular(4.0),
                           ),
                         ),
+                        // decoration: InputDecoration(
+                        //   contentPadding: EdgeInsets.only(
+                        //       top: 0.0, bottom: 0.0, left: 17),
+                        //   hintText:
+                        //   '${store.currentAddressResult.formattedAddress}',
+                        //   hintStyle: TextStyle(
+                        //       color: Colors.white70, fontSize: 15),
+                        //   suffixIcon: InkWell(
+                        //     onTap: () async {
+                        //       FocusScope.of(context).unfocus();
+                        //       await searchGyms(_searchController.text);
+                        //     },
+                        //     child: Container(
+                        //       margin: EdgeInsets.all(7),
+                        //       height: 25,
+                        //       width: 25,
+                        //       decoration: BoxDecoration(
+                        //           color: Colors.red,
+                        //           borderRadius:
+                        //           BorderRadius.circular(50.0)),
+                        //       child: Center(
+                        //         child: Icon(
+                        //           Icons.search,
+                        //           color: Colors.white,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   filled: true,
+                        //   fillColor: Colors.black,
+                        //   border: OutlineInputBorder(
+                        //     borderSide: BorderSide.none,
+                        //     borderRadius: BorderRadius.circular(50.0),
+                        //   ),
+                        // ),
                       )
                           : Loading(),
                     ),

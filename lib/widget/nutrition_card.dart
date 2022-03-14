@@ -90,9 +90,9 @@ class _NutritioncardState extends State<Nutritioncard> {
             builder: (context, store, child) => Card(
               margin: EdgeInsets.all(12),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(8),
               ),
-              color: Colors.white,
+              color: Color(0xff2d2d2d),
               child: Column(
                 children: [
                   Container(
@@ -118,7 +118,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                               fontWeight: FontWeight.bold,
                               fontSize: 14.0,
                               letterSpacing: 1,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -136,7 +136,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.0,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(
@@ -144,7 +144,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 10.0,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 TextSpan(
@@ -153,7 +153,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                                     fontFamily: Fonts.ROBOTO,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16.0,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 TextSpan(
@@ -161,7 +161,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 10.0,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ],
@@ -215,7 +215,7 @@ class _NutritioncardState extends State<Nutritioncard> {
                           margin: EdgeInsets.symmetric(horizontal: 20),
                           height: 1,
                           width: 1,
-                          color: Colors.black38,
+                          color: Colors.white38,
                           padding: EdgeInsets.only(left: 10, right: 10),
                         );
                       },

@@ -151,7 +151,6 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                     data: list[0],
                                     isFree: true,
                                   );
-
                                   NavigationService.navigateTo(
                                     Routes.chooseSlotScreen,
                                   );
@@ -2303,7 +2302,7 @@ class GymAddonWidget extends StatelessWidget {
 
   //&& element.isPt == 0
   List<AddOnData> getData(List<AddOnData> data) =>
-      data.where((element) => !element.isLive && element.isPt == 0).toList();
+      data.where((element) => !element.isLive && element.isPt == 0 && element.freeSession == 'false').toList();
 
   @override
   Widget build(BuildContext context) {

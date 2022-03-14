@@ -285,7 +285,8 @@ class PurchaseDoneSummary extends StatelessWidget {
                         // SizedBox(height: 12),
                         // amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}'),
                         SizedBox(height: 12),
-                        amountLabel(label:'End Date:',value:'${convertDate(gymStore.selectedSlotData.date.add(Duration(days: int.parse(gymStore.selectedSession.duration))))}'),
+                        amountLabel(label: 'Start Date' ,value:'${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}' ),
+                        SizedBox(height: 12),
                         // amountLabel(label: 'End Date:', value: gymStore.isFreeSession
                         //     ? "${formatDate(gymStore.selectedSlotData.date)}"
                         //     : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
@@ -293,6 +294,28 @@ class PurchaseDoneSummary extends StatelessWidget {
                         //       days: int.tryParse(gymStore
                         //           .selectedSession.duration)),
                         // ).toIso8601String())}"),
+                        // Text(
+                        //   gymStore.isFreeSession
+                        //       ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
+                        //       : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                        //     Duration(
+                        //         days: int.tryParse(
+                        //             gymStore.selectedSession.duration)),
+                        //   ).toIso8601String())}",
+                        //   style: TextStyle(
+                        //     fontSize: 15,
+                        //     // fontWeight: FontWeight.bold,
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
+                        amountLabel(label:'End Date:',value:gymStore.isFreeSession
+                            ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
+                            : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                          Duration(
+                              days: int.tryParse(
+                                  gymStore.selectedSession.duration)),
+                        ).toIso8601String())}"),
+
                         SizedBox(height: 12),
                         amountLabel(label: 'Begin Time:', value: '${gymStore.selectedSlotData.startTime??''}'),
                         SizedBox(height: 12),
@@ -311,13 +334,27 @@ class PurchaseDoneSummary extends StatelessWidget {
                             .selectedStartingDate
                             .toIso8601String())??''}'),
                         SizedBox(height: 12),
-                        amountLabel(label: 'End Date:', value: '${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
-                          Duration(
-                            days: int.tryParse(
-                              gymStore.selectedGymPlan.duration,
-                            ),
-                          ),
-                        ).toIso8601String())??''}'),
+                        // gymStore.isFreeSession
+                        //     ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
+                        //     : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                        //   Duration(
+                        //       days: int.tryParse(
+                        //           gymStore.selectedSession.duration)),
+                        // ).toIso8601String())}"
+                        // amountLabel(label :  gymStore.isFreeSession
+                        //     ? "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}"
+                        //     : "${Helper.stringForDatetime2(gymStore.selectedSlotData.date.add(
+                        //   Duration(
+                        //       days: int.tryParse(
+                        //           gymStore.selectedSession.duration)),
+                        // ).toIso8601String())}",)
+                        // amountLabel(label: 'End Date:', value: gymStore.isFreeSession ? Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String()):'${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
+                        //   Duration(
+                        //     days: int.tryParse(
+                        //       gymStore.selectedGymPlan.duration,
+                        //     ),
+                        //   ),
+                        // ).toIso8601String())??''}'),
                       ],
                     ),
                   ),

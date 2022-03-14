@@ -42,9 +42,8 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   Widget build(BuildContext context) {
     store = context.read<GymStore>();
     return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(
-        backgroundColor: AppConstants.bgColor,
+        backgroundColor: AppColors.BACK_GROUND_BG,
         centerTitle: false,
         title: Text('Choose Your Plan'),
       ),
@@ -495,11 +494,11 @@ class PlanColor {
   static List<PlanColor> getColorList() => [
         PlanColor(leftColor: Color(0xff6FAF81), rightColor: Color(0xff598966)),
         PlanColor(leftColor: Color(0xffB9789B), rightColor: Color(0xff89506D)),
-        PlanColor(leftColor: Color(0xff965651), rightColor: Color(0xffB43B3B)),
-        PlanColor(leftColor: Color(0xff438373), rightColor: Color(0xff3E74B4)),
+        PlanColor(leftColor: Color(0xffd24d4d), rightColor: Color(0xffB43B3B)),
+        PlanColor(leftColor: Color(0xff46aad2), rightColor: Color(0xff3E74B4)),
         PlanColor(leftColor: Color(0xff6FAF81), rightColor: Color(0xff598966)),
         PlanColor(leftColor: Color(0xffB9789B), rightColor: Color(0xff89506D)),
-        PlanColor(leftColor: Color(0xff965651), rightColor: Color(0xffB43B3B)),
+        PlanColor(leftColor: Color(0xff46aad2), rightColor: Color(0xffB43B3B)),
         PlanColor(leftColor: Color(0xff438373), rightColor: Color(0xff3E74B4)),
       ];
 }
