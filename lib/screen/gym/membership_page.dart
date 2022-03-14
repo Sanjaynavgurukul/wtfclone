@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -54,6 +55,10 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
   void dispose() {
     super.dispose();
     gymStore.setGymDetails(data: null);
+  }
+
+  List<AddOnData> getFreeSession({@required List<AddOnData> data}){
+    return data.where((element) => element.price == '0' && element.freeSession == 'true').toList();
   }
 
   @override
@@ -139,17 +144,27 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                           Expanded(
                             child: InkWell(
                               onTap: () {
-                                gymStore.setAddOnSlot(
-                                  context: context,
-                                  data: gymStore.selectedGymAddOns.data
-                                      .where((element) => element.price == '0')
-                                      .toList()[0],
-                                  isFree: true,
-                                );
+                                List<AddOnData> list = getFreeSession(data:gymStore.selectedGymAddOns.data);
+                                if(list.isNotEmpty && list != null){
+                                  gymStore.setAddOnSlot(
+                                    context: context,
+                                    data: list[0],
+                                    isFree: true,
+                                  );
 
-                                NavigationService.navigateTo(
-                                  Routes.chooseSlotScreen,
-                                );
+                                  NavigationService.navigateTo(
+                                    Routes.chooseSlotScreen,
+                                  );
+                                }else{
+                                  Fluttertoast.showToast(msg: 'No Free trial available');
+                                }
+                                // gymStore.setAddOnSlot(
+                                //   context: context,
+                                //   data: gymStore.selectedGymAddOns.data
+                                //       .where((element) => element.price == '0' && element.freeSession == 'true')
+                                //       .toList()[0],
+                                //   isFree: true,
+                                // );
                               },
                               child: Container(
                                   decoration: BoxDecoration(

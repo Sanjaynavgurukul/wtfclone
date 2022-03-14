@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/addon/powered_pages.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/progress_loader.dart';
+
 class PTPages extends StatefulWidget {
   @override
   _PTPagesState createState() => _PTPagesState();
@@ -46,7 +48,10 @@ class _PTPagesState extends State<PTPages> {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height - 24,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height - 24,
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -58,7 +63,8 @@ class _PTPagesState extends State<PTPages> {
                             color: Colors.transparent,
                           ),
                           height: 400.0,
-                          child: CommonBanner(bannerType: 'PT_banner',height: 400,fraction: 1,),
+                          child: CommonBanner(
+                            bannerType: 'PT_banner', height: 400, fraction: 1,),
                         ),
                         AppBar(
                           backgroundColor: Colors.transparent,
@@ -169,31 +175,33 @@ class _PTPagesState extends State<PTPages> {
                       },
                       color: AppConstants.white,
                       child: Consumer<GymStore>(
-                        builder: (context, store, child) => store
+                        builder: (context, store, child) =>
+                        store
                             .allAddonClasses !=
                             null
                             ? store.allAddonClasses.data != null &&
-                            store.allAddonClasses.data.isNotEmpty
+                            store.allAddonClasses.data.isNotEmpty &&
+                            getFilterData(data: store.allAddonClasses.data)
+                                .isNotEmpty && getFilterData(
+                            data: store.allAddonClasses.data) != null
                             ? ListView.builder(
                           shrinkWrap: true,
                           primary: false,
-                          itemCount: store.allAddonClasses.data
-                              .where((element) => element.isPt == 1)
-                              .toList()
-                              .length,
+                          itemCount: getFilterData(
+                              data: store.allAddonClasses.data).length,
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20.0,
-                            ),
-                            child: LiveCard(
-                              data: store.allAddonClasses.data
-                                  .where((element) =>
-                              element.isPt == 1)
-                                  .toList()[index],
-                              isFullView: true,
-                            ),
-                          ),
+                          itemBuilder: (context, index) {
+                            AddOnData item = getFilterData(data:store.allAddonClasses.data)[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20.0,
+                              ),
+                              child: LiveCard(
+                                data: item,
+                                isFullView: true,
+                              ),
+                            );
+                          },
                         )
                             : Center(
                           child: Text(
@@ -214,4 +222,8 @@ class _PTPagesState extends State<PTPages> {
     );
   }
 
+  List<AddOnData> getFilterData({@required List<AddOnData> data}) {
+    return data.where((element) =>
+    element.isPt == 1 && int.parse(element.price ?? '0') > 0).toList();
+  }
 }
