@@ -1,4 +1,4 @@
-import 'package:easy_gradient_text/easy_gradient_text.dart';
+import 'package:cupertino_tabbar/cupertino_tabbar.dart' as CupertinoTabBar;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
@@ -18,150 +18,466 @@ class PoweredPages extends StatefulWidget {
   _PoweredPagesState createState() => _PoweredPagesState();
 }
 
-class _PoweredPagesState extends State<PoweredPages> {
+class _PoweredPagesState extends State<PoweredPages>
+    with TickerProviderStateMixin {
   GymStore store;
   ScrollController controller;
+  TabController _tabController;
+  double tabBarRadius = 4.0;
+  var _selectedIndex = 0;
 
   @override
   void initState() {
     controller = ScrollController();
     controller.addListener(() {});
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+    // _tabController = TabController(length: 2, vsync: this,initialIndex: 0)
+    //   ..addListener(() {
+    //     setState(() {
+    //       _selectedIndex = _tabController.index;
+    //     });
+    //   });
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    // _tabController.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
-    return SafeArea(
-      child: Scaffold(
-        body:  Container(
-          height: MediaQuery.of(context).size.height - 24,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          colorFilter: ColorFilter.mode(
-                            Color(0xff046A58).withOpacity(0.5),
-                            BlendMode.dstIn,
-                          ),
-                          image: AssetImage(
-                            'assets/images/powered_bg.png',
+    return Scaffold(
+      body: RefreshIndicator(onRefresh: () async {
+        store.getAllLiveClasses(context: context);
+      }, child: Consumer<GymStore>(builder: (context, store, child) {
+        return NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              SliverToBoxAdapter(child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                              Color(0xff046A58).withOpacity(0.5),
+                              BlendMode.dstIn,
+                            ),
+                            image: AssetImage(
+                              'assets/images/powered_bg.png',
+                            ),
                           ),
                         ),
+                        height: 400.0,
                       ),
-                      height: 400.0,
-                    ),
-                    Positioned(
-                      top: 150.0,
-                      left: 20.0,
-                      child: SvgPicture.asset(
-                        'assets/svg/fitness_fullstop.svg',
+                      Positioned(
+                        top: 150.0,
+                        left: 20.0,
+                        child: SvgPicture.asset(
+                          'assets/svg/fitness_fullstop.svg',
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 50.0,
-                        left: 12.0,
-                        right: 12.0,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 50.0,
+                          left: 12.0,
+                          right: 12.0,
+                        ),
+                        child: PageAppBar(isLive: false),
                       ),
-                      child: PageAppBar(isLive: false),
-                    ),
-                    // Positioned(
-                    //   top: 10.0,
-                    //   left: 0.0,
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       gradient: RadialGradient(
-                    //         colors: [
-                    //           Color(0xff046A58).withOpacity(0.6),
-                    //           Colors.black,
-                    //           Color(0xff046A58).withOpacity(0.6),
-                    //           Colors.black,
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // Positioned(
-                    //   top: 10.0,
-                    //   right: 0.0,
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       gradient: RadialGradient(
-                    //         colors: [
-                    //           Color(0xff046A58).withOpacity(0.6),
-                    //           Colors.black,
-                    //           Color(0xff046A58).withOpacity(0.6),
-                    //           Colors.black,
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-                UIHelper.verticalSpace(24.0),
-                PagePriceTag(
-                  text1: 'Start only from ',
-                  text2: '199 Rs.',
-                  image2: 'right_dot_blue',
-                  image1: 'left_dot_blue',
-                ),
-                UIHelper.verticalSpace(22.0),
-                PageSectionHeader(
-                  onFilterTap: () {
-                    //todo:
-                  },
-                  sectionHeading: 'Activities',
-                ),
-                UIHelper.verticalSpace(12.0),
-                RefreshIndicator(
-                  onRefresh: () async {
-                    store.getAllLiveClasses(context: context);
-                  },
-                  color: AppConstants.white,
-                  child: Consumer<GymStore>(
-                    builder: (context, store, child) => store
-                        .allAddonClasses !=
-                        null
-                        ? store.allAddonClasses.data != null &&
-                        store.allAddonClasses.data.isNotEmpty && getFilterList(data:store.allAddonClasses.data) != null && getFilterList(data:store.allAddonClasses.data).isNotEmpty
-                        ? ListView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount:
-                      getFilterList(data:store.allAddonClasses.data).length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index){
-                        AddOnData item = getFilterList(data:store.allAddonClasses.data)[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20.0,
-                          ),
-                          child: LiveCard(
-                            data: item,
-                            isFullView: true,
-                          ),
-                        );
-                      },
-                    )
-                        : Center(
-                      child: Text(
-                        'No live Classes found',
-                      ),
-                    )
-                        : Loading(),
+                      // Positioned(
+                      //   top: 10.0,
+                      //   left: 0.0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       gradient: RadialGradient(
+                      //         colors: [
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Positioned(
+                      //   top: 10.0,
+                      //   right: 0.0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       gradient: RadialGradient(
+                      //         colors: [
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
                   ),
-                ),
-                UIHelper.verticalSpace(120.0),
+                  UIHelper.verticalSpace(24.0),
+                  PagePriceTag(
+                    text1: 'Start only from ',
+                    text2: '199 Rs.',
+                    image2: 'right_dot_blue',
+                    image1: 'left_dot_blue',
+                  ),
+                  UIHelper.verticalSpace(22.0),
+                  PageSectionHeader(
+                    onFilterTap: () {
+                      //todo:
+                    },
+                    sectionHeading: 'Activities',
+                  ),
+                  UIHelper.verticalSpace(12.0),
+                ],
+              )),
+              SliverToBoxAdapter(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2d2d2d),
+                      borderRadius: BorderRadius.circular(tabBarRadius),
+                      border:
+                      Border.all(width: 1.0, color: const Color(0xff2f363d)),
+                    ),
+                    padding: EdgeInsets.all(2),
+                    child: TabBar(
+                      controller: _tabController,
+                      // give the indicator a decoration (color and border radius)
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(tabBarRadius),
+                        color: AppConstants.bgColor,
+                      ),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: AppConstants.white,
+                      tabs: [
+                        // first tab [you can add an icon using the icon property]
+                        Tab(
+                          child: Text(
+                            'Paid',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.normal),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+
+                        // second tab [you can add an icon using the icon property]
+                        Tab(
+                          child: Text(
+                            'Free',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.normal),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ),
+            ];
+          },
+          body: Container(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                getList(data: store.allAddonClasses,isPaid: true),
+                getList(data: store.allAddonClasses,isPaid: false),
               ],
+            ),
+          ),
+        );
+      })),
+    );
+  }
+
+  Widget getList({@required GymAddOn data, bool isPaid = true}) {
+    return store.allAddonClasses != null
+        ? store.allAddonClasses.data != null &&
+        store.allAddonClasses.data.isNotEmpty &&
+        getFilterList(data: store.allAddonClasses.data,isPaid: isPaid) != null &&
+        getFilterList(data: store.allAddonClasses.data,isPaid: isPaid).isNotEmpty
+        ? ListView.builder(
+      // shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          primary: false,
+          itemCount:
+          getFilterList(data: store.allAddonClasses.data,isPaid: isPaid).length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            AddOnData item =
+            getFilterList(data: store.allAddonClasses.data,isPaid: isPaid)[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+              ),
+              child: LiveCard(
+                data: item,
+                isFullView: true,
+              ),
+            );
+          },
+    )
+        : Center(
+      child: Text(
+        'No live Classes found',
+      ),
+    )
+        : Loading();
+  }
+
+  Widget oldUi() {
+    return SafeArea(
+      child: Scaffold(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            store.getAllLiveClasses(context: context);
+          },
+          child: Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height - 24,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                              Color(0xff046A58).withOpacity(0.5),
+                              BlendMode.dstIn,
+                            ),
+                            image: AssetImage(
+                              'assets/images/powered_bg.png',
+                            ),
+                          ),
+                        ),
+                        height: 400.0,
+                      ),
+                      Positioned(
+                        top: 150.0,
+                        left: 20.0,
+                        child: SvgPicture.asset(
+                          'assets/svg/fitness_fullstop.svg',
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 50.0,
+                          left: 12.0,
+                          right: 12.0,
+                        ),
+                        child: PageAppBar(isLive: false),
+                      ),
+                      // Positioned(
+                      //   top: 10.0,
+                      //   left: 0.0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       gradient: RadialGradient(
+                      //         colors: [
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Positioned(
+                      //   top: 10.0,
+                      //   right: 0.0,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       gradient: RadialGradient(
+                      //         colors: [
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //           Color(0xff046A58).withOpacity(0.6),
+                      //           Colors.black,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  UIHelper.verticalSpace(24.0),
+                  PagePriceTag(
+                    text1: 'Start only from ',
+                    text2: '199 Rs.',
+                    image2: 'right_dot_blue',
+                    image1: 'left_dot_blue',
+                  ),
+                  UIHelper.verticalSpace(22.0),
+                  PageSectionHeader(
+                    onFilterTap: () {
+                      //todo:
+                    },
+                    sectionHeading: 'Activities',
+                  ),
+                  UIHelper.verticalSpace(12.0),
+                  // PreferredSize(
+                  //     preferredSize: Size.fromHeight(70),
+                  //     child: Align(
+                  //         alignment: Alignment.centerLeft,
+                  //         child: Container(
+                  //           // width: MediaQuery.of(context).size.width / 1.5,
+                  //           child: TabBar(
+                  //             isScrollable: true,
+                  //               indicatorColor: Colors.white,
+                  //               unselectedLabelColor: Colors.blue,
+                  //               indicatorSize: TabBarIndicatorSize.label,
+                  //               padding: EdgeInsets.all(0),
+                  //               controller: _tabController,
+                  //
+                  //               indicator: BoxDecoration(
+                  //                   borderRadius: BorderRadius.circular(tabBarRadius),
+                  //                   color: Colors.blue),
+                  //               tabs: [
+                  //                 Tab(
+                  //                   text: 'Home',
+                  //                 ),
+                  //                 Tab(
+                  //                   text: 'Home',
+                  //                 ),
+                  //               ]),
+                  //         ))),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 16),
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width / 1.5,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff2d2d2d),
+                        borderRadius: BorderRadius.circular(tabBarRadius),
+                        border: Border.all(
+                            width: 1.0, color: const Color(0xff2f363d)),
+                      ),
+                      padding: EdgeInsets.all(2),
+                      child: TabBar(
+                        controller: _tabController,
+                        // give the indicator a decoration (color and border radius)
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(tabBarRadius),
+                          color: AppConstants.bgColor,
+                        ),
+                        labelColor: Colors.white,
+                        unselectedLabelColor: AppConstants.white,
+                        tabs: [
+                          // first tab [you can add an icon using the icon property]
+                          Tab(
+                            child: Text(
+                              'Paid',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+
+                          // second tab [you can add an icon using the icon property]
+                          Tab(
+                            child: Text(
+                              'Free',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // tab bar view her
+                  // Expanded(
+                  //   child: TabBarView(
+                  //     controller: _tabController,
+                  //     children: [
+                  //       // Container(
+                  //       //padding: EdgeInsets.symmetric(vertical: 25, horizontal: 32),
+                  //       //height: 50,
+                  //       //child:
+                  //      Text('one'),
+                  //      Text('twwwo')
+                  //     ],
+                  //   ),
+                  // ),
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      store.getAllLiveClasses(context: context);
+                    },
+                    color: AppConstants.white,
+                    child: Consumer<GymStore>(
+                      builder: (context, store, child) =>
+                      store
+                          .allAddonClasses !=
+                          null
+                          ? store.allAddonClasses.data != null &&
+                          store.allAddonClasses.data.isNotEmpty &&
+                          getFilterList(
+                              data: store.allAddonClasses.data) !=
+                              null &&
+                          getFilterList(
+                              data: store.allAddonClasses.data)
+                              .isNotEmpty
+                          ? ListView.builder(
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: getFilterList(
+                            data: store.allAddonClasses.data)
+                            .length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          AddOnData item = getFilterList(
+                              data:
+                              store.allAddonClasses.data)[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20.0,
+                            ),
+                            child: LiveCard(
+                              data: item,
+                              isFullView: true,
+                            ),
+                          );
+                        },
+                      )
+                          : Center(
+                        child: Text(
+                          'No live Classes found',
+                        ),
+                      )
+                          : Loading(),
+                    ),
+                  ),
+                  UIHelper.verticalSpace(120.0),
+                ],
+              ),
             ),
           ),
         ),
@@ -169,10 +485,20 @@ class _PoweredPagesState extends State<PoweredPages> {
     );
   }
 
-  List<AddOnData> getFilterList({@required List<AddOnData> data}){
-    return data.where((element) => element.isPt == 0).toList();
+  List<AddOnData> getFilterList({@required List<AddOnData> data,bool isPaid = false}) {
+    if(isPaid){
+      print('is Paid -- $isPaid');
+      return data.where((element) => element.isPt == 0 && int.parse(element.price ?? '0') != 0).toList();
+    }else{
+      print('is Paid -- $isPaid');
+      return data.where((element) => element.isPt == 0 && int.parse(element.price ?? '0') == 0).toList();
+    }
+    return data.where((element) => element.isPt == 0 && isPaid ? int.parse(element.price??'0') > 0:int.parse(element.price??'0') ==0).toList();
   }
 
+// @override
+// // TODO: implement wantKeepAlive
+// bool get wantKeepAlive => true;
 }
 
 class PagePriceTag extends StatelessWidget {
@@ -180,6 +506,7 @@ class PagePriceTag extends StatelessWidget {
   final String text2;
   final String image1;
   final String image2;
+
   const PagePriceTag({
     Key key,
     this.text1,
@@ -192,7 +519,10 @@ class PagePriceTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150.0,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       margin: const EdgeInsets.symmetric(
         horizontal: 16.0,
         vertical: 10.0,
@@ -224,8 +554,7 @@ class PagePriceTag extends StatelessWidget {
               child: Container(
                 height: 100.0,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(16))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -263,6 +592,7 @@ class PagePriceTag extends StatelessWidget {
 class PageAppBar extends StatelessWidget {
   final bool isLive;
   final bool showText;
+
   const PageAppBar({
     Key key,
     this.isLive = false,
@@ -353,7 +683,7 @@ class PageSectionHeader extends StatelessWidget {
     return InkWell(
       onTap: onHeaderTap != null ? onHeaderTap : null,
       child: Container(
-       padding: EdgeInsets.only(left: 16,right: 16),
+        padding: EdgeInsets.only(left: 16, right: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -363,36 +693,36 @@ class PageSectionHeader extends StatelessWidget {
                 fontSize: 22.0,
               ),
             ),
-            InkWell(
-              onTap: onFilterTap,
-              child: Container(
-                // padding: const EdgeInsets.symmetric(
-                //   vertical: 6.0,
-                //   horizontal: 8.0,
-                // ),
-                padding: EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(2)),
-                  color: Color(0xff383838),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Filter',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    UIHelper.horizontalSpace(6.0),
-                    SvgPicture.asset(
-                      'assets/svg/filter.svg',
-                      height: 10.0,
-                    ),
-                  ],
-                ),
-              ),
-            )
+            // InkWell(
+            //   onTap: onFilterTap,
+            //   child: Container(
+            //     // padding: const EdgeInsets.symmetric(
+            //     //   vertical: 6.0,
+            //     //   horizontal: 8.0,
+            //     // ),
+            //     padding: EdgeInsets.all(6),
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.all(Radius.circular(2)),
+            //       color: Color(0xff383838),
+            //     ),
+            //     child: Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Text(
+            //           'Filter',
+            //           style: TextStyle(
+            //             fontSize: 16.0,
+            //           ),
+            //         ),
+            //         UIHelper.horizontalSpace(6.0),
+            //         SvgPicture.asset(
+            //           'assets/svg/filter.svg',
+            //           height: 10.0,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
