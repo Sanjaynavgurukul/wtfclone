@@ -8,6 +8,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/widget/glass_morphism.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -131,22 +132,25 @@ class _PoweredPagesState extends State<PoweredPages> {
                         .allAddonClasses !=
                         null
                         ? store.allAddonClasses.data != null &&
-                        store.allAddonClasses.data.isNotEmpty
+                        store.allAddonClasses.data.isNotEmpty && getFilterList(data:store.allAddonClasses.data) != null && getFilterList(data:store.allAddonClasses.data).isNotEmpty
                         ? ListView.builder(
                       shrinkWrap: true,
                       primary: false,
                       itemCount:
-                      store.allAddonClasses.data.length,
+                      getFilterList(data:store.allAddonClasses.data).length,
                       scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20.0,
-                        ),
-                        child: LiveCard(
-                          data: store.allAddonClasses.data[index],
-                          isFullView: true,
-                        ),
-                      ),
+                      itemBuilder: (context, index){
+                        AddOnData item = getFilterList(data:store.allAddonClasses.data)[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20.0,
+                          ),
+                          child: LiveCard(
+                            data: item,
+                            isFullView: true,
+                          ),
+                        );
+                      },
                     )
                         : Center(
                       child: Text(
@@ -164,6 +168,11 @@ class _PoweredPagesState extends State<PoweredPages> {
       ),
     );
   }
+
+  List<AddOnData> getFilterList({@required List<AddOnData> data}){
+    return data.where((element) => element.isPt == 0).toList();
+  }
+
 }
 
 class PagePriceTag extends StatelessWidget {

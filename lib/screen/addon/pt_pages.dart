@@ -29,7 +29,6 @@ class _PTPagesState extends State<PTPages> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
-
         body: Stack(
           children: [
             Container(

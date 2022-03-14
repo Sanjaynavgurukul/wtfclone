@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/model/gym_add_on.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/addon/powered_pages.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
@@ -39,6 +40,7 @@ class _LiveClassesState extends State<LiveClasses> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              //Banner Section
               Container(
                 height: 400,
                 child: Stack(
@@ -84,6 +86,7 @@ class _LiveClassesState extends State<LiveClasses> {
                   ],
                 ),
               ),
+
               Container(
                 padding: const EdgeInsets.only(
                   top: 30.0,
