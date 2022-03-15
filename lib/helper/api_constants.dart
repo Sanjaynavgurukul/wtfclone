@@ -28,8 +28,10 @@ class Api {
       'slot/check/new?date=$date&trainer_id=$trainerId&gym_id=$gymId';
   static String slotDetails2(String date, String gymId) =>
       'slot/check/new?date=$date&gym_id=$gymId';
+
   static String checkSubscription(String userId, String gymId) =>
       'subscription/getbyid?user_id=$userId&gym_id=$gymId';
+
   static gymAddOn(String gymId) => 'addon?gym_id=$gymId';
   static getUpcomingEvents() =>
       'subscription/suscribed/event?user_id=${locator<AppPrefs>().memberId.getValue()}&type=new';

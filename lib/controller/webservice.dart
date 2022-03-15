@@ -73,7 +73,7 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     print('Curent lat and long --- ' + lat + " " + lng);
     mapHeader["Authorization"] = "Bearer " + token;
-    String url = BASE_URL + Api.getNearByGym(lat, lng, '');
+    String url = BASE_URL + Api.getNearByGym(lat,lng,'');
     // String url = BASE_URL + Api.getGyms(lat, lng);
     log('URL: $url');
     return _netUtil
@@ -94,7 +94,7 @@ class RestDatasource {
   }
 
   Future<NewTrainersModel> getNewTrainers({gymId}) async {
-    print("shift trainer"); //
+    print("shift trainer");//
     String url = BASE_URL + Api.newTrainers(gymId);
     log(url);
     String token = locator<AppPrefs>().token.getValue();
@@ -869,6 +869,27 @@ class RestDatasource {
     return Future.value(model);
   }
 
+  ///Manmohan
+  Future<int> checkGymSubscription(
+      {BuildContext context, String userId, String gymId}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String url = BASE_URL + Api.checkSubscription(userId, gymId);
+    print('url: $url');
+    return _netUtil
+        .get(
+      url,
+      headers: mapHeader,
+    )
+        .then((dynamic res) {
+      log(res.toString());
+      print('check subscription available --- ${res.toString()}');
+      return Future.value(res['status'] == true ? 1 : 0);
+    });
+  }
+
   Future<CheckEventParticipation> checkEventSubscription(
       {BuildContext context, String eventId}) async {
     String token = locator<AppPrefs>().token.getValue();
@@ -890,6 +911,7 @@ class RestDatasource {
     return Future.value(val);
   }
 
+  //TODO check slot availablity :D
   Future<dynamic> checkSlotAvailability(
       {BuildContext context, String slotId}) async {
     String token = locator<AppPrefs>().token.getValue();
@@ -1241,8 +1263,7 @@ class RestDatasource {
   }
 
   //get diet pref
-  Future<DietItem> getDietCat(
-      String day, String date, String diet_cat_id) async {
+  Future<DietItem> getDietCat(String day, String date,String diet_cat_id) async {
     print('check diet cat id --  web -- $diet_cat_id');
 
     String token = locator<AppPrefs>().token.getValue();
@@ -1250,11 +1271,9 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     print('check diet cat date : day $day date $date cat id $diet_cat_id');
-    print(
-        'check diet url : ${BASE_URL + Api.getDietCat(day, date, diet_cat_id)}');
+    print('check diet url : ${BASE_URL + Api.getDietCat(day, date,diet_cat_id)}');
     return _netUtil
-        .get(BASE_URL + Api.getDietCat(day, date, diet_cat_id),
-            headers: mapHeader)
+        .get(BASE_URL + Api.getDietCat(day, date,diet_cat_id), headers: mapHeader)
         .then((dynamic res) {
       print("response of getDietCat : " + res.toString());
       DietItem model;
@@ -1516,7 +1535,7 @@ class RestDatasource {
   //     return {};
   //   }
   // }
-  Future<bool> addMember(Map<String, dynamic> data) async {
+  Future<bool> addMember(Map<String, dynamic> data)async{
     data['user_id'] = locator<AppPrefs>().memberId.getValue();
     print('response from add member data : $data');
     String token = locator<AppPrefs>().token.getValue();
@@ -1534,7 +1553,7 @@ class RestDatasource {
     if (res != null) {
       print('response called not null ${res['status']}');
       return res['status'];
-    } else {
+    }else{
       print('response called null');
       return false;
     }
@@ -1565,7 +1584,7 @@ class RestDatasource {
     }
   }
 
-  Future<PreambleModel> getMemberById() async {
+  Future<PreambleModel> getMemberById()async{
     String memberId = locator<AppPrefs>().memberId.getValue();
     print('checking member id : --- $memberId');
     Map<String, String> mapHeader = Map();
@@ -1628,13 +1647,14 @@ class RestDatasource {
     if (res != null) {
       print('response called not null ${res['status']}');
       return res['status'];
-    } else {
+    }else{
       print('response called null');
       return false;
     }
   }
 
-  Future<void> getLastSeen() async {
+
+  Future<void> getLastSeen()async{
     String userId = locator<AppPrefs>().memberId.getValue();
     print('checking member id : --- $userId');
 
@@ -1648,7 +1668,9 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
     var res = await _netUtil.post(
       url,
-      body: {"user_id": "$userId"},
+      body: {
+        "user_id":"$userId"
+      },
       headers: mapHeader,
     );
     // print('get member  by id  response - : $response');
@@ -1665,32 +1687,5 @@ class RestDatasource {
     // }
     print('last seen response -- $res');
     return true;
-  }
-
-  ///Manmohan
-  Future<int> checkGymSubscription(
-      {BuildContext context, String userId, String gymId}) async {
-    String token = locator<AppPrefs>().token.getValue();
-    Map<String, String> mapHeader = Map();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    String url = BASE_URL + Api.checkSubscription(userId, gymId);
-    print('url: $url');
-    var res = _netUtil.get(
-      url,
-      headers: mapHeader,
-    );
-
-    print('response called checkGymSubscription -- ${res}');
-    // if(res['status'] == true ){
-    //
-    // }else{
-    //
-    // }
-    // )
-    //     .then((dynamic res) {
-    //   log(res.toString());
-    //   return Future.value(res['status'] == true ? 1 : 0);
-    // });
   }
 }

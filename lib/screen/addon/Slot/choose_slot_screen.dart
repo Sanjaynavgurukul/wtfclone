@@ -30,6 +30,7 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
   @override
   Widget build(BuildContext context) {
     gymStore = context.read<GymStore>();
+    print('check free session --- ${gymStore.isFreeSession}');
     return Scaffold(
       backgroundColor: AppColors.PRIMARY_COLOR,
       appBar: AppBar(

@@ -953,6 +953,7 @@ class GymStore extends ChangeNotifier {
     dynamic res = await RestDatasource()
         .checkSlotAvailability(context: context, slotId: slotId);
     Navigator.pop(context);
+    print('check slot response --- ${res}');
     if (res['status'] == true) {
       getAllSessionsForAddOn(context: context);
     } else {
