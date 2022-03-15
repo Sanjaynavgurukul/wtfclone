@@ -243,7 +243,7 @@ class PreambleModel {
     bool inDouble = value.contains(RegExp('.'));
     bool isCm = value.contains(RegExp('_cm'));
     if(isCm){
-      return 0.0;
+      return 5.0;
     }else{
 
      if(isFeet){
@@ -254,7 +254,7 @@ class PreambleModel {
       double d = double.parse(value);
       return d;
     }else{
-      return 0.0;
+      return 5.0;
     }}
     //
     // if (isCm) {

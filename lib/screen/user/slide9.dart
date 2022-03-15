@@ -21,6 +21,10 @@ class Slide9 extends StatefulWidget {
 }
 
 class _Slide9State extends State<Slide9> {
+  int decimal1 = 5;
+  int decimal2 = 0;
+  bool decimalSet = false;
+
   String bodyType = '';
   final GlobalKey<ExpansionTileCardState> cardBodyType = new GlobalKey();
   final GlobalKey<ExpansionTileCardState> cardWorkout = new GlobalKey();
@@ -36,6 +40,12 @@ class _Slide9State extends State<Slide9> {
     {'text': 'Actively', 'value': 'Experienced'},
   ];
 
+  String displayInchesText(double value){
+    if(double == null) return '5\'0';
+    String v = value.toString();
+    print('check string double -- $v');
+    return v.replaceAll('.', '\'');
+  }
   List<Map<String, String>> types = [
     {
       'type': 'Lean',
@@ -78,481 +88,560 @@ class _Slide9State extends State<Slide9> {
     super.initState();
   }
 
-  List<String> tallList = ['in cm', 'in inches'];
+  List<String> tallList = ['in cm', 'in feet'];
   List<String> weightList = ['in kg'];
 
   String tallLabel;
   String weightLabel;
   String targetWeightLabel;
 
+  double convertToDouble(){
+    String d = '${decimal2}.${decimal2}';
+    return double.parse(d);
+  }
+
+  void setValueDouble(double v){
+    String vs = v.toString();
+    final split = vs.split('.');
+    String de1 = split[0];
+    String de2 = split[1];
+    decimal1 = int.parse(de1);
+    decimal2 = int.parse(de2);
+    decimalSet = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, user, child) => SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 40, left: 18, right: 18),
-          child: Column(
-            children: [
-              Text(
-                'Let us know more about you',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              //Body Type Card :D
-              ExpansionTileCard(
-                elevation: 0,
-                key: cardBodyType,
-                onExpansionChanged: (bool){
-                  controlCard(0);
-                },
-                baseColor: Color(0xff922224),
-                expandedColor: Color(0xff922224),
-                title: Text('Choose your body type',
-                    style: TextStyle(color: Colors.white)),
-                subtitle: user.preambleModel.body_type == null
-                    ? null
-                    : Text(
-                  user.preambleModel.body_type ?? '',
-                  style: TextStyle(color: Colors.white),
+      builder: (context, user, child){
+        if(!decimalSet) setValueDouble(user.preambleModel.heightFeet);
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: 40, left: 18, right: 18),
+            child: Column(
+              children: [
+                Text(
+                  'Let us know more about you',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff292929),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8))),
-                    padding: EdgeInsets.all(12),
-                    width: double.infinity,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        runAlignment: WrapAlignment.start,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        runSpacing: 0.0,
-                        spacing: 12.0,
-                        children: types
-                            .map((e) => newUI(
-                            data: e,
-                            selected: user.preambleModel.body_type == null
-                                ? false
-                                : user.preambleModel.body_type == e['type'],
-                            onClick: () {
-                              // print('clicked value');
-                              setState(() {
-                                bodyType = e['type'];
-                                user.preambleModel.body_type = bodyType;
-                                // user.setValue(bodyType: e['type']);
-                              });
-                            }))
-                            .toList()),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              ExpansionTileCard(
-                elevation: 0,
-                key: cardWorkout,
-                onExpansionChanged: (bool){
-                  controlCard(1);
-                },
-                baseColor: Color(0xff292929),
-                expandedColor: Color(0xff922224),
-                title: Text('Workout Experience',
-                    style: TextStyle(color: Colors.white)),
-                subtitle: user.preambleModel.howactive == null
-                    ? null
-                    : Text(
-                  user.preambleModel.howactive ?? '',
-                  style: TextStyle(color: Colors.white),
+                SizedBox(
+                  height: 40,
                 ),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff292929),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8))),
-                    padding: EdgeInsets.all(12),
-                    width: double.infinity,
-                    child: Wrap(
-                        alignment: WrapAlignment.start,
-                        runAlignment: WrapAlignment.start,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        runSpacing: 0.0,
-                        spacing: 12.0,
-                        children: howActive
-                            .map((e){
-                              bool selected = e['value'] == user.preambleModel.howactive??'';
-                              return Container(
-                                margin: EdgeInsets.only(bottom: 12),
-                                child: InkWell(
-                                  onTap: (){
-                                    user.preambleModel.howactive = e['value'];
-                                    setState(() {
-                                    });
-                                  },
-                                  child: Container(
-                                    child: Text(
-                                      e['text'] ?? 'No Type',
-                                      style: TextStyle(color: selected ? Colors.black : Colors.white),
+                //Body Type Card :D
+                ExpansionTileCard(
+                  elevation: 0,
+                  key: cardBodyType,
+                  onExpansionChanged: (bool){
+                    controlCard(0);
+                  },
+                  baseColor: Color(0xff922224),
+                  expandedColor: Color(0xff922224),
+                  title: Text('Choose your body type',
+                      style: TextStyle(color: Colors.white)),
+                  subtitle: user.preambleModel.body_type == null
+                      ? null
+                      : Text(
+                    user.preambleModel.body_type ?? '',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff292929),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8))),
+                      padding: EdgeInsets.all(12),
+                      width: double.infinity,
+                      child: Wrap(
+                          alignment: WrapAlignment.start,
+                          runAlignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          runSpacing: 0.0,
+                          spacing: 12.0,
+                          children: types
+                              .map((e) => newUI(
+                              data: e,
+                              selected: user.preambleModel.body_type == null
+                                  ? false
+                                  : user.preambleModel.body_type == e['type'],
+                              onClick: () {
+                                // print('clicked value');
+                                setState(() {
+                                  bodyType = e['type'];
+                                  user.preambleModel.body_type = bodyType;
+                                  // user.setValue(bodyType: e['type']);
+                                });
+                              }))
+                              .toList()),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                ExpansionTileCard(
+                  elevation: 0,
+                  key: cardWorkout,
+                  onExpansionChanged: (bool){
+                    controlCard(1);
+                  },
+                  baseColor: Color(0xff292929),
+                  expandedColor: Color(0xff922224),
+                  title: Text('Workout Experience',
+                      style: TextStyle(color: Colors.white)),
+                  subtitle: user.preambleModel.howactive == null
+                      ? null
+                      : Text(
+                    user.preambleModel.howactive ?? '',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff292929),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8))),
+                      padding: EdgeInsets.all(12),
+                      width: double.infinity,
+                      child: Wrap(
+                          alignment: WrapAlignment.start,
+                          runAlignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          runSpacing: 0.0,
+                          spacing: 12.0,
+                          children: howActive
+                              .map((e){
+                            bool selected = e['value'] == user.preambleModel.howactive??'';
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 12),
+                              child: InkWell(
+                                onTap: (){
+                                  user.preambleModel.howactive = e['value'];
+                                  setState(() {
+                                  });
+                                },
+                                child: Container(
+                                  child: Text(
+                                    e['text'] ?? 'No Type',
+                                    style: TextStyle(color: selected ? Colors.black : Colors.white),
+                                  ),
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                                      color: selected ? Colors.white : Colors.transparent,
+                                      border: Border.all(width: 1, color: Colors.white)),
+                                ),
+                              ),
+                            );
+                          })
+                              .toList()),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                //Your height Card :D
+                ExpansionTileCard(
+                  elevation: 0,
+                  key: cardHeight,
+                  onExpansionChanged: (bool){
+                    controlCard(2);
+                  },
+                  baseColor: Color(0xff292929),
+                  expandedColor: Color(0xff922224),
+                  trailing: PopupMenuButton<String>(
+                    color: Color(0xff922224),
+                    itemBuilder: (context) => tallList
+                        .map((e) => PopupMenuItem(
+                      value: e,
+                      onTap: () {
+                        tallLabel = e;
+                        user.preambleModel.heightInCm = e == tallList[0];
+                        setState(() {});
+                      },
+                      child: Text(
+                        "$e",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
+                    ))
+                        .toList(),
+                    child: Container(
+                      child: Text(tallLabel ?? tallList[0]),
+                    ),
+                  ),
+                  title: Text('Enter your height',
+                      style: TextStyle(color: Colors.white, fontSize: 12)),
+                  subtitle: Text(
+                      '${user.preambleModel.heightInCm ? '${user.preambleModel.heightCm} CM' : '${displayInchesText(user.preambleModel.heightFeet)} Feet'}',
+                      style: TextStyle(color: Colors.white)),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff292929),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8))),
+                      padding: EdgeInsets.all(12),
+                      width: double.infinity,
+                      child: user.preambleModel.heightInCm
+                          ? NumberPicker(
+                        textStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                        selectedTextStyle: TextStyle(
+                          fontSize: 45,
+                          color: Color(0xff922224),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        itemHeight: 60,
+                        value: user.preambleModel.heightCm,
+                        minValue: 0,
+                        maxValue: 200,
+                        step: 1,
+                        haptics: true,
+                        onChanged: (value) {
+                          setState(() {
+                            user.preambleModel.heightCm = value;
+                            // user.setValue(heightFeet: '$value'+'cm');
+                          });
+                        },
+                      )
+                          : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          UIHelper.verticalSpace(30.0),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceAround,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left:30),
+                                  child: Text(
+                                    'Feet',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(4)),
-                                        color: selected ? Colors.white : Colors.transparent,
-                                        border: Border.all(width: 1, color: Colors.white)),
                                   ),
                                 ),
-                              );
-                        })
-                            .toList()),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              //Your height Card :D
-              ExpansionTileCard(
-                elevation: 0,
-                key: cardHeight,
-                onExpansionChanged: (bool){
-                  controlCard(2);
-                },
-                baseColor: Color(0xff292929),
-                expandedColor: Color(0xff922224),
-                trailing: PopupMenuButton<String>(
-                  color: Color(0xff922224),
-                  itemBuilder: (context) => tallList
-                      .map((e) => PopupMenuItem(
-                    value: e,
-                    onTap: () {
-                      tallLabel = e;
-                      user.preambleModel.heightInCm = e == tallList[0];
-                      setState(() {});
-                    },
-                    child: Text(
-                      "$e",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ))
-                      .toList(),
-                  child: Container(
-                    child: Text(tallLabel ?? tallList[0]),
-                  ),
-                ),
-                title: Text('Enter your height',
-                    style: TextStyle(color: Colors.white, fontSize: 12)),
-                subtitle: Text(
-                    '${user.preambleModel.heightInCm ? '${user.preambleModel.heightCm} CM' : '${user.preambleModel.heightFeet} Inches'}',
-                    style: TextStyle(color: Colors.white)),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff292929),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8))),
-                    padding: EdgeInsets.all(12),
-                    width: double.infinity,
-                    child: user.preambleModel.heightInCm
-                        ? NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
-                      ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value: user.preambleModel.heightCm,
-                      minValue: 0,
-                      maxValue: 200,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value) {
-                        setState(() {
-                          user.preambleModel.heightCm = value;
-                          // user.setValue(heightFeet: '$value'+'cm');
-                        });
-                      },
-                    )
-                        : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        UIHelper.verticalSpace(30.0),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Feet',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
+                              ),
+                              UIHelper.horizontalSpace(80.0),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'Inches',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                            ),
-                            UIHelper.horizontalSpace(80.0),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Inches',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: NumberPicker(
+                                  textStyle: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                  selectedTextStyle: TextStyle(
+                                    fontSize: 45,
+                                    color: Color(0xff922224),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  itemHeight: 60,
+                                  value: decimal1,
+                                  minValue: 0,
+                                  maxValue: 9,
+                                  step: 1,
+                                  haptics: true,
+                                  onChanged: (value) {
+                                    decimal1 = value;
+                                    user.preambleModel.heightFeet=convertToDouble();
+                                    setState(() {
+                                      //user.preambleModel.heightCm = value;
+                                      // user.setValue(heightFeet: '$value'+'cm');
+                                    });
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        DecimalNumberPicker(
-                            textStyle: TextStyle(
-                              fontSize: 22,
-                              color: Colors.white54,
-                            ),
-                            selectedTextStyle: TextStyle(
-                              fontSize: 45,
-                              color: Color(0xff922224),
-                              fontWeight: FontWeight.bold,
-                            ),
-                            itemHeight: 60,
-                            value: user.preambleModel.heightFeet ?? 5.0,
-                            minValue: 1,
-                            maxValue: 9,
-                            haptics: true,
-                            decimalPlaces: 2,
-                            decimalTextMapper: (text) {
-                              print('text: $text');
-                              int dec = int.tryParse(text);
-                              return dec < 12 ? text : '';
-                            },
-                            onChanged: (value) {
-                              user.preambleModel.heightFeet = value;
-                              // user.setValue(heightFeet: value.toString());
-                              setState(() {
-                                // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
-                              });
-                            }
-                          /*onChanged: (value) => setState(() => _currentDoubleValue = value
-
-                ),*/
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              // //Your weight card :D
-              ExpansionTileCard(
-                elevation: 0,
-                key: cardWeight,
-                onExpansionChanged: (bool){
-                  controlCard(3);
-                },
-                baseColor: Color(0xff292929),
-                expandedColor: Color(0xff922224),
-                trailing: PopupMenuButton<String>(
-                  color: Color(0xff922224),
-                  itemBuilder: (context) => weightList
-                      .map((e) => PopupMenuItem(
-                    value: e,
-                    onTap: () {
-                      weightLabel = e;
-                      user.preambleModel.weightInKg = e ==weightList[0] ;
-                      setState(() {});
-                    },
-                    child: Text(
-                      "$e",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ))
-                      .toList(),
-                  child: Container(
-                    child: Text(weightLabel ?? weightList[0]),
-                  ),
-                ),
-                title: Text('Enter your weight',
-                    style: TextStyle(color: Colors.white, fontSize: 12)),
-                subtitle: user.preambleModel.weightInKg?valueLabel(user.preambleModel.weightKg):valueLabel(user.preambleModel.weightInLbs),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff292929),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8))),
-                    padding: EdgeInsets.all(12),
-                    width: double.infinity,
-                    child: user.preambleModel.weightInKg
-                        ? NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
+                              Expanded(
+                                child: NumberPicker(
+                                  textStyle: TextStyle(
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                  selectedTextStyle: TextStyle(
+                                    fontSize: 45,
+                                    color: Color(0xff922224),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  itemHeight: 60,
+                                  value: decimal2,
+                                  minValue: 0,
+                                  maxValue: 11,
+                                  step: 1,
+                                  haptics: false,
+                                  onChanged: (value) {
+                                    decimal2 = value;
+                                    user.preambleModel.heightFeet=convertToDouble();
+                                    setState(() {
+                                      // user.preambleModel.heightCm = value;
+                                      // user.setValue(heightFeet: '$value'+'cm');
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                          //         DecimalNumberPicker(
+                          //             textStyle: TextStyle(
+                          //               fontSize: 22,
+                          //               color: Colors.white54,
+                          //             ),
+                          //             selectedTextStyle: TextStyle(
+                          //               fontSize: 45,
+                          //               color: Color(0xff922224),
+                          //               fontWeight: FontWeight.bold,
+                          //             ),
+                          //             itemHeight: 60,
+                          //             value: user.preambleModel.heightFeet ?? 5.0,
+                          //             minValue: 1,
+                          //             maxValue:11,
+                          //             haptics: true,
+                          //             decimalPlaces: 2,
+                          //             decimalTextMapper: (text) {
+                          //               print('text: $text');
+                          //               int dec = int.tryParse(text);
+                          //               return dec == 11 ? '':text;
+                          //             },
+                          //             onChanged: (value) {
+                          //               user.preambleModel.heightFeet = value;
+                          //               // user.setValue(heightFeet: value.toString());
+                          //               setState(() {
+                          //                 // print('checking decimal number = ${seperateValue(user.heightFeet)[0]} ${seperateValue(user.heightFeet)[1]}');
+                          //               });
+                          //             }
+                          //           /*onChanged: (value) => setState(() => _currentDoubleValue = value
+                          //
+                          // ),*/
+                          //         ),
+                        ],
                       ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value: user.preambleModel.weightKg ?? 0,
-                      minValue: 0,
-                      maxValue: 200,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value) {
-                        setState(() {
-                          user.preambleModel.weightKg = value;
-                        });
-                      },
                     )
-                        : NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
-                      ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value: user.preambleModel.weightInLbs ?? 0,
-                      minValue: 0,
-                      maxValue: 600,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value) {
-                        setState(() {
-                          user.preambleModel.weightInLbs = value;
-                        });
-                      },
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              //Target weight card :D
-              ExpansionTileCard(
-                elevation: 0,
-                key: cardTWeight,
-                onExpansionChanged: (bool){
-                  controlCard(4);
-                },
-                baseColor: Color(0xff292929),
-                expandedColor: Color(0xff922224),
-                trailing: PopupMenuButton<String>(
-                  color: Color(0xff922224),
-                  itemBuilder: (context) => weightList
-                      .map((e) => PopupMenuItem(
-                    value: e,
-                    onTap: () {
-                      targetWeightLabel = e;
-                      user.preambleModel.targetWeightInKg = e == weightList[0];
-                      setState(() {});
-                    },
-                    child: Text(
-                      "$e",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  ))
-                      .toList(),
-                  child: Container(
-                    child: Text(targetWeightLabel ?? weightList[0]),
-                  ),
+                  ],
                 ),
-                title: Text ('Target weight',
-                    style: TextStyle(color: Colors.white, fontSize: 12)),
-                subtitle: user.preambleModel.targetWeightInKg
-                    ? valueLabel(user.preambleModel.targetWeight)
-                    : valueLabel(user.preambleModel.targetWeightInLbs),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color(0xff292929),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8))),
-                    padding: EdgeInsets.all(12),
-                    width: double.infinity,
-                    child: user.preambleModel.targetWeightInKg
-                        ? NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
-                      ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value:  user.preambleModel.targetWeight??0,
-                      minValue: 0,
-                      maxValue: 200,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value) {
-                        setState(() {
-                          user.preambleModel.targetWeight = value;
-                        });
+                SizedBox(
+                  height: 12,
+                ),
+                // //Your weight card :D
+                ExpansionTileCard(
+                  elevation: 0,
+                  key: cardWeight,
+                  onExpansionChanged: (bool){
+                    controlCard(3);
+                  },
+                  baseColor: Color(0xff292929),
+                  expandedColor: Color(0xff922224),
+                  trailing: PopupMenuButton<String>(
+                    color: Color(0xff922224),
+                    itemBuilder: (context) => weightList
+                        .map((e) => PopupMenuItem(
+                      value: e,
+                      onTap: () {
+                        weightLabel = e;
+                        user.preambleModel.weightInKg = e ==weightList[0] ;
+                        setState(() {});
                       },
-                    )
-                        : NumberPicker(
-                      textStyle: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
+                      child: Text(
+                        "$e",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
                       ),
-                      selectedTextStyle: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xff922224),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      itemHeight: 60,
-                      value: user.preambleModel.targetWeightInLbs??0,
-                      minValue: 0,
-                      maxValue: 600,
-                      step: 1,
-                      haptics: true,
-                      onChanged: (value) {
-                        setState(() {
-                          user.preambleModel.targetWeightInLbs = value;
-                        });
-                      },
+                    ))
+                        .toList(),
+                    child: Container(
+                      child: Text(weightLabel ?? weightList[0]),
                     ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              //
-            ],
+                  ),
+                  title: Text('Enter your weight',
+                      style: TextStyle(color: Colors.white, fontSize: 12)),
+                  subtitle: user.preambleModel.weightInKg?valueLabel(user.preambleModel.weightKg):valueLabel(user.preambleModel.weightInLbs),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff292929),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8))),
+                      padding: EdgeInsets.all(12),
+                      width: double.infinity,
+                      child: user.preambleModel.weightInKg
+                          ? NumberPicker(
+                        textStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                        selectedTextStyle: TextStyle(
+                          fontSize: 45,
+                          color: Color(0xff922224),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        itemHeight: 60,
+                        value: user.preambleModel.weightKg ?? 0,
+                        minValue: 0,
+                        maxValue: 200,
+                        step: 1,
+                        haptics: true,
+                        onChanged: (value) {
+                          setState(() {
+                            user.preambleModel.weightKg = value;
+                          });
+                        },
+                      )
+                          : NumberPicker(
+                        textStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                        selectedTextStyle: TextStyle(
+                          fontSize: 45,
+                          color: Color(0xff922224),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        itemHeight: 60,
+                        value: user.preambleModel.weightInLbs ?? 0,
+                        minValue: 0,
+                        maxValue: 600,
+                        step: 1,
+                        haptics: true,
+                        onChanged: (value) {
+                          setState(() {
+                            user.preambleModel.weightInLbs = value;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                //Target weight card :D
+                ExpansionTileCard(
+                  elevation: 0,
+                  key: cardTWeight,
+                  onExpansionChanged: (bool){
+                    controlCard(4);
+                  },
+                  baseColor: Color(0xff292929),
+                  expandedColor: Color(0xff922224),
+                  trailing: PopupMenuButton<String>(
+                    color: Color(0xff922224),
+                    itemBuilder: (context) => weightList
+                        .map((e) => PopupMenuItem(
+                      value: e,
+                      onTap: () {
+                        targetWeightLabel = e;
+                        user.preambleModel.targetWeightInKg = e == weightList[0];
+                        setState(() {});
+                      },
+                      child: Text(
+                        "$e",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
+                    ))
+                        .toList(),
+                    child: Container(
+                      child: Text(targetWeightLabel ?? weightList[0]),
+                    ),
+                  ),
+                  title: Text ('Target weight',
+                      style: TextStyle(color: Colors.white, fontSize: 12)),
+                  subtitle: user.preambleModel.targetWeightInKg
+                      ? valueLabel(user.preambleModel.targetWeight)
+                      : valueLabel(user.preambleModel.targetWeightInLbs),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xff292929),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8))),
+                      padding: EdgeInsets.all(12),
+                      width: double.infinity,
+                      child: user.preambleModel.targetWeightInKg
+                          ? NumberPicker(
+                        textStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                        selectedTextStyle: TextStyle(
+                          fontSize: 45,
+                          color: Color(0xff922224),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        itemHeight: 60,
+                        value:  user.preambleModel.targetWeight??0,
+                        minValue: 0,
+                        maxValue: 200,
+                        step: 1,
+                        haptics: true,
+                        onChanged: (value) {
+                          setState(() {
+                            user.preambleModel.targetWeight = value;
+                          });
+                        },
+                      )
+                          : NumberPicker(
+                        textStyle: TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                        ),
+                        selectedTextStyle: TextStyle(
+                          fontSize: 45,
+                          color: Color(0xff922224),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        itemHeight: 60,
+                        value: user.preambleModel.targetWeightInLbs??0,
+                        minValue: 0,
+                        maxValue: 600,
+                        step: 1,
+                        haptics: true,
+                        onChanged: (value) {
+                          setState(() {
+                            user.preambleModel.targetWeightInLbs = value;
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                //
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -598,8 +687,7 @@ class _Slide9State extends State<Slide9> {
         break;
     }
   }
-
-
+  
   // Widget so(BuildContext context){
   //   return Consumer<UserController>(
   //     builder: (context, user, child) => SingleChildScrollView(
