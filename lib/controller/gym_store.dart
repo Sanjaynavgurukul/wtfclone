@@ -1739,6 +1739,7 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> getGymDetails({BuildContext context, String gymId}) async {
+    print('get Gym details method called :D');
     loading = true;
     notifyListeners();
     GymDetailsModel res = await RestDatasource().getGymDetails(gymId);
@@ -1760,6 +1761,7 @@ class GymStore extends ChangeNotifier {
   }
 
   //Get GYm By ID
+  //TODO get gym by id
   Future<void> getGymByID({BuildContext context, String gymId}) async {
     loading = true;
     notifyListeners();
@@ -1780,10 +1782,15 @@ class GymStore extends ChangeNotifier {
       );
       notifyListeners();
     }
+    print('called after fetch 1');
     getTrailInfo(context: context);
+    print('called after fetch 2');
     getAddOnForGym(gymId: gymId, context: context);
+    print('called after fetch 3');
     checkGymSubscription(context: context, gymId: gymId);
+    print('called after fetch 4');
     getTerms(context: context);
+    print('called after fetch 5');
   }
 
   Future<void> getAllSessionsForAddOn({BuildContext context}) async {
@@ -1866,6 +1873,7 @@ class GymStore extends ChangeNotifier {
 
   Future<void> checkGymSubscription(
       {BuildContext context, String gymId}) async {
+    print('check checkGymSubscription called');
     int res = await RestDatasource().checkGymSubscription(
       context: context,
       gymId: gymId,
@@ -1875,7 +1883,16 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
     if (res != null && res > 0) {
       isSelectedGymSubscribed = true;
+      print('check checkGymSubscription called -- ${isSelectedGymSubscribed}');
       notifyListeners();
+    }
+  }
+
+  bool checkSubscription(String gymId){
+    if(gymId == activeSubscriptions.data.gymId){
+      return true;
+    }else{
+      return false;
     }
   }
 

@@ -68,610 +68,686 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
   Widget build(BuildContext context) {
     print('gym iD --- ${widget.gymId}');
     return Scaffold(
-      body: Consumer<GymStore>(
-        builder: (context, gymStore, child){
-          print("checking gym subscription --- ${gymStore.activeSubscriptions.data.gymId}");
-          return gymStore.selectedGymDetail ==
-              null
-              ? LoadingWithBackground()
-              : gymStore.selectedGymDetail.status
-              ? Scaffold(
-            backgroundColor: Color(0xff0D0D0D),
-            bottomNavigationBar: Container(
-              padding: EdgeInsets.only(
-                  left: 16, right: 16, top: 6, bottom: 6),
-              constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        // if(gymStore.activeSubscriptions != null){
-                        //   if(gymStore.activeSubscriptions.data.gymId == widget.gymId){
-                        //
-                        //   }
-                        // }else{
-                        //
-                        // }
-                        if (gymStore.activeSubscriptions == null ||
-                            (gymStore.activeSubscriptions != null &&
-                                gymStore.activeSubscriptions.data ==
-                                    null)) {
-                          gymStore.getGymPlans(
-                            gymId:
-                            gymStore.selectedGymDetail.data.userId,
-                            context: context,
-                          );
+      body: Consumer<GymStore>(builder: (context, gymStore, child) {
+        bool isSubscribed = gymStore.checkSubscription(widget.gymId);
+        return gymStore.selectedGymDetail == null
+            ? LoadingWithBackground()
+            : gymStore.selectedGymDetail.status
+                ? Scaffold(
+                    backgroundColor: Color(0xff0D0D0D),
+                    bottomNavigationBar: Container(
+                      padding: EdgeInsets.only(
+                          left: 16, right: 16, top: 6, bottom: 6),
+                      constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
+                      child: isSubscribed ? RenewMembership(
+                        gymId: widget.gymId,
+                      ):Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                // if(gymStore.activeSubscriptions != null){
+                                //   if(gymStore.activeSubscriptions.data.gymId == widget.gymId){
+                                //
+                                //   }
+                                // }else{
+                                //
+                                // }
+                                if (gymStore.activeSubscriptions == null ||
+                                    (gymStore.activeSubscriptions != null &&
+                                        gymStore.activeSubscriptions.data ==
+                                            null)) {
+                                  gymStore.getGymPlans(
+                                    gymId:
+                                        gymStore.selectedGymDetail.data.userId,
+                                    context: context,
+                                  );
 
-                          NavigationService.navigateTo(
-                            Routes.membershipPlanPage,
-                          );
-                        } else {
-                          String selection = await showDialog<String>(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (context) =>
-                                SubscriptionAlreadyPresent(
-                                  cancelTapped: () {
-                                    Navigator.pop(context, 'no');
-                                  },
-                                  nextTapped: () {
-                                    Navigator.pop(context, 'yes');
-                                  },
-                                  gymName: gymStore
-                                      .activeSubscriptions.data.gymName,
-                                ),
-                          );
-                          if (selection != null && selection == 'yes') {
-                            gymStore.getGymPlans(
-                              gymId: gymStore
-                                  .selectedGymDetail.data.userId,
-                              context: context,
-                            );
-                            NavigationService.navigateTo(
-                              Routes.membershipPlanPage,
-                            );
-                          }
-                        }
-                      },
-                      child: Container(
-                          padding: EdgeInsets.only(
-                              top: 8, bottom: 8, left: 12, right: 12),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(4)),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xff490000),
-                                  Color(0xffBA1406),
-                                ],
-                              )),
-                          alignment: Alignment.center,
-                          child: Text('Buy Membership')),
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        List<AddOnData> list = getFreeSession(
-                            data: gymStore.selectedGymAddOns.data);
-                        if (list.isNotEmpty && list != null) {
-                          gymStore.setAddOnSlot(
-                            context: context,
-                            data: list[0],
-                            isFree: true,
-                          );
-                          NavigationService.navigateTo(
-                            Routes.chooseSlotScreen,
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: 'No Free trial available');
-                        }
-                        // gymStore.setAddOnSlot(
-                        //   context: context,
-                        //   data: gymStore.selectedGymAddOns.data
-                        //       .where((element) => element.price == '0' && element.freeSession == 'true')
-                        //       .toList()[0],
-                        //   isFree: true,
-                        // );
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(4)),
-                              border: Border.all(
-                                  width: 2, color: AppConstants.tabBg)),
-                          alignment: Alignment.center,
-                          child: Text('Book Free Trial',
-                              style: TextStyle(
-                                  color: AppConstants.whitish))),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () async {
-                await context.read<GymStore>().getGymByID(
-                  context: context,
-                  gymId: widget.gymId,
-                );
-              },
-              color: AppConstants.primaryColor,
-              backgroundColor: Colors.white,
-              child: CustomScrollView(
-                physics: isPreview == true
-                    ? const NeverScrollableScrollPhysics()
-                    : null,
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverAppBar(
-                    centerTitle: false,
-                    backgroundColor: AppConstants.primaryColor,
-                    leading: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        margin: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1,
-                              color: Colors.white.withOpacity(0.3)),
-                          shape: BoxShape.circle,
-                          // color: glassyColor.withOpacity(0.3)
-                        ),
-                        child: Icon(Icons.close,
-                            color: Colors.white.withOpacity(0.3)),
-                      ),
-                    ),
-                    pinned: false,
-                    expandedHeight: 330.0,
-                    bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(50.0),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                            padding: EdgeInsets.only(
-                                bottom: 14, right: 16, top: 16),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: FractionalOffset.topCenter,
-                                    end: FractionalOffset.bottomCenter,
-                                    colors: [
-                                      Colors.transparent,
-                                      Color(0xff0D0D0D)
-                                    ])),
-                            child: gymStore
-                                .selectedGymDetail.data.distance
-                                .contains('N/A')
-                                ? SizedBox(
-                              width: 0,
-                            )
-                                : ListTile(
-                              subtitle: Text(
-                                  '${gymStore.selectedGymDetail.data.duration_text} away'),
-                              title: Row(
-                                children: [
-                                  Icon(
-                                    Icons.directions_car,
-                                    size: 18,
-                                    color: AppConstants.green,
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                      '${gymStore.selectedGymDetail.data.distance_text}',
-                                      style: TextStyle(
-                                          fontWeight:
-                                          FontWeight.normal))
-                                ],
-                              ),
-                              trailing: InkWell(
-                                onTap: () {
-                                  MapsLauncher.launchCoordinates(
-                                    double.tryParse(
-                                      gymStore.selectedGymDetail
-                                          .data.latitude,
-                                    ),
-                                    double.tryParse(
-                                      gymStore.selectedGymDetail
-                                          .data.longitude,
+                                  NavigationService.navigateTo(
+                                    Routes.membershipPlanPage,
+                                  );
+                                } else {
+                                  String selection = await showDialog<String>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (context) =>
+                                        SubscriptionAlreadyPresent(
+                                      cancelTapped: () {
+                                        Navigator.pop(context, 'no');
+                                      },
+                                      nextTapped: () {
+                                        Navigator.pop(context, 'yes');
+                                      },
+                                      gymName: gymStore
+                                          .activeSubscriptions.data.gymName,
                                     ),
                                   );
-                                },
-                                child: Container(
+                                  if (selection != null && selection == 'yes') {
+                                    gymStore.getGymPlans(
+                                      gymId: gymStore
+                                          .selectedGymDetail.data.userId,
+                                      context: context,
+                                    );
+                                    NavigationService.navigateTo(
+                                      Routes.membershipPlanPage,
+                                    );
+                                  }
+                                }
+                              },
+                              child: Container(
                                   padding: EdgeInsets.only(
-                                      top: 8,
-                                      bottom: 8,
-                                      left: 12,
-                                      right: 12),
+                                      top: 8, bottom: 8, left: 12, right: 12),
                                   decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.all(
-                                        Radius.circular(4)),
-                                    color: Color(0xffBA1406),
-                                  ),
-                                  child: Text('Direction',
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xff490000),
+                                          Color(0xffBA1406),
+                                        ],
+                                      )),
+                                  alignment: Alignment.center,
+                                  child: Text('Buy Membership')),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                List<AddOnData> list = getFreeSession(
+                                    data: gymStore.selectedGymAddOns.data);
+                                if (list.isNotEmpty && list != null) {
+                                  gymStore.setAddOnSlot(
+                                    context: context,
+                                    data: list[0],
+                                    isFree: true,
+                                  );
+                                  NavigationService.navigateTo(
+                                    Routes.chooseSlotScreen,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'No Free trial available');
+                                }
+                                // gymStore.setAddOnSlot(
+                                //   context: context,
+                                //   data: gymStore.selectedGymAddOns.data
+                                //       .where((element) => element.price == '0' && element.freeSession == 'true')
+                                //       .toList()[0],
+                                //   isFree: true,
+                                // );
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(4)),
+                                      border: Border.all(
+                                          width: 2, color: AppConstants.tabBg)),
+                                  alignment: Alignment.center,
+                                  child: Text('Book Free Trial',
                                       style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight:
-                                          FontWeight.w400,
-                                          fontStyle:
-                                          FontStyle.normal)),
+                                          color: AppConstants.whitish))),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    body: RefreshIndicator(
+                      onRefresh: () async {
+                        await context.read<GymStore>().getGymByID(
+                              context: context,
+                              gymId: widget.gymId,
+                            );
+                      },
+                      color: AppConstants.primaryColor,
+                      backgroundColor: Colors.white,
+                      child: CustomScrollView(
+                        physics: isPreview == true
+                            ? const NeverScrollableScrollPhysics()
+                            : null,
+                        controller: _scrollController,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            centerTitle: false,
+                            backgroundColor: AppConstants.primaryColor,
+                            leading: InkWell(
+                              onTap: () => Navigator.pop(context),
+                              child: Container(
+                                margin: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Colors.white.withOpacity(0.3)),
+                                  shape: BoxShape.circle,
+                                  // color: glassyColor.withOpacity(0.3)
                                 ),
+                                child: Icon(Icons.close,
+                                    color: Colors.white.withOpacity(0.3)),
                               ),
-                            )
-                          // : Column(
-                          //     crossAxisAlignment:
-                          //         CrossAxisAlignment.end,
-                          //     mainAxisSize: MainAxisSize.max,
-                          //     children: <Widget>[
-                          //       RichText(
-                          //         text: TextSpan(
-                          //           text: '',
-                          //           style:
-                          //               DefaultTextStyle.of(context)
-                          //                   .style,
-                          //           children: <WidgetSpan>[
-                          //             WidgetSpan(
-                          //                 child: Icon(
-                          //               Icons.directions_car,
-                          //               size: 18,
-                          //               color: AppConstants.green,
-                          //             )),
-                          //             WidgetSpan(
-                          //                 child: Text(
-                          //                     // ' ${item.duration_text??''} away | ${item.distance_text??''}'
-                          //                     ' ${gymStore.selectedGymDetail.data.duration_text ?? ''} away | ${gymStore.selectedGymDetail.data.distance_text}',
-                          //                     style: TextStyle(
-                          //                         fontSize: 14,
-                          //                         fontWeight:
-                          //                             FontWeight
-                          //                                 .bold))),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       SizedBox(height: 8),
-                          //       InkWell(
-                          //         onTap: () {
-                          //           MapsLauncher.launchCoordinates(
-                          //             double.tryParse(
-                          //               gymStore.selectedGymDetail
-                          //                   .data.latitude,
-                          //             ),
-                          //             double.tryParse(
-                          //               gymStore.selectedGymDetail
-                          //                   .data.longitude,
-                          //             ),
-                          //           );
-                          //         },
-                          //         child: Container(
-                          //           padding: EdgeInsets.only(
-                          //               top: 8,
-                          //               bottom: 8,
-                          //               left: 12,
-                          //               right: 12),
-                          //           decoration: BoxDecoration(
-                          //             borderRadius:
-                          //                 BorderRadius.all(
-                          //                     Radius.circular(4)),
-                          //             color: Color(0xffBA1406),
-                          //           ),
-                          //           child: Text('Direction',
-                          //               style: TextStyle(
-                          //                   fontSize: 14,
-                          //                   fontWeight:
-                          //                       FontWeight.w400,
-                          //                   fontStyle:
-                          //                       FontStyle.normal)),
-                          //         ),
-                          //       )
-                          //     ],
-                          //   ),
-                        ),
-                      ),
-                    ),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: FlexibleAppBar(
-                        images: gymStore.selectedGymDetail.data.gallery,
-                        color: AppConstants.primaryColor,
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 70),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            //Name and rating section :D
-                            Padding(
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    contentPadding: EdgeInsets.all(0),
-                                    title: Text(
-                                        '${gymStore.selectedGymDetail.data.gymName ?? ''}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                            fontStyle: FontStyle.normal)),
-                                    subtitle: Text(
-                                        '${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
-                                    trailing: gymStore.selectedGymDetail
-                                        .data.rating
-                                        .toDouble() !=
-                                        null &&
-                                        gymStore.selectedGymDetail.data
-                                            .rating
-                                            .toDouble() >
-                                            0
-                                        ? Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      children: [
-                                        Text('Rating',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight:
-                                                FontWeight.w600)),
-                                        SizedBox(height: 6),
-                                        RatingBar(
-                                            initialRating: gymStore
-                                                .selectedGymDetail
-                                                .data
-                                                .rating
-                                                .toDouble() ??
-                                                0.0,
-                                            direction:
-                                            Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemSize: 16,
-                                            ratingWidget:
-                                            RatingWidget(
-                                              full: Icon(
-                                                Icons.star,
-                                                color: AppConstants
-                                                    .boxBorderColor,
-                                              ),
-                                              half: Icon(
-                                                Icons.star_half,
-                                                color: AppConstants
-                                                    .boxBorderColor,
-                                              ),
-                                              empty: Icon(
-                                                Icons.star_border,
-                                                color: AppConstants
-                                                    .white,
+                            ),
+                            pinned: false,
+                            expandedHeight: 330.0,
+                            bottom: PreferredSize(
+                              preferredSize: const Size.fromHeight(50.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: 14, right: 16, top: 16),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: FractionalOffset.topCenter,
+                                            end: FractionalOffset.bottomCenter,
+                                            colors: [
+                                          Colors.transparent,
+                                          Color(0xff0D0D0D)
+                                        ])),
+                                    child: gymStore
+                                            .selectedGymDetail.data.distance
+                                            .contains('N/A')
+                                        ? SizedBox(
+                                            width: 0,
+                                          )
+                                        : ListTile(
+                                            subtitle: Text(
+                                                '${gymStore.selectedGymDetail.data.duration_text} away'),
+                                            title: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.directions_car,
+                                                  size: 18,
+                                                  color: AppConstants.green,
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                    '${gymStore.selectedGymDetail.data.distance_text}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal))
+                                              ],
+                                            ),
+                                            trailing: InkWell(
+                                              onTap: () {
+                                                MapsLauncher.launchCoordinates(
+                                                  double.tryParse(
+                                                    gymStore.selectedGymDetail
+                                                        .data.latitude,
+                                                  ),
+                                                  double.tryParse(
+                                                    gymStore.selectedGymDetail
+                                                        .data.longitude,
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.only(
+                                                    top: 8,
+                                                    bottom: 8,
+                                                    left: 12,
+                                                    right: 12),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4)),
+                                                  color: Color(0xffBA1406),
+                                                ),
+                                                child: Text('Direction',
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontStyle:
+                                                            FontStyle.normal)),
                                               ),
                                             ),
-                                            itemPadding:
-                                            EdgeInsets.symmetric(
-                                                horizontal: 0.0),
-                                            onRatingUpdate: (rating) {
-                                              print(rating);
-                                            }),
-                                      ],
-                                    )
-                                        : Text('Newly Opened'),
-                                  ),
-                                  //Divider :D
-                                  if (gymStore.selectedGymDetail.data
-                                      .description !=
-                                      null)
-                                    Divider(
-                                      thickness: 2,
-                                      color: AppConstants.headingTextColor,
+                                          )
+                                    // : Column(
+                                    //     crossAxisAlignment:
+                                    //         CrossAxisAlignment.end,
+                                    //     mainAxisSize: MainAxisSize.max,
+                                    //     children: <Widget>[
+                                    //       RichText(
+                                    //         text: TextSpan(
+                                    //           text: '',
+                                    //           style:
+                                    //               DefaultTextStyle.of(context)
+                                    //                   .style,
+                                    //           children: <WidgetSpan>[
+                                    //             WidgetSpan(
+                                    //                 child: Icon(
+                                    //               Icons.directions_car,
+                                    //               size: 18,
+                                    //               color: AppConstants.green,
+                                    //             )),
+                                    //             WidgetSpan(
+                                    //                 child: Text(
+                                    //                     // ' ${item.duration_text??''} away | ${item.distance_text??''}'
+                                    //                     ' ${gymStore.selectedGymDetail.data.duration_text ?? ''} away | ${gymStore.selectedGymDetail.data.distance_text}',
+                                    //                     style: TextStyle(
+                                    //                         fontSize: 14,
+                                    //                         fontWeight:
+                                    //                             FontWeight
+                                    //                                 .bold))),
+                                    //           ],
+                                    //         ),
+                                    //       ),
+                                    //       SizedBox(height: 8),
+                                    //       InkWell(
+                                    //         onTap: () {
+                                    //           MapsLauncher.launchCoordinates(
+                                    //             double.tryParse(
+                                    //               gymStore.selectedGymDetail
+                                    //                   .data.latitude,
+                                    //             ),
+                                    //             double.tryParse(
+                                    //               gymStore.selectedGymDetail
+                                    //                   .data.longitude,
+                                    //             ),
+                                    //           );
+                                    //         },
+                                    //         child: Container(
+                                    //           padding: EdgeInsets.only(
+                                    //               top: 8,
+                                    //               bottom: 8,
+                                    //               left: 12,
+                                    //               right: 12),
+                                    //           decoration: BoxDecoration(
+                                    //             borderRadius:
+                                    //                 BorderRadius.all(
+                                    //                     Radius.circular(4)),
+                                    //             color: Color(0xffBA1406),
+                                    //           ),
+                                    //           child: Text('Direction',
+                                    //               style: TextStyle(
+                                    //                   fontSize: 14,
+                                    //                   fontWeight:
+                                    //                       FontWeight.w400,
+                                    //                   fontStyle:
+                                    //                       FontStyle.normal)),
+                                    //         ),
+                                    //       )
+                                    //     ],
+                                    //   ),
                                     ),
-                                  //Description :D
-                                  ListTile(
-                                    contentPadding: EdgeInsets.all(0),
-                                    title: Padding(
-                                      padding: EdgeInsets.only(bottom: 8),
-                                      child: Text('Description',
+                              ),
+                            ),
+                            flexibleSpace: FlexibleSpaceBar(
+                              background: FlexibleAppBar(
+                                images: gymStore.selectedGymDetail.data.gallery,
+                                color: AppConstants.primaryColor,
+                              ),
+                            ),
+                          ),
+                          SliverToBoxAdapter(
+                              child: Padding(
+                            padding: EdgeInsets.only(bottom: 70),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                //Name and rating section :D
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        contentPadding: EdgeInsets.all(0),
+                                        title: Text(
+                                            '${gymStore.selectedGymDetail.data.gymName ?? ''}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                                fontStyle: FontStyle.normal)),
+                                        subtitle: Text(
+                                            '${gymStore.selectedGymDetail.data.address1 + " " + gymStore.selectedGymDetail.data.address2}'),
+                                        trailing: gymStore.selectedGymDetail
+                                                        .data.rating
+                                                        .toDouble() !=
+                                                    null &&
+                                                gymStore.selectedGymDetail.data
+                                                        .rating
+                                                        .toDouble() >
+                                                    0
+                                            ? Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text('Rating',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                  SizedBox(height: 6),
+                                                  GestureDetector(
+                                                    behavior:
+                                                        HitTestBehavior.opaque,
+                                                    onTap: () {
+                                                      if (!isSubscribed) return;
+                                                      final _dialog =
+                                                          RatingDialog(
+                                                        // your app's name?
+                                                        title:
+                                                            'Rate ${gymStore.selectedGymDetail.data.gymName}',
+                                                        // encourage your user to leave a high rating?
+                                                        message:
+                                                            'Tap a star to set your rating. Add more description here if you want.',
+                                                        // your app's logo?
+                                                        image: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            image:
+                                                                DecorationImage(
+                                                              image: AssetImage(
+                                                                  'assets/logo/wtf_dark.png'),
+                                                            ),
+                                                          ),
+                                                        ),
+
+                                                        submitButton: 'Submit',
+                                                        ratingColor: Colors.red,
+                                                        onCancelled: () =>
+                                                            print('cancelled'),
+                                                        onSubmitted:
+                                                            (response) {
+                                                          print(
+                                                              'rating: ${response.rating}, comment: ${response.comment}');
+                                                          gymStore
+                                                              .giveGymFeedback(
+                                                            context: context,
+                                                            comment: response
+                                                                .comment,
+                                                            stars: double
+                                                                .tryParse(response
+                                                                    .rating
+                                                                    .toString()),
+                                                          );
+                                                        },
+                                                      );
+
+                                                      showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            true,
+                                                        builder: (context) =>
+                                                            _dialog,
+                                                      );
+                                                    },
+                                                    child: IgnorePointer(
+                                                      ignoring: true,
+                                                      child: RatingBar(
+                                                          initialRating: gymStore
+                                                                  .selectedGymDetail
+                                                                  .data
+                                                                  .rating
+                                                                  .toDouble() ??
+                                                              0.0,
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          allowHalfRating:
+                                                              false,
+                                                          itemCount: 5,
+                                                          itemSize: 16,
+                                                          ratingWidget:
+                                                              RatingWidget(
+                                                            full: Icon(
+                                                              Icons.star,
+                                                              color: AppConstants
+                                                                  .boxBorderColor,
+                                                            ),
+                                                            half: Icon(
+                                                              Icons.star_half,
+                                                              color: AppConstants
+                                                                  .boxBorderColor,
+                                                            ),
+                                                            empty: Icon(
+                                                              Icons.star_border,
+                                                              color:
+                                                                  AppConstants
+                                                                      .white,
+                                                            ),
+                                                          ),
+                                                          itemPadding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      0.0),
+                                                          onRatingUpdate:
+                                                              (bo) {}),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            : Text('Newly Opened'),
+                                      ),
+                                      //Divider :D
+                                      if (gymStore.selectedGymDetail.data
+                                              .description !=
+                                          null)
+                                        Divider(
+                                          thickness: 2,
+                                          color: AppConstants.headingTextColor,
+                                        ),
+                                      //Description :D
+                                      ListTile(
+                                        contentPadding: EdgeInsets.all(0),
+                                        title: Padding(
+                                          padding: EdgeInsets.only(bottom: 8),
+                                          child: Text('Description',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                  fontStyle: FontStyle.normal)),
+                                        ),
+                                        subtitle: gymStore.selectedGymDetail
+                                                    .data.description !=
+                                                null
+                                            ? Html(
+                                                data: gymStore.selectedGymDetail
+                                                    .data.description,
+                                              )
+                                            : Text(
+                                                '${gymStore.selectedGymDetail.data.gymName ?? ''} is one of the leading fitness center at WTF'),
+                                      ),
+//                                   InkWell(
+//                                     onTap: () {
+//                                       final _dialog =
+//                                       RatingDialog(
+//                                         // your app's name?
+//                                         title:
+//                                         'Rate ${gymStore.selectedGymDetail.data.gymName}',
+//                                         // encourage your user to leave a high rating?
+//                                         message:
+//                                         'Tap a star to set your rating. Add more description here if you want.',
+//                                         // your app's logo?
+//                                         image:
+//                                         Container(
+//                                           decoration:
+//                                           BoxDecoration(
+//                                             image:
+//                                             DecorationImage(
+//                                               image: AssetImage(
+//                                                   'assets/logo/wtf_dark.png'),
+//                                             ),
+//                                           ),
+//                                         ),
+//
+//                                         submitButton:
+//                                         'Submit',
+//                                         ratingColor:
+//                                         Colors.red,
+//                                         onCancelled:
+//                                             () => print(
+//                                             'cancelled'),
+//                                         onSubmitted:
+//                                             (response) {
+//                                           print(
+//                                               'rating: ${response.rating}, comment: ${response.comment}');
+//                                           gymStore
+//                                               .giveGymFeedback(
+//                                             context:
+//                                             context,
+//                                             comment:
+//                                             response
+//                                                 .comment,
+//                                             stars: double.tryParse(
+//                                                 response
+//                                                     .rating
+//                                                     .toString()),
+//                                           );
+//                                         },
+//                                       );
+//
+// // show the dialog
+//                                       showDialog(
+//                                         context:
+//                                         context,
+//                                         barrierDismissible:
+//                                         true,
+//                                         builder:
+//                                             (context) =>
+//                                         _dialog,
+//                                       );
+//                                     },
+//                                     child: Padding(
+//                                       padding:
+//                                       const EdgeInsets
+//                                           .all(8.0),
+//                                       child: Text(
+//                                         '✩✩✩✩✩ Rate us',
+//                                         textAlign:
+//                                         TextAlign
+//                                             .center,
+//                                         style:
+//                                         TextStyle(
+//                                           color: Colors
+//                                               .white,
+//                                         ),
+//                                       ),
+//                                     ),
+//                                   )
+                                      // if (isSubscribed) GoldMembership()
+                                    ],
+                                  ),
+                                ),
+
+                                SizedBox(height: 24),
+                                //Facility Section :D
+                                if (gymStore
+                                    .selectedGymDetail.data.benefits.isNotEmpty)
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        child: Text('Facilities',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                                fontStyle: FontStyle.normal)),
+                                      ),
+                                      SizedBox(height: 12),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.only(
+                                            top: 12,
+                                            bottom: 12,
+                                            left: 8,
+                                            right: 8),
+                                        decoration: BoxDecoration(
+                                            color: AppConstants.bgColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(0))),
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: facilityItems(
+                                                data: gymStore.selectedGymDetail
+                                                        .data.benefits ??
+                                                    []),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 24),
+                                      Text('Why to choose WTF',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 14,
                                               fontStyle: FontStyle.normal)),
-                                    ),
-                                    subtitle: gymStore.selectedGymDetail
-                                        .data.description !=
-                                        null
-                                        ? Html(
-                                      data: gymStore.selectedGymDetail
-                                          .data.description,
-                                    )
-                                        : Text(
-                                        '${gymStore.selectedGymDetail.data.gymName ?? ''} is one of the leading fitness center at WTF'),
-                                  ),
-                                  if(gymStore.isSelectedGymSubscribed)RenewMembership(
-                                    gymId: widget.gymId,
-                                  ),
-                                  if(gymStore.isSelectedGymSubscribed)GoldMembership()
-                                ],
-                              ),
-                            ),
-
-                            SizedBox(height: 24),
-                            //Facility Section :D
-                            if (gymStore
-                                .selectedGymDetail.data.benefits.isNotEmpty)
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 16, right: 16),
-                                    child: Text('Facilities',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                            fontStyle: FontStyle.normal)),
-                                  ),
-                                  SizedBox(height: 12),
-                                  Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.only(
-                                        top: 12,
-                                        bottom: 12,
-                                        left: 8,
-                                        right: 8),
-                                    decoration: BoxDecoration(
-                                        color: AppConstants.bgColor,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(0))),
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: facilityItems(
-                                            data: gymStore.selectedGymDetail
-                                                .data.benefits ??
-                                                []),
+                                      SizedBox(height: 12),
+                                      GridView.count(
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.all(20),
+                                        crossAxisSpacing: 10,
+                                        mainAxisSpacing: 10,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        crossAxisCount: 2,
+                                        children: <Widget>[
+                                          whyWTF('Earn WTF rewards coin',
+                                              'assets/svg/why_choose/coins.svg'),
+                                          whyWTF('Fully Vaccinated Staff',
+                                              'assets/svg/why_choose/vaccine.svg'),
+                                          whyWTF('Track Fitness Journey',
+                                              'assets/svg/why_choose/heart.svg'),
+                                          whyWTF('Pocket Friendly Membership',
+                                              'assets/svg/why_choose/money.svg'),
+                                          whyWTF('Free diet Support',
+                                              'assets/svg/why_choose/diet.svg'),
+                                          whyWTF('Top Class Ambiance',
+                                              'assets/svg/why_choose/class.svg'),
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                            Padding(
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  gymStore.isSelectedGymSubscribed
-                                      ? InkWell(
-                                    onTap: () {
-                                      final _dialog = RatingDialog(
-                                        // your app's name?
-                                        title:
-                                        'Rate ${gymStore.selectedGymDetail.data.gymName}',
-                                        // encourage your user to leave a high rating?
-                                        message:
-                                        'Tap a star to set your rating. Add more description here if you want.',
-                                        // your app's logo?
-                                        image: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/logo/wtf_dark.png'),
-                                            ),
-                                          ),
-                                        ),
-
-                                        submitButton: 'Submit',
-                                        ratingColor: Colors.red,
-                                        onCancelled: () =>
-                                            print('cancelled'),
-                                        onSubmitted: (response) {
-                                          print(
-                                              'rating: ${response.rating}, comment: ${response.comment}');
-                                          gymStore.giveGymFeedback(
-                                            context: context,
-                                            comment: response.comment,
-                                            stars: double.tryParse(
-                                                response.rating
-                                                    .toString()),
-                                          );
-                                        },
-                                      );
-
-// show the dialog
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: true,
-                                        builder: (context) => _dialog,
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '✩✩✩✩✩ Rate us',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                      : Container(),
-                                  SizedBox(height: 24),
-                                  Text('Why to choose WTF',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                          fontStyle: FontStyle.normal)),
-                                  SizedBox(height: 12),
-                                  GridView.count(
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.all(20),
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    crossAxisCount: 2,
-                                    children: <Widget>[
-                                      whyWTF('Earn WTF rewards coin',
-                                          'assets/svg/why_choose/coins.svg'),
-                                      whyWTF('Fully Vaccinated Staff',
-                                          'assets/svg/why_choose/vaccine.svg'),
-                                      whyWTF('Track Fitness Journey',
-                                          'assets/svg/why_choose/heart.svg'),
-                                      whyWTF('Pocket Friendly Membership',
-                                          'assets/svg/why_choose/money.svg'),
-                                      whyWTF('Free diet Support',
-                                          'assets/svg/why_choose/diet.svg'),
-                                      whyWTF('Top Class Ambiance',
-                                          'assets/svg/why_choose/class.svg'),
+                                      BookPTWidget(),
+                                      SizedBox(height: 34),
+                                      //CoSpace section :D
+                                      GymLiveWidget(),
+                                      SizedBox(height: 45),
+                                      // Container(
+                                      //   child: SingleChildScrollView(
+                                      //     scrollDirection: Axis.horizontal,
+                                      //     child: Row(
+                                      //       children: coSpaceWidget(),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      GymAddonWidget(),
+                                      SizedBox(height: 12),
                                     ],
                                   ),
-                                  BookPTWidget(),
-                                  SizedBox(height: 34),
-                                  //CoSpace section :D
-                                  GymLiveWidget(),
-                                  SizedBox(height: 45),
-                                  // Container(
-                                  //   child: SingleChildScrollView(
-                                  //     scrollDirection: Axis.horizontal,
-                                  //     child: Row(
-                                  //       children: coSpaceWidget(),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  GymAddonWidget(),
-                                  SizedBox(height: 12),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          )
-              : Center(
-            child: Text(
-              'Gym not Found',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          );
-        }
-      ),
+                                )
+                              ],
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Gym not Found',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+      }),
     );
   }
 
@@ -2810,94 +2886,136 @@ class RenewMembership extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GymStore gymStore = context.watch<GymStore>();
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 6,
-              ),
-              Divider(
-                color: Colors.white70,
-                thickness: 1,
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                'Renew Membership',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Text('If you are looking to renew your membership\nclick here',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 13)),
-              SizedBox(
-                height: 15,
-              ),
-              InkWell(
-                onTap: () {
-                  gymStore.getGymPlans(
-                    gymId: gymId,
-                    context: context,
-                  );
-                  gymStore.setRenew(true);
-                  NavigationService.navigateTo(
-                    Routes.membershipPlanPage,
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'renew membership now'.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Divider(
-                color: Colors.white70,
-                thickness: 1,
-              ),
-              SizedBox(
-                height: 6,
-              ),
-            ],
+    return  InkWell(
+      onTap: () {
+        gymStore.getGymPlans(
+          gymId: gymId,
+          context: context,
+        );
+        gymStore.setRenew(true);
+        NavigationService.navigateTo(
+          Routes.membershipPlanPage,
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(
+            top: 8, bottom: 8, left: 12, right: 12),
+        decoration: BoxDecoration(
+            borderRadius:
+            BorderRadius.all(Radius.circular(4)),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xff490000),
+                Color(0xffBA1406),
+              ],
+            )),
+        alignment: Alignment.center,
+        child:  Text(
+          'renew membership now'.toUpperCase(),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
           ),
         ),
-      ],
+      ),
     );
+    // return Column(
+    //   children: [
+    //     Padding(
+    //       padding: const EdgeInsets.symmetric(horizontal: 15),
+    //       child: Column(
+    //         children: [
+    //           SizedBox(
+    //             height: 6,
+    //           ),
+    //           Divider(
+    //             color: Colors.white70,
+    //             thickness: 1,
+    //           ),
+    //           SizedBox(
+    //             height: 6,
+    //           ),
+    //           Text(
+    //             'Renew Membership',
+    //             style: TextStyle(
+    //               color: Colors.white,
+    //               fontWeight: FontWeight.bold,
+    //               fontSize: 20,
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             height: 8,
+    //           ),
+    //           Text('If you are looking to renew your membership\nclick here',
+    //               textAlign: TextAlign.center,
+    //               style: TextStyle(
+    //                   color: Colors.white,
+    //
+    //                   // fontWeight: FontWeight.bold,
+    //                   fontSize: 13)),
+    //           SizedBox(
+    //             height: 15,
+    //           ),
+    //           InkWell(
+    //             onTap: () {
+    //               gymStore.getGymPlans(
+    //                 gymId: gymId,
+    //                 context: context,
+    //               );
+    //               gymStore.setRenew(true);
+    //               NavigationService.navigateTo(
+    //                 Routes.membershipPlanPage,
+    //               );
+    //             },
+    //             child: Container(
+    //               padding: EdgeInsets.only(
+    //                   top: 8, bottom: 8, left: 12, right: 12),
+    //               decoration: BoxDecoration(
+    //                   borderRadius:
+    //                   BorderRadius.all(Radius.circular(4)),
+    //                   gradient: LinearGradient(
+    //                     begin: Alignment.topLeft,
+    //                     end: Alignment.bottomRight,
+    //                     colors: [
+    //                       Color(0xff490000),
+    //                       Color(0xffBA1406),
+    //                     ],
+    //                   )),
+    //               alignment: Alignment.center,
+    //               child: Row(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 // crossAxisAlignment: CrossAxisAlignment.center,
+    //                 children: [
+    //                   Text(
+    //                     'renew membership now'.toUpperCase(),
+    //                     style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontWeight: FontWeight.bold,
+    //                       fontSize: 18,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             height: 6,
+    //           ),
+    //           Divider(
+    //             color: Colors.white70,
+    //             thickness: 1,
+    //           ),
+    //           SizedBox(
+    //             height: 6,
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 }
 
