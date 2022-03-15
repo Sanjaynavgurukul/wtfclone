@@ -281,6 +281,10 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool getIsSubscribed(String gymId){
+
+  }
+
   Future<void> applyCoupon({BuildContext context, OfferData data}) async {
     await setOffer(context: context, data: data);
     notifyListeners();

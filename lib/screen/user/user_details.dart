@@ -647,7 +647,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         } else {
           // NavigationService.navigateTo(Routes.bmrCalculatorResult);
           locator<AppPrefs>().memberAdded.setValue(true);
-          NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
+          // NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
+          Navigator.pop(context);
         }
       } else {
         displaySnack('Something went wrong please try again later!!');
