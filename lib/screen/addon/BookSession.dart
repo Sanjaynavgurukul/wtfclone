@@ -68,13 +68,15 @@ class _PTIntroState extends State<PTIntro> {
                           Positioned(
                             bottom: 10.0,
                             left: 20.0,
-                            child: Text(
-                              store.selectedAddOnSlot.name.capitalize(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.w900,
-                              ),
+                            child: ListTile(
+                              title:Text(
+                                store.selectedAddOnSlot.name.capitalize(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              )
                             ),
                           ),
                         ],

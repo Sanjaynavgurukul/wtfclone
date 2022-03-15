@@ -1,4 +1,5 @@
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as CupertinoTabBar;
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
@@ -25,19 +26,21 @@ class _PoweredPagesState extends State<PoweredPages>
   TabController _tabController;
   double tabBarRadius = 4.0;
   var _selectedIndex = 0;
+  PageController pageController;
 
   @override
   void initState() {
-    controller = ScrollController();
-    controller.addListener(() {});
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
-    // _tabController = TabController(length: 2, vsync: this,initialIndex: 0)
-    //   ..addListener(() {
-    //     setState(() {
-    //       _selectedIndex = _tabController.index;
-    //     });
-    //   });
+    pageController = PageController(initialPage: 0, keepPage: true);
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() => changeAction());
+
     super.initState();
+  }
+
+  void changeAction() {
+    setState(() {});
+    pageController.animateToPage(_tabController.index,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   @override
@@ -46,10 +49,163 @@ class _PoweredPagesState extends State<PoweredPages>
     // _tabController.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
+    return Scaffold(
+          body: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                store.getAllLiveClasses(context: context);
+              },
+              child: Consumer<GymStore>(
+                builder: (context,store,child){
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  colorFilter: ColorFilter.mode(
+                                    Color(0xff046A58).withOpacity(0.5),
+                                    BlendMode.dstIn,
+                                  ),
+                                  image: AssetImage(
+                                    'assets/images/powered_bg.png',
+                                  ),
+                                ),
+                              ),
+                              height: 400.0,
+                            ),
+                            Positioned(
+                              top: 150.0,
+                              left: 20.0,
+                              child: SvgPicture.asset(
+                                'assets/svg/fitness_fullstop.svg',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 50.0,
+                                left: 12.0,
+                                right: 12.0,
+                              ),
+                              child: PageAppBar(isLive: false),
+                            ),
+                            // Positioned(
+                            //   top: 10.0,
+                            //   left: 0.0,
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //       gradient: RadialGradient(
+                            //         colors: [
+                            //           Color(0xff046A58).withOpacity(0.6),
+                            //           Colors.black,
+                            //           Color(0xff046A58).withOpacity(0.6),
+                            //           Colors.black,
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   top: 10.0,
+                            //   right: 0.0,
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //       gradient: RadialGradient(
+                            //         colors: [
+                            //           Color(0xff046A58).withOpacity(0.6),
+                            //           Colors.black,
+                            //           Color(0xff046A58).withOpacity(0.6),
+                            //           Colors.black,
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        UIHelper.verticalSpace(24.0),
+                        PagePriceTag(
+                          text1: 'Start only from ',
+                          text2: '199 Rs.',
+                          image2: 'right_dot_blue',
+                          image1: 'left_dot_blue',
+                        ),
+                        UIHelper.verticalSpace(22.0),
+                        PageSectionHeader(
+                          onFilterTap: () {
+                            //todo:
+                          },
+                          sectionHeading: 'Activities',
+                        ),
+                        UIHelper.verticalSpace(12.0),
+                        Container(
+                          margin: EdgeInsets.only(left: 16, right: 16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff2d2d2d),
+                            borderRadius: BorderRadius.circular(tabBarRadius),
+                            border:
+                            Border.all(width: 1.0, color: const Color(0xff2f363d)),
+                          ),
+                          padding: EdgeInsets.all(2),
+                          child: TabBar(
+                            controller: _tabController,
+                            // give the indicator a decoration (color and border radius)
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(tabBarRadius),
+                              color: AppConstants.bgColor,
+                            ),
+                            labelColor: Colors.white,
+
+                            unselectedLabelColor: AppConstants.white,
+                            tabs: [
+                              // first tab [you can add an icon using the icon property]
+                              Tab(
+                                child: Text(
+                                  'Paid',
+                                  style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.normal),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+
+                              // second tab [you can add an icon using the icon property]
+                              Tab(
+                                child: Text(
+                                  'Free',
+                                  style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.normal),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ExpandablePageView(
+                          controller: pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            getList(data: store.allAddonClasses, isPaid: true),
+                            getList(data: store.allAddonClasses, isPaid: false)
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
+            ),
+          ),
+        );
+  }
+
+  Widget ab() {
     return Scaffold(
       body: RefreshIndicator(onRefresh: () async {
         store.getAllLiveClasses(context: context);
@@ -57,7 +213,8 @@ class _PoweredPagesState extends State<PoweredPages>
         return NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
-              SliverToBoxAdapter(child: Column(
+              SliverToBoxAdapter(
+                  child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Stack(
@@ -146,95 +303,91 @@ class _PoweredPagesState extends State<PoweredPages>
               )),
               SliverToBoxAdapter(
                   child: Container(
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xff2d2d2d),
-                      borderRadius: BorderRadius.circular(tabBarRadius),
-                      border:
+                margin: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                  color: const Color(0xff2d2d2d),
+                  borderRadius: BorderRadius.circular(tabBarRadius),
+                  border:
                       Border.all(width: 1.0, color: const Color(0xff2f363d)),
-                    ),
-                    padding: EdgeInsets.all(2),
-                    child: TabBar(
-                      controller: _tabController,
-                      // give the indicator a decoration (color and border radius)
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(tabBarRadius),
-                        color: AppConstants.bgColor,
-                      ),
-                      labelColor: Colors.white,
-                      unselectedLabelColor: AppConstants.white,
-                      tabs: [
-                        // first tab [you can add an icon using the icon property]
-                        Tab(
-                          child: Text(
-                            'Paid',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                ),
+                padding: EdgeInsets.all(2),
+                child: TabBar(
+                  controller: _tabController,
+                  // give the indicator a decoration (color and border radius)
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(tabBarRadius),
+                    color: AppConstants.bgColor,
+                  ),
+                  labelColor: Colors.white,
 
-                        // second tab [you can add an icon using the icon property]
-                        Tab(
-                          child: Text(
-                            'Free',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.normal),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
+                  unselectedLabelColor: AppConstants.white,
+                  tabs: [
+                    // first tab [you can add an icon using the icon property]
+                    Tab(
+                      child: Text(
+                        'Paid',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.normal),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  )
-              ),
+
+                    // second tab [you can add an icon using the icon property]
+                    Tab(
+                      child: Text(
+                        'Free',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.normal),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
             ];
           },
-          body: Container(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                getList(data: store.allAddonClasses,isPaid: true),
-                getList(data: store.allAddonClasses,isPaid: false),
-              ],
-            ),
-          ),
+          body: _selectedIndex == 0
+              ? getList(data: store.allAddonClasses, isPaid: true, count: 12)
+              : getList(data: store.allAddonClasses, isPaid: false, count: 2),
         );
       })),
     );
   }
 
-  Widget getList({@required GymAddOn data, bool isPaid = true}) {
+  Widget getList({@required GymAddOn data, bool isPaid = true, int count}) {
     return store.allAddonClasses != null
         ? store.allAddonClasses.data != null &&
-        store.allAddonClasses.data.isNotEmpty &&
-        getFilterList(data: store.allAddonClasses.data,isPaid: isPaid) != null &&
-        getFilterList(data: store.allAddonClasses.data,isPaid: isPaid).isNotEmpty
-        ? ListView.builder(
-      // shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          primary: false,
-          itemCount:
-          getFilterList(data: store.allAddonClasses.data,isPaid: isPaid).length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            AddOnData item =
-            getFilterList(data: store.allAddonClasses.data,isPaid: isPaid)[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 20.0,
-              ),
-              child: LiveCard(
-                data: item,
-                isFullView: true,
-              ),
-            );
-          },
-    )
-        : Center(
-      child: Text(
-        'No live Classes found',
-      ),
-    )
+                store.allAddonClasses.data.isNotEmpty &&
+                getFilterList(
+                        data: store.allAddonClasses.data, isPaid: isPaid) !=
+                    null &&
+                getFilterList(data: store.allAddonClasses.data, isPaid: isPaid)
+                    .isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                primary: false,
+                itemCount:
+                getFilterList(data: store.allAddonClasses.data,isPaid: isPaid).length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  AddOnData item =  getFilterList(data: store.allAddonClasses.data,isPaid: isPaid)[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                    ),
+                    child: LiveCard(
+                      data: item,
+                      isFullView: true,
+                    ),
+                  );
+                },
+              )
+            : Center(
+                child: Text(
+                  'No live Classes found',
+                ),
+              )
         : Loading();
   }
 
@@ -246,10 +399,7 @@ class _PoweredPagesState extends State<PoweredPages>
             store.getAllLiveClasses(context: context);
           },
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height - 24,
+            height: MediaQuery.of(context).size.height - 24,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -366,10 +516,7 @@ class _PoweredPagesState extends State<PoweredPages>
                     alignment: Alignment.topLeft,
                     child: Container(
                       margin: EdgeInsets.only(left: 16),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 1.5,
+                      width: MediaQuery.of(context).size.width / 1.5,
                       height: 45,
                       decoration: BoxDecoration(
                         color: const Color(0xff2d2d2d),
@@ -433,45 +580,44 @@ class _PoweredPagesState extends State<PoweredPages>
                     },
                     color: AppConstants.white,
                     child: Consumer<GymStore>(
-                      builder: (context, store, child) =>
-                      store
-                          .allAddonClasses !=
-                          null
+                      builder: (context, store, child) => store
+                                  .allAddonClasses !=
+                              null
                           ? store.allAddonClasses.data != null &&
-                          store.allAddonClasses.data.isNotEmpty &&
-                          getFilterList(
-                              data: store.allAddonClasses.data) !=
-                              null &&
-                          getFilterList(
-                              data: store.allAddonClasses.data)
-                              .isNotEmpty
-                          ? ListView.builder(
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: getFilterList(
-                            data: store.allAddonClasses.data)
-                            .length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          AddOnData item = getFilterList(
-                              data:
-                              store.allAddonClasses.data)[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20.0,
-                            ),
-                            child: LiveCard(
-                              data: item,
-                              isFullView: true,
-                            ),
-                          );
-                        },
-                      )
-                          : Center(
-                        child: Text(
-                          'No live Classes found',
-                        ),
-                      )
+                                  store.allAddonClasses.data.isNotEmpty &&
+                                  getFilterList(
+                                          data: store.allAddonClasses.data) !=
+                                      null &&
+                                  getFilterList(
+                                          data: store.allAddonClasses.data)
+                                      .isNotEmpty
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  itemCount: getFilterList(
+                                          data: store.allAddonClasses.data)
+                                      .length,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    AddOnData item = getFilterList(
+                                        data:
+                                            store.allAddonClasses.data)[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 20.0,
+                                      ),
+                                      child: LiveCard(
+                                        data: item,
+                                        isFullView: true,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Center(
+                                  child: Text(
+                                    'No live Classes found',
+                                  ),
+                                )
                           : Loading(),
                     ),
                   ),
@@ -485,15 +631,26 @@ class _PoweredPagesState extends State<PoweredPages>
     );
   }
 
-  List<AddOnData> getFilterList({@required List<AddOnData> data,bool isPaid = false}) {
-    if(isPaid){
+  List<AddOnData> getFilterList(
+      {@required List<AddOnData> data, bool isPaid = false}) {
+    if (isPaid) {
       print('is Paid -- $isPaid');
-      return data.where((element) => element.isPt == 0 && int.parse(element.price ?? '0') != 0).toList();
-    }else{
+      return data
+          .where((element) =>
+              element.isPt == 0 && int.parse(element.price ?? '0') != 0)
+          .toList();
+    } else {
       print('is Paid -- $isPaid');
-      return data.where((element) => element.isPt == 0 && int.parse(element.price ?? '0') == 0).toList();
+      return data
+          .where((element) =>
+              element.isPt == 0 && int.parse(element.price ?? '0') == 0)
+          .toList();
     }
-    return data.where((element) => element.isPt == 0 && isPaid ? int.parse(element.price??'0') > 0:int.parse(element.price??'0') ==0).toList();
+    return data
+        .where((element) => element.isPt == 0 && isPaid
+            ? int.parse(element.price ?? '0') > 0
+            : int.parse(element.price ?? '0') == 0)
+        .toList();
   }
 
 // @override
@@ -519,10 +676,7 @@ class PagePriceTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150.0,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(
         horizontal: 16.0,
         vertical: 10.0,

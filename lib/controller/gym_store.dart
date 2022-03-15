@@ -954,12 +954,12 @@ class GymStore extends ChangeNotifier {
         .checkSlotAvailability(context: context, slotId: slotId);
     Navigator.pop(context);
     print('check slot response --- ${res}');
-    if (res['status'] == true) {
+    if (res['status'] == false) {
       getAllSessionsForAddOn(context: context);
     } else {
       FlashHelper.errorBar(
         context,
-        message: res['message'],
+        message: 'Already Purchased',
       );
     }
   }

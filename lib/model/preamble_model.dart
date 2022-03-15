@@ -102,6 +102,15 @@ class PreambleModel {
     this.tainer_notes = json["tainer_notes"];
   }
 
+  int getTargetWeight(String weight){
+    int d = int.parse(weight??'0');
+    if(d ==0){
+      return 40;
+    }else{
+      return d;
+    }
+  }
+
   String convertListToString(List<String> data){
     if(data.isEmpty || data == null) return '';
     else{
@@ -221,7 +230,7 @@ class PreambleModel {
       int d = int.parse(value.replaceAll(RegExp('_cm'), ''));
       return d;
     }else{
-      return 0;
+      return 160;
     }
     //
     // else if(isFeet){
@@ -282,10 +291,10 @@ class PreambleModel {
 
     if (isKg) {
       int d = int.parse(value.replaceAll(RegExp('_kg'), ''));
-      return d;
+      return d == 0 ?40:d;
     } else {
       int d = int.parse(value.replaceAll(RegExp('_lbs'), ''));
-      return d;
+      return d == 0 ?40:d;
     }
   }
 
