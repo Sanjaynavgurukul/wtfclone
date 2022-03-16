@@ -96,7 +96,7 @@ class _Slide9State extends State<Slide9> {
   String targetWeightLabel;
 
   double convertToDouble(){
-    String d = '${decimal2}.${decimal2}';
+    String d = '${decimal1}.${decimal2}';
     return double.parse(d);
   }
 
@@ -365,7 +365,7 @@ class _Slide9State extends State<Slide9> {
                                   ),
                                   itemHeight: 60,
                                   value: decimal1,
-                                  minValue: 0,
+                                  minValue: 2,
                                   maxValue: 9,
                                   step: 1,
                                   haptics: true,

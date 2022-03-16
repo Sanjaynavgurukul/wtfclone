@@ -1891,10 +1891,13 @@ class GymStore extends ChangeNotifier {
   }
 
   bool checkSubscription(String gymId){
-    if(gymId == activeSubscriptions.data.gymId){
-      return true;
-    }else{
-      return false;
+    if(gymId == null || gymId.isEmpty || activeSubscriptions.data == null || activeSubscriptions == null) return false;
+    else{
+      if(gymId == activeSubscriptions.data.gymId){
+        return true;
+      }else{
+        return false;
+      }
     }
   }
 

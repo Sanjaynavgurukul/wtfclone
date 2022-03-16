@@ -37,99 +37,114 @@ class _PTIntroState extends State<PTIntro> {
           builder: (context, constraints) => SingleChildScrollView(
             child: Consumer<GymStore>(
               builder: (context, store, child) => IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 300.0,
-                      child: Stack(
-                        // fit: StackFit.expand,
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: store.selectedAddOnSlot.image != null
-                                ? Image.network(
-                                    store.selectedAddOnSlot.image,
-                                    fit: BoxFit.cover,
-                                    height: 300.0,
-                                  )
-                                : Image.network(
-                                    'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c=',
-                                    fit: BoxFit.cover,
-                                    height: 300.0,
-                                  ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Image.asset(
-                                'assets/images/workout_background.png'),
-                          ),
-                          Positioned(
-                            bottom: 10.0,
-                            left: 20.0,
-                            child: ListTile(
-                              title:Text(
-                                store.selectedAddOnSlot.name.capitalize(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              )
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 300.0,
+                        child: Stack(
+                          // fit: StackFit.expand,
+                          children: [
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: store.selectedAddOnSlot.image != null
+                                  ? Image.network(
+                                      store.selectedAddOnSlot.image,
+                                      fit: BoxFit.cover,
+                                      height: 300.0,
+                                    )
+                                  : Image.network(
+                                      'https://media.istockphoto.com/photos/male-personal-trainer-helping-sportswoman-to-do-exercises-with-at-picture-id972833328?k=20&m=972833328&s=612x612&w=0&h=LtGaklhIxyJbMkxEKDNWzGXgX-zmONE2-llVRDrv17c=',
+                                      fit: BoxFit.cover,
+                                      height: 300.0,
+                                    ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 20.0,
-                      ),
-                      child: Text(
-                        store.selectedAddOnSlot.description ?? '',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
-                          fontSize: 13.0,
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Image.asset(
+                                  'assets/images/workout_background.png'),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ListTile(
+                                  title:Text(
+                                    store.selectedAddOnSlot.name!=null?store.selectedAddOnSlot.name.capitalize():'No Name',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                              ),
+                            )
+                            // Positioned(
+                            //   bottom: 10.0,
+                            //   left: 20.0,
+                            //   child: ListTile(
+                            //     title:Text(
+                            //       store.selectedAddOnSlot.name!=null?store.selectedAddOnSlot.name.capitalize():'No Name',
+                            //       style: TextStyle(
+                            //         color: Colors.white,
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.normal,
+                            //       ),
+                            //     )
+                            //   ),
+                            // ),
+                          ],
                         ),
                       ),
-                    ),
-                    UIHelper.verticalSpace(4.0),
-                    Divider(
-                      thickness: 0.5,
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                    FeatureDetails(
-                      heading: 'WHY BUY PERSONAL TRAINING?',
-                      textColor: AppColors.TEXT_DARK,
-                      headingColor: Colors.white,
-                      headingSize: 20.0,
-                      textSize: 16.0,
-                      showVerticalBar: false,
-                      items: [
-                        {
-                          'heading': 'Save More',
-                          'text': 'Save up to 15% in per session cost',
-                          'image': 'assets/gif/save.gif'
-                        },
-                        {
-                          'heading': 'Be Regular',
-                          'text':
-                              'People who are regular are 95% more likely to achieve their fitness goals',
-                          'image': 'assets/gif/regular.gif'
-                        },
-                        {
-                          'heading': 'Hassle-Free Booking',
-                          'text':
-                              'Book regular sessions without having to pay every time',
-                          'image': 'assets/gif/hassle.gif'
-                        }
-                      ],
-                    ),
-                    UIHelper.verticalSpace(12.0),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 20.0,
+                        ),
+                        child: Text(
+                          store.selectedAddOnSlot.description ?? '',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 13.0,
+                          ),
+                        ),
+                      ),
+                      UIHelper.verticalSpace(4.0),
+                      Divider(
+                        thickness: 0.5,
+                        color: Colors.white.withOpacity(0.4),
+                      ),
+                      FeatureDetails(
+                        heading: 'WHY BUY PERSONAL TRAINING?',
+                        textColor: AppColors.TEXT_DARK,
+                        headingColor: Colors.white,
+                        headingSize: 20.0,
+                        textSize: 16.0,
+                        showVerticalBar: false,
+                        items: [
+                          {
+                            'heading': 'Save More',
+                            'text': 'Save up to 15% in per session cost',
+                            'image': 'assets/gif/save.gif'
+                          },
+                          {
+                            'heading': 'Be Regular',
+                            'text':
+                                'People who are regular are 95% more likely to achieve their fitness goals',
+                            'image': 'assets/gif/regular.gif'
+                          },
+                          {
+                            'heading': 'Hassle-Free Booking',
+                            'text':
+                                'Book regular sessions without having to pay every time',
+                            'image': 'assets/gif/hassle.gif'
+                          }
+                        ],
+                      ),
+                      UIHelper.verticalSpace(12.0),
+                    ],
+                  ),
                 ),
               ),
             ),
