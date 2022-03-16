@@ -2913,10 +2913,10 @@ class RenewMembership extends StatelessWidget {
             )),
         alignment: Alignment.center,
         child:  Text(
-          'renew membership now'.toUpperCase(),
+          'Renew membership now',
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
             fontSize: 18,
           ),
         ),

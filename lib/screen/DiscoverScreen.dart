@@ -476,31 +476,34 @@ class GymCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (item.rating != null && item.rating > 0)
-                            RatingBar(
-                                initialRating: (item.rating ?? 0).toDouble(),
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemSize: 16,
-                                ratingWidget: RatingWidget(
-                                  full: Icon(
-                                    Icons.star,
-                                    color: AppConstants.boxBorderColor,
+                            IgnorePointer(
+                              ignoring: true,
+                              child: RatingBar(
+                                  initialRating: (item.rating ?? 0).toDouble(),
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemSize: 16,
+                                  ratingWidget: RatingWidget(
+                                    full: Icon(
+                                      Icons.star,
+                                      color: AppConstants.boxBorderColor,
+                                    ),
+                                    half: Icon(
+                                      Icons.star_half,
+                                      color: AppConstants.boxBorderColor,
+                                    ),
+                                    empty: Icon(
+                                      Icons.star_border,
+                                      color: AppConstants.white,
+                                    ),
                                   ),
-                                  half: Icon(
-                                    Icons.star_half,
-                                    color: AppConstants.boxBorderColor,
-                                  ),
-                                  empty: Icon(
-                                    Icons.star_border,
-                                    color: AppConstants.white,
-                                  ),
-                                ),
-                                itemPadding:
-                                    EdgeInsets.symmetric(horizontal: 0.0),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                }),
+                                  itemPadding:
+                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  }),
+                            ),
                           if (item.rating == null || item.rating <= 0)
                             RichText(
                               text: TextSpan(

@@ -61,21 +61,20 @@ class _LoaderPageState extends State<LoaderPage> {
           if(memberAdded){
             context.read<GymStore>().getForceUpdate().then((value){
               print('checking from loader --- ${value.wtf_version}');
-              navToHome();
-              // if(isAndroid()){
-              //   if(!value.wtf_version.contains(Api.currentVersion) && value.force_update == 1) {
-              //     navToForceUpdate(value);
-              //   } else{
-              //     navToHome();
-              //   }
-              // }else{
-              //   if(!value.apple_version.contains(Api.currentVersion) && value.force_update == 1){
-              //     navToForceUpdate(value);
-              //   }
-              //   else {
-              //     navToHome();
-              //   }
-              // }
+              if(isAndroid()){
+                if(!value.wtf_version.contains(Api.currentVersion) && value.force_update == 1) {
+                  navToForceUpdate(value);
+                } else{
+                  navToHome();
+                }
+              }else{
+                if(!value.apple_version.contains(Api.currentVersion) && value.force_update == 1){
+                  navToForceUpdate(value);
+                }
+                else {
+                  navToHome();
+                }
+              }
             });
           }else{
             NavigationService

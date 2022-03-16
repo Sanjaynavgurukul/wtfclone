@@ -944,6 +944,7 @@ class GymStore extends ChangeNotifier {
 
   Future<void> checkSlotAvailability(
       {BuildContext context, String slotId}) async {
+    print('check uid --- $slotId');
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
