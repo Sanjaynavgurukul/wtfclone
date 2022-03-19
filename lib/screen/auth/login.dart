@@ -382,36 +382,40 @@ class _LoginPageState extends State<LoginPage> {
                                     Routes.loginEmail);
                               },
                             ),
-                            SizedBox(height: 80),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Dont have an account? ",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white.withOpacity(0.8),
+                            SizedBox(height: 20),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Don\'t have an account? ",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white.withOpacity(0.8),
+                                      ),
                                     ),
+                                    TextSpan(
+                                      text: " Sign up",
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          NavigationService
+                                              .navigateToReplacement(
+                                              Routes.register);
+                                        },
+                                    )
+                                  ],
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppConstants.buttonRed2,
                                   ),
-                                  TextSpan(
-                                    text: " Sign up",
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        NavigationService
-                                            .navigateToReplacement(
-                                            Routes.register);
-                                      },
-                                  )
-                                ],
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppConstants.buttonRed2,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            )
+                            ),
+                            SizedBox(height: 80),
                             // if (Platform.isAndroid)
                             //   IntrinsicHeight(
                             //     child: Row(
