@@ -61,7 +61,7 @@ class UserData {
         mobile: json["mobile"],
         email: json["email"],
         accountType: json["account_type"],
-        dateAdded: json["date_added"],
+        dateAdded: json["date_added"].toString(),
         lastUpdated: json["last_updated"],
         lastLogin: json["last_login"],
         lastIp: json["last_ip"],
