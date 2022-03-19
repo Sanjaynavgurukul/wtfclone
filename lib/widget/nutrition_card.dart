@@ -39,16 +39,6 @@ class _NutritioncardState extends State<Nutritioncard> {
   int totalconsumed = 0;
   GymStore store;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   totalfoodCalories() {
     totalcal = 0;
 
@@ -187,9 +177,11 @@ class _NutritioncardState extends State<Nutritioncard> {
                         return DietCard(
                           data: widget.breakfast[index],
                           onMarked: () {
+
                             DateTime tdate = DateTime.now();
                             final df = DateFormat('dd-MM-yyyy');
                             String today = df.format(tdate).toString();
+                            print('checked');
                             if (today == widget.date) {
                               if (widget.breakfast[index].consumptionStatus) {
                                 FlashHelper.informationBar(
@@ -205,7 +197,13 @@ class _NutritioncardState extends State<Nutritioncard> {
                               //   message:
                               //       "You can only consume the meal for today",
                               // );
-                              _showDialog(null, widget.breakfast[index].uid);
+
+                              FlashHelper.informationBar(
+                                context,
+                                message: "You can only consume today'\'s meals",
+                              );
+
+                              // _showDialog(null, widget.breakfast[index].uid);
                             }
                           },
                         );
@@ -289,7 +287,7 @@ class _DietSaverDialogState extends State<DietSaverDialog> {
                             width: 160,
                             child: Center(
                               child: Text(
-                                "You need to submit your diet photo",
+                                "You need to submit your diet photos",
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.white,

@@ -121,7 +121,9 @@ class _DietScheduleState extends State<DietSchedule> {
               child: DatePicker(
                 DateTime(calendetDate.year, calendetDate.month - 1,
                     calendetDate.day),
-                initialSelectedDate: selectedValue,
+                // initialSelectedDate: selectedValue,
+                initialSelectedDate: DateTime.now(),
+
                 controller: datePickerController,
                 selectionColor: AppConstants.bgColor,
                 selectedTextColor: Colors.white,
