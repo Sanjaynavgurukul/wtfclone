@@ -867,7 +867,7 @@ class _BookingSummaryAddOnState extends State<BookingSummaryAddOn>
       "gym_id": gymStore.selectedGymDetail.data.userId,
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "price": totalAmount,
-      "type": gymStore.selectedAddOnSlot.isPt == '1'
+      "type": gymStore.selectedAddOnSlot.isPt == 1
           ? 'addon_pt'
           : gymStore.selectedAddOnSlot.isLive
           ? 'addon_live'
