@@ -33,10 +33,10 @@ class BmrState extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
-    // saveProgress(
-    //   context: context,
-    //   fromAuth: fromAuth,
-    // );
+    saveProgress(
+      context: context,
+      fromAuth: fromAuth,
+    );
   }
 
   bmrForWoMen(
@@ -53,14 +53,15 @@ class BmrState extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
-    // saveProgress(
-    //   context: context,
-    //   fromAuth: fromAuth,
-    // );
+    saveProgress(
+      context: context,
+      fromAuth: fromAuth,
+    );
   }
 
   Future<void> saveProgress(
       {BuildContext context, bool fromAuth = false}) async {
+    print('check save bmr method called ---');
     if (!fromAuth)
       showDialog(
         context: context,
