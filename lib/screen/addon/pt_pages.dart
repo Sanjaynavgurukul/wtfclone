@@ -210,7 +210,7 @@ class _PTPagesState extends State<PTPages> {
                                   )
                                 : Center(
                                     child: Text(
-                                      'No live Classes found',
+                                      'No Classes found',
                                     ),
                                   )
                             : Loading(),

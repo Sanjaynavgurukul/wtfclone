@@ -127,6 +127,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   hintText: 'OTP',
                                   controller: otp,
                                   maxLines: 1,
+                                  maxLength: 7,
                                   suffix: Icon(
                                     Icons.check,
                                     color: isMobileNumber
