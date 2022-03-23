@@ -613,7 +613,7 @@ class GymStore extends ChangeNotifier {
         notifyListeners();
       });
       String orderId =
-          await generateRazorPayId(context: context, amount: price);
+          await generateRazorPayId(context: context, amount: price,subBody:body);
       if (orderId.isNotEmpty) {
         var options = {
           "key": Helper.razorPayKey,
@@ -627,6 +627,7 @@ class GymStore extends ChangeNotifier {
             "contact": locator<AppPrefs>().phoneNumber.getValue(),
             "email": locator<AppPrefs>().userEmail.getValue(),
           },
+
         };
         log('razor pay body:: $options');
         _razorpay.open(options);
@@ -637,7 +638,7 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<String> generateRazorPayId(
-      {BuildContext context, String amount}) async {
+      {BuildContext context, String amount,Map<String,dynamic> subBody}) async {
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
@@ -647,7 +648,12 @@ class GymStore extends ChangeNotifier {
     Map<String, dynamic> body = {
       "amount": amount,
       "user_id": locator<AppPrefs>().memberId.getValue(),
+      'value' : subBody,
+      'transaction_type':'',
     };
+
+    //value
+    //transaction_type == partial or regular
     String orderId =
         await RestDatasource().generateRazorPayId(context: context, body: body);
     Navigator.pop(context);
