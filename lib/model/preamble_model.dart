@@ -82,30 +82,13 @@ class PreambleModel {
     this.user_uid = json["user_uid"];
     this.target_weight = convertTargetWeight(json["target_weight"].toString() ??'0');
     this.target_duration = double.parse(json["target_duration"].toString() ?? '0.25');
-    this.location = json["location"];
+    this.location = json["location"] == null?'': json["location"];
     this.lat = json["lat"];
     this.long = json["long"];
     this.n_token = json["n_token"];
     this.device_id = json["device_id"];
     this.howactive = json["howactive"];
     this.tainer_notes = json["tainer_notes"];
-  }
-
-
-  int convertTargetWeight(String targetWeight){
-    bool inKg = targetWeight.contains(RegExp('_kg'));
-    bool inDouble = targetWeight.contains('.');
-    if(inDouble){
-      return 40;
-    }
-    else if(inKg){
-      int d = int.parse(targetWeight.replaceAll(RegExp('_kg'), ''));
-      return d == 0 ?40:d;
-    }else{
-      int d = int.parse(targetWeight);
-      return d == 0 ?40:d;
-    }
-
   }
 
   Map<String, dynamic> toJsonPreamble(PreambleModel data) => {
@@ -160,6 +143,22 @@ class PreambleModel {
     "diet_category_id": data.diet_category_id,
     'status': 'active'
   };
+
+  int convertTargetWeight(String targetWeight){
+    bool inKg = targetWeight.contains(RegExp('_kg'));
+    bool inDouble = targetWeight.contains('.');
+    if(inDouble){
+      return 40;
+    }
+    else if(inKg){
+      int d = int.parse(targetWeight.replaceAll(RegExp('_kg'), ''));
+      return d == 0 ?40:d;
+    }else{
+      int d = int.parse(targetWeight);
+      return d == 0 ?40:d;
+    }
+
+  }
 
   static String convertHeightToJson({PreambleModel value}) {
     if (value.heightInCm) {

@@ -59,7 +59,7 @@ class _Slide2State extends State<Slide2> {
     fetchLocation();
     return Consumer<GymStore>(
       builder: (context, user, snapshot) {
-        if(user.preambleModel.location != null || user.preambleModel.location.isNotEmpty){
+        if(user.preambleModel.location != null && user.preambleModel.location.isNotEmpty){
           _place.text = user.preambleModel.location;
         }
         return Scaffold(
