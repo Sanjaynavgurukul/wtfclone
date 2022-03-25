@@ -1057,14 +1057,14 @@ class GymStore extends ChangeNotifier {
   void openPermissionWarningDialog(BuildContext context){
     // set up the button
     Widget okButton = TextButton(
-      child: Text("Give Permission"),
+      child: Text("Give Permission",style: TextStyle(color: AppConstants.bgColor),),
       onPressed: () {Navigator.pop(context); determinePosition(context);},
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("My title"),
-      content: Text("This is my message."),
+      title: Text("Location Warning",style: TextStyle(color: AppConstants.white),),
+      content: Text("In order to give you the best WTF Fitness Experience, we recommend you to share your location",style: TextStyle(color: Colors.white),),
       actions: [
         okButton,
       ],
