@@ -26,9 +26,9 @@ class _Slide2State extends State<Slide2> {
   Future<void> fetchLocation() async {
     await context.read<GymStore>().determinePosition(context);
     //TODO Location CHECK
-    // var get = context.read<GymStore>().currentAddressResult;
-    _place.text = '${context.read<GymStore>().address}';
-    // context.read<UserController>().setValue(address: _place.text);
+    _place.text = '${context.read<GymStore>().getAddress()}';
+    setState(() {
+    });
   }
 
   void showPlacePicker(GymStore store) async {
@@ -39,7 +39,7 @@ class _Slide2State extends State<Slide2> {
         builder: (context) => PlacePicker(
           Helper.googleMapKey,
           displayLocation: LatLng(
-              store.lat, store.lng),
+              store.getLat(), store.getLng()),
         ),
       ),
     );
@@ -59,6 +59,9 @@ class _Slide2State extends State<Slide2> {
     fetchLocation();
     return Consumer<GymStore>(
       builder: (context, user, snapshot) {
+        if(user.preambleModel.location != null || user.preambleModel.location.isNotEmpty){
+          _place.text = user.preambleModel.location;
+        }
         return Scaffold(
           body: Container(
             width: double.infinity,

@@ -81,10 +81,6 @@ class GymStore extends ChangeNotifier {
 
   bool loading = false;
 
-  double lat = double.parse(locator<AppPrefs>().lat.getValue());
-  double lng = double.parse(locator<AppPrefs>().lng.getValue());
-  String address = locator<AppPrefs>().address.getValue();
-
   bool get isLoading => loading;
 
   GymPlanData selectedGymPlan;
@@ -485,14 +481,13 @@ class GymStore extends ChangeNotifier {
         message: 'Please wait...',
       ),
     );
-    print('mark attendence check lat and lng ---- $lat lng $lng');
     Map<String, dynamic> body = {
       'user_id': locator<AppPrefs>().memberId.getValue(),
       'mode': mode,
       'date': '${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
       'time': '${DateFormat('h:mm a').format(DateTime.now())}',
-      'lat': lat,
-      'long': lng,
+      'lat': getLat(),
+      'long': getLng(),
       "role": 'member',
       "qr_code": qrCode,
     };
@@ -894,8 +889,8 @@ class GymStore extends ChangeNotifier {
             lng: selectedNewLocation.latLng.longitude.toString(),
           )
         : await RestDatasource().getGym(
-            lat: lat.toString(),
-            lng: lng.toString(),
+            lat: getLat().toString(),
+            lng: getLng().toString(),
           );
     if (res != null) {
       print('gym data is present');
@@ -1078,7 +1073,7 @@ class GymStore extends ChangeNotifier {
       },
     );
   }
-  Future<void> determinePosition(BuildContext context) async {
+  Future<String> determinePosition(BuildContext context) async {
     print('determine location called');
     bool serviceEnabled;
     LocationPermission permission;
@@ -1119,11 +1114,16 @@ class GymStore extends ChangeNotifier {
       log('1');
       Position currentPosition = await Geolocator.getCurrentPosition();
       if(currentPosition.latitude != null ||currentPosition.latitude != 0.0){
+        print('set new lat lng (LAT) -- ${currentPosition.latitude}');
         locator<AppPrefs>().lat.setValue(currentPosition.latitude.toString());
+        print('set new lat lng (LAT pref) -- ${locator<AppPrefs>().lat.getValue()}');
       }
 
       if(currentPosition.longitude != null ||currentPosition.longitude != 0.0){
+        print('set new lat lng (LNG) -- ${currentPosition.longitude}');
         locator<AppPrefs>().lng.setValue(currentPosition.longitude.toString());
+        print('set new lat lng (LNG pref) -- ${locator<AppPrefs>().lng.getValue()}');
+
       }
 
       getUserLocation();
@@ -1147,6 +1147,19 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  double getLat(){
+    return double.parse(locator<AppPrefs>().lat.getValue());
+
+  }
+
+  double getLng(){
+    return double.parse(locator<AppPrefs>().lng.getValue());
+  }
+
+  String getAddress(){
+    return locator<AppPrefs>().address.getValue();
+  }
+
   Future<GeoAddress> _getGooglecoo(var lat, var long) async {
     const _host = 'https://maps.google.com/maps/api/geocode/json';
     const apiKey = Helper.googleMapKey;
@@ -1168,7 +1181,7 @@ class GymStore extends ChangeNotifier {
   Future<Address> getUserLocation() async {
     //call this async method from whereever you need
     final coordinates =
-        new Coordinates(lat, lng);
+        new Coordinates(getLat(), getLng());
     var addresses = await Geocoder.google(Helper.googleMapKey)
         .findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
@@ -1690,8 +1703,8 @@ class GymStore extends ChangeNotifier {
             lng: selectedNewLocation.latLng.longitude.toString())
         : await RestDatasource().getDiscoverNow(
             type: type,
-            lat: lat.toString(),
-            lng: lng.toString());
+            lat: getLat().toString(),
+            lng: getLng().toString());
     if (res != null) {
       selectedGymTypes = res;
       notifyListeners();
@@ -1821,8 +1834,8 @@ class GymStore extends ChangeNotifier {
     // 'long': currentPosition.longitude,
     GymDetailsModel res = await RestDatasource().getGymById(
         gymID: gymId,
-        lng:lat.toString(),
-        lat: lng.toString());
+        lng:getLat().toString(),
+        lat: getLng().toString());
     if (res != null) {
       selectedGymDetail = res;
       //TODO check plan :D
@@ -2381,8 +2394,8 @@ class GymStore extends ChangeNotifier {
       data.user_id = locator<AppPrefs>().memberId.getValue();
       data.name = locator<AppPrefs>().userName.getValue();
       data.email = locator<AppPrefs>().userEmail.getValue();
-      data.lat = lat.toString();
-      data.long = lng.toString();
+      data.lat = getLat().toString();
+      data.long = getLng().toString();
       // data.lat =
       // '${context
       //     .read<GymStore>()

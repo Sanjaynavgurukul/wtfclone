@@ -221,8 +221,8 @@ class _SearchBarState extends State<SearchBar> {
                       displayLocation: store.selectedNewLocation != null
                           ? LatLng(store.selectedNewLocation.latLng.latitude,
                               store.selectedNewLocation.latLng.longitude)
-                          : LatLng(store.lat,
-                              store.lng),
+                          : LatLng(store.getLat(),
+                              store.getLng()),
                     ),
                   ),
                 );

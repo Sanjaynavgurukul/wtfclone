@@ -46,8 +46,8 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
-    lat = store.lat.toString();
-    lng = store.lng.toString();
+    lat = store.getLat().toString();
+    lng = store.getLng().toString();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.BACK_GROUND_BG,
@@ -123,7 +123,7 @@ class _SearchScreenState extends State<SearchScreen>
                             bottom: 0.0,
                             left: 17,
                           ),
-                          hintText: '${store.address}',
+                          hintText: '${store.getAddress()}',
                           hintStyle: TextStyle(
                             color: Colors.white70,
                             fontSize: 13.0,
