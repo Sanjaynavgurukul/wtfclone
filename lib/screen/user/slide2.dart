@@ -49,7 +49,6 @@ class _Slide2State extends State<Slide2> {
     store.preambleModel.lat = result.latLng.latitude.toString();
     store.preambleModel.long = result.latLng.longitude.toString();
     setState(() {
-      // user.setValue(address: result.formattedAddress);
     });
     // Handle the result in your way
   }
