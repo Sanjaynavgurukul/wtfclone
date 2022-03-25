@@ -8,7 +8,7 @@ class Attendance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<GymStore>().determinePosition();
+    context.read<GymStore>().determinePosition(context);
     return QRScanner();
   }
 }

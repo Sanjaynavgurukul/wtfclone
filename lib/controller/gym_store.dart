@@ -81,6 +81,10 @@ class GymStore extends ChangeNotifier {
 
   bool loading = false;
 
+  double lat = double.parse(locator<AppPrefs>().lat.getValue());
+  double lng = double.parse(locator<AppPrefs>().lng.getValue());
+  String address = locator<AppPrefs>().address.getValue();
+
   bool get isLoading => loading;
 
   GymPlanData selectedGymPlan;
@@ -140,7 +144,7 @@ class GymStore extends ChangeNotifier {
 
   String workoutTime;
 
-  Position currentPosition;
+  //Position currentPosition;
 
   Address currentAddress;
 
@@ -179,7 +183,7 @@ class GymStore extends ChangeNotifier {
 
   String timeElapsed = '';
 
-  Result currentAddressResult;
+  // Result currentAddressResult;
 
   Razorpay _razorpay;
 
@@ -481,13 +485,14 @@ class GymStore extends ChangeNotifier {
         message: 'Please wait...',
       ),
     );
+    print('mark attendence check lat and lng ---- $lat lng $lng');
     Map<String, dynamic> body = {
       'user_id': locator<AppPrefs>().memberId.getValue(),
       'mode': mode,
       'date': '${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
       'time': '${DateFormat('h:mm a').format(DateTime.now())}',
-      'lat': currentPosition.latitude,
-      'long': currentPosition.longitude,
+      'lat': lat,
+      'long': lng,
       "role": 'member',
       "qr_code": qrCode,
     };
@@ -882,15 +887,15 @@ class GymStore extends ChangeNotifier {
   Future<void> getAllGyms({
     BuildContext context,
   }) async {
-    await determinePosition();
+    await determinePosition(context);
     GymModel res = selectedNewLocation != null
         ? await RestDatasource().getGym(
             lat: selectedNewLocation.latLng.latitude.toString(),
             lng: selectedNewLocation.latLng.longitude.toString(),
           )
         : await RestDatasource().getGym(
-            lat: currentPosition.latitude.toString(),
-            lng: currentPosition.longitude.toString(),
+            lat: lat.toString(),
+            lng: lng.toString(),
           );
     if (res != null) {
       print('gym data is present');
@@ -1048,7 +1053,33 @@ class GymStore extends ChangeNotifier {
   ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
-  Future<void> determinePosition() async {
+  ///
+  void openPermissionWarningDialog(BuildContext context){
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Give Permission"),
+      onPressed: () {Navigator.pop(context); determinePosition(context);},
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text("This is my message."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  Future<void> determinePosition(BuildContext context) async {
+    print('determine location called');
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -1070,6 +1101,7 @@ class GymStore extends ChangeNotifier {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
+        openPermissionWarningDialog(context);
         return Future.error('Location permissions are denied');
       }
     }
@@ -1083,8 +1115,17 @@ class GymStore extends ChangeNotifier {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     try {
+      //TODO Lat Lng
       log('1');
-      currentPosition = await Geolocator.getCurrentPosition();
+      Position currentPosition = await Geolocator.getCurrentPosition();
+      if(currentPosition.latitude != null ||currentPosition.latitude != 0.0){
+        locator<AppPrefs>().lat.setValue(currentPosition.latitude.toString());
+      }
+
+      if(currentPosition.longitude != null ||currentPosition.longitude != 0.0){
+        locator<AppPrefs>().lng.setValue(currentPosition.longitude.toString());
+      }
+
       getUserLocation();
       notifyListeners();
       log(currentPosition.toJson().toString());
@@ -1106,19 +1147,6 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<Address> getUserLocation() async {
-    //call this async method from whereever you need
-    final coordinates =
-        new Coordinates(currentPosition.latitude, currentPosition.longitude);
-    var addresses = await Geocoder.google(Helper.googleMapKey)
-        .findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    print(
-        ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
-    currentAddress = first;
-    return first;
-  }
-
   Future<GeoAddress> _getGooglecoo(var lat, var long) async {
     const _host = 'https://maps.google.com/maps/api/geocode/json';
     const apiKey = Helper.googleMapKey;
@@ -1129,9 +1157,25 @@ class GymStore extends ChangeNotifier {
     final responseJson = json.decode(response.body);
     print(responseJson);
     GeoAddress add = GeoAddress.fromJson(responseJson);
-    currentAddressResult = add.results.first;
+
+    //TODO check here
+    // currentAddressResult = add.results.first;
+    locator<AppPrefs>().address.setValue(add.results.first.formattedAddress);
     notifyListeners();
     return Future.value(add);
+  }
+
+  Future<Address> getUserLocation() async {
+    //call this async method from whereever you need
+    final coordinates =
+        new Coordinates(lat, lng);
+    var addresses = await Geocoder.google(Helper.googleMapKey)
+        .findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    print(
+        ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+    currentAddress = first;
+    return first;
   }
 
   Future<void> getMySchedules({String date}) async {
@@ -1646,8 +1690,8 @@ class GymStore extends ChangeNotifier {
             lng: selectedNewLocation.latLng.longitude.toString())
         : await RestDatasource().getDiscoverNow(
             type: type,
-            lat: currentPosition.latitude.toString(),
-            lng: currentPosition.longitude.toString());
+            lat: lat.toString(),
+            lng: lng.toString());
     if (res != null) {
       selectedGymTypes = res;
       notifyListeners();
@@ -1777,8 +1821,8 @@ class GymStore extends ChangeNotifier {
     // 'long': currentPosition.longitude,
     GymDetailsModel res = await RestDatasource().getGymById(
         gymID: gymId,
-        lng: currentPosition.longitude.toString(),
-        lat: currentPosition.latitude.toString());
+        lng:lat.toString(),
+        lat: lng.toString());
     if (res != null) {
       selectedGymDetail = res;
       //TODO check plan :D
@@ -2337,20 +2381,22 @@ class GymStore extends ChangeNotifier {
       data.user_id = locator<AppPrefs>().memberId.getValue();
       data.name = locator<AppPrefs>().userName.getValue();
       data.email = locator<AppPrefs>().userEmail.getValue();
-      data.lat =
-      '${context
-          .read<GymStore>()
-          .currentPosition
-          ?.latitude ?? locator<AppPrefs>().memberData
-          .getValue()
-          .lat}';
-      data.long =
-      '${context
-          .read<GymStore>()
-          .currentPosition
-          ?.longitude ?? locator<AppPrefs>().memberData
-          .getValue()
-          .long}';
+      data.lat = lat.toString();
+      data.long = lng.toString();
+      // data.lat =
+      // '${context
+      //     .read<GymStore>()
+      //     .currentPosition
+      //     ?.latitude ?? locator<AppPrefs>().memberData
+      //     .getValue()
+      //     .lat}';
+      // data.long =
+      // '${context
+      //     .read<GymStore>()
+      //     .currentPosition
+      //     ?.longitude ?? locator<AppPrefs>().memberData
+      //     .getValue()
+      //     .long}';
     }
 
     if(!isLogin){

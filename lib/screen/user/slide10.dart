@@ -22,6 +22,7 @@ class _Slide10State extends State<Slide10> {
     final user = Provider.of<GymStore>(context, listen: false);
     // if (locator<AppPrefs>().gender.getValue() == 'male') {
     if(user.preambleModel.gender.toLowerCase() == 'male'){
+      print(' callled bmr men called --- ');
       context.read<BmrState>().bmrForMen(
         height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
         weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,
@@ -30,6 +31,7 @@ class _Slide10State extends State<Slide10> {
         fromAuth: user.preambleFromLogin,
       );
     } else {
+      print(' callled bmr women called --- ');
       context.read<BmrState>().bmrForWoMen(
         height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
         weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,

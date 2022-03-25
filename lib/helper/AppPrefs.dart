@@ -89,7 +89,12 @@ class AppPrefs {
         memberId =
             preferences.getString(PrefsConstants.userId, defaultValue: ''),
         type1 = preferences.getString(PrefsConstants.type1, defaultValue: ''),
-        type2 = preferences.getString(PrefsConstants.type2, defaultValue: '');
+        type2 = preferences.getString(PrefsConstants.type2, defaultValue: ''),
+        lat = preferences.getString(PrefsConstants.lat,
+            defaultValue: '28.596669322602807'),
+        lng = preferences.getString(PrefsConstants.lng,
+            defaultValue: '77.32866249084584'),
+        address = preferences.getString(PrefsConstants.address,defaultValue:'Noida Sector 8');
 
   final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
@@ -106,6 +111,7 @@ class AppPrefs {
   final Preference<UserData> userData;
   final Preference<String> gender;
   final Preference<bool> memberAdded;
+
   // final Preference<String> currentWorkoutDaySelected;
   final Preference<String> selectedMySchedule;
   final Preference<String> selectedSubmission;
@@ -121,6 +127,10 @@ class AppPrefs {
   final Preference<String> userName;
   final Preference<String> type1;
   final Preference<String> type2;
+  final Preference<String> lat;
+  final Preference<String> lng;
+  final Preference<String> address;
+
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
     return await preferences.setBool(key, value);
@@ -158,7 +168,6 @@ class AppPrefs {
 
   printBefore({String key, value}) =>
       print('Saving Key: $key &  value: $value');
-
 }
 
 class PrefsConstants {
@@ -223,4 +232,7 @@ class PrefsConstants {
   static const String type1 = 'type1';
   static const String type2 = 'type2';
   static const String diet_category_id = 'dietcatid';
+  static const String lat = 'lat';
+  static const String lng = 'lng';
+  static const String address = 'currentAddress';
 }

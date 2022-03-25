@@ -34,7 +34,7 @@ class _LoaderPageState extends State<LoaderPage> {
     Future.delayed(
       Duration(seconds: 5),
       () {
-        context.read<GymStore>().determinePosition();
+        // context.read<GymStore>().determinePosition();
         if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
           print('preamble check login init checked');

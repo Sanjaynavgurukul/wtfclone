@@ -1612,6 +1612,7 @@ class RestDatasource {
   }
 
   Future<bool> saveBmrProgress({Map<String, dynamic> body}) async {
+    print('save bmr body --- $body');
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;

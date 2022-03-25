@@ -64,7 +64,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         subTitle:
             'To help us serve you better and give you a wholesome experience, please complete your fitness profile.',
       ),
-      // Slide2(),//
+      Slide2(),//
       Slide1(), //
       Slide9(), //
       // Slide11(),
@@ -438,7 +438,15 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
                                 //age and gender :D
 
-                                if (currentIndex == 1) {
+                                if(currentIndex == 1){
+                                  if(user.preambleModel.location == null){
+                                    displaySnack('Please Select your location');
+                                    return;
+                                  }else{
+                                    gotoNext();
+                                  }
+                                }
+                               else if (currentIndex == 2) {
                                   if (user.preambleModel.gender == null ||
                                       user.preambleModel.gender.isEmpty) {
                                     displaySnack('Please select your gender!');
@@ -450,7 +458,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   } else {
                                     gotoNext();
                                   }
-                                } else if (currentIndex == 2) {
+                                } else if (currentIndex == 3) {
                                   if (user.preambleModel.body_type == null) {
                                     displaySnack(
                                         'Please select your body type!');
@@ -522,7 +530,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   else {
                                     gotoNext();
                                   }
-                                } else if (currentIndex == 3) {
+                                }
+                                else if (currentIndex == 4) {
                                   if (user.preambleModel.target_duration == null ||
                                       user.preambleModel.target_duration == 0.0) {
                                     displaySnack(
@@ -539,7 +548,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                   } else {
                                     gotoNext();
                                   }
-                                } else if (currentIndex == 4) {
+                                }
+                                else if (currentIndex == 5) {
                                   if (user.preambleModel.type1 == null ||
                                       user.preambleModel.type1.isEmpty) {
                                     displaySnack(
@@ -592,9 +602,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void gotoNext() {
-    if (currentIndex == 5) {
-      user.preambleModel.location = user.currentAddress.addressLine;
-      print('check uid -- ${user.preambleModel.uid}');
+    if (currentIndex == 6) {
+      user.preambleModel.user_id = locator<AppPrefs>().memberId.getValue();
+      // print('check uid -- ${user.preambleModel.uid}');
       updatePreambleData();
     } else {
       _controller.nextPage(

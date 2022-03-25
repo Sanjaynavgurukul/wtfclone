@@ -157,7 +157,7 @@ class _SearchBarState extends State<SearchBar> {
 
                 onTap: () {
                   FocusScope.of(context).unfocus();
-                  store.determinePosition();
+                  store.determinePosition(context);
                   NavigationService.navigateTo(Routes.searchScreen);
                 },
                 decoration: InputDecoration(
@@ -221,8 +221,8 @@ class _SearchBarState extends State<SearchBar> {
                       displayLocation: store.selectedNewLocation != null
                           ? LatLng(store.selectedNewLocation.latLng.latitude,
                               store.selectedNewLocation.latLng.longitude)
-                          : LatLng(store.currentPosition.latitude,
-                              store.currentPosition.longitude),
+                          : LatLng(store.lat,
+                              store.lng),
                     ),
                   ),
                 );

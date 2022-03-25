@@ -24,28 +24,28 @@ class _Slide2State extends State<Slide2> {
   }
 
   Future<void> fetchLocation() async {
-    // log('fetching');
-    // await context.read<GymStore>().determinePosition();
-    var get = context.read<GymStore>().currentAddressResult;
-    _place.text = '${get.formattedAddress}';
+    await context.read<GymStore>().determinePosition(context);
+    //TODO Location CHECK
+    // var get = context.read<GymStore>().currentAddressResult;
+    _place.text = '${context.read<GymStore>().address}';
     // context.read<UserController>().setValue(address: _place.text);
   }
 
   void showPlacePicker(GymStore store) async {
-    double lat = store.currentPosition != null && store.currentPosition.latitude != null ? store.currentPosition.latitude:28.596669322602807;
-    double lng = store.currentPosition != null &&store.currentPosition.longitude != null ? store.currentPosition.longitude:77.32866249084584;
+    // double lat = store.lat != null && store.currentPosition.latitude != null ? store.currentPosition.latitude:28.596669322602807;
+    // double lng = store.currentPosition != null &&store.currentPosition.longitude != null ? store.currentPosition.longitude:77.32866249084584;
     LocationResult result = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PlacePicker(
           Helper.googleMapKey,
           displayLocation: LatLng(
-              lat, lng),
+              store.lat, store.lng),
         ),
       ),
     );
     print(result);
     _place.text = result.formattedAddress;
-    store.preambleModel.location = result.formattedAddress;
+    store.preambleModel.location = _place.text;
     store.preambleModel.lat = result.latLng.latitude.toString();
     store.preambleModel.long = result.latLng.longitude.toString();
     setState(() {
