@@ -60,7 +60,7 @@ class _Slide10State extends State<Slide10> {
               padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
               color: AppColors.BACK_GROUND_BG,
               child: Text(
-                "To reach ${store.preambleModel.goalWeight.toStringAsFixed(2)} kg per week you need to ?",
+                "To reach ${store.preambleModel.target_duration.toStringAsFixed(2)} kg per week you need to ?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24.0,

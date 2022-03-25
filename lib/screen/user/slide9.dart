@@ -557,7 +557,7 @@ class _Slide9State extends State<Slide9> {
                       value: e,
                       onTap: () {
                         targetWeightLabel = e;
-                        user.preambleModel.targetWeightInKg = e == weightList[0];
+                        // user.preambleModel.targetWeightInKg = e == weightList[0];
                         setState(() {});
                       },
                       child: Text(
@@ -573,9 +573,7 @@ class _Slide9State extends State<Slide9> {
                   ),
                   title: Text ('Target weight',
                       style: TextStyle(color: Colors.white, fontSize: 12)),
-                  subtitle: user.preambleModel.targetWeightInKg
-                      ? valueLabel(user.preambleModel.targetWeight)
-                      : valueLabel(user.preambleModel.targetWeightInLbs),
+                  subtitle: valueLabel(user.preambleModel.target_weight.toInt()),
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -585,8 +583,7 @@ class _Slide9State extends State<Slide9> {
                               bottomRight: Radius.circular(8))),
                       padding: EdgeInsets.all(12),
                       width: double.infinity,
-                      child: user.preambleModel.targetWeightInKg
-                          ? NumberPicker(
+                      child: NumberPicker(
                         textStyle: TextStyle(
                           fontSize: 22,
                           color: Colors.white,
@@ -597,39 +594,17 @@ class _Slide9State extends State<Slide9> {
                           fontWeight: FontWeight.bold,
                         ),
                         itemHeight: 60,
-                        value:  user.preambleModel.targetWeight??0,
+                        value:  user.preambleModel.target_weight??40,
                         minValue: 0,
                         maxValue: 200,
                         step: 1,
                         haptics: true,
                         onChanged: (value) {
                           setState(() {
-                            user.preambleModel.targetWeight = value;
+                            user.preambleModel.target_weight = value;
                           });
                         },
                       )
-                          : NumberPicker(
-                        textStyle: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                        ),
-                        selectedTextStyle: TextStyle(
-                          fontSize: 45,
-                          color: Color(0xff922224),
-                          fontWeight: FontWeight.bold,
-                        ),
-                        itemHeight: 60,
-                        value: user.preambleModel.targetWeightInLbs??0,
-                        minValue: 0,
-                        maxValue: 600,
-                        step: 1,
-                        haptics: true,
-                        onChanged: (value) {
-                          setState(() {
-                            user.preambleModel.targetWeightInLbs = value;
-                          });
-                        },
-                      ),
                     )
                   ],
                 ),

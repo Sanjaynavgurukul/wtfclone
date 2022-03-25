@@ -209,7 +209,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
 
   void processToBuy() async {
     print('method called------');
-    Map<String, dynamic> body = {};
+    Map<String, dynamic> body = {
+
+    };
     // setState(() {
     //   subscriptionBody = body;
     // });

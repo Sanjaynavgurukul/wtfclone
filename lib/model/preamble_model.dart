@@ -23,12 +23,6 @@ class PreambleModel {
   int weightInLbs;
   String weight;
 
-  bool targetWeightInKg = true;
-  int targetWeight = 50;
-  int targetWeightInLbs;
-
-  bool gainingWeight = true;
-  double goalWeight = 0.25;
   List<String> existing_disease = [];
   bool is_smoking = false;
   bool is_drinking = false;
@@ -43,8 +37,8 @@ class PreambleModel {
   String uid;
   String name;
   String email;
-  double target_weight;
-  String target_duration = '30 days';
+  int target_weight = 40;
+  double target_duration= 0.35;
   String location;
   String lat;
   String long;
@@ -76,11 +70,6 @@ class PreambleModel {
     // this.weightInLbs = json["weightInLbs"];
     this.weightKg = convertWeightFromJson(value:json['weight']);
     this.weightInLbs = convertWeightFromJson(value: json['weight']);
-    this.targetWeightInKg = json["targetWeightInKg"] ?? true;
-    this.targetWeight = json["targetWeight"];
-    this.targetWeightInLbs = json["targetWeightInLbs"];
-    this.gainingWeight = json["gainingWeight"] ?? true;
-    this.goalWeight = json["goalWeight"] ?? 0.25;
     this.existing_disease = convertMedical(json["existing_disease"] ?? []);
     // this.existing_disease = json["existing_disease"] as List;
     this.is_smoking = convertBool(json["is_smoking"]) ?? false;
@@ -91,8 +80,8 @@ class PreambleModel {
     this.name = json["name"];
     this.email = json["email"];
     this.user_uid = json["user_uid"];
-    this.target_weight = double.parse(json["target_weight"]);
-    this.target_duration = json["target_duration"];
+    this.target_weight = convertTargetWeight(json["target_weight"].toString() ??'0');
+    this.target_duration = double.parse(json["target_duration"].toString() ?? '0.25');
     this.location = json["location"];
     this.lat = json["lat"];
     this.long = json["long"];
@@ -102,41 +91,21 @@ class PreambleModel {
     this.tainer_notes = json["tainer_notes"];
   }
 
-  int getTargetWeight(String weight){
-    int d = int.parse(weight??'0');
-    if(d ==0){
+
+  int convertTargetWeight(String targetWeight){
+    bool inKg = targetWeight.contains(RegExp('_kg'));
+    bool inDouble = targetWeight.contains('.');
+    if(inDouble){
       return 40;
+    }
+    else if(inKg){
+      int d = int.parse(targetWeight.replaceAll(RegExp('_kg'), ''));
+      return d == 0 ?40:d;
     }else{
-      return d;
+      int d = int.parse(targetWeight);
+      return d == 0 ?40:d;
     }
-  }
 
-  String convertListToString(List<String> data){
-    if(data.isEmpty || data == null) return '';
-    else{
-      String commaSeparatedNames= data
-          .map((item) => item)
-          .toList()
-          .join(",");
-      print("convert of string  -- $commaSeparatedNames");
-      return commaSeparatedNames;
-    }
-  }
-  static List<String> convertMedical(String value) {
-    // var ab = json.decode(value);
-    print('something $value');
-    var ab = (value.split(','));
-    print('something $ab');
-    // List<String> v = json.decode(value).cast < List<String>();
-    return ab;
-  }
-
-  static bool convertBool(var value) {
-    if (value == 'false') {
-      return false;
-    } else {
-      return true;
-    }
   }
 
   Map<String, dynamic> toJsonPreamble(PreambleModel data) => {
@@ -168,12 +137,6 @@ class PreambleModel {
     "weightKg": data.weightKg,
     "weightInLbs": data.weightInLbs,
     'weight': convertWeightToJson(value: data),
-
-    "targetWeightInKg": data.targetWeightInKg,
-    "targetWeight": data.targetWeight,
-    "targetWeightInLbs": data.targetWeightInLbs,
-    "gainingWeight": data.gainingWeight,
-    "goalWeight": data.goalWeight,
     // "existing_disease": data.existing_disease.toString(),
     "existing_disease": convertListToString(data.existing_disease),
     "is_smoking": data.is_smoking,
@@ -185,8 +148,8 @@ class PreambleModel {
     "uid": data.uid,
     "name": data.name,
     "email": data.email,
-    "target_weight": data.goalWeight, //data.target_weight,
-    "target_duration": data.target_duration,
+    "target_weight": data.target_weight.toString(), //data.target_weight,
+    "target_duration": data.target_duration.toString(),
     "location": data.location,
     "lat": data.lat,
     "long": data.long,
@@ -251,6 +214,8 @@ class PreambleModel {
     bool isFeet = value.contains(RegExp('_ft'));
     bool inDouble = value.contains(RegExp('.'));
     bool isCm = value.contains(RegExp('_cm'));
+    bool isFeetFull = value.contains(RegExp('_feet'));
+
     if(isCm){
       return 5.0;
     }else{
@@ -295,6 +260,44 @@ class PreambleModel {
     } else {
       int d = int.parse(value.replaceAll(RegExp('_lbs'), ''));
       return d == 0 ?40:d;
+    }
+  }
+
+  int getTargetWeight(String weight){
+    int d = int.parse(weight??'0');
+    if(d ==0){
+      return 40;
+    }else{
+      return d;
+    }
+  }
+
+  String convertListToString(List<String> data){
+    if(data.isEmpty || data == null) return '';
+    else{
+      String commaSeparatedNames= data
+          .map((item) => item)
+          .toList()
+          .join(",");
+      print("convert of string  -- $commaSeparatedNames");
+      return commaSeparatedNames;
+    }
+  }
+
+  static List<String> convertMedical(String value) {
+    // var ab = json.decode(value);
+    print('something $value');
+    var ab = (value.split(','));
+    print('something $ab');
+    // List<String> v = json.decode(value).cast < List<String>();
+    return ab;
+  }
+
+  static bool convertBool(var value) {
+    if (value == 'false') {
+      return false;
+    } else {
+      return true;
     }
   }
 

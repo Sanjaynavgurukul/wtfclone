@@ -85,7 +85,7 @@ class _Slide7State extends State<Slide7> {
                   child: Column(
                     children: [
                       Text(
-                        user.preambleFromLogin ? 'How fast do you want to achieve this goal':"How fast do you want to ${user.preambleModel.targetWeight > user.preambleModel.weightKg ? 'gain your weight' : 'lose your weight'}?",
+                        user.preambleFromLogin ? 'How fast do you want to achieve this goal':"How fast do you want to ${user.preambleModel.target_weight > user.preambleModel.weightKg ? 'gain your weight' : 'lose your weight'}?",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,
@@ -97,7 +97,7 @@ class _Slide7State extends State<Slide7> {
                       ),
                       Center(
                         child: Text(
-                          '${user.preambleModel.goalWeight.toStringAsFixed(2)} kg / week',
+                          '${user.preambleModel.target_duration.toStringAsFixed(2)} kg / week',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 22,
@@ -111,11 +111,11 @@ class _Slide7State extends State<Slide7> {
                         padding:
                         EdgeInsets.only(left: 12, right: 12, bottom: 20),
                         child: FluidSlider(
-                          value: user.preambleModel.goalWeight,
+                          value: user.preambleModel.target_duration,
                           thumbColor: Color(0xff922224),
                           onChanged: (double newValue) {
                             setState(() {
-                              user.preambleModel.goalWeight = newValue;
+                              user.preambleModel.target_duration = newValue;
                             });
                           },
                           min: 0.0,

@@ -19,6 +19,7 @@ import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
 import 'package:wtf/screen/user/slide12.dart';
+import 'package:wtf/screen/user/slide2.dart';
 import 'package:wtf/screen/user/slide7.dart';
 import 'package:wtf/screen/user/slide9.dart';
 
@@ -62,7 +63,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         title: 'Welcome to WTF',
         subTitle:
             'To help us serve you better and give you a wholesome experience, please complete your fitness profile.',
-      ), //
+      ),
+      // Slide2(),//
       Slide1(), //
       Slide9(), //
       // Slide11(),
@@ -489,33 +491,40 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     displaySnack(
                                         'Please choose your valid weight in lbs!');
                                     return;
-                                  } //validating target weight in kg
-                                  else if (user
-                                          .preambleModel.targetWeightInKg &&
-                                      (user.preambleModel.targetWeight ==
-                                              null ||
-                                          user.preambleModel.targetWeight ==
-                                              0)) {
+                                  }
+                                  else if(user.preambleModel.target_weight  == 0 || user.preambleModel.target_weight == null){
                                     displaySnack(
                                         'Please choose your valid target weight in kg!');
                                     return;
-                                  } //validating target weight in lbs
-                                  else if (!user
-                                          .preambleModel.targetWeightInKg &&
-                                      (user.preambleModel.targetWeightInLbs ==
-                                              null ||
-                                          user.preambleModel
-                                                  .targetWeightInLbs ==
-                                              0)) {
-                                    displaySnack(
-                                        'Please choose your valid target weight in lbs!');
-                                    return;
-                                  } else {
+                                  }
+                                  // else if (user
+                                  //         .preambleModel.target_weight &&
+                                  //     (user.preambleModel.targetWeight ==
+                                  //             null ||
+                                  //         user.preambleModel.targetWeight ==
+                                  //             0)) {
+                                  //   displaySnack(
+                                  //       'Please choose your valid target weight in kg!');
+                                  //   return;
+                                  // } //validating target weight in lbs
+                                  // else if (!user
+                                  //         .preambleModel.targetWeightInKg &&
+                                  //     (user.preambleModel.targetWeightInLbs ==
+                                  //             null ||
+                                  //         user.preambleModel
+                                  //                 .targetWeightInLbs ==
+                                  //             0)) {
+                                  //   displaySnack(
+                                  //       'Please choose your valid target weight in lbs!');
+                                  //   return;
+                                  // }
+
+                                  else {
                                     gotoNext();
                                   }
                                 } else if (currentIndex == 3) {
-                                  if (user.preambleModel.goalWeight == null ||
-                                      user.preambleModel.goalWeight == 0.0) {
+                                  if (user.preambleModel.target_duration == null ||
+                                      user.preambleModel.target_duration == 0.0) {
                                     displaySnack(
                                         'Please select valid goal weight!');
                                     return;

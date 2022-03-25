@@ -268,9 +268,9 @@ class MyGoals extends StatelessWidget {
                             ),
                             children: [
                               if (snapshot != null &&
-                                  snapshot.targetWeight != null)
+                                  snapshot.target_weight != null)
                                 TextSpan(
-                                  text: snapshot.targetWeight.toString() + " Kg",
+                                  text: snapshot.target_weight.toString() + " Kg",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
