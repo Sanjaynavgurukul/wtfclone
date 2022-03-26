@@ -49,8 +49,13 @@ class _Slide0State extends State<Slide0> {
     return Future.value(false);
   }
 
-  Future<void> fetchLocation() async {
-    await context.read<GymStore>().determinePosition(context);
+  Future<void> fetchLocation(GymStore store) async {
+    await store.determinePosition(context).then((value){
+      print('status of network -- $value');
+      if(!value){
+        showPlacePicker(store);
+      }
+    });
     //TODO Location CHECK
 
     locationValue = '${context.read<GymStore>().getAddress()}';
@@ -138,63 +143,127 @@ class _Slide0State extends State<Slide0> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 12,),
+                // Container(
+                //   child: Row(children: [
+                //     Expanded(child: TextFormField(
+                //       enabled: false,
+                //     initialValue: locationValue??'',
+                //     onChanged: (val) {
+                //       locationValue = val;
+                //       user.preambleModel.location = locationValue ;
+                //       setState(() {});
+                //     },
+                //       decoration: InputDecoration(
+                //         contentPadding: EdgeInsets.only(
+                //           top: 0.0,
+                //           bottom: 0.0,
+                //           left: 17,
+                //         ),
+                //         hintText: 'Enter Your Location',
+                //         hintStyle: TextStyle(
+                //           color: Colors.white70,
+                //           fontSize: 13.0,
+                //         ),
+                //         filled: true,
+                //         fillColor: Color(0xff2d2d2d),
+                //         border: OutlineInputBorder(
+                //           borderSide: BorderSide.none,
+                //           borderRadius: BorderRadius.circular(4.0),
+                //         ),
+                //       ),
+                //     ),),
+                //     InkWell(
+                //       onTap: () {
+                //         showPlacePicker(user);
+                //       },
+                //       child: Container(
+                //         margin: EdgeInsets.all(5.0),
+                //         height: 25,
+                //         width: 25,
+                //         decoration: BoxDecoration(
+                //             gradient: LinearGradient(
+                //               begin: Alignment.topLeft,
+                //               end: Alignment.bottomRight,
+                //               colors: [
+                //                 Color(0xffBA1406),
+                //                 Color(0xff490000),
+                //               ],
+                //             ),
+                //             borderRadius: BorderRadius.circular(4.0)),
+                //         child: Center(
+                //           child: Icon(
+                //             Icons.location_on,
+                //             color: Colors.white,
+                //             size: 16.0,
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   ],),
+                // ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: TextFormField(
+                  child: InkWell(
                     onTap: (){
-                      fetchLocation();
+                      // showPlacePicker(user);
+                      fetchLocation(user);
                     },
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        top: 0.0,
-                        bottom: 0.0,
-                        left: 17,
-                      ),
-                      hintText: 'Enter Your Location',
-                      hintStyle: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13.0,
-                      ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          showPlacePicker(user);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(5.0),
-                          height: 25,
-                          width: 25,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xffBA1406),
-                                  Color(0xff490000),
-                                ],
+                    child: TextFormField(
+
+                      enabled: false,
+                      focusNode: FocusNode(canRequestFocus: false),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          top: 0.0,
+                          bottom: 0.0,
+                          left: 17,
+                        ),
+                        hintText: 'Enter Your Location',
+                        hintStyle: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13.0,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            showPlacePicker(user);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(5.0),
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color(0xffBA1406),
+                                    Color(0xff490000),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(4.0)),
+                            child: Center(
+                              child: Icon(
+                                Icons.location_on,
+                                color: Colors.white,
+                                size: 16.0,
                               ),
-                              borderRadius: BorderRadius.circular(4.0)),
-                          child: Center(
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                              size: 16.0,
                             ),
                           ),
                         ),
+                        filled: true,
+                        fillColor: Color(0xff2d2d2d),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
                       ),
-                      filled: true,
-                      fillColor: Color(0xff2d2d2d),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
+                      initialValue: locationValue??'',
+                      onChanged: (val) {
+                        locationValue = val;
+                        user.preambleModel.location = locationValue ;
+                        setState(() {});
+                      },
                     ),
-                    initialValue: locationValue??'',
-                    onChanged: (val) {
-                      locationValue = val;
-                      user.preambleModel.location = locationValue ;
-                      setState(() {});
-                    },
                   ),
                 ),
                 SizedBox(height: 40,),

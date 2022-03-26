@@ -219,8 +219,8 @@ class _SearchBarState extends State<SearchBar> {
                     builder: (context) => PlacePicker(
                       Helper.googleMapKey,
                       displayLocation: store.selectedNewLocation != null
-                          ? LatLng(store.selectedNewLocation.latLng.latitude,
-                              store.selectedNewLocation.latLng.longitude)
+                          ? LatLng(store.selectedNewLocation.latLng.latitude??store.getLat(),
+                              store.selectedNewLocation.latLng.longitude??store.getLng())
                           : LatLng(store.getLat(),
                               store.getLng()),
                     ),

@@ -1056,11 +1056,11 @@ class GymStore extends ChangeNotifier {
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
   ///
-  void openPermissionWarningDialog(BuildContext context){
+  Future<bool> openPermissionWarningDialog(BuildContext context){
     // set up the button
     Widget okButton = TextButton(
       child: Text("Give Permission",style: TextStyle(color: AppConstants.bgColor),),
-      onPressed: () {Navigator.pop(context); determinePosition(context);},
+      onPressed: () {Navigator.pop(context,true); determinePosition(context);},
     );
 
     // set up the AlertDialog
@@ -1073,14 +1073,14 @@ class GymStore extends ChangeNotifier {
     );
 
     // show the dialog
-    showDialog(
+    return showDialog(
       context: context,
       builder: (BuildContext context) {
         return alert;
       },
     );
   }
-  Future<String> determinePosition(BuildContext context) async {
+  Future<bool> determinePosition(BuildContext context) async {
     print('determine location called');
     bool serviceEnabled;
     LocationPermission permission;
@@ -1091,7 +1091,8 @@ class GymStore extends ChangeNotifier {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      log('Location services are disabled.');
+      return false;
     }
 
     permission = await Geolocator.checkPermission();
@@ -1103,15 +1104,16 @@ class GymStore extends ChangeNotifier {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        openPermissionWarningDialog(context);
-        return Future.error('Location permissions are denied');
+       return await openPermissionWarningDialog(context);
+        log('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
+      log(
           'Location permissions are permanently denied, we cannot request permissions.');
+      return false;
     }
 
     // When we reach here, permissions are granted and we can
@@ -1149,8 +1151,10 @@ class GymStore extends ChangeNotifier {
       // print('address:: ${currentAddress.toMap()}');
       // log(currentAddress.toMap().toString());
       notifyListeners();
+      return true;
     } catch (e) {
       log(e.toString());
+      return false;
     }
   }
 
