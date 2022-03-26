@@ -143,7 +143,7 @@ class GymStore extends ChangeNotifier {
 
   //Position currentPosition;
 
-  Address currentAddress;
+  // Address currentAddress;
 
   GymOffers selectedGymOffer;
 
@@ -226,7 +226,8 @@ class GymStore extends ChangeNotifier {
   DietConsumed dietConsumed;
 
   String discoverType = '';
-  LocationResult selectedNewLocation;
+  // LocationResult selectedNewLocation;
+  double _tempLat = 0.0,_tempLng = 0.0;
 
   double sessionRating = 0.0;
 
@@ -317,12 +318,12 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> setNewLocation(
-      {BuildContext context, LocationResult result}) async {
-    selectedNewLocation = result;
-    notifyListeners();
-    init(context: context);
-  }
+  // Future<void> setNewLocation(
+  //     {BuildContext context, LocationResult result}) async {
+  //   selectedNewLocation = result;
+  //   notifyListeners();
+  //   init(context: context);
+  // }
 
   Future<void> setFreeSession({BuildContext context, bool val}) async {
     isFreeSession = val;
@@ -890,12 +891,14 @@ class GymStore extends ChangeNotifier {
   }) async {
     if(!preambleFromLogin)
       await determinePosition(context);
-    GymModel res = selectedNewLocation != null
+    GymModel res =
+    tempLat != 0.0 && tempLng != 0.0
         ? await RestDatasource().getGym(
-            lat: selectedNewLocation.latLng.latitude.toString(),
-            lng: selectedNewLocation.latLng.longitude.toString(),
+            lat: tempLat.toString(),
+            lng: tempLng.toString(),
           )
-        : await RestDatasource().getGym(
+        :
+    await RestDatasource().getGym(
             lat: getLat().toString(),
             lng: getLng().toString(),
           );
@@ -1098,6 +1101,9 @@ class GymStore extends ChangeNotifier {
     bool serviceEnabled;
     LocationPermission permission;
 
+    tempLat = getLat();
+    tempLng = getLng();
+
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -1217,9 +1223,7 @@ class GymStore extends ChangeNotifier {
     var addresses = await Geocoder.google(Helper.googleMapKey)
         .findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print(
-        ' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
-    currentAddress = first;
+    locator<AppPrefs>().address.setValue('${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
     return first;
   }
 
@@ -1728,11 +1732,11 @@ class GymStore extends ChangeNotifier {
     loading = true;
     discoverType = type;
     notifyListeners();
-    GymTypes res = selectedNewLocation != null
+    GymTypes res = tempLat != 0.0 && tempLng != 0.0
         ? await RestDatasource().getDiscoverNow(
             type: type,
-            lat: selectedNewLocation.latLng.latitude.toString(),
-            lng: selectedNewLocation.latLng.longitude.toString())
+            lat: tempLat.toString(),
+            lng: tempLng.toString())
         : await RestDatasource().getDiscoverNow(
             type: type, lat: getLat().toString(), lng: getLng().toString());
     if (res != null) {
@@ -2484,5 +2488,18 @@ class GymStore extends ChangeNotifier {
 
   Future<void> getLastSeen() async {
     await RestDatasource().getLastSeen();
+  }
+
+  get tempLng => _tempLng;
+
+  set tempLng(value) {
+    _tempLng = value;
+  }
+
+
+  double get tempLat => _tempLat;
+
+  set tempLat(double value) {
+    _tempLat = value;
   }
 }

@@ -92,7 +92,7 @@ class _SearchScreenState extends State<SearchScreen>
                     // Padding(padding: EdgeInsets.all(8.0)),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: store.currentAddress != null
+                      child: store.getAddress() != null
                           ? TextFormField(
                         autofocus: true,
                         controller: _searchController,

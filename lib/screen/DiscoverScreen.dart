@@ -218,21 +218,29 @@ class _SearchBarState extends State<SearchBar> {
                   MaterialPageRoute(
                     builder: (context) => PlacePicker(
                       Helper.googleMapKey,
-                      displayLocation: store.selectedNewLocation != null
-                          ? LatLng(store.selectedNewLocation.latLng.latitude??store.getLat(),
-                              store.selectedNewLocation.latLng.longitude??store.getLng())
-                          : LatLng(store.getLat(),
+                      displayLocation:
+                      // store.selectedNewLocation != null
+                      //     ? LatLng(store.selectedNewLocation.latLng.latitude??store.getLat(),
+                      //         store.selectedNewLocation.latLng.longitude??store.getLng())
+                      //     :
+                      LatLng(store.getLat(),
                               store.getLng()),
                     ),
                   ),
                 );
                 print(result);
                 setState(() {
+                  print('check condition latlng');
                   if (result != null) {
-                    store.setNewLocation(
-                      result: result,
-                      context: context,
-                    );
+                    print('check condition latlng not null');
+                    store.tempLat = result.latLng.latitude;
+                    store.tempLng = result.latLng.longitude;
+                    // store.setNewLocation(
+                    //   result: result,
+                    //   context: context,
+                    // );
+                  }else{
+                    print('check condition latlng null');
                   }
                 });
               },
