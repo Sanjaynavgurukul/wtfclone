@@ -25,7 +25,7 @@ class Slide0 extends StatefulWidget {
 
 class _Slide0State extends State<Slide0> {
   final _user = TextEditingController();
-  String locationValue = '';
+  String addressVal = '';
   @override
   void initState() {
     super.initState();
@@ -54,13 +54,20 @@ class _Slide0State extends State<Slide0> {
       print('status of network -- $value');
       if(!value){
         showPlacePicker(store);
+      }else{
+        print('location else condition called dd --- ');
+        if(addressVal.isNotEmpty){
+          print('location else condition called --- is not empty ');
+          showPlacePicker(store);
+        }else{
+          addressVal = '${context.read<GymStore>().getAddress()}';
+          print('location else condition called --- $addressVal');
+        setState(() {
+        });
+        }
       }
     });
     //TODO Location CHECK
-
-    locationValue = '${context.read<GymStore>().getAddress()}';
-    setState(() {
-    });
   }
 
   void showPlacePicker(GymStore store) async {
@@ -75,9 +82,11 @@ class _Slide0State extends State<Slide0> {
         ),
       ),
     );
-    print(result);
-    locationValue = result.formattedAddress;
-    store.preambleModel.location = locationValue;
+    print('check result ${result.formattedAddress}');
+    print('check result ${result.latLng.longitude}');
+    print('check result ${result.latLng.latitude}');
+    addressVal = result.formattedAddress;
+    store.preambleModel.location = addressVal;
     store.preambleModel.lat = result.latLng.latitude.toString();
     store.preambleModel.long = result.latLng.longitude.toString();
     setState(() {
@@ -87,10 +96,13 @@ class _Slide0State extends State<Slide0> {
 
   @override
   Widget build(BuildContext context) {
+    print('cehck result $addressVal');
     return Consumer<GymStore>(
       builder: (context, user, snapshot) {
         if(user.preambleModel.location != null && user.preambleModel.location.isNotEmpty){
-          locationValue = user.preambleModel.location;
+          addressVal = user.preambleModel.location;
+        }else{
+          user.preambleModel.location = addressVal;
         }
         return Container(
           padding: EdgeInsets.only(top: 40,left: 18,right: 18),
@@ -100,15 +112,15 @@ class _Slide0State extends State<Slide0> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Hey ${locator<AppPrefs>().userName.getValue()}!',
+                  'Hey ${locator<AppPrefs>().userName.getValue().capitalize()}!',
                   style: TextStyle(
                     fontSize: 22.0,
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white,
                   ),
                 ),
                 UIHelper.verticalSpace(10.0),
                 Text(
-                  widget.title,
+                  widget.title.capitalize(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30.0,
@@ -124,6 +136,7 @@ class _Slide0State extends State<Slide0> {
                     style: TextStyle(
                       fontSize: 14.0,
                       color: Colors.white,
+                      fontWeight: FontWeight.w100
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 5,
@@ -131,18 +144,13 @@ class _Slide0State extends State<Slide0> {
                   ),
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 80,
                 ),
                 SvgPicture.asset('assets/svg/Location.svg',
                   semanticsLabel: 'Location Image',width: 200,),
                 SizedBox(
                   height: 40,
                 ),
-                Text(
-                  'Where do you live',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 12,),
                 // Container(
                 //   child: Row(children: [
                 //     Expanded(child: TextFormField(
@@ -209,9 +217,9 @@ class _Slide0State extends State<Slide0> {
                       fetchLocation(user);
                     },
                     child: TextFormField(
-
+                      controller: TextEditingController(text: addressVal ),
                       enabled: false,
-                      focusNode: FocusNode(canRequestFocus: false),
+                      style: TextStyle(fontWeight:FontWeight.w300),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(
                           top: 0.0,
@@ -257,11 +265,10 @@ class _Slide0State extends State<Slide0> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                       ),
-                      initialValue: locationValue??'',
                       onChanged: (val) {
-                        locationValue = val;
-                        user.preambleModel.location = locationValue ;
-                        setState(() {});
+                        // addressVal = val;
+                        // user.preambleModel.location = addressVal ;
+                        // setState(() {});
                       },
                     ),
                   ),
