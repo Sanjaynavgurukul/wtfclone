@@ -703,7 +703,7 @@ class GymStore extends ChangeNotifier {
       print(
           'subscription added   --- event type is: ${subscriptionBody['type']}');
       if (isDone) {
-        _nullData();
+        //_nullData();
         if (subscriptionBody['type'] == 'event') {
           await addEventParticipation(context: paymentContext);
 

@@ -51,70 +51,73 @@ class _Slide10State extends State<Slide10> {
     users = context.watch<GymStore>();
     bmrState = context.watch<BmrState>();
 
-    return Consumer<GymStore>(
-      builder: (context, store, child){
-        store.preambleModel.bmr_result = bmrState.bmrResult;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
-              color: AppColors.BACK_GROUND_BG,
-              child: Text(
-                "To reach ${store.preambleModel.target_duration.toStringAsFixed(2)} kg per week you need to ?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  color: Colors.white,
+    return Scaffold(
+      backgroundColor: AppColors.BACK_GROUND_BG,
+      body: Consumer<GymStore>(
+        builder: (context, store, child){
+          store.preambleModel.bmr_result = bmrState.bmrResult;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 40,bottom: 20,left: 18,right: 18),
+                color: AppColors.BACK_GROUND_BG,
+                child: Text(
+                  "To reach ${store.preambleModel.target_duration.toStringAsFixed(2)} kg per week you need to ?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 18,right: 18),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/eat_outline.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/glass-water-outline.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
-                  ),
-                ],
+              SizedBox(
+                height: 40,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 18,right: 18),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk Minimum'),
-                  ),
-                  SizedBox(width: 20,),
-                  Expanded(
-                    flex: 1,
-                    child: item(image: 'assets/gif/burn_outline.gif',value: ' calories every day',count: '500',label: 'Burn'),
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.only(left: 18,right: 18),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: item(image: 'assets/gif/eat_outline.gif',value: ' calories every day',count: '${bmrState.bmrResult}',label: 'Eat'),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      flex: 1,
+                      child: item(image: 'assets/gif/glass-water-outline.gif',value: ' of water every day',count: '4000 ml',label: 'Drink'),
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
-        );
-      }
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 18,right: 18),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: item(image: 'assets/gif/walking-person-outline.gif',value: ' steps every day',count: '8000',label: 'Walk Minimum'),
+                    ),
+                    SizedBox(width: 20,),
+                    Expanded(
+                      flex: 1,
+                      child: item(image: 'assets/gif/burn_outline.gif',value: ' calories every day',count: '500',label: 'Burn'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          );
+        }
+      ),
     );
   }
 

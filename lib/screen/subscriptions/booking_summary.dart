@@ -291,7 +291,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       );
       if (isDone) {
         gymStore.init(context: context);
-        nullData();
+        //nullData();
         NavigationService.navigateTo(Routes.purchaseDone);
       } else {
         FlashHelper.errorBar(context, message: 'Please Try again!');
