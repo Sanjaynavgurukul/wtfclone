@@ -447,7 +447,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                //  }
                                // else
                                 if(currentIndex == 0){
-                                 if(user.preambleModel.location == null){
+                                 if(user.preambleModel.location == null || user.preambleModel.location.isEmpty){
                                   displaySnack('Please Select your location');
                                   return;
                                 }else{
