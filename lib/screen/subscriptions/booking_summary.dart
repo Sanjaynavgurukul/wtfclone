@@ -291,11 +291,17 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
       );
       if (isDone) {
         gymStore.init(context: context);
+        nullData();
         NavigationService.navigateTo(Routes.purchaseDone);
       } else {
         FlashHelper.errorBar(context, message: 'Please Try again!');
       }
     }
+  }
+
+  void nullData(){
+    //gymStore.selectedGymDetail = null;
+    gymStore.selectedGymPlan = null;
   }
 
   @override

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer__ructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -123,6 +124,14 @@ class _Slide0State extends State<Slide0> {
                     maxLines: 5,
                     softWrap: true,
                   ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                SvgPicture.asset('assets/svg/Location.svg',
+                  semanticsLabel: 'Location Image',width: 200,),
+                SizedBox(
+                  height: 40,
                 ),
                 Text(
                   'Where do you live',

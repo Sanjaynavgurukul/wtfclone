@@ -680,6 +680,11 @@ class GymStore extends ChangeNotifier {
     return verifyPayment;
   }
 
+  void _nullData(){
+    //selectedGymDetail = null;
+    selectedGymPlan = null;
+  }
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     print(
         'PAYMENT SUCCESS:: id: ${response.orderId} \n signature: ${response.signature} \n payId: ${response.paymentId}');
@@ -699,6 +704,7 @@ class GymStore extends ChangeNotifier {
       print(
           'subscription added   --- event type is: ${subscriptionBody['type']}');
       if (isDone) {
+        _nullData();
         if (subscriptionBody['type'] == 'event') {
           await addEventParticipation(context: paymentContext);
 
@@ -1724,10 +1730,12 @@ class GymStore extends ChangeNotifier {
     bool isFree = false,
     String gymId,
   }) {
+    _nullData();
     selectedSlotDetails = null;
     selectedAddOnSlot = null;
     selectedSlotData = null;
     selectedTrainer = null;
+
     isFreeSession = isFree;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
@@ -1829,6 +1837,8 @@ class GymStore extends ChangeNotifier {
   //Get GYm By ID
   //TODO get gym by id
   Future<void> getGymByID({BuildContext context, String gymId}) async {
+    //null data
+    _nullData();
     loading = true;
     notifyListeners();
     // 'lat': currentPosition.latitude,
