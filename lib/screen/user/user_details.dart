@@ -455,7 +455,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                  }
                                 }
                                  else if (currentIndex == 1) {
-
                                   if (user.preambleModel.gender == null ||
                                       user.preambleModel.gender.isEmpty) {
                                     displaySnack('Please select your gender!');
