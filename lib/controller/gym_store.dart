@@ -92,6 +92,7 @@ class GymStore extends ChangeNotifier {
   GymAddOn allLiveClasses;
 
   PreambleModel preambleModel = new PreambleModel();
+
   bool preambleFromLogin = true;
 
   GymAddOn allAddonClasses;
@@ -2442,7 +2443,6 @@ class GymStore extends ChangeNotifier {
     // notifyListeners();
     return data.hasData;
   }
-
 
   Future<void> getLastSeen()async{
     await RestDatasource().getLastSeen();
