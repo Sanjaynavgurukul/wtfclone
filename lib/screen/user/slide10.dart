@@ -129,12 +129,12 @@ class _Slide10State extends State<Slide10> {
           padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
-              color: Colors.white
+              color: Color(0xff2b2b2b)
 
           ),
           child: Column(
             children: [
-              Image.asset(image??'assets/gif/upcoming.gif',width: 70,height: 70,),SizedBox(height: 8,),Text(label??'No Label',style: TextStyle(color: Colors.black),)
+              Image.asset(image??'assets/gif/upcoming.gif',width: 70,height: 70,),SizedBox(height: 8,),Text(label??'No Label',style: TextStyle(color: Colors.white),)
             ],
           ),
         ),SizedBox(height: 12,),
