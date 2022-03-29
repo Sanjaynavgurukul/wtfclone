@@ -1561,9 +1561,6 @@ class RestDatasource {
 
   Future<bool> updateMember(Map<String, dynamic> body) async {
     print('response from update member data : $body');
-    // body['user_id'] = locator<AppPrefs>().memberId.getValue();
-    // String id =  locator<AppPrefs>().memberId.getValue();
-    // print('response from update member data : $id');
     String url = APIHelper.updateMember;
     print('adding member : $url');
     try {
@@ -1653,7 +1650,6 @@ class RestDatasource {
       return false;
     }
   }
-
 
   Future<void> getLastSeen()async{
     String userId = locator<AppPrefs>().memberId.getValue();

@@ -500,14 +500,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                         'Please choose your valid weight in kg!');
                                     return;
                                   } //validating your weight in pound
-                                  else if (!user.preambleModel.weightInKg &&
-                                      (user.preambleModel.weightInLbs == null ||
-                                          user.preambleModel.weightInLbs ==
-                                              0)) {
-                                    displaySnack(
-                                        'Please choose your valid weight in lbs!');
-                                    return;
-                                  }
                                   else if(user.preambleModel.target_weight  == 0 || user.preambleModel.target_weight == null){
                                     displaySnack(
                                         'Please choose your valid target weight in kg!');

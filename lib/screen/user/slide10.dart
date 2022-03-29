@@ -25,7 +25,7 @@ class _Slide10State extends State<Slide10> {
       print(' callled bmr men called --- ');
       context.read<BmrState>().bmrForMen(
         height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
-        weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,
+        weight: user.preambleModel.weightKg,
         age: user.preambleModel.age,
         context: context,
         fromAuth: user.preambleFromLogin,
@@ -34,7 +34,7 @@ class _Slide10State extends State<Slide10> {
       print(' callled bmr women called --- ');
       context.read<BmrState>().bmrForWoMen(
         height: 30.48 * (user.preambleModel.heightInCm ? user.preambleModel.heightCm/30.48:user.preambleModel.heightFeet),
-        weight: user.preambleModel.weightInKg?user.preambleModel.weightKg:user.preambleModel.weightInLbs,
+        weight: user.preambleModel.weightKg,
         age: user.preambleModel.age,
         context: context,
         fromAuth: user.preambleFromLogin,
