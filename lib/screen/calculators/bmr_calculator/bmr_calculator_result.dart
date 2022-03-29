@@ -12,8 +12,6 @@ class BMRCalculatorResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BmrState bmrState = context.watch<BmrState>();
-
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       appBar: AppBar(

@@ -18,12 +18,13 @@ class BmrState extends ChangeNotifier {
   num weight;
   num height;
   num age;
+
   bmrForMen(
       {BuildContext context,
       num weight,
       num height,
       num age,
-      bool fromAuth = false}) {
+      bool openBmtResult = true}) {
     this.weight = weight;
     this.height = height;
     this.age = age;
@@ -33,10 +34,9 @@ class BmrState extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
-    saveProgress(
-      context: context,
-      fromAuth: fromAuth,
-    );
+    if (openBmtResult) {
+      saveProgress(context: context);
+    }
   }
 
   bmrForWoMen(
@@ -44,7 +44,7 @@ class BmrState extends ChangeNotifier {
       num weight,
       num height,
       num age,
-      bool fromAuth = false}) {
+      bool openBmtResult = true}) {
     this.weight = weight;
     this.height = height;
     this.age = age;
@@ -53,16 +53,16 @@ class BmrState extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifyListeners();
     });
-    saveProgress(
-      context: context,
-      fromAuth: fromAuth,
-    );
+    if (openBmtResult) {
+      saveProgress(
+        context: context,
+      );
+    }
   }
 
   Future<void> saveProgress(
-      {BuildContext context, bool fromAuth = false}) async {
+      {BuildContext context}) async {
     print('check save bmr method called ---');
-    if (!fromAuth)
       showDialog(
         context: context,
         builder: (context) => ProcessingDialog(
@@ -79,13 +79,12 @@ class BmrState extends ChangeNotifier {
       "bmr_result": bmrResult,
     };
     bool isSaved = await RestDatasource().saveBmrProgress(body: body);
-    if (!fromAuth) Navigator.pop(context);
     if (isSaved) {
       // FlashHelper.successBar(context, message: 'BMR result Saved');
-      if (!fromAuth) {
+      //context.read<GymStore>().init(context: context);
         context.read<GymStore>().init(context: context);
         NavigationService.navigateTo(Routes.bmrCalculatorResult);
-      }
+
     } else {
       FlashHelper.errorBar(context, message: 'Please try again!');
     }

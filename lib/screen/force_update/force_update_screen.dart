@@ -74,7 +74,7 @@ height: 230,
               InkWell(
                 onTap: ()async{
                   int version = int.parse(Api.currentVersion);
-                  if(version == 194){
+                  if(version <= 194){
                     locator<AppPrefs>().clear();
                     _launchURL(_forceUpdateModel.link??getPlayUrl());
                   }else{

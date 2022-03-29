@@ -17,6 +17,7 @@ import '../../main.dart';
 class Slide0 extends StatefulWidget {
   final String title;
   final String subTitle;
+  bool isPressed = true;
   @override
   State<Slide0> createState() => _Slide0State();
 
@@ -26,6 +27,7 @@ class Slide0 extends StatefulWidget {
 class _Slide0State extends State<Slide0> {
   final _user = TextEditingController();
   String addressVal = '';
+  bool isPressed = false;
   @override
   void initState() {
     super.initState();
@@ -82,6 +84,8 @@ class _Slide0State extends State<Slide0> {
         ),
       ),
     );
+    this.isPressed = false;
+    if(result != null){
     print('check result ${result.formattedAddress}');
     print('check result ${result.latLng.longitude}');
     print('check result ${result.latLng.latitude}');
@@ -90,7 +94,7 @@ class _Slide0State extends State<Slide0> {
     store.preambleModel.lat = result.latLng.latitude.toString();
     store.preambleModel.long = result.latLng.longitude.toString();
     setState(() {
-    });
+    });}
     // Handle the result in your way
   }
 
@@ -213,8 +217,12 @@ class _Slide0State extends State<Slide0> {
                   width: MediaQuery.of(context).size.width,
                   child: InkWell(
                     onTap: (){
+                      print('check on pressed ---- $isPressed');
                       // showPlacePicker(user);
-                      fetchLocation(user);
+                      if(!isPressed){
+                        isPressed = true;
+                        fetchLocation(user);
+                      }
                     },
                     child: TextFormField(
                       controller: TextEditingController(text: addressVal ),

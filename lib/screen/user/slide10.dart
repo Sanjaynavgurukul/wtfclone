@@ -28,7 +28,7 @@ class _Slide10State extends State<Slide10> {
         weight: user.preambleModel.weightKg,
         age: user.preambleModel.age,
         context: context,
-        fromAuth: user.preambleFromLogin,
+        openBmtResult: false,
       );
     } else {
       print(' callled bmr women called --- ');
@@ -37,7 +37,7 @@ class _Slide10State extends State<Slide10> {
         weight: user.preambleModel.weightKg,
         age: user.preambleModel.age,
         context: context,
-        fromAuth: user.preambleFromLogin,
+        openBmtResult: false,
       );
     }
     // }
@@ -50,7 +50,7 @@ class _Slide10State extends State<Slide10> {
   Widget build(BuildContext context) {
     users = context.watch<GymStore>();
     bmrState = context.watch<BmrState>();
-
+    users.preambleModel.bmr_result = bmrState.bmrResult;
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       body: Consumer<GymStore>(

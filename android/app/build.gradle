@@ -42,8 +42,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 30
         multiDexEnabled true
-        versionCode 194
-        versionName '18.9.4'
+        versionCode 195
+        versionName '18.9.5'
         multiDexEnabled true
     }
 
@@ -60,11 +60,11 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            debuggable false
             signingConfig signingConfigs.release
-            minifyEnabled true
-            useProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources false
+            minifyEnabled false
+//            useProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {

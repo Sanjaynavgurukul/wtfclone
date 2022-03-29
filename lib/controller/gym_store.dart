@@ -2502,4 +2502,12 @@ class GymStore extends ChangeNotifier {
   set tempLat(double value) {
     _tempLat = value;
   }
+
+  Future<bool> saveBmr()async{
+    print('save bmr called -----');
+    Map<String,dynamic> map = PreambleModel().toJsonPreamble(preambleModel);
+    bool b = await RestDatasource().saveBmrProgress(body: map);
+    print('save bmr called after saved----- $b');
+    return b;
+  }
 }

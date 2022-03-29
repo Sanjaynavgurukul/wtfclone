@@ -647,6 +647,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         .then((value) {
       // Navigator.pop(context);
       if (value) {
+        saveBMR();
+
         if (user.preambleFromLogin) {
           locator<AppPrefs>().memberAdded.setValue(true);
           NavigationService.navigateToReplacement(Routes.homePage);
@@ -660,5 +662,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         displaySnack('Something went wrong please try again later!!');
       }
     });
+  }
+
+  void saveBMR(){
+    user.saveBmr();
   }
 }
