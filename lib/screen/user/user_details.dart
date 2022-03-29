@@ -1,25 +1,18 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:place_picker/entities/location_result.dart';
-import 'package:place_picker/place_picker.dart';
-import 'package:place_picker/widgets/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
-import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/screen/user/slide0.dart';
 import 'package:wtf/screen/user/slide1.dart';
 import 'package:wtf/screen/user/slide10.dart';
 import 'package:wtf/screen/user/slide12.dart';
-import 'package:wtf/screen/user/slide2.dart';
 import 'package:wtf/screen/user/slide7.dart';
 import 'package:wtf/screen/user/slide9.dart';
 
@@ -45,12 +38,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   GymStore user;
-
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   Navigator.of(context).pop(false);
-  //
-  //   return true;
-  // }
 
   List<Widget> contents = [];
 

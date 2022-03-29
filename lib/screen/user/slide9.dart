@@ -261,6 +261,7 @@ class _Slide9State extends State<Slide9> {
                   expandedColor: Color(0xff922224),
                   trailing: PopupMenuButton<String>(
                     color: Color(0xff922224),
+                    initialValue: user.preambleModel.heightInCm ? tallList[0]:tallList[1],
                     itemBuilder: (context) => tallList
                         .map((e) => PopupMenuItem(
                               value: e,

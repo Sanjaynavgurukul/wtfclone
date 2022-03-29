@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' show Platform;
+import 'package:wtf/db/db_provider.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/api_constants.dart';
+import 'dart:io' show Directory, Platform;
 
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/model/force_update_model.dart';
@@ -67,8 +72,14 @@ height: 230,
                 height: 80,
               ),
               InkWell(
-                onTap: (){
-                  _launchURL(_forceUpdateModel.link??getPlayUrl());
+                onTap: ()async{
+                  int version = int.parse(Api.currentVersion);
+                  if(version == 194){
+                    locator<AppPrefs>().clear();
+                    _launchURL(_forceUpdateModel.link??getPlayUrl());
+                  }else{
+                    _launchURL(_forceUpdateModel.link??getPlayUrl());
+                  }
                 },
                 child: Container(
                   width: double.infinity,
@@ -111,4 +122,5 @@ height: 230,
       return false;
     }
   }
+
 }
