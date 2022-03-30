@@ -32,7 +32,7 @@ ${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework
 ${BUILT_PRODUCTS_DIR}/otp_autofill/otp_autofill.framework
 ${BUILT_PRODUCTS_DIR}/package_info/package_info.framework
 ${BUILT_PRODUCTS_DIR}/package_info_plus/package_info_plus.framework
-${BUILT_PRODUCTS_DIR}/path_provider/path_provider.framework
+${BUILT_PRODUCTS_DIR}/path_provider_ios/path_provider_ios.framework
 ${BUILT_PRODUCTS_DIR}/qr_code_scanner/qr_code_scanner.framework
 ${BUILT_PRODUCTS_DIR}/razorpay_flutter/razorpay_flutter.framework
 ${BUILT_PRODUCTS_DIR}/shared_preferences/shared_preferences.framework

@@ -3856,7 +3856,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-## path_provider
+## path_provider_ios
 
 Copyright 2013 The Flutter Authors. All rights reserved.
 
