@@ -65,6 +65,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //   },
       //   child:Icon(Icons.add)
       // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          NavigationService.pushName(Routes.gymCategoryScreen);
+        },
+        child: Icon(Icons.add),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);

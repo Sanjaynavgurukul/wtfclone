@@ -37,6 +37,7 @@ import 'package:wtf/screen/event/EventDetails.dart';
 import 'package:wtf/screen/event/event_submissions.dart';
 import 'package:wtf/screen/event/submission_detail.dart';
 import 'package:wtf/screen/force_update/force_update_screen.dart';
+import 'package:wtf/screen/gym/gym_category_screen.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/screen/home/home.dart';
@@ -135,6 +136,7 @@ class Routes {
   static const String choosePlanScreen = ChoosePlan.routeName;
   static const String dietDetailScreen = DietDetails.routeName;
   static const String forceUpdateScreen = ForceUpdateScreen.routeName;
+  static const String gymCategoryScreen = GymCategoryScreen.routeName;
 }
 
 class RouteGenerator {
@@ -148,6 +150,14 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => ChangeDiet(), settings: settings);
+      case Routes.gymCategoryScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: GymCategoryScreen(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => GymCategoryScreen(), settings: settings);
       case Routes.choosePlanScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
