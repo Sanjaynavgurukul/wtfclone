@@ -108,6 +108,7 @@ dependencies:
   expansion_tile_card: ^2.0.0
   expandable_page_view: ^1.0.13
   path_provider: ^2.0.9
+  syncfusion_flutter_sliders: ^19.4.56
 
 dev_dependencies:
   flutter_test:
