@@ -39,10 +39,11 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   }
 
   void callData() {
+    print('called -----');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     if (callMethod) {
-      user.getAddonsCat();
       this.callMethod = false;
+      user.getAddonsCat();
     }
     });
   }
@@ -60,6 +61,12 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
     _controller = TabController(vsync: this, initialIndex: 0, length: length);
   }
 
+  void onRefreshPage(){
+    user.nearestAddonsCatGymList = null;
+    this.callMethod = true;
+    this.callgymsMethod = true;
+    callData();
+  }
   @override
   Widget build(BuildContext context) {
     callData();
@@ -96,9 +103,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
             ),
             body: RefreshIndicator(
               onRefresh: () async {
-                this.callMethod = true;
-                this.callgymsMethod = true;
-                callData();
+                onRefreshPage();
               },
               child: user.addonsCatList.isEmpty
                   ? Center(
