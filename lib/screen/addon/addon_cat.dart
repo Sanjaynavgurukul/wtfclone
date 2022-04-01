@@ -9,6 +9,7 @@ import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/model/gym_model.dart';
 
 class AddonsCat extends StatefulWidget {
   static const String routeName = '/addonsCat';
@@ -41,10 +42,10 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   void callData() {
     print('called -----');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    if (callMethod) {
-      this.callMethod = false;
-      user.getAddonsCat();
-    }
+      if (callMethod) {
+        this.callMethod = false;
+        user.getAddonsCat();
+      }
     });
   }
 
@@ -58,24 +59,26 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   }
 
   void setTabBarController(int length) {
-    _controller = TabController(vsync: this, initialIndex: 0, length: length);
+    _controller = TabController(
+        vsync: this, initialIndex: initialTabSelected, length: length);
   }
 
-  void onRefreshPage(){
+  void onRefreshPage() {
     user.nearestAddonsCatGymList = null;
     this.callMethod = true;
     this.callgymsMethod = true;
     callData();
   }
+
   @override
   Widget build(BuildContext context) {
     callData();
     return Consumer<GymStore>(builder: (context, user, snapshot) {
-      if(user.addonsCatList == null || user.addonsCatList.isEmpty){
+      if (user.addonsCatList == null || user.addonsCatList.isEmpty) {
         return Center(
           child: CupertinoActivityIndicator(),
         );
-      }else{
+      } else {
         setTabBarController(user.addonsCatList.length);
         calGymList(user.addonsCatList[_controller.index].uid);
         return Scaffold(
@@ -92,12 +95,14 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                       indicatorSize: TabBarIndicatorSize.label,
                       onTap: (index) {
                         initialTabSelected = index;
+                        callgymsMethod = true;
+                        calGymList(user.addonsCatList[_controller.index].uid);
                         log('check initial tab selected value --- $initialTabSelected');
                       },
                       tabs: user.addonsCatList
                           .map((e) => Tab(
-                        child: Text('${e.name.toUpperCase() ?? ''}'),
-                      ))
+                                child: Text('${e.name.toUpperCase() ?? ''}'),
+                              ))
                           .toList()),
                   preferredSize: Size.fromHeight(30.0)),
             ),
@@ -107,42 +112,82 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
               },
               child: user.addonsCatList.isEmpty
                   ? Center(
-                child: CupertinoActivityIndicator(),
-              )
+                      child: CupertinoActivityIndicator(),
+                    )
                   : Column(
-                children: [
-                  ListTile(
-                    title: Text('Nearby CrossFit Classes'),
-                    trailing: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'View all',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      children: [
+                        ListTile(
+                          title: Text('Nearby ${user.addonsCatList[_controller.index].name??'No Name'} Classes'),
+                          trailing: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'View all',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        user.nearestAddonsCatGymList != null &&
+                                user.nearestAddonsCatGymList.data != null
+                            ? Expanded(
+                                child:
+                                    user.nearestAddonsCatGymList.data.isNotEmpty
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+
+                                            itemCount: user
+                                                .nearestAddonsCatGymList
+                                                .data
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              GymModelData data = user
+                                                  .nearestAddonsCatGymList
+                                                  .data[index];
+                                              return addonItem(data: data);
+                                            })
+                                        : Center(child: Text('No Data Found')),
+                              )
+                            : Center(
+                                child: CupertinoActivityIndicator(),
+                              )
+                      ],
                     ),
-                  ),
-                  user.nearestAddonsCatGymList != null &&
-                      user.nearestAddonsCatGymList.data != null &&
-                      user.nearestAddonsCatGymList.data.isNotEmpty
-                      ? Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (context, index) {
-                          return addonItem();
-                        }),
-                  )
-                      : Center(
-                    child: CupertinoActivityIndicator(),
-                  )
-                ],
-              ),
             ));
       }
     });
   }
 
-  Widget addonItem() {
+  Widget sliderItem({@required GymModelData data, String imageUrl}) {
+    return Container(
+      alignment: Alignment.topRight,
+      width: MediaQuery.of(context).size.width,
+      height: 120,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        image: DecorationImage(
+          image: NetworkImage(
+              'https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg',),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Wrap(
+        children: [
+          if (!data.distance.contains('N/A'))
+            Container(
+              padding: EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(8)),
+                  color: Colors.white.withOpacity(0.7)),
+              child: Text(
+                '${data.distance_text.toUpperCase() ?? ''}' ?? '',
+                style: TextStyle(color: Colors.black),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget addonItem({@required GymModelData data}) {
     return Container(
       width: 200,
       margin: EdgeInsets.only(bottom: 18),
@@ -150,49 +195,26 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            child: CarouselSlider(
-              options: CarouselOptions(
-                  height: 120.0,
-                  initialPage: 0,
-                  viewportFraction: 0.9,
-                  reverse: false,
-                  enableInfiniteScroll: false),
-              items: [1, 2, 3, 4, 5].map((i) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      alignment: Alignment.topRight,
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(right: 12),
-                      height: 120,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                              'https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Wrap(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8)),
-                                color: Colors.white.withOpacity(0.7)),
-                            child: Text(
-                              '2.8KM',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
-              }).toList(),
-            ),
+            height: 120.0,
+            child: data.gallery == null || data.gallery.isEmpty
+                ? data.cover_image != null && data.cover_image.isNotEmpty
+                    ? Container(margin:EdgeInsets.only(left: 16,right: 16),child: sliderItem(data: data, imageUrl: data.cover_image))
+                    : Container(margin:EdgeInsets.only(left: 16,right: 16),child: sliderItem(data: data, imageUrl: null))
+                : CarouselSlider(
+                    options: CarouselOptions(
+                        height: 120.0,
+                        initialPage: 0,
+                        viewportFraction:0.9,
+                        reverse: false,
+                        enableInfiniteScroll: false),
+                    items: data.gallery.map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Container(margin: EdgeInsets.only(right: data.gallery.length ==1?0:12),child: sliderItem(imageUrl: i.images, data: data));
+                        },
+                      );
+                    }).toList(),
+                  ),
           ),
           SizedBox(height: 16),
           Container(
@@ -200,13 +222,13 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
             child: ListTile(
               onTap: () {},
               contentPadding: EdgeInsets.all(0),
-              subtitle: Text('Noida Sector 8',
+              subtitle: Text(data.address1 + ' ' + data.address2,
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
                       color: Colors.grey.withOpacity(0.8))),
               dense: true,
-              title: Text('WTF Supernatural Cross fitness Advance',
+              title: Text(data.gymName ?? '',
                   style:
                       TextStyle(fontSize: 12, fontWeight: FontWeight.normal)),
               trailing: Container(
