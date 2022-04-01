@@ -67,7 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          NavigationService.pushName(Routes.gymCategoryScreen);
+          NavigationService.pushName(Routes.addonsCat);
         },
         child: Icon(Icons.add),
       ),
