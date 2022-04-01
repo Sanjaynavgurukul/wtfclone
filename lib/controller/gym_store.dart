@@ -2510,4 +2510,8 @@ class GymStore extends ChangeNotifier {
     print('save bmr called after saved----- $b');
     return b;
   }
+
+  Future<void> getAddonsCat()async{
+    await RestDatasource().getAddonsCat();
+  }
 }

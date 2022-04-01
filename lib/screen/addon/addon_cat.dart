@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 
@@ -26,6 +28,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    context.read<GymStore>().getAddonsCat();
     return Scaffold(
       appBar: AppBar(
         title: Text('Activities'),
