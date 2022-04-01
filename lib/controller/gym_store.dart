@@ -42,6 +42,7 @@ import 'package:wtf/model/WhyChooseWtf.dart';
 import 'package:wtf/model/WorkoutComplete.dart';
 import 'package:wtf/model/WorkoutDetailModel.dart';
 import 'package:wtf/model/add_on_slot_details.dart';
+import 'package:wtf/model/addons_cat_model.dart';
 import 'package:wtf/model/all_diets.dart';
 import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/all_notifications.dart';
@@ -244,6 +245,8 @@ class GymStore extends ChangeNotifier {
   String selectedGymId;
 
   List<Submission> selectedSubmissions = [];
+  List<AddonsCatModel> addonsCatList = [];
+  GymTypes nearestAddonsCatGymList;
 
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
@@ -2512,6 +2515,31 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> getAddonsCat()async{
-    await RestDatasource().getAddonsCat();
+    addonsCatList = [];
+    notifyListeners();
+
+    log('Addons cat getAddonsCat method called');
+    var list = await RestDatasource().getAddonsCat();
+    if(list != null || list.isNotEmpty){
+      log('Addons cat getAddonsCat not null and not empty');
+      addonsCatList = list;
+    }else{
+      log('Addons cat getAddonsCat null');
+      addonsCatList = [];
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> getNearestCatGym({@required String cat_id})async{
+    nearestAddonsCatGymList = null;
+    notifyListeners();
+    var list = await RestDatasource().getNearestCatGym(cat_id: cat_id);
+    if(list.data != null || list.data.isNotEmpty){
+      nearestAddonsCatGymList = list;
+    }else{
+      nearestAddonsCatGymList = null;
+    }
+    notifyListeners();
   }
 }

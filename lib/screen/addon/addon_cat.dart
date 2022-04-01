@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -7,70 +12,129 @@ import 'package:wtf/helper/colors.dart';
 
 class AddonsCat extends StatefulWidget {
   static const String routeName = '/addonsCat';
+
   const AddonsCat({Key key}) : super(key: key);
 
   @override
   _AddonsCatState createState() => _AddonsCatState();
 }
 
-class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin{
-
+class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   TabController _controller;
-  List<String> _tabList = ['Crossfit', 'yoga', 'pilates', 'aerobics', 'zumba'];
+  bool callMethod = true, callgymsMethod = true, refreshed = false;
+  GymStore user;
+  int initialTabSelected = 0;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    user = context.watch<GymStore>();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-    _controller =
-        TabController(vsync: this, initialIndex: 0, length: _tabList.length);
     super.initState();
+  }
+
+  void callData() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    if (callMethod) {
+      user.getAddonsCat();
+      this.callMethod = false;
+    }
+    });
+  }
+
+  void calGymList(String cat_id) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (callgymsMethod) {
+        this.callgymsMethod = false;
+        user.getNearestCatGym(cat_id: cat_id);
+      }
+    });
+  }
+
+  void setTabBarController(int length) {
+    _controller = TabController(vsync: this, initialIndex: 0, length: length);
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<GymStore>().getAddonsCat();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Activities'),
-        backgroundColor: AppColors.BACK_GROUND_BG,
-        elevation: 0,
-        bottom: PreferredSize(
-            child: TabBar(
-                isScrollable: true,
-                unselectedLabelColor: Colors.white.withOpacity(0.3),
-                controller: _controller,
-                indicatorColor: AppConstants.bgColor,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: _tabList
-                    .map((e) => Tab(
-                  child: Text('${e.toUpperCase()}'),
-                ))
-                    .toList()),
-            preferredSize: Size.fromHeight(30.0)),
-      ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text('Nearby CrossFit Classes'),
-            trailing: TextButton(
-              onPressed: () {},
-              child: Text(
-                'View all',
-                style: TextStyle(color: Colors.white),
-              ),
+    callData();
+    return Consumer<GymStore>(builder: (context, user, snapshot) {
+      if(user.addonsCatList == null || user.addonsCatList.isEmpty){
+        return Center(
+          child: CupertinoActivityIndicator(),
+        );
+      }else{
+        setTabBarController(user.addonsCatList.length);
+        calGymList(user.addonsCatList[_controller.index].uid);
+        return Scaffold(
+            appBar: AppBar(
+              title: Text('Activities'),
+              backgroundColor: AppColors.BACK_GROUND_BG,
+              elevation: 0,
+              bottom: PreferredSize(
+                  child: TabBar(
+                      isScrollable: true,
+                      unselectedLabelColor: Colors.white.withOpacity(0.3),
+                      controller: _controller,
+                      indicatorColor: AppConstants.bgColor,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      onTap: (index) {
+                        initialTabSelected = index;
+                        log('check initial tab selected value --- $initialTabSelected');
+                      },
+                      tabs: user.addonsCatList
+                          .map((e) => Tab(
+                        child: Text('${e.name.toUpperCase() ?? ''}'),
+                      ))
+                          .toList()),
+                  preferredSize: Size.fromHeight(30.0)),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return addonItem();
-                }),
-          )
-        ],
-      ),
-    );
+            body: RefreshIndicator(
+              onRefresh: () async {
+                this.callMethod = true;
+                this.callgymsMethod = true;
+                callData();
+              },
+              child: user.addonsCatList.isEmpty
+                  ? Center(
+                child: CupertinoActivityIndicator(),
+              )
+                  : Column(
+                children: [
+                  ListTile(
+                    title: Text('Nearby CrossFit Classes'),
+                    trailing: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'View all',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  user.nearestAddonsCatGymList != null &&
+                      user.nearestAddonsCatGymList.data != null &&
+                      user.nearestAddonsCatGymList.data.isNotEmpty
+                      ? Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return addonItem();
+                        }),
+                  )
+                      : Center(
+                    child: CupertinoActivityIndicator(),
+                  )
+                ],
+              ),
+            ));
+      }
+    });
   }
 
   Widget addonItem() {
@@ -139,10 +203,10 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin{
               dense: true,
               title: Text('WTF Supernatural Cross fitness Advance',
                   style:
-                  TextStyle(fontSize: 12, fontWeight: FontWeight.normal)),
+                      TextStyle(fontSize: 12, fontWeight: FontWeight.normal)),
               trailing: Container(
                 padding:
-                EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                    EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(4)),
                     gradient: LinearGradient(
@@ -171,4 +235,11 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin{
     );
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    user.nearestAddonsCatGymList = null;
+    user.addonsCatList = null;
+    super.dispose();
+  }
 }
