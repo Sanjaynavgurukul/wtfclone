@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:wtf/model/addons_cat_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 
 GymTypes gymTypesFromJson(String str) => GymTypes.fromJson(json.decode(str));
@@ -29,7 +30,8 @@ class GymTypes {
             json["pagination"].map((x) => Pagination.fromJson(x)))
             : null,
         data: json.containsKey('data')
-            ? List<GymModelData>.from(json["data"].map((x) => GymModelData.fromJson(x)))
+            ? List<GymModelData>.from(
+            json["data"].map((x) => GymModelData.fromJson(x)))
             : [],
       );
 
@@ -82,7 +84,8 @@ class GymModel {
     return GymModel(
         status: json['status'],
         data: json.containsKey('data') && json['data'] != null
-            ? List<GymModelData>.from(json["data"].map((x) => GymModelData.fromJson(x)))
+            ? List<GymModelData>.from(
+            json["data"].map((x) => GymModelData.fromJson(x)))
             : []);
   }
 
@@ -97,10 +100,11 @@ class GymModel {
   }
 }
 
-class Facility{
+class Facility {
   String label;
   String imageUrl;
-  Facility({this.label,this.imageUrl});
+
+  Facility({this.label, this.imageUrl});
 }
 
 class GymModelData {
@@ -142,7 +146,7 @@ class GymModelData {
 
   String plan_name;
   String plan_duration;
-  String plan_price='';
+  String plan_price = '';
   String plan_description;
 
   //Static Variable
@@ -153,6 +157,8 @@ class GymModelData {
   String second_payment_amount;
   String third_payment;
   String third_payment_amount;
+  CatAddonsSlotsModel addons;
+
 
   GymModelData({
     this.uid,
@@ -201,110 +207,117 @@ class GymModelData {
     this.second_payment_amount,
     this.third_payment,
     this.third_payment_amount,
+    this.addons
   });
 
-  factory GymModelData.fromJson(Map<String, dynamic> json) => GymModelData(
-    uid: json["uid"],
-    userId: json["user_id"],
-    description: json["description"],
-    name: json["name"],
-    gymName: json["gym_name"],
-    address1: json["address1"],
-    address2: json["address2"],
-    city: json["city"],
-    state: json["state"],
-    country: json["country"],
-    pin: json["pin"],
-    // is_partial: int.parse(json["is_partial"].toString()??'0'),
-    is_partial:json["is_partial"] != null ? int.parse(json["is_partial"].toString()??'0'): 0,
-    cover_image: json["cover_image"],
-    latitude: json["lat"],
-    longitude: json["long"],
-    leaseAgreement: json["lease_agreement"],
-    electricityBill: json["electricity_bill"],
-    bankStatement: json["bank_statement"],
-    dateAdded: json["date_added"],
-    lastUpdated: json["last_updated"],
-    status: json["status"],
-    planType: json["plan_type"],
-    gallery: json.containsKey('gallery') && json['gallery'] != null
-        ? List<Gallery>.from(
-        json["gallery"].map((x) => Gallery.fromJson(x)))
-        : [],
-    // equipment: List<Equipment>.from(
-    //     json["equipment"].map((x) => Equipment.fromJson(x))),
-    benefits: json.containsKey('benefits') && json['benefits'] != null
-        ? List<Benfit>.from(json["benefits"].map((x) => Benfit.fromJson(x)))
-        : [],
+  factory GymModelData.fromJson(Map<String, dynamic> json) =>
+      GymModelData(
+          uid: json["uid"],
+          userId: json["user_id"],
+          description: json["description"],
+          name: json["name"],
+          gymName: json["gym_name"],
+          address1: json["address1"],
+          address2: json["address2"],
+          city: json["city"],
+          state: json["state"],
+          country: json["country"],
+          pin: json["pin"],
+          // is_partial: int.parse(json["is_partial"].toString()??'0'),
+          is_partial: json["is_partial"] != null ? int.parse(
+              json["is_partial"].toString() ?? '0') : 0,
+          cover_image: json["cover_image"],
+          latitude: json["lat"],
+          longitude: json["long"],
+          leaseAgreement: json["lease_agreement"],
+          electricityBill: json["electricity_bill"],
+          bankStatement: json["bank_statement"],
+          dateAdded: json["date_added"],
+          lastUpdated: json["last_updated"],
+          status: json["status"],
+          planType: json["plan_type"],
+          gallery: json.containsKey('gallery') && json['gallery'] != null
+              ? List<Gallery>.from(
+              json["gallery"].map((x) => Gallery.fromJson(x)))
+              : [],
+          // equipment: List<Equipment>.from(
+          //     json["equipment"].map((x) => Equipment.fromJson(x))),
+          benefits: json.containsKey('benefits') && json['benefits'] != null
+              ? List<Benfit>.from(
+              json["benefits"].map((x) => Benfit.fromJson(x)))
+              : [],
 
-    //New Variables :D
-    distance: json["distance"].toString(),
-    distance_text: json["distance_text"],
-    duration: json["duration"].toString(),
-    duration_text: json["duration_text"],
-    text1: json["text1"],
-    text2: json["text2"],
-    plan_text: json["plan_text"],
-    rating: json["rating"].toDouble(),
+          //New Variables :D
+          distance: json["distance"].toString(),
+          distance_text: json["distance_text"],
+          duration: json["duration"].toString(),
+          duration_text: json["duration_text"],
+          text1: json["text1"],
+          text2: json["text2"],
+          plan_text: json["plan_text"],
+          rating: json["rating"].toDouble(),
 
-    plan_name: json["plan_name"],
-    plan_duration: json["plan_duration"],
-    plan_price: json["plan_price"],
-    plan_description: json["plan_description"],
+          plan_name: json["plan_name"],
+          plan_duration: json["plan_duration"],
+          plan_price: json["plan_price"],
+          plan_description: json["plan_description"],
 
-    first_payment: json["first_payment"],
-    first_payment_amount: json["first_payment_amount"],
-    second_payment: json["second_payment"],
-    second_payment_amount: json["second_payment_amount"],
-    third_payment: json["third_payment"],
-    third_payment_amount: json["third_payment_amount"],
-  );
+          first_payment: json["first_payment"],
+          first_payment_amount: json["first_payment_amount"],
+          second_payment: json["second_payment"],
+          second_payment_amount: json["second_payment_amount"],
+          third_payment: json["third_payment"],
+          third_payment_amount: json["third_payment_amount"],
+          addons: json['addons'] == null ? null : CatAddonsSlotsModel
+              .fromJsonToModel(json['addons'][0])
+      );
 
-  Map<String, dynamic> toJson() => {
-    "uid": uid,
-    "description": description,
-    "name": name,
-    "gym_name": gymName,
-    "address1": address1,
-    "address2": address2,
-    "city": city,
-    "state": state,
-    "country": country,
-    "pin": pin,
-    "cover_image": cover_image,
-    "latitude": latitude,
-    "longitude": longitude,
-    "lease_agreement": leaseAgreement,
-    "electricity_bill": electricityBill,
-    "bank_statement": bankStatement,
-    "date_added": dateAdded,
-    "last_updated": lastUpdated,
-    "status": status,
-    "plan_type": planType,
-    "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
-    "benefits": List<dynamic>.from(benefits.map((x) => x.toJson())),
-    //New Variables :D
-    "distance": distance,
-    "distance_text": distance_text,
-    "duration": duration,
-    "duration_text": duration_text,
-    "text1": text1,
-    "text2": text2,
-    "plan_text": plan_text,
-    "rating": rating,
+  Map<String, dynamic> toJson() =>
+      {
+        "uid": uid,
+        "description": description,
+        "name": name,
+        "gym_name": gymName,
+        "address1": address1,
+        "address2": address2,
+        "city": city,
+        "state": state,
+        "country": country,
+        "pin": pin,
+        "cover_image": cover_image,
+        "latitude": latitude,
+        "longitude": longitude,
+        "lease_agreement": leaseAgreement,
+        "electricity_bill": electricityBill,
+        "bank_statement": bankStatement,
+        "date_added": dateAdded,
+        "last_updated": lastUpdated,
+        "status": status,
+        "plan_type": planType,
+        "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
+        "benefits": List<dynamic>.from(benefits.map((x) => x.toJson())),
+        //New Variables :D
+        "distance": distance,
+        "distance_text": distance_text,
+        "duration": duration,
+        "duration_text": duration_text,
+        "text1": text1,
+        "text2": text2,
+        "plan_text": plan_text,
+        "rating": rating,
 
-    "plan_name": plan_name,
-    "is_partial": is_partial,
-    "plan_duration": plan_duration,
-    "plan_price": plan_price,
-    "plan_description": plan_description,
+        "plan_name": plan_name,
+        "is_partial": is_partial,
+        "plan_duration": plan_duration,
+        "plan_price": plan_price,
+        "plan_description": plan_description,
 
-    "first_payment": first_payment,
-    "first_payment_amount": first_payment_amount,
-    "second_payment": second_payment,
-    "second_payment_amount": second_payment_amount,
-    "third_payment": third_payment,
-    "third_payment_amount": third_payment_amount,
-  };
+        "first_payment": first_payment,
+        "first_payment_amount": first_payment_amount,
+        "second_payment": second_payment,
+        "second_payment_amount": second_payment_amount,
+        "third_payment": third_payment,
+        "third_payment_amount": third_payment_amount,
+      };
 }
 

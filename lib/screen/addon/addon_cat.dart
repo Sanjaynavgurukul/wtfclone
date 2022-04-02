@@ -188,6 +188,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   }
 
   Widget addonItem({@required GymModelData data}) {
+    print('check adon id --- ${data.addons.name}');
     return Container(
       width: 200,
       margin: EdgeInsets.only(bottom: 18),
