@@ -38,6 +38,7 @@ import 'package:wtf/screen/event/EventDetails.dart';
 import 'package:wtf/screen/event/event_submissions.dart';
 import 'package:wtf/screen/event/submission_detail.dart';
 import 'package:wtf/screen/force_update/force_update_screen.dart';
+import 'package:wtf/screen/gym/gym_cat.dart';
 import 'package:wtf/screen/gym/gym_category_screen.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
@@ -139,12 +140,20 @@ class Routes {
   static const String forceUpdateScreen = ForceUpdateScreen.routeName;
   static const String gymCategoryScreen = GymCategoryScreen.routeName;
   static const String addonsCat = AddonsCat.routeName;
+  static const String gymCat = GymCat.routeName;
 }
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.addonsCat:
+      case Routes.gymCat:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: GymCat(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => GymCat(), settings: settings); case Routes.addonsCat:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
                 widget: AddonsCat(),
