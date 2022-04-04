@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
@@ -117,7 +119,8 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                   : Column(
                       children: [
                         ListTile(
-                          title: Text('Nearby ${user.addonsCatList[_controller.index].name??'No Name'} Classes'),
+                          title: Text(
+                              'Nearby ${user.addonsCatList[_controller.index].name ?? 'No Name'} Classes'),
                           trailing: TextButton(
                             onPressed: () {},
                             child: Text(
@@ -133,7 +136,6 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                                     user.nearestAddonsCatGymList.data.isNotEmpty
                                         ? ListView.builder(
                                             shrinkWrap: true,
-
                                             itemCount: user
                                                 .nearestAddonsCatGymList
                                                 .data
@@ -165,7 +167,8 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
         borderRadius: BorderRadius.all(Radius.circular(8)),
         image: DecorationImage(
           image: NetworkImage(
-              'https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg',),
+            'https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg',
+          ),
           fit: BoxFit.cover,
         ),
       ),
@@ -199,19 +202,28 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
             height: 120.0,
             child: data.gallery == null || data.gallery.isEmpty
                 ? data.cover_image != null && data.cover_image.isNotEmpty
-                    ? Container(margin:EdgeInsets.only(left: 16,right: 16),child: sliderItem(data: data, imageUrl: data.cover_image))
-                    : Container(margin:EdgeInsets.only(left: 16,right: 16),child: sliderItem(data: data, imageUrl: null))
+                    ? Container(
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child:
+                            sliderItem(data: data, imageUrl: data.cover_image))
+                    : Container(
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        child: sliderItem(data: data, imageUrl: null))
                 : CarouselSlider(
                     options: CarouselOptions(
                         height: 120.0,
                         initialPage: 0,
-                        viewportFraction:0.9,
+                        viewportFraction: 0.9,
                         reverse: false,
                         enableInfiniteScroll: false),
                     items: data.gallery.map((i) {
                       return Builder(
                         builder: (BuildContext context) {
-                          return Container(margin: EdgeInsets.only(right: data.gallery.length ==1?0:12),child: sliderItem(imageUrl: i.images, data: data));
+                          return Container(
+                              margin: EdgeInsets.only(
+                                  right: data.gallery.length == 1 ? 0 : 12),
+                              child:
+                                  sliderItem(imageUrl: i.images, data: data));
                         },
                       );
                     }).toList(),
@@ -221,7 +233,9 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
           Container(
             margin: EdgeInsets.only(right: 12, left: 12),
             child: ListTile(
-              onTap: () {},
+              onTap: () {
+                showAsBottomSheet();
+              },
               contentPadding: EdgeInsets.all(0),
               subtitle: Text(data.address1 + ' ' + data.address2,
                   style: TextStyle(
@@ -269,5 +283,107 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
     user.nearestAddonsCatGymList = null;
     user.addonsCatList = null;
     super.dispose();
+  }
+
+  void showAsBottomSheet() async {
+    DateTime _dateTime;
+    final result = await showSlidingBottomSheet(context, builder: (context) {
+      return SlidingSheetDialog(
+        elevation: 8,
+        color: Colors.white,
+        cornerRadiusOnFullscreen: 0.0,
+        cornerRadius: 16,
+        snapSpec: const SnapSpec(
+          snap: true,
+          snappings: [1, 0.7, 1.0],
+          positioning: SnapPositioning.relativeToAvailableSpace,
+        ),
+        headerBuilder: (context, state) {
+            return Material(
+            color: Colors.white,
+            child: ListTile(
+              contentPadding: EdgeInsets.only(left: 16,right: 16,top: 16,bottom: 6),
+                title:Padding(
+                  padding: EdgeInsets.only(bottom: 6),
+                    child: Text('Select Your Slot',style:TextStyle(color: Colors.black))),
+              subtitle: DatePicker(
+                DateTime.now(),
+                initialSelectedDate: DateTime.now(),
+                selectionColor: Colors.black,
+                selectedTextColor: Colors.white,
+                onDateChange: (date) {
+                  // New date selected
+                  setState(() {
+                   // _selectedValue = date;
+                  });
+                },
+              ),
+            ),
+          );
+        },
+        footerBuilder: (context, state) {
+
+          return Material(
+            child: Container(
+              height: 56,
+              width: double.infinity,
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 4,bottom: 4),
+              alignment: Alignment.centerRight,
+              child: Container(
+                margin: EdgeInsets.only(right: 16),
+                padding: EdgeInsets.all(12),
+                constraints: BoxConstraints(maxWidth: 150,minWidth: 100),
+                decoration: BoxDecoration(
+                  borderRadius:BorderRadius.all(Radius.circular(6)),
+                  color: AppConstants.bgColor
+                ),
+                child: Text('Submit',textAlign: TextAlign.center,),
+              ),
+            ),
+          );
+        },
+        builder: (context, state) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              canvasColor: Colors.white,
+              unselectedWidgetColor: Colors.grey,
+              textTheme: TextTheme(
+                bodyText1: TextStyle(),
+                bodyText2: TextStyle(),
+              ).apply(
+                bodyColor: AppConstants.bgColor,
+                displayColor: AppConstants.bgColor,
+              ),
+              colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
+            ),
+            child: Container(
+              height: 800,
+              color: Colors.white,
+              child: Material(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, 'This is the result.'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Text(
+                            'This is the content of the sheet',
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    });
+
+    print(result); // This is the result.
   }
 }
