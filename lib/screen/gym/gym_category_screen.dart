@@ -259,7 +259,7 @@ class _GymCategoryScreenState extends State<GymCategoryScreen> {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return GymCard(item: gym.data[index]);
+                          return GymCard(item: gym.data[index],recommended_list: true,cat_logo: cat.image,);
                         },
                       ),
                     )

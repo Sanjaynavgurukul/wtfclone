@@ -26,7 +26,6 @@ class DiscoverScreen extends StatefulWidget {
 class _DiscoverScreenState extends State<DiscoverScreen> {
   GymStore store;
 
-  //
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -257,12 +256,16 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class GymCard extends StatelessWidget {
-  const GymCard({
+   GymCard({
     Key key,
     @required this.item,
+    this.recommended_list = false,
+     this.cat_logo = ''
   }) : super(key: key);
 
   final GymModelData item;
+  bool recommended_list;
+   String cat_logo;
 
   bool isRecommended(String value) {
     return value != null;
@@ -298,7 +301,7 @@ class GymCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 176,
+              height: 190,
               width: MediaQuery.of(context).size.width,
               // margin: EdgeInsets.only(right: 15),
               child: Stack(
@@ -470,14 +473,52 @@ class GymCard extends StatelessWidget {
                       ),
                     ),
                   Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 16),
+                      padding: EdgeInsets.all(12),
+                      color: Color(0xffBF6D6D),
+                      child: Text('40%\nOFF',textAlign:TextAlign.center,style:TextStyle(color: Colors.white,fontWeight:FontWeight.w600,fontSize: 16)),
+                    ),
+                  ),
+                  Align(
                     alignment: Alignment.bottomLeft,
                     child: ListTile(
-                      title: Text(item.gymName ?? '',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              fontStyle: FontStyle.normal)),
-                      subtitle: Text(item.address1 + ' ' + item.address2),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if(recommended_list)Container(
+                            margin: EdgeInsets.only(bottom: 6),
+                            child: Image.network(
+                              cat_logo,
+                              errorBuilder: (context, error, stackTrace) {
+                                return SizedBox();
+                              },
+                              loadingBuilder: (BuildContext context, Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes
+                                        : null,
+                                  ),
+                                );
+                              },
+                              fit: BoxFit.fitHeight,
+                              height: 50,
+                            ),
+                          ),
+                          Text(item.gymName ?? '',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  fontStyle: FontStyle.normal)),
+                          Text(item.address1 + ' ' + item.address2),
+                        ],
+                      ),
                       trailing: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.end,
