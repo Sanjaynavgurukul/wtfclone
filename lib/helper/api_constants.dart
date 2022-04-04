@@ -172,4 +172,6 @@ class Api {
 
   static String getNearestCatGym({String lat, String lng, String cat_id}) =>
       'gym/nearestgym?lat=$lat&long=$lng&addon_cat=$cat_id';
+
+  static String getGymCat()=>'gymcat?page&uid&status&category_name&limit, price_start&price_end';
 }

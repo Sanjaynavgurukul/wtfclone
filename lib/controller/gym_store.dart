@@ -59,6 +59,7 @@ import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/force_update_model.dart';
 import 'package:wtf/model/geo_address.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/model/gym_cat_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
@@ -246,6 +247,7 @@ class GymStore extends ChangeNotifier {
 
   List<Submission> selectedSubmissions = [];
   List<AddonsCatModel> addonsCatList = [];
+  List<GymCatModel> gymCatList = [];
   GymTypes nearestAddonsCatGymList;
 
   Future<void> setEventSubmission({List<Submission> data}) async {
@@ -2526,6 +2528,23 @@ class GymStore extends ChangeNotifier {
     }else{
       log('Addons cat getAddonsCat null');
       addonsCatList = [];
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> getGymCat()async{
+    gymCatList = [];
+    notifyListeners();
+
+    log('gym cat getGymCat method called');
+    var list = await RestDatasource().getGymCat();
+    if(list != null || list.isNotEmpty){
+      log('Gym cat getGymCat not null and not empty');
+      gymCatList = list;
+    }else{
+      log('gym cat getGymCat null');
+      gymCatList = [];
     }
 
     notifyListeners();

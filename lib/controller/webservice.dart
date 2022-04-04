@@ -40,6 +40,7 @@ import 'package:wtf/model/diet_model.dart';
 import 'package:wtf/model/diet_pref.dart';
 import 'package:wtf/model/force_update_model.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/model/gym_cat_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
@@ -1708,7 +1709,7 @@ class RestDatasource {
       return null;
     }
   }
-  //
+
   Future<GymTypes> getNearestCatGym({@required String cat_id}) async {
     String token = locator<AppPrefs>().token.getValue();
     String lat = locator<AppPrefs>().lat.getValue();
@@ -1730,6 +1731,29 @@ class RestDatasource {
       );
       return model;
     });
+  }
+
+  Future<List<GymCatModel>> getGymCat()async{
+    String token = locator<AppPrefs>().token.getValue();
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String finalUrl = Api.getGymCat();
+    var res =
+    await _netUtil.get(BASE_URL + finalUrl, headers: mapHeader);
+    print('get gym cat response --- $res');
+
+    if (res['status']) {
+      print('get gym cat response --- true --- $res');
+      var model = List<GymCatModel>.from(
+          res["data"].map((x) => GymCatModel.fromJsonToModel(x)));
+      print(
+          'get gym cat response --- list length --- ${model.length ?? 'no List Found'}');
+      return model;
+    } else {
+      return null;
+    }
   }
 
 }
