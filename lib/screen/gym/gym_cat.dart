@@ -219,15 +219,33 @@ class _GymCatState extends State<GymCat> {
                           subtitle: Text('Choose your gym of your budget',
                               style: TextStyle(fontWeight: FontWeight.w200))),
                       Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            cat(label: 'WTF ELITE', image: 'assets/images/elite.png'),
-                            cat(label: 'WTF LUXURY', image: 'assets/images/luxe.png'),
-                            cat(label: 'WTF PRO', image: 'assets/images/pro.png'),
-                          ],
+                        width: double.infinity,
+                        padding: EdgeInsets.only(left: 16),
+                        child:  Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            runAlignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            runSpacing: 0.0,
+                            spacing: 12.0,
+                            children: user.gymCatList
+                                .map((e) => Padding(padding:EdgeInsets.only(bottom: 20),child: cat(label: e.category_name??'No Name', image: e.image)),
+                            )
+                                .toList(),
+                          ),
                         ),
                       ),
+                      // Container(
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       cat(label: 'WTF ELITE', image: 'assets/images/elite.png'),
+                      //       cat(label: 'WTF LUXURY', image: 'assets/images/luxe.png'),
+                      //       cat(label: 'WTF PRO', image: 'assets/images/pro.png'),
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 18,
                       ),
@@ -330,7 +348,24 @@ class _GymCatState extends State<GymCat> {
             decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.grey),
                 borderRadius: BorderRadius.all(Radius.circular(100))),
-            child: Image.asset(image ?? 'assets/images/pro.png'),
+            child: Image.network(
+              '$image',
+              errorBuilder: (context, error, stackTrace) {
+                return Center(child: Text("Failed",));
+              },
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes
+                        : null,
+                  ),
+                );
+              },
+            ),
           ),
           SizedBox(
             height: 8,
