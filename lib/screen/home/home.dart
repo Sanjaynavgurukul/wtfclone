@@ -8,7 +8,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/flash_helper.dart';
@@ -66,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          NavigationService.pushName(Routes.addonsCat);
+          NavigationService.pushName(Routes.gymCat);
         },
         child: Icon(Icons.add),
       ),
