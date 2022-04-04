@@ -268,8 +268,8 @@ class GymModelData {
           second_payment_amount: json["second_payment_amount"],
           third_payment: json["third_payment"],
           third_payment_amount: json["third_payment_amount"],
-          addons: json['addons'] == null ? null : CatAddonsSlotsModel
-              .fromJsonToModel(json['addons'][0])
+
+          addons: json['addons'] == null ? null : getAddonsList(json['addons'])
       );
 
   Map<String, dynamic> toJson() =>
@@ -319,5 +319,17 @@ class GymModelData {
         "third_payment": third_payment,
         "third_payment_amount": third_payment_amount,
       };
+
+  static CatAddonsSlotsModel getAddonsList(List<dynamic> value){
+    if(value.isEmpty) return null;
+    else{
+      var list= value.map((i) => CatAddonsSlotsModel.fromJsonToModel(i)).toList();
+      if(list.isEmpty || list == null){
+        return null;
+      }else{
+        return list[0];
+      }
+    }
+  }
 }
 

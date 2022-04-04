@@ -1756,4 +1756,25 @@ class RestDatasource {
     }
   }
 
+
+  Future<GymTypes> getCatNearByGymsList({String lat, String lng,String cat_id}) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String finalUrl = Api.getCatNearByGym(lat, lng, cat_id);
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response get cat nearBy Gym list : " + res.toString());
+      GymTypes model = res != null && res['status']
+          ? GymTypes.fromJson(res)
+          : GymTypes(
+        data: [],
+      );
+      return model;
+    });
+  }
+
 }

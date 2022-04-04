@@ -228,8 +228,9 @@ class GymStore extends ChangeNotifier {
   DietConsumed dietConsumed;
 
   String discoverType = '';
+
   // LocationResult selectedNewLocation;
-  double _tempLat = 0.0,_tempLng = 0.0;
+  double _tempLat = 0.0, _tempLng = 0.0;
 
   double sessionRating = 0.0;
 
@@ -894,16 +895,13 @@ class GymStore extends ChangeNotifier {
   Future<void> getAllGyms({
     BuildContext context,
   }) async {
-    if(!preambleFromLogin)
-      await determinePosition(context);
-    GymModel res =
-    tempLat != 0.0 && tempLng != 0.0
+    if (!preambleFromLogin) await determinePosition(context);
+    GymModel res = tempLat != 0.0 && tempLng != 0.0
         ? await RestDatasource().getGym(
             lat: tempLat.toString(),
             lng: tempLng.toString(),
           )
-        :
-    await RestDatasource().getGym(
+        : await RestDatasource().getGym(
             lat: getLat().toString(),
             lng: getLng().toString(),
           );
@@ -1228,7 +1226,8 @@ class GymStore extends ChangeNotifier {
     var addresses = await Geocoder.google(Helper.googleMapKey)
         .findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    locator<AppPrefs>().address.setValue('${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+    locator<AppPrefs>().address.setValue(
+        '${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
     return first;
   }
 
@@ -1739,9 +1738,7 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
     GymTypes res = tempLat != 0.0 && tempLng != 0.0
         ? await RestDatasource().getDiscoverNow(
-            type: type,
-            lat: tempLat.toString(),
-            lng: tempLng.toString())
+            type: type, lat: tempLat.toString(), lng: tempLng.toString())
         : await RestDatasource().getDiscoverNow(
             type: type, lat: getLat().toString(), lng: getLng().toString());
     if (res != null) {
@@ -2501,31 +2498,30 @@ class GymStore extends ChangeNotifier {
     _tempLng = value;
   }
 
-
   double get tempLat => _tempLat;
 
   set tempLat(double value) {
     _tempLat = value;
   }
 
-  Future<bool> saveBmr()async{
+  Future<bool> saveBmr() async {
     print('save bmr called -----');
-    Map<String,dynamic> map = PreambleModel().toJsonPreamble(preambleModel);
+    Map<String, dynamic> map = PreambleModel().toJsonPreamble(preambleModel);
     bool b = await RestDatasource().saveBmrProgress(body: map);
     print('save bmr called after saved----- $b');
     return b;
   }
 
-  Future<void> getAddonsCat()async{
+  Future<void> getAddonsCat() async {
     addonsCatList = [];
     notifyListeners();
 
     log('Addons cat getAddonsCat method called');
     var list = await RestDatasource().getAddonsCat();
-    if(list != null || list.isNotEmpty){
+    if (list != null || list.isNotEmpty) {
       log('Addons cat getAddonsCat not null and not empty');
       addonsCatList = list;
-    }else{
+    } else {
       log('Addons cat getAddonsCat null');
       addonsCatList = [];
     }
@@ -2533,16 +2529,16 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getGymCat()async{
+  Future<void> getGymCat() async {
     gymCatList = [];
     notifyListeners();
 
     log('gym cat getGymCat method called');
     var list = await RestDatasource().getGymCat();
-    if(list != null || list.isNotEmpty){
+    if (list != null || list.isNotEmpty) {
       log('Gym cat getGymCat not null and not empty');
       gymCatList = list;
-    }else{
+    } else {
       log('gym cat getGymCat null');
       gymCatList = [];
     }
@@ -2550,14 +2546,28 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getNearestCatGym({@required String cat_id})async{
+  Future<void> getNearestCatGym({@required String cat_id}) async {
     nearestAddonsCatGymList = null;
     notifyListeners();
     var list = await RestDatasource().getNearestCatGym(cat_id: cat_id);
-    if(list.data != null || list.data.isNotEmpty){
+    if (list.data != null || list.data.isNotEmpty) {
       nearestAddonsCatGymList = list;
-    }else{
+    } else {
       nearestAddonsCatGymList = null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> getCatNearByGymsList({@required String cat_id}) async {
+    selectedGymTypes = null;
+    notifyListeners();
+    var list = await RestDatasource().getCatNearByGymsList(
+        lat: tempLat.toString(), lng: tempLng.toString(), cat_id: cat_id);
+
+    if (list.data != null || list.data.isNotEmpty) {
+      selectedGymTypes = list;
+    } else {
+      selectedGymTypes = null;
     }
     notifyListeners();
   }
