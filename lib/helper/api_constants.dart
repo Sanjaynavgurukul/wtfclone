@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 
@@ -177,4 +178,6 @@ class Api {
 
   static String getCatNearByGym(String lat, String lng,String cat_id) =>
       'gym/nearestgym?lat=$lat&long=$lng&gym_cat=$cat_id';
+
+  static String getAddOnsGymsSlots({@required String date})=>'slot/check/new?date=$date';
 }

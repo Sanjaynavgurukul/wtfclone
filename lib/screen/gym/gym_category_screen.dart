@@ -20,11 +20,10 @@ import 'arguments/gym_cat_argument.dart';
 
 class GymCategoryScreen extends StatefulWidget {
   static const String routeName = '/gymCategoryScreen';
-
   const GymCategoryScreen({Key key}) : super(key: key);
-
   @override
   _GymCategoryScreenState createState() => _GymCategoryScreenState();
+
 }
 
 class _GymCategoryScreenState extends State<GymCategoryScreen> {

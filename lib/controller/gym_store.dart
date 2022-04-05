@@ -250,6 +250,7 @@ class GymStore extends ChangeNotifier {
   List<AddonsCatModel> addonsCatList = [];
   List<GymCatModel> gymCatList = [];
   GymTypes nearestAddonsCatGymList;
+  AddOnSlotDetails addonsCatGymSlots;
 
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
@@ -2568,6 +2569,17 @@ class GymStore extends ChangeNotifier {
       selectedGymTypes = list;
     } else {
       selectedGymTypes = null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> getAddOnsCatGymSlots({@required String date, @required String addons_uid})async{
+    addonsCatGymSlots = null;
+    var v =await RestDatasource().getAddOnsCatGymSlots(date: date,addon_uid: addons_uid);
+    if(v.data != null || v != null){
+      addonsCatGymSlots = v;
+    }else{
+      addonsCatGymSlots = null;
     }
     notifyListeners();
   }
