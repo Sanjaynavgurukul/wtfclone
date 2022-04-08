@@ -8,7 +8,7 @@ class PreambleModel {
 
   String user_uid;
   String uid;
-
+  // =
   DateTime date;
   String n_token;
   String device_id;

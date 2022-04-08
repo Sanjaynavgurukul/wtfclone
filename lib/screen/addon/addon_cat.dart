@@ -30,6 +30,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   bool callMethod = true, callgymsMethod = true, refreshed = false;
   GymStore user;
   int initialTabSelected = 0;
+  final controller = ScrollController();
 
   final bool isPreview = false;
   final _scrollController = ScrollController();
@@ -195,6 +196,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
   }
 
   Widget sliderItem({@required GymModelData data, String imageUrl}) {
+    print('image irl $imageUrl');
     return Container(
       alignment: Alignment.topRight,
       width: MediaQuery.of(context).size.width,
@@ -303,7 +305,8 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
             margin: EdgeInsets.only(right: 12, left: 12),
             child: ListTile(
               onTap: () {
-                showAsBottomSheet(data.addons.uid);
+                _showDialog(context, data.addons.uid);
+                // showAsBottomSheet(data.addons.uid);
               },
               contentPadding: EdgeInsets.all(0),
               subtitle: Text(data.address1 + ' ' + data.address2,
@@ -499,10 +502,314 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
     });
   }
 
+  void _showDialog(BuildContext context, String cat_id) {
+    DateTime _dateTime;
+    int index = 0;
+    bool adonsCalled = false;
+    String slot_selected;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          maxChildSize: 1,
+          minChildSize: 0.7,
+          initialChildSize: 0.7,
+          expand: false,
+          builder: (_, controller) {
+            return StatefulBuilder(
+              builder: (context, state) {
+                return Consumer<GymStore>(builder: (context, user, snapshot) {
+                  if (!adonsCalled) {
+                    adonsCalled = true;
+                    var date = DateTime.now();
+                    String formattedDate =
+                        DateFormat('dd-MM-yyyy').format(date);
+                    user.getAddOnsCatGymSlots(
+                        date: '$formattedDate', addons_uid: cat_id);
+                  }
+                  if (user.addonsCatGymSlots == null ||
+                      user.addonsCatGymSlots.data == null) {
+                    return Material(
+                      color: Colors.white,
+                      child: Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.only(top: 30),
+                          alignment: Alignment.topCenter,
+                          height: 800,
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              Colors.black,
+                              BlendMode.srcATop,
+                            ),
+                            child: const CupertinoActivityIndicator(),
+                          )),
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.only(
+                              left: 16, right: 16, top: 16, bottom: 6),
+                          title: Padding(
+                              padding: EdgeInsets.only(bottom: 6),
+                              child: Text('Select Your Slot',
+                                  style: TextStyle(color: Colors.black))),
+                          subtitle: DatePicker(
+                            DateTime.now().subtract(const Duration(days: 2)),
+                            initialSelectedDate: DateTime.now(),
+                            selectionColor: Colors.black,
+                            selectedTextColor: Colors.white,
+                            onDateChange: (date) {
+                              // New date selected
+                              String formattedDate =
+                                  DateFormat('dd-MM-yyyy').format(date);
+                              print(
+                                  'date picker value changed ---- ${formattedDate}');
+
+                              user.getAddOnsCatGymSlots(
+                                  date: '$formattedDate', addons_uid: cat_id);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: user.addonsCatGymSlots.data.length != 0
+                                  ? ListView.builder(
+                                      controller: controller,
+                                      itemCount:
+                                          user.addonsCatGymSlots.data.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        AddOnSlotDetailsData item =
+                                            user.addonsCatGymSlots.data[index];
+                                        return item.data != null &&
+                                                item.data.length != 0
+                                            ? Container(
+                                                margin:
+                                                    EdgeInsets.only(bottom: 8),
+                                                width: double.infinity,
+                                                padding: EdgeInsets.all(18),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                12)),
+                                                    color: Color(0xffEFEFEF)),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text('${item.key}',style: TextStyle(color: Colors.black),),
+                                                    SizedBox(
+                                                      height: 16,
+                                                    ),
+                                                    ListView.builder(
+                                                        itemCount:
+                                                            item.data.length,
+                                                        physics:
+                                                            ClampingScrollPhysics(),
+                                                        shrinkWrap: true,
+                                                        itemBuilder://8650066595
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+
+                                                          SlotData slotItem =
+                                                              item.data[index];
+
+                                                          return InkWell(
+                                                            onTap: (){
+                                                              slot_selected = slotItem.uid;
+                                                              state(() {
+
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              margin:
+                                                                  EdgeInsets.only(
+                                                                      bottom: 12),
+                                                              alignment: Alignment
+                                                                  .topRight,
+                                                              width:
+                                                                  double.infinity,
+                                                              child: Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topRight,
+                                                                child: ListTile(
+                                                                  leading:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                100.0),
+                                                                    child: Image
+                                                                        .network(
+                                                                      slotItem.profile ??
+                                                                          '',
+                                                                      errorBuilder:
+                                                                          (context,
+                                                                              error,
+                                                                              stackTrace) {
+                                                                        return Center(
+                                                                            child:
+                                                                                Text(
+                                                                          "Failed",
+                                                                        ));
+                                                                      },
+                                                                      loadingBuilder: (BuildContext
+                                                                              context,
+                                                                          Widget
+                                                                              child,
+                                                                          ImageChunkEvent
+                                                                              loadingProgress) {
+                                                                        if (loadingProgress ==
+                                                                            null)
+                                                                          return child;
+                                                                        return Center(
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                            value: loadingProgress.expectedTotalBytes != null
+                                                                                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                                                                : null,
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      height: 54,
+                                                                      width: 54,
+                                                                    ),
+                                                                  ),
+                                                                  //     Container(
+                                                                  //   width: 54,
+                                                                  //   height: 54,
+                                                                  //   decoration: BoxDecoration(
+                                                                  //       color: Colors
+                                                                  //           .grey,
+                                                                  //       borderRadius:
+                                                                  //           BorderRadius.all(
+                                                                  //               Radius.circular(100))),
+                                                                  // ),
+                                                                  title: Wrap(
+                                                                    children: [
+                                                                      Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                                12),
+                                                                        decoration: BoxDecoration(
+                                                                            color: Colors
+                                                                                .transparent,
+                                                                            borderRadius: BorderRadius.all(Radius.circular(
+                                                                                8)),
+                                                                            border: Border.all(
+                                                                                width: 1,
+                                                                                color: Colors.grey)),
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                                '${slotItem.trainer_name ?? 'No Name'}',style: TextStyle(color: Colors.black)),
+                                                                            Text(
+                                                                              '${slotItem.startTime ?? ''}',
+                                                                              style:
+                                                                                  TextStyle(fontSize: 12,fontWeight: FontWeight.w400,color: Colors.black),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              // child: Row(
+                                                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                                                              //   mainAxisAlignment: MainAxisAlignment.end,
+                                                              //   children: [
+                                                              // Container(
+                                                              //   width:54,
+                                                              //   height:54,
+                                                              //   decoration: BoxDecoration(
+                                                              //     color: Colors.grey,
+                                                              //     borderRadius: BorderRadius.all(Radius.circular(100))
+                                                              //   ),
+                                                              // ),
+                                                              //     // SizedBox(width:12),
+                                                              //     ListTile(
+                                                              //       title: Text('hi'),
+                                                              //     ),
+                                                              //     Container(
+                                                              //       padding: EdgeInsets.all(12),
+                                                              //       decoration: BoxDecoration(
+                                                              //           color: Colors.transparent,
+                                                              //           borderRadius: BorderRadius.all(Radius.circular(8)),
+                                                              //         border: Border.all(width: 1,color: Colors.grey)
+                                                              //       ),child: Text('Some trainer name here Some trainer name here Some trainer name here'),
+                                                              //     )
+                                                              //   ],
+                                                              // ),
+                                                            ),
+                                                          );
+                                                        }),
+                                                  ],
+                                                ),
+                                              )
+                                            : SizedBox();
+                                      })
+                                  : Container(
+                                      padding: EdgeInsets.only(top: 30),
+                                      alignment: Alignment.topCenter,
+                                      child: Text(
+                                        'No Slot Found!',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    )),
+                        ),
+                        Material(
+                          child: Container(
+                            height: 56,
+                            width: double.infinity,
+                            color: Colors.white,
+                            padding: EdgeInsets.only(top: 4, bottom: 4),
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              margin: EdgeInsets.only(right: 16),
+                              padding: EdgeInsets.all(12),
+                              constraints:
+                                  BoxConstraints(maxWidth: 150, minWidth: 100),
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
+                                  color: AppConstants.bgColor),
+                              child: Text(
+                                'Submit',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                });
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   void showAsBottomSheet(String cat_id) async {
     DateTime _dateTime;
     int index = 0;
     bool adonsCalled = false;
+
     final result = await showSlidingBottomSheet(context, builder: (context) {
       return SlidingSheetDialog(
         elevation: 8,
@@ -604,40 +911,130 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                         color: Colors.white,
                         child: Padding(
                             padding: const EdgeInsets.all(16),
-                            child: user.addonsCatGymSlots.data != null &&
-                                    user.addonsCatGymSlots.data.isNotEmpty
-                                ? ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount:
-                                        user.addonsCatGymSlots.data.length,
-                                    itemBuilder: (context, i) {
-                                      AddOnSlotDetailsData item =
-                                          user.addonsCatGymSlots.data[i];
-
-                                      return Material(
-                                        child: InkWell(
-                                          onTap: () {
-                                            state(() {
-                                              index = i;
-                                            });
-                                          },
-                                          child: Text(
-                                            '${item.key}',
-                                            style: TextStyle(
-                                                color: index == i
-                                                    ? Colors.red
-                                                    : Colors.black),
-                                          ),
-                                        ),
-                                      );
-                                    })
-                                : Container(
-                                    padding: EdgeInsets.only(top: 30),
-                                    alignment: Alignment.topCenter,
-                                    height: 800,
-                                    child: Text('No Slot Found!'),
-                                  )),
+                            child:
+                                user.addonsCatGymSlots.data != null &&
+                                        user.addonsCatGymSlots.data.isNotEmpty
+                                    ? ListView.builder(
+                                        controller: controller,
+                                        itemCount:
+                                            user.addonsCatGymSlots.data.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Container(
+                                            margin: EdgeInsets.only(bottom: 8),
+                                            width: double.infinity,
+                                            padding: EdgeInsets.all(18),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12)),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Color(0xff262626),
+                                                    Color(0xff151515),
+                                                  ],
+                                                )),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text('07:00 - 8:00 AM'),
+                                                SizedBox(
+                                                  height: 16,
+                                                ),
+                                                ListView.builder(
+                                                    itemCount: 2,
+                                                    physics:
+                                                        ClampingScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Container(
+                                                        margin: EdgeInsets.only(
+                                                            bottom: 12),
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        width: double.infinity,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .topRight,
+                                                          child: ListTile(
+                                                            leading: Container(
+                                                              width: 54,
+                                                              height: 54,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              100))),
+                                                            ),
+                                                            title: Wrap(
+                                                              children: [
+                                                                Container(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              12),
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(Radius.circular(
+                                                                              8)),
+                                                                      border: Border.all(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.grey)),
+                                                                  child: Text(
+                                                                      'Some trainer name'),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        // child: Row(
+                                                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                                                        //   mainAxisAlignment: MainAxisAlignment.end,
+                                                        //   children: [
+                                                        // Container(
+                                                        //   width:54,
+                                                        //   height:54,
+                                                        //   decoration: BoxDecoration(
+                                                        //     color: Colors.grey,
+                                                        //     borderRadius: BorderRadius.all(Radius.circular(100))
+                                                        //   ),
+                                                        // ),
+                                                        //     // SizedBox(width:12),
+                                                        //     ListTile(
+                                                        //       title: Text('hi'),
+                                                        //     ),
+                                                        //     Container(
+                                                        //       padding: EdgeInsets.all(12),
+                                                        //       decoration: BoxDecoration(
+                                                        //           color: Colors.transparent,
+                                                        //           borderRadius: BorderRadius.all(Radius.circular(8)),
+                                                        //         border: Border.all(width: 1,color: Colors.grey)
+                                                        //       ),child: Text('Some trainer name here Some trainer name here Some trainer name here'),
+                                                        //     )
+                                                        //   ],
+                                                        // ),
+                                                      );
+                                                    }),
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                    : Container(
+                                        padding: EdgeInsets.only(top: 30),
+                                        alignment: Alignment.topCenter,
+                                        height: 800,
+                                        child: Text('No Slot Found!'),
+                                      )),
                       ),
                     );
                   }

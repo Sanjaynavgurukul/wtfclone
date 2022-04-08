@@ -92,6 +92,7 @@ class SlotData {
     this.dateAdded,
     this.addonsId,
     this.date,
+    this.trainer_name,this.profile
   });
 
   int id;
@@ -106,6 +107,8 @@ class SlotData {
   String dateAdded;
   String addonsId;
   DateTime date;
+  String trainer_name;
+  String profile;
 
   factory SlotData.fromJson(Map<String, dynamic> json) {
     String temp = json['start_time'];
@@ -200,6 +203,8 @@ class SlotData {
       status: json["status"],
       dateAdded: json["date_added"],
       addonsId: json["addons_id"],
+      trainer_name: json["trainer_name"]??'',
+      profile:json["profile"]??'',
       date: DateTime.parse(json["date"]),
     );
   }

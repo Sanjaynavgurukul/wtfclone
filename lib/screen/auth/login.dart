@@ -167,7 +167,9 @@ class _LoginPageState extends State<LoginPage> {
                                 } else {
                                   isMobileNumber = true;
                                 }
-                                setState(() {});
+                                setState(() {
+
+                                });
                               },
                             ),
                             SizedBox(height: 20),
