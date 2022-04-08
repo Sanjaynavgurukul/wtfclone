@@ -110,6 +110,8 @@ dependencies:
   path_provider: ^2.0.9
   syncfusion_flutter_sliders: ^19.4.56
   sliding_sheet: ^0.5.2
+  #Firebase Crys
+  firebase_crashlytics: any
 
 dev_dependencies:
   flutter_test:

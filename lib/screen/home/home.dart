@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_gradient_text/easy_gradient_text.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -55,19 +56,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     store.preambleModel = new PreambleModel();
-      //     store.preambleFromLogin = true;
-      //     NavigationService.pushName(Routes.userDetail);
-      //   },
-      //   child:Icon(Icons.add)
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           // NavigationService.pushName(Routes.gymCat);
-          NavigationService.pushName(Routes.addonsCat);
+         NavigationService.pushName(Routes.addonsCat);
+          //FirebaseCrashlytics.instance.crash();
         },
+
         child: Icon(Icons.add),
       ),
       body: RefreshIndicator(

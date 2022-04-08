@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging_platform_interface/src/remote_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,36 +33,44 @@ import 'helper/routes.dart';
 final GetIt locator = GetIt.instance;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  Provider.debugCheckInvalidValueType = null;
-  await setupLocator();
-  await Firebase.initializeApp();
-  AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
-    'resource://drawable/ic_launcher',
-    [
-      NotificationChannel(
-        channelKey: '123456',
-        channelName: 'WTF',
-        channelDescription: 'WTF Notifications',
-        defaultColor: AppConstants.primaryColor,
-        playSound: true,
-        soundSource: 'resource://raw/res_morph_power_rangers',
-        ledColor: Colors.white,
-      )
-    ],
-  );
-  // SharedPref.pref = await SharedPreferences.getInstance();
+  await runZonedGuarded(() async {
+    //Here
+    WidgetsFlutterBinding.ensureInitialized();
+    Provider.debugCheckInvalidValueType = null;
+    await setupLocator();
+    await Firebase.initializeApp();
+    //Firebase FirebaseCrashlytics :d
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      'resource://drawable/ic_launcher',
+      [
+        NotificationChannel(
+          channelKey: '123456',
+          channelName: 'WTF',
+          channelDescription: 'WTF Notifications',
+          defaultColor: AppConstants.primaryColor,
+          playSound: true,
+          soundSource: 'resource://raw/res_morph_power_rangers',
+          ledColor: Colors.white,
+        )
+      ],
+    );
+    // SharedPref.pref = await SharedPreferences.getInstance();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness:
-          Platform.isAndroid ? Brightness.light : Brightness.dark,
-    ),
-  );
-  runApp(MyApp());
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness:
+        Platform.isAndroid ? Brightness.light : Brightness.dark,
+      ),
+    );
+    runApp(MyApp());
+    //END here
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
 
 class MyApp extends StatefulWidget {
