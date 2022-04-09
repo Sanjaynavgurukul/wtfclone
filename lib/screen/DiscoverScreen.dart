@@ -49,7 +49,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           Container(
             color: AppColors.BACK_GROUND_BG,
             padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-            child: SearchBar(),
+            child: SearchBar(
+              onClickLocation: (){
+                print('location changed ----');
+                store.getDiscoverNow(type: 'gym');
+              },
+            ),
           ),
           //ListView
           Expanded(
@@ -135,8 +140,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 }
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({
-    Key key,
+  Function() onClickLocation;
+   SearchBar({
+    Key key,@required this.onClickLocation
   }) : super(key: key);
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -234,12 +240,13 @@ class _SearchBarState extends State<SearchBar> {
                     print('check condition latlng not null');
                     store.tempLat = result.latLng.latitude;
                     store.tempLng = result.latLng.longitude;
+                    widget.onClickLocation();
                     // store.setNewLocation(
                     //   result: result,
                     //   context: context,
                     // );
                   }else{
-                    print('check condition latlng null');
+                    print('No Location Selected ----');
                   }
                 });
               },
@@ -472,7 +479,7 @@ class GymCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Align(
+                  recommended_list ?Align(
                     alignment: Alignment.topLeft,
                     child: Container(
                       margin: EdgeInsets.only(left: 16),
@@ -480,7 +487,7 @@ class GymCard extends StatelessWidget {
                       color: Color(0xffBF6D6D),
                       child: Text('40%\nOFF',textAlign:TextAlign.center,style:TextStyle(color: Colors.white,fontWeight:FontWeight.w600,fontSize: 16)),
                     ),
-                  ),
+                  ):Container(),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ListTile(

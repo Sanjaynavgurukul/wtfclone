@@ -54,7 +54,14 @@ class _ExplorePageState extends State<ExplorePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: SearchBar(),
+                  child: SearchBar(
+                    onClickLocation: (){
+                      context.read<GymStore>().getDiscoverNow(
+                        context: context,
+                        type: 'gym',
+                      );
+                    },
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,
                     vertical: 6.0,
