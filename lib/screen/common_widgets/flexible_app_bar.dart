@@ -47,15 +47,24 @@ class FlexibleAppBar extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(0))),
                         child: Image.network(
                           i.images,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(child: Text("Failed to load image",));
+                          },
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
                           fit: BoxFit.fill,
                           width: double.infinity,
                           height: double.infinity,
-                          loadingBuilder: (context, _, chunk) => chunk == null
-                              ? _
-                              : RectangleShimmering(
-                            width: double.infinity,
-                            height: 180.0,
-                          ),
                         ),
                       );
                     },

@@ -27,6 +27,7 @@ import 'package:wtf/widget/progress_loader.dart';
 
 import '../main.dart';
 import 'DiscoverScreen.dart';
+import 'gym/arguments/gym_detail_argument.dart';
 import 'gym/membership_page.dart';
 import 'home/home.dart';
 
@@ -900,156 +901,6 @@ class CommonAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var old = Padding(
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: 12.0,
-        top: 12.0,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          UIHelper.horizontalSpace(6.0),
-          InkWell(
-            onTap: () async {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  // builder: (context) => MyProfileXd(),
-                  builder: (context) => SidebarDrawer(),
-                ),
-              );
-            },
-            child: PreferenceBuilder<String>(
-              preference: locator<AppPrefs>().avatar,
-              builder: (context, snapshot) {
-                print('user image: $snapshot');
-                String img = snapshot;
-                if (img.startsWith(
-                    'https://wtfupme-images-1435.s3.ap-south-1.amazonaws.com')) {
-                  img.replaceFirst(
-                      'https://wtfupme-images-1435.s3.ap-south-1.amazonaws.com',
-                      AppConstants.cloudFrontImage);
-                }
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: Container(
-                    width: 60.0,
-                    height: 60.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.network(
-                      img,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          UIHelper.horizontalSpace(16.0),
-          Expanded(
-            child: Consumer<GymStore>(
-              builder: (context, store, child) => InkWell(
-                onTap: () async {
-                  context.read<GymStore>().getGymDetails(
-                        context: context,
-                        gymId: store.activeSubscriptions.data.gymId,
-                      );
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (_) => BuyMemberShipPage(
-                        gymId: store.activeSubscriptions.data.gymId,
-                      ),
-                    ),
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PreferenceBuilder<String>(
-                        preference: locator<AppPrefs>().userName,
-                        builder: (context, name) {
-                          return Text(
-                            'Hi! ${name.isNotEmpty ? name.capitalize() : ""}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0,
-                              color: Colors.white,
-                            ),
-                          );
-                        }),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    RichText(
-                      text: TextSpan(
-                          text: 'Welcome to ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14.0,
-                            color: Colors.white,
-                          ),
-                          children: [
-                            if (store.activeSubscriptions == null ||
-                                store.activeSubscriptions.data == null)
-                              TextSpan(
-                                text: ' WTF',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16.0,
-                                  color: Colors.redAccent,
-                                ),
-                              )
-                          ]),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    if (store.activeSubscriptions != null &&
-                        store.activeSubscriptions.data != null)
-                      Text(
-                        store.activeSubscriptions.data.gymName ?? 'n/a',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16.0,
-                          color: Colors.redAccent,
-                        ),
-                      )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          VerticalDivider(
-            width: 1.0,
-            color: Colors.white,
-          ),
-          UIHelper.horizontalSpace(10.0),
-          PreferenceBuilder<String>(
-            preference: locator<AppPrefs>().dateAdded,
-            builder: (context, snapshot) {
-              return snapshot != null
-                  ? Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        // '',
-                        'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 11.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  : Container();
-            },
-          ),
-        ],
-      ),
-    );
     return Container(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -1110,13 +961,15 @@ class CommonAppBar extends StatelessWidget {
                                   context: context,
                                   gymId: store.activeSubscriptions.data.gymId,
                                 );
-                            Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                builder: (_) => BuyMemberShipPage(
-                                  gymId: store.activeSubscriptions.data.gymId,
-                                ),
-                              ),
-                            );
+                            NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: store.selectedGymDetail.data, gymId: store.activeSubscriptions.data.gymId));
+
+                            // Navigator.of(context).push(
+                            //   CupertinoPageRoute(
+                            //     builder: (_) => BuyMemberShipPage(
+                            //       gymId: store.activeSubscriptions.data.gymId,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

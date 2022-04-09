@@ -13,6 +13,7 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/gym_model.dart';
+import 'package:wtf/screen/gym/arguments/gym_detail_argument.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
@@ -97,18 +98,19 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                     searchableList:
                                     user.selectedGymTypes.data,onClick: (GymModelData data){
                                   // print('this is clicked from search ----- ${data.gymName}');
-                                  context.read<GymStore>().getGymByID(
-                                    context: context,
-                                    gymId: data.userId,
-                                  );
+                                  // context.read<GymStore>().getGymByID(
+                                  //   context: context,
+                                  //   gymId: data.userId,
+                                  // );
                                   print('gym iD --- from nav ${data.userId}');
-                                  Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                      builder: (_) => BuyMemberShipPage(
-                                        gymId: data.userId,
-                                      ),
-                                    ),
-                                  );
+                                  NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: data, gymId: data.userId));
+                                  // Navigator.of(context).push(
+                                  //   CupertinoPageRoute(
+                                  //     builder: (_) => BuyMemberShipPage(
+                                  //       gymId: data.userId,
+                                  //     ),
+                                  //   ),
+                                  // );
                                 }));
                           },
                           child: TextFormField(
@@ -435,18 +437,20 @@ class GymCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: clicable ? () {
-          context.read<GymStore>().getGymByID(
-                context: context,
-                gymId: item.userId,
-              );
+          // context.read<GymStore>().getGymByID(
+          //       context: context,
+          //       gymId: item.userId,
+          //     );
           print('gym iD --- from nav ${item.userId}');
-          Navigator.of(context).push(
-            CupertinoPageRoute(
-              builder: (_) => BuyMemberShipPage(
-                gymId: item.userId,
-              ),
-            ),
-          );
+          NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: item, gymId: item.userId));
+
+          // Navigator.of(context).push(
+          //   CupertinoPageRoute(
+          //     builder: (_) => BuyMemberShipPage(
+          //       gymId: item.userId,
+          //     ),
+          //   ),
+          // );
       }:null,
       child: Container(
         margin: EdgeInsets.only(bottom: 24),

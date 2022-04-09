@@ -16,6 +16,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
+import 'package:wtf/screen/gym/arguments/gym_detail_argument.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/custom_button.dart';
@@ -49,215 +50,235 @@ class _EventDetailsState extends State<EventDetails> {
       ),
       body: SafeArea(
         child: Consumer<GymStore>(
-          builder: (context, gymStore, child) => gymStore.selectedEventData ==
-                  null
+          builder: (context, gymStore, child) =>
+          gymStore.selectedEventData ==
+              null
               ? LoadingWithBackground()
               : gymStore.selectedEventData != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              ? Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (gymStore.selectedEventData.image != null &&
+                      gymStore.selectedEventData.image.isNotEmpty)
+                    AutoImageSlider(
+                      mainContainerHeight:
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .height / 2.3,
+                      childContainerHeight:
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .height / 2.28,
+                      items: [gymStore.selectedEventData.image],
+                      dotSize: 8.0,
+                      activeMarkerColor: Colors.red,
+                      inActiveMarkerColor:
+                      Colors.white.withOpacity(0.4),
+                      markerType: PositionMarkerType.dots,
+                      positionedMarker: true,
+                      showDelete: false,
+                      showBorderDots: true,
+                      autoScroll: false,
+                    )
+                  else
+                    Container(
+                      height:
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .height / 2.3,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 15,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          gymStore.selectedEventData.mode ==
+                              'challenge'
+                              ? "Challenge"
+                              : "Events",
+                          // 'WTF Team Core',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        UIHelper.verticalSpace(6.0),
+                        Text(
+                          gymStore.selectedEventData.name ?? '',
+                          // 'WTF Team Core',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        UIHelper.verticalSpace(6.0),
+                        InkWell(
+                          onTap: () {
+                            context.read<GymStore>().getGymDetails(
+                              context: context,
+                              gymId: gymStore
+                                  .selectedEventData.gymId,
+                            );
+                            NavigationService.pushName(Routes.buyMemberShipPage,
+                                argument: GymDetailArgument(
+                                    gym: gymStore.selectedGymDetail.data,
+                                    gymId: gymStore.selectedEventData.gymId));
+
+                            // Navigator.of(context).push(
+                            //   CupertinoPageRoute(
+                            //     builder: (_) =>
+                            //         BuyMemberShipPage(
+                            //           gymId: gymStore
+                            //               .selectedEventData.gymId,
+                            //         ),
+                            //   ),
+                            // );
+                          },
+                          child: Text(
+                            'By ${gymStore.selectedEventData.gymName}',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        UIHelper.verticalSpace(20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
                           children: [
-                            if (gymStore.selectedEventData.image != null &&
-                                gymStore.selectedEventData.image.isNotEmpty)
-                              AutoImageSlider(
-                                mainContainerHeight:
-                                    MediaQuery.of(context).size.height / 2.3,
-                                childContainerHeight:
-                                    MediaQuery.of(context).size.height / 2.28,
-                                items: [gymStore.selectedEventData.image],
-                                dotSize: 8.0,
-                                activeMarkerColor: Colors.red,
-                                inActiveMarkerColor:
-                                    Colors.white.withOpacity(0.4),
-                                markerType: PositionMarkerType.dots,
-                                positionedMarker: true,
-                                showDelete: false,
-                                showBorderDots: true,
-                                autoScroll: false,
-                              )
-                            else
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height / 2.3,
-                                color: Colors.white.withOpacity(0.1),
-                              ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 15,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            SvgPicture.asset(
+                              'assets/svg/calendar.svg',
+                              color: Colors.white.withOpacity(0.7),
+                              height: 24.0,
+                            ),
+                            UIHelper.horizontalSpace(12.0),
+                            Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Helper.stringWeekDay(gymStore
+                                      .selectedEventData.date
+                                      .toString()) ??
+                                      '',
+                                  // 'WTF Team Core',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                UIHelper.verticalSpace(6.0),
+                                Text(
+                                  ' ${gymStore.selectedEventData
+                                      .timeFrom} to ${gymStore.selectedEventData
+                                      .timeTo}',
+                                  style: TextStyle(
+                                    color:
+                                    Colors.white.withOpacity(0.6),
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        UIHelper.verticalSpace(12.0),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Row(
                                 children: [
-                                  Text(
-                                    gymStore.selectedEventData.mode ==
-                                            'challenge'
-                                        ? "Challenge"
-                                        : "Events",
-                                    // 'WTF Team Core',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  Icon(
+                                    Icons.location_on,
+                                    color:
+                                    Colors.white.withOpacity(0.7),
+                                    size: 20.0,
                                   ),
-                                  UIHelper.verticalSpace(6.0),
-                                  Text(
-                                    gymStore.selectedEventData.name ?? '',
-                                    // 'WTF Team Core',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  UIHelper.verticalSpace(6.0),
-                                  InkWell(
-                                    onTap: () {
-                                      context.read<GymStore>().getGymDetails(
-                                            context: context,
-                                            gymId: gymStore
-                                                .selectedEventData.gymId,
-                                          );
-                                      Navigator.of(context).push(
-                                        CupertinoPageRoute(
-                                          builder: (_) => BuyMemberShipPage(
-                                            gymId: gymStore
-                                                .selectedEventData.gymId,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                  UIHelper.horizontalSpace(12.0),
+                                  Flexible(
                                     child: Text(
-                                      'By ${gymStore.selectedEventData.gymName}',
+                                      '${gymStore.selectedEventData
+                                          .gymAddress1 ?? ''}, ${gymStore
+                                          .selectedEventData.gymAddress2}' ??
+                                          '',
+                                      textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.white,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
                                   ),
-                                  UIHelper.verticalSpace(20.0),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/svg/calendar.svg',
-                                        color: Colors.white.withOpacity(0.7),
-                                        height: 24.0,
-                                      ),
-                                      UIHelper.horizontalSpace(12.0),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Helper.stringWeekDay(gymStore
-                                                    .selectedEventData.date
-                                                    .toString()) ??
-                                                '',
-                                            // 'WTF Team Core',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w900,
-                                            ),
-                                          ),
-                                          UIHelper.verticalSpace(6.0),
-                                          Text(
-                                            ' ${gymStore.selectedEventData.timeFrom} to ${gymStore.selectedEventData.timeTo}',
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.6),
-                                              fontSize: 12.0,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  UIHelper.verticalSpace(12.0),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.location_on,
-                                              color:
-                                                  Colors.white.withOpacity(0.7),
-                                              size: 20.0,
-                                            ),
-                                            UIHelper.horizontalSpace(12.0),
-                                            Flexible(
-                                              child: Text(
-                                                '${gymStore.selectedEventData.gymAddress1 ?? ''}, ${gymStore.selectedEventData.gymAddress2}' ??
-                                                    '',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      GetDirectionButton(
-                                        lat: double.tryParse(
-                                          gymStore.selectedEventData.gymLat,
-                                        ),
-                                        lng: double.tryParse(
-                                          gymStore.selectedEventData.gymLong,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  UIHelper.verticalSpace(30.0),
-                                  Html(
-                                    data: gymStore
-                                            .selectedEventData.description ??
-                                        '',
-                                    // padding: EdgeInsets.all(8.0),
-                                    // customRender: (node, children) {
-                                    //   if (node is dom.Element) {
-                                    //     switch (node.localName) {
-                                    //       case "custom_tag": // using this, you can handle custom tags in your HTML
-                                    //         return Column(children: children);
-                                    //     }
-                                    //   }
-                                    // },
-                                  ),
-                                  SizedBox(
-                                    height: 14.0,
-                                  ),
                                 ],
+                              ),
+                            ),
+                            GetDirectionButton(
+                              lat: double.tryParse(
+                                gymStore.selectedEventData.gymLat,
+                              ),
+                              lng: double.tryParse(
+                                gymStore.selectedEventData.gymLong,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    )
-                  : Center(
-                      child: Text(
-                        'Event Details not available.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
+                        UIHelper.verticalSpace(30.0),
+                        Html(
+                          data: gymStore
+                              .selectedEventData.description ??
+                              '',
+                          // padding: EdgeInsets.all(8.0),
+                          // customRender: (node, children) {
+                          //   if (node is dom.Element) {
+                          //     switch (node.localName) {
+                          //       case "custom_tag": // using this, you can handle custom tags in your HTML
+                          //         return Column(children: children);
+                          //     }
+                          //   }
+                          // },
                         ),
-                      ),
+                        SizedBox(
+                          height: 14.0,
+                        ),
+                      ],
                     ),
+                  ),
+                ],
+              ),
+            ),
+          )
+              : Center(
+            child: Text(
+              'Event Details not available.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -277,37 +298,38 @@ class EventButton extends StatefulWidget {
 
 class _EventButtonState extends State<EventButton> {
   GymStore store;
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
     bool isStarted = store.selectedEventData != null
         ? Helper.stringForDatetime2(DateTime.now().toIso8601String()).contains(
-                Helper.stringForDatetime2(store.selectedEventData.validFrom))
-            ? true
-            : DateTime.now()
-                .isAfter(DateTime.parse(store.selectedEventData.validFrom))
+        Helper.stringForDatetime2(store.selectedEventData.validFrom))
+        ? true
+        : DateTime.now()
+        .isAfter(DateTime.parse(store.selectedEventData.validFrom))
         : false;
     if (isStarted == false) {
       isStarted = store.selectedEventData != null
           ? Helper.stringForDatetime2(DateTime.now().toIso8601String())
-                  .contains(
-                      Helper.stringForDatetime2(store.selectedEventData.date))
-              ? true
-              : DateTime.now()
-                  .isAfter(DateTime.parse(store.selectedEventData.date))
+          .contains(
+          Helper.stringForDatetime2(store.selectedEventData.date))
+          ? true
+          : DateTime.now()
+          .isAfter(DateTime.parse(store.selectedEventData.date))
           : false;
     }
     bool isValid = store.selectedEventData != null
         ? (DateTime.now()
-                    .isBefore(DateTime.parse(store.selectedEventData.date)) &&
-                !(store.selectedEventData.submissions == null)) ||
-            Helper.stringForDatetime2(DateTime.now().toIso8601String())
-                .contains(
-                    Helper.stringForDatetime2(store.selectedEventData.date))
+        .isBefore(DateTime.parse(store.selectedEventData.date)) &&
+        !(store.selectedEventData.submissions == null)) ||
+        Helper.stringForDatetime2(DateTime.now().toIso8601String())
+            .contains(
+            Helper.stringForDatetime2(store.selectedEventData.date))
         : false;
     if (store.selectedEventData != null) {
       if (DateTime.now()
-              .isBefore(DateTime.parse(store.selectedEventData.date)) ||
+          .isBefore(DateTime.parse(store.selectedEventData.date)) ||
           Helper.stringForDatetime2(DateTime.now().toIso8601String()).contains(
               Helper.stringForDatetime2(store.selectedEventData.date))) {
         isValid = true;
@@ -324,188 +346,215 @@ class _EventButtonState extends State<EventButton> {
     }
     log('isStarted: $isStarted   ---->>> isValid: $isValid');
     return Consumer<GymStore>(
-      builder: (context, store, child) => store.selectedEventData != null &&
-              !isStarted &&
-              isValid
+      builder: (context, store, child) =>
+      store.selectedEventData != null &&
+          !isStarted &&
+          isValid
           ? Column(
+        children: [
+          UIHelper.verticalSpace(12.0),
+          Text(
+              'Events Registration starts on: ${Helper.stringForDatetime2(
+                  store?.selectedEventData?.validFrom) ?? ''}'),
+          CustomButton(
+            height: 48.0,
+            onTap: () {
+              log('time;;; ${-DateTime
+                  .now()
+                  .difference(DateTime.parse(store.selectedEventData.validFrom))
+                  .inSeconds}');
+            },
+            bgColor: Colors.white,
+            textColor: Colors.red,
+            radius: 12.0,
+            text: 'Coming Soon!!',
+          ),
+        ],
+      )
+          : isValid
+          ? Column(
+        children: [
+          UIHelper.verticalSpace(12.0),
+          if (store.selectedEventData != null &&
+              store.selectedEventData.validTo != null)
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                UIHelper.verticalSpace(12.0),
+                Image.asset(
+                  'assets/images/trending.png',
+                  width: 15.0,
+                  height: 20.0,
+                ),
                 Text(
-                    'Events Registration starts on: ${Helper.stringForDatetime2(store?.selectedEventData?.validFrom) ?? ''}'),
-                CustomButton(
-                  height: 48.0,
-                  onTap: () {
-                    log('time;;; ${-DateTime.now().difference(DateTime.parse(store.selectedEventData.validFrom)).inSeconds}');
-                  },
-                  bgColor: Colors.white,
-                  textColor: Colors.red,
-                  radius: 12.0,
-                  text: 'Coming Soon!!',
+                  '${DateTime
+                      .now()
+                      .difference(DateTime.parse(store.selectedEventData.date))
+                      .inHours
+                      .isEven ? DateTime
+                      .now()
+                      .difference(DateTime.parse(store.selectedEventData.date))
+                      .inHours < 24 ? '1 Day left' : '${-DateTime
+                      .now()
+                      .difference(DateTime.parse(store.selectedEventData.date))
+                      .inDays + 1 % 24} Days left' : '${DateTime
+                      .now()
+                      .difference(DateTime.parse(store.selectedEventData.date))
+                      .inDays == 0 ? '1 Day Left' : '${DateTime
+                      .now()
+                      .difference(DateTime.parse(store.selectedEventData.date))
+                      .inDays}  Days left'}'}',
                 ),
               ],
+            ),
+          UIHelper.verticalSpace(2.0),
+          Consumer<GymStore>(
+            builder: (context, store, child) =>
+            store
+                .selectedEventData !=
+                null
+                ? store.isEventParticipated
+                ? CustomButton(
+              height: 40.0,
+              onTap: () {
+                if (Helper.formatDate2(
+                    DateTime.now().toIso8601String()) ==
+                    Helper.formatDate2(
+                        store.selectedEventData.date) ||
+                    store.selectedEventData.submissions != null) {
+                  if (store.eventParticipation != null &&
+                      store.eventParticipation.data !=
+                          null &&
+                      store.eventParticipation.data
+                          .dateCheckedin !=
+                          null) {
+                    if (store.selectedEventData
+                        .submissions !=
+                        null &&
+                        store.selectedEventData.submissions
+                            .isNotEmpty &&
+                        int.tryParse(store.selectedEventData
+                            .submissions) >
+                            0) {
+                      store.getEventSubmission(
+                        context: context,
+                        eventId:
+                        store.selectedEventData.uid,
+                      );
+                      NavigationService.navigateTo(
+                          Routes.eventSubmissions);
+                    } else {
+                      FlashHelper.informationBar(
+                        context,
+                        message: 'Event already checked-in',
+                      );
+                    }
+                  } else {
+                    store.eventCheckIn(
+                      context: context,
+                      eventId: store.selectedEventData.uid,
+                    );
+                  }
+                } else {
+                  FlashHelper.errorBar(
+                    context,
+                    message: 'cannot start now',
+                  );
+                }
+              },
+              textColor: Colors.white,
+              bgColor: AppConstants.primaryColor,
+              radius: 12.0,
+              text: Helper.formatDate2(DateTime.now()
+                  .toIso8601String()) ==
+                  Helper.formatDate2(
+                      store.selectedEventData.date) ||
+                  store.selectedEventData.submissions != null
+                  ? store.eventParticipation != null &&
+                  store.eventParticipation.data !=
+                      null &&
+                  store.eventParticipation.data
+                      .dateCheckedin !=
+                      null
+                  ? store.selectedEventData
+                  .submissions !=
+                  null &&
+                  store.selectedEventData
+                      .submissions.isNotEmpty &&
+                  int.tryParse(store
+                      .selectedEventData
+                      .submissions) >
+                      0
+                  ? 'Event Submissions'
+                  : 'Event Checked-In at ${Helper.stringForDatetime(
+                  store.eventParticipation.data.dateCheckedin
+                      .toIso8601String())}'
+                  : 'Check - In'
+                  : 'Events starts on: ${Helper.stringForDatetime2(
+                  store?.selectedEventData?.date) ?? ''}',
             )
-          : isValid
-              ? Column(
-                  children: [
-                    UIHelper.verticalSpace(12.0),
-                    if (store.selectedEventData != null &&
-                        store.selectedEventData.validTo != null)
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/trending.png',
-                            width: 15.0,
-                            height: 20.0,
-                          ),
-                          Text(
-                            '${DateTime.now().difference(DateTime.parse(store.selectedEventData.date)).inHours.isEven ? DateTime.now().difference(DateTime.parse(store.selectedEventData.date)).inHours < 24 ? '1 Day left' : '${-DateTime.now().difference(DateTime.parse(store.selectedEventData.date)).inDays + 1 % 24} Days left' : '${DateTime.now().difference(DateTime.parse(store.selectedEventData.date)).inDays == 0 ? '1 Day Left' : '${DateTime.now().difference(DateTime.parse(store.selectedEventData.date)).inDays}  Days left'}'}',
-                          ),
-                        ],
-                      ),
-                    UIHelper.verticalSpace(2.0),
-                    Consumer<GymStore>(
-                      builder: (context, store, child) => store
-                                  .selectedEventData !=
-                              null
-                          ? store.isEventParticipated
-                              ? CustomButton(
-                                  height: 40.0,
-                                  onTap: () {
-                                    if (Helper.formatDate2(
-                                            DateTime.now().toIso8601String()) ==
-                                        Helper.formatDate2(
-                                            store.selectedEventData.date)  || store.selectedEventData.submissions != null) {
-                                      if (store.eventParticipation != null &&
-                                          store.eventParticipation.data !=
-                                              null &&
-                                          store.eventParticipation.data
-                                                  .dateCheckedin !=
-                                              null) {
-                                        if (store.selectedEventData
-                                                    .submissions !=
-                                                null &&
-                                            store.selectedEventData.submissions
-                                                .isNotEmpty &&
-                                            int.tryParse(store.selectedEventData
-                                                    .submissions) >
-                                                0) {
-                                          store.getEventSubmission(
-                                            context: context,
-                                            eventId:
-                                                store.selectedEventData.uid,
-                                          );
-                                          NavigationService.navigateTo(
-                                              Routes.eventSubmissions);
-                                        } else {
-                                          FlashHelper.informationBar(
-                                            context,
-                                            message: 'Event already checked-in',
-                                          );
-                                        }
-                                      } else {
-                                        store.eventCheckIn(
-                                          context: context,
-                                          eventId: store.selectedEventData.uid,
-                                        );
-                                      }
-                                    } else {
-                                      FlashHelper.errorBar(
-                                        context,
-                                        message: 'cannot start now',
-                                      );
-                                    }
-                                  },
-                                  textColor: Colors.white,
-                                  bgColor: AppConstants.primaryColor,
-                                  radius: 12.0,
-                                  text: Helper.formatDate2(DateTime.now()
-                                              .toIso8601String()) ==
-                                          Helper.formatDate2(
-                                              store.selectedEventData.date) || store.selectedEventData.submissions != null
-                                      ? store.eventParticipation != null &&
-                                              store.eventParticipation.data !=
-                                                  null &&
-                                              store.eventParticipation.data
-                                                      .dateCheckedin !=
-                                                  null
-                                          ? store.selectedEventData
-                                                          .submissions !=
-                                                      null &&
-                                                  store.selectedEventData
-                                                      .submissions.isNotEmpty &&
-                                                  int.tryParse(store
-                                                          .selectedEventData
-                                                          .submissions) >
-                                                      0
-                                              ? 'Event Submissions'
-                                              : 'Event Checked-In at ${Helper.stringForDatetime(store.eventParticipation.data.dateCheckedin.toIso8601String())}'
-                                          : 'Check - In'
-                                      : 'Events starts on: ${Helper.stringForDatetime2(store?.selectedEventData?.date) ?? ''}',
-                                )
-                              : SlideButton(
-                                 text: store.selectedEventData != null
-                                      ? "Book now for Rs. ${store.selectedEventData.price}"
-                                      : 'Book now',
-                                  onTap:() async {
-                                    if (int.tryParse(
-                                            store.selectedEventData.price) >
-                                        0) {
-                                      //TODO Check plan :D
-                                      // store.getAllGymOffers(
-                                      //   gymId: store.selectedEventData.gymId,
-                                      //   context: context,
-                                      // );
-                                      NavigationService.navigateTo(
-                                          Routes.bookingSummaryEvent);
-                                    } else {
-                                      var body = {
-                                        "gym_id": store.selectedEventData.gymId,
-                                        "user_id": locator<AppPrefs>()
-                                            .memberId
-                                            .getValue(),
-                                        "price": '0',
-                                        "type": 'event',
-                                        "tax_percentage": "18",
-                                        "tax_amount": '0',
-                                        "slot_id": '',
-                                        "addon": '',
-                                        'event_id': store.selectedEventData.uid,
-                                        'remark': store.selectedEventData.uid,
-                                        "start_date": Helper.stringForDatetime3(
-                                                store.selectedEventData.date)
-                                            .trim(),
-                                        "expire_date":
-                                            Helper.stringForDatetime3(store
-                                                    .selectedEventData.date)
-                                                .trim(),
-                                        'trx_id': 'pay_free',
-                                        'trx_status': 'done',
-                                        'order_status': 'done',
-                                      };
-                                      bool isDone = await store.addSubscription(
-                                          context: context, body: body);
-                                      if (isDone) {
-                                        store.addEventParticipation(
-                                            context: context);
-                                      } else {
-                                        FlashHelper.errorBar(
-                                          context,
-                                          message: 'Please try again',
-                                        );
-                                      }
-                                    }
-                                    // NavigationService.navigateTo(Routes.scheduleSlotPage);
-                                  },
-                                )
-                          : Container(
-                              height: 0.0,
-                            ),
-                    ),
-                  ],
-                )
-              : Container(),
+                : SlideButton(
+              text: store.selectedEventData != null
+                  ? "Book now for Rs. ${store.selectedEventData.price}"
+                  : 'Book now',
+              onTap: () async {
+                if (int.tryParse(
+                    store.selectedEventData.price) >
+                    0) {
+                  //TODO Check plan :D
+                  // store.getAllGymOffers(
+                  //   gymId: store.selectedEventData.gymId,
+                  //   context: context,
+                  // );
+                  NavigationService.navigateTo(
+                      Routes.bookingSummaryEvent);
+                } else {
+                  var body = {
+                    "gym_id": store.selectedEventData.gymId,
+                    "user_id": locator<AppPrefs>()
+                        .memberId
+                        .getValue(),
+                    "price": '0',
+                    "type": 'event',
+                    "tax_percentage": "18",
+                    "tax_amount": '0',
+                    "slot_id": '',
+                    "addon": '',
+                    'event_id': store.selectedEventData.uid,
+                    'remark': store.selectedEventData.uid,
+                    "start_date": Helper.stringForDatetime3(
+                        store.selectedEventData.date)
+                        .trim(),
+                    "expire_date":
+                    Helper.stringForDatetime3(store
+                        .selectedEventData.date)
+                        .trim(),
+                    'trx_id': 'pay_free',
+                    'trx_status': 'done',
+                    'order_status': 'done',
+                  };
+                  bool isDone = await store.addSubscription(
+                      context: context, body: body);
+                  if (isDone) {
+                    store.addEventParticipation(
+                        context: context);
+                  } else {
+                    FlashHelper.errorBar(
+                      context,
+                      message: 'Please try again',
+                    );
+                  }
+                }
+                // NavigationService.navigateTo(Routes.scheduleSlotPage);
+              },
+            )
+                : Container(
+              height: 0.0,
+            ),
+          ),
+        ],
+      )
+          : Container(),
     );
   }
 }
