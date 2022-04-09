@@ -66,6 +66,7 @@ import 'package:wtf/screen/subscriptions/booking_summary.dart';
 import 'package:wtf/screen/subscriptions/booking_summary_add_on.dart';
 import 'package:wtf/screen/subscriptions/booking_summary_events.dart';
 import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
+import 'package:wtf/screen/subscriptions/payment_process.dart';
 import 'package:wtf/screen/user/update_fitness_profile.dart';
 import 'package:wtf/screen/user/user_details.dart';
 
@@ -141,26 +142,21 @@ class Routes {
   static const String gymCategoryScreen = GymCategoryScreen.routeName;
   static const String addonsCat = AddonsCat.routeName;
   static const String gymCat = GymCat.routeName;
+  static const String paymentProcess = PaymentProcess.routeName;
 }
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.gymCat:
+      case Routes.paymentProcess:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
-                widget: GymCat(),
-                settings: settings,
-              )
+          widget: PaymentProcess(),
+          settings: settings,
+        )
             : CupertinoPageRoute(
-                builder: (context) => GymCat(), settings: settings); case Routes.addonsCat:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-                widget: AddonsCat(),
-                settings: settings,
-              )
-            : CupertinoPageRoute(
-                builder: (context) => AddonsCat(), settings: settings);
+            builder: (context) => PaymentProcess(), settings: settings);
+
       case Routes.changeDietScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
