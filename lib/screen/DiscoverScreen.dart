@@ -16,6 +16,7 @@ import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
+import 'package:wtf/widget/gym_list_search_adapter.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -24,11 +25,202 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  GymStore store;
+  GymStore user;
+  bool callMethod = true;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    user = context.watch<GymStore>();
+  }
+
+  void callData({String type = 'gym'}) {
+    print('called -----');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (callMethod) {
+        this.callMethod = false;
+        user.getDiscoverNow(context: context, type: type);
+      }
+    });
+  }
+
+  void onRefreshPage({String type = 'gym'}) {
+    user.selectedGymTypes = null;
+    this.callMethod = true;
+    user.getDiscoverNow(context: context, type: type);
+  }
 
   @override
   Widget build(BuildContext context) {
-    store = context.watch<GymStore>();
+    //Calling data
+    callData(type: 'gym');
+
+    return Consumer<GymStore>(builder: (context, user, snapshot) {
+      if (user.selectedGymTypes == null || user.selectedGymTypes.data == null) {
+        return Center(
+          child: CupertinoActivityIndicator(),
+        );
+      } else {
+        //This is data
+        GymTypes gym = user.selectedGymTypes;
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text(
+              ' Discover WTF ${user.discoverType == 'gym' ? 'Arena' : 'Fitness Studios'}',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: AppColors.BACK_GROUND_BG,
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 54),
+              child: Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: InkWell(
+                          onTap: (){
+                            FocusScope.of(context).unfocus();
+                            user.determinePosition(context);
+                            showSearch(
+                                context: context,
+                                delegate: GymListSearchAdapter(
+                                    searchableList:
+                                    user.selectedGymTypes.data,onClick: (GymModelData data){
+                                  // print('this is clicked from search ----- ${data.gymName}');
+                                  context.read<GymStore>().getGymByID(
+                                    context: context,
+                                    gymId: data.userId,
+                                  );
+                                  print('gym iD --- from nav ${data.userId}');
+                                  Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                      builder: (_) => BuyMemberShipPage(
+                                        gymId: data.userId,
+                                      ),
+                                    ),
+                                  );
+                                }));
+                          },
+                          child: TextFormField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(
+                                top: 0.0,
+                                bottom: 0.0,
+                                left: 17,
+                              ),
+                              hintText: 'Search your favourite WTF gyms',
+                              hintStyle: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13.0,
+                              ),
+                              suffixIcon: InkWell(
+                                onTap: () {
+                                  // store.determinePosition();
+                                  // NavigationService.navigateTo(
+                                  //     Routes.searchScreen);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(5.0),
+                                  height: 25,
+                                  width: 25,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xffBA1406),
+                                          Color(0xff490000),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.search,
+                                      color: Colors.white,
+                                      size: 16.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Color(0xff2d2d2d),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    UIHelper.horizontalSpace(12.0),
+                    Flexible(
+                      child: InkWell(
+                        onTap: () async {
+                          LocationResult result =
+                              await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PlacePicker(
+                                Helper.googleMapKey,
+                                displayLocation:
+                                    LatLng(user.getLat(), user.getLng()),
+                              ),
+                            ),
+                          );
+                          print(result);
+                          setState(() {
+                            print('Checking selected new location ----');
+                            if (result != null) {
+                              print('User has choose new location -----');
+                              user.tempLat = result.latLng.latitude;
+                              user.tempLng = result.latLng.longitude;
+                              onRefreshPage(type: 'gym');
+                            } else {
+                              print('Same as previous location ----');
+                            }
+                          });
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset('assets/svg/change.svg'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              onRefreshPage(type: 'gym');
+            },
+            child: ListView.builder(
+              itemCount: gym.data.length,
+              padding:
+                  EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 40),
+              itemBuilder: (context, index) {
+                return GymCard(item: gym.data[index]);
+              },
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  Widget myOldUI(GymStore store) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -50,7 +242,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             color: AppColors.BACK_GROUND_BG,
             padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: SearchBar(
-              onClickLocation: (){
+              onClickLocation: () {
                 print('location changed ----');
                 store.getDiscoverNow(type: 'gym');
               },
@@ -86,64 +278,18 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     );
   }
 
-  Widget abd() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 15.0,
-            ),
-            SearchBar(),
-            SizedBox(
-              height: 25.0,
-            ),
-            Expanded(
-              child: store.selectedGymTypes == null
-                  ? LoadingWithBackground()
-                  : store.selectedGymTypes != null &&
-                          store.selectedGymTypes.data.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: store.selectedGymTypes.data.length,
-                          itemBuilder: (context, index) {
-                            var item = store.selectedGymTypes.data[index];
-                            return GymCard(item: item);
-                          },
-                        )
-                      : Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'No Record Found',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-            ),
-            UIHelper.verticalSpace(20.0),
-            ComingSoonWidget(),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
-    store.setGymTypes(data: null);
+    user.setGymTypes(data: null);
     super.dispose();
   }
 }
 
 class SearchBar extends StatefulWidget {
   Function() onClickLocation;
-   SearchBar({
-    Key key,@required this.onClickLocation
-  }) : super(key: key);
+
+  SearchBar({Key key, @required this.onClickLocation}) : super(key: key);
+
   @override
   State<SearchBar> createState() => _SearchBarState();
 }
@@ -159,11 +305,13 @@ class _SearchBarState extends State<SearchBar> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: TextFormField(
-
                 onTap: () {
                   FocusScope.of(context).unfocus();
                   store.determinePosition(context);
                   NavigationService.navigateTo(Routes.searchScreen);
+                  // showSearch(
+                  //     context: context,
+                  //     delegate: GymListSearchAdapter(searchableList: _bloC.ledgerList));
                 },
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(
@@ -224,12 +372,11 @@ class _SearchBarState extends State<SearchBar> {
                     builder: (context) => PlacePicker(
                       Helper.googleMapKey,
                       displayLocation:
-                      // store.selectedNewLocation != null
-                      //     ? LatLng(store.selectedNewLocation.latLng.latitude??store.getLat(),
-                      //         store.selectedNewLocation.latLng.longitude??store.getLng())
-                      //     :
-                      LatLng(store.getLat(),
-                              store.getLng()),
+                          // store.selectedNewLocation != null
+                          //     ? LatLng(store.selectedNewLocation.latLng.latitude??store.getLat(),
+                          //         store.selectedNewLocation.latLng.longitude??store.getLng())
+                          //     :
+                          LatLng(store.getLat(), store.getLng()),
                     ),
                   ),
                 );
@@ -245,7 +392,7 @@ class _SearchBarState extends State<SearchBar> {
                     //   result: result,
                     //   context: context,
                     // );
-                  }else{
+                  } else {
                     print('No Location Selected ----');
                   }
                 });
@@ -263,16 +410,18 @@ class _SearchBarState extends State<SearchBar> {
 }
 
 class GymCard extends StatelessWidget {
-   GymCard({
-    Key key,
-    @required this.item,
-    this.recommended_list = false,
-     this.cat_logo = ''
-  }) : super(key: key);
+  GymCard(
+      {Key key,
+      @required this.item,
+      this.recommended_list = false,
+      this.clicable = true,
+      this.cat_logo = ''})
+      : super(key: key);
 
   final GymModelData item;
   bool recommended_list;
-   String cat_logo;
+  String cat_logo;
+  bool clicable;
 
   bool isRecommended(String value) {
     return value != null;
@@ -285,21 +434,20 @@ class GymCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        context.read<GymStore>().getGymByID(
-          context: context,
-          gymId: item.userId,
-        );
-        print('gym iD --- from nav ${item.userId}');
-        Navigator.of(context).push(
-          CupertinoPageRoute(
-            builder: (_) => BuyMemberShipPage(
-              gymId: item.userId,
+      onTap: clicable ? () {
+          context.read<GymStore>().getGymByID(
+                context: context,
+                gymId: item.userId,
+              );
+          print('gym iD --- from nav ${item.userId}');
+          Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder: (_) => BuyMemberShipPage(
+                gymId: item.userId,
+              ),
             ),
-          ),
-        );
-      },
-
+          );
+      }:null,
       child: Container(
         margin: EdgeInsets.only(bottom: 24),
         decoration: BoxDecoration(
@@ -443,8 +591,8 @@ class GymCard extends StatelessWidget {
                             left: 12, right: 12, top: 6, bottom: 6),
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius:
-                                BorderRadius.only(topRight: Radius.circular(8))),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8))),
                         child: Wrap(
                           direction: Axis.vertical,
                           children: <Widget>[
@@ -479,15 +627,22 @@ class GymCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  recommended_list ?Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 16),
-                      padding: EdgeInsets.all(12),
-                      color: Color(0xffBF6D6D),
-                      child: Text('40%\nOFF',textAlign:TextAlign.center,style:TextStyle(color: Colors.white,fontWeight:FontWeight.w600,fontSize: 16)),
-                    ),
-                  ):Container(),
+                  recommended_list
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 16),
+                            padding: EdgeInsets.all(12),
+                            color: Color(0xffBF6D6D),
+                            child: Text('40%\nOFF',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16)),
+                          ),
+                        )
+                      : Container(),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: ListTile(
@@ -495,29 +650,34 @@ class GymCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if(recommended_list)Container(
-                            margin: EdgeInsets.only(bottom: 6),
-                            child: Image.network(
-                              cat_logo,
-                              errorBuilder: (context, error, stackTrace) {
-                                return SizedBox();
-                              },
-                              loadingBuilder: (BuildContext context, Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes
-                                        : null,
-                                  ),
-                                );
-                              },
-                              fit: BoxFit.fitHeight,
-                              height: 50,
+                          if (recommended_list)
+                            Container(
+                              margin: EdgeInsets.only(bottom: 6),
+                              child: Image.network(
+                                cat_logo,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return SizedBox();
+                                },
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value: loadingProgress
+                                                  .expectedTotalBytes !=
+                                              null
+                                          ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes
+                                          : null,
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.fitHeight,
+                                height: 50,
+                              ),
                             ),
-                          ),
                           Text(item.gymName ?? '',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -594,7 +754,8 @@ class GymCard extends StatelessWidget {
                                               ' ${item.duration_text ?? ''} away | ${item.distance_text ?? ''}',
                                               style: TextStyle(
                                                   fontSize: 10,
-                                                  fontWeight: FontWeight.w400))),
+                                                  fontWeight:
+                                                      FontWeight.w400))),
                                     ],
                                   ),
                                 )
