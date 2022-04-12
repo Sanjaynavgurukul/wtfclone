@@ -607,6 +607,7 @@ class GymStore extends ChangeNotifier {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
+  //TODO Razor Pay method start from here :D
   Future<bool> processPayment({
     BuildContext context,
     String price,
@@ -622,6 +623,8 @@ class GymStore extends ChangeNotifier {
       String orderId = await generateRazorPayId(
           context: context, amount: price, subBody: body);
       if (orderId.isNotEmpty) {
+
+
         var options = {
           "key": Helper.razorPayKey,
           "amount": price.toString(),
@@ -643,6 +646,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //This return order id generated from db :D
   Future<String> generateRazorPayId(
       {BuildContext context,
       String amount,
@@ -673,8 +677,8 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<VerifyPayment> verifyRazorPayPayment(String razorPayPaymentId) async {
-    showDialog(
+  Future<VerifyPayment> verifyRazorPayPayment(String razorPayPaymentId,{bool wantDialog = true}) async {
+    if(wantDialog) showDialog(
       context: paymentContext,
       builder: (context) => ProcessingDialog(
         message: 'Creating your order,  Please wait...',
@@ -683,7 +687,7 @@ class GymStore extends ChangeNotifier {
     Map<String, dynamic> body = {'razorpay_payment_id': razorPayPaymentId};
     VerifyPayment verifyPayment =
         await RestDatasource().verifyRazorPayPayment(body: body);
-    Navigator.pop(paymentContext);
+    if(wantDialog)Navigator.pop(paymentContext);
     return verifyPayment;
   }
 
@@ -713,9 +717,17 @@ class GymStore extends ChangeNotifier {
       if (isDone) {
         //_nullData();
         if (subscriptionBody['type'] == 'event') {
-          await addEventParticipation(context: paymentContext);
+          await addEventParticipation(context: paymentContext).then((value){
+            if(value){
+              NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
+            }else{
+              FlashHelper.errorBar(paymentContext,
+                  message:
+                  'Failed to subscribe, Please contact support for resolution');
+            }
+          });
 
-          NavigationService.navigateTo(Routes.eventPurchaseDone);
+          //NavigationService.navigateTo(Routes.eventPurchaseDone);
         } else {
           NavigationService.navigateTo(Routes.purchaseDone);
         }
@@ -740,9 +752,17 @@ class GymStore extends ChangeNotifier {
           'subscription added   --- event type is: ${subscriptionBody['type']}');
       if (isDone) {
         if (subscriptionBody['type'] == 'event') {
-          await addEventParticipation(context: paymentContext);
+          await addEventParticipation(context: paymentContext).then((value){
+            if(value){
+              NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
+            }else{
+              FlashHelper.errorBar(paymentContext,
+                  message:
+                  'Failed to subscribe, Please contact support for resolution');
+            }
+          });
 
-          NavigationService.navigateTo(Routes.eventPurchaseDone);
+          //NavigationService.navigateTo(Routes.eventPurchaseDone);
         } else {
           NavigationService.navigateTo(Routes.purchaseDone);
         }
@@ -1038,7 +1058,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> addEventParticipation({
+  Future<bool> addEventParticipation({
     BuildContext context,
   }) async {
     showDialog(
@@ -1054,7 +1074,10 @@ class GymStore extends ChangeNotifier {
     bool isAdded = await RestDatasource()
         .addEventParticipation(context: context, body: body);
     if (isAdded) {
-      NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
+      // NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
+      return true;
+    }else{
+      return false;
     }
   }
 

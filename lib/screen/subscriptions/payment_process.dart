@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/src/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/controller/webservice.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
+import 'package:wtf/helper/flash_helper.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
+import 'package:wtf/main.dart';
+import 'package:wtf/model/VerifyPayment.dart';
 import 'package:wtf/screen/subscriptions/argument/payment_process_argument.dart';
+import 'package:wtf/widget/processing_dialog.dart';
 
 class PaymentProcess extends StatefulWidget {
   const PaymentProcess({Key key}) : super(key: key);
@@ -17,12 +28,25 @@ class _PaymentProcessState extends State<PaymentProcess> {
   static const platform = const MethodChannel("razorpay_flutter");
   bool isOpen = false;
   Razorpay _razorpay;
-  PaymentStatusModel _pStatus;
+  GymStore store;
+  Map<String,dynamic> paymentBody={};
+  PaymentProcessArgument _paymentProcessArgument;
+
+  final uiStream = BehaviorSubject<PaymentStatusModel>();
+  Function(PaymentStatusModel) get setUiStream => uiStream.sink.add;
+  Stream<PaymentStatusModel> get getUiStream => uiStream.stream;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    store = context.watch<GymStore>();
+  }
 
   @override
   void initState() {
     super.initState();
-    _pStatus = getStatusModel(PaymentStatus.PROGRESS);
+    setUiStream(getStatusModel(PaymentStatus.PROGRESS));
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -33,23 +57,36 @@ class _PaymentProcessState extends State<PaymentProcess> {
   void dispose() {
     super.dispose();
     _razorpay.clear();
+    uiStream.close();
   }
 
-  void openCheckout() async {
+  void openCheckout(PaymentProcessArgument value) async {
     this.isOpen = true;
     var options = {
-      'key': 'rzp_live_ILgsfZCZoFIKMb',
-      'amount': 100,
-      'name': 'Acme Corp.',
-      'description': 'Fine T-Shirt',
-      'retry': {'enabled': true, 'max_count': 1},
-      'send_sms_hash': true,
-      'prefill': {'contact': '7761826600', 'email': 'aminemshaw@gmail.com'},
-      'external': {
-        'wallets': ['paytm']
-      }
+      "key": Helper.razorPayKey,
+      "amount": value.price.toString(),
+      'currency': 'INR',
+      'description':
+      'Pay to buy ${value.data['type'] == 'regular' ? 'Gym' : value.data['type'] == 'event' ? 'Event' : value.data['type'] == 'addon' ? 'Addon' : 'PT'} Subscription',
+      'order_id': value.orderId,
+      "name": 'WTF',
+      'prefill': {
+        "contact": locator<AppPrefs>().phoneNumber.getValue(),
+        "email": locator<AppPrefs>().userEmail.getValue(),
+      },
     };
-
+    // var options = {
+    //   'key': 'rzp_live_ILgsfZCZoFIKMb',
+    //   'amount': 100,
+    //   'name': 'Acme Corp.',
+    //   'description': 'Fine T-Shirt',
+    //   'retry': {'enabled': true, 'max_count': 1},
+    //   'send_sms_hash': true,
+    //   'prefill': {'contact': '7761826600', 'email': 'aminemshaw@gmail.com'},
+    //   'external': {
+    //     'wallets': ['paytm']
+    //   }
+    // };
     try {
       _razorpay.open(options);
     } catch (e) {
@@ -57,21 +94,40 @@ class _PaymentProcessState extends State<PaymentProcess> {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async{
     print('razor error ---  Success Response: $response');
-    _pStatus = getStatusModel(PaymentStatus.MAKING_ORDER);
-    setState(() {
+    // this._pStatus = getStatusModel(PaymentStatus.VERIFY_PAYMENT);
+    setUiStream(getStatusModel(PaymentStatus.VERIFY_PAYMENT));
+    await store.verifyRazorPayPayment(response.paymentId,wantDialog: false).then((verifyPayment){
+      if (verifyPayment != null &&
+          verifyPayment.data != null &&
+          verifyPayment.data.status == 'captured'){
+        verifyPaymentInDB(response: response,paymentFailed: false);
+      }else{
+        verifyPaymentInDB(response: response,paymentFailed: true);
+      }
     });
+    // await store.verifyRazorPayPayment(response.paymentId)
     /*Fluttertoast.showToast(
         msg: "SUCCESS: " + response.paymentId!,
         toastLength: Toast.LENGTH_SHORT); */
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    _pStatus = getStatusModel(PaymentStatus.FAILED);
-    setState(() {
-    });
+  void _handlePaymentError(PaymentFailureResponse response) async{
     print('razor error --- Error Response: $response');
+    setUiStream(getStatusModel(PaymentStatus.FAILED));
+    var map = _paymentProcessArgument.data;
+
+    map['trx_id'] = '';
+    map['trx_status'] = 'failed';
+    map['order_status'] = 'failed';
+    await store.addSubscription(
+        body: map,
+    );
+    // init(
+    //   context: NavigationService.context,
+    // );
+    navigateFailed();
     /* Fluttertoast.showToast(
         msg: "ERROR: " + response.code.toString() + " - " + response.message!,
         toastLength: Toast.LENGTH_SHORT); */
@@ -79,20 +135,179 @@ class _PaymentProcessState extends State<PaymentProcess> {
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     print('razor error --- External SDK Response: $response');
-    _pStatus = getStatusModel(PaymentStatus.CANCEL);
-    setState(() {
-    });
+    // this._pStatus = getStatusModel(PaymentStatus.CANCEL);
+    setUiStream(getStatusModel(PaymentStatus.CANCEL));
     /* Fluttertoast.showToast(
         msg: "EXTERNAL_WALLET: " + response.walletName!,
         toastLength: Toast.LENGTH_SHORT); */
   }
 
+  Future<VerifyPayment> verifyRazorPayPayment(String razorPayPaymentId) async {
+    // showDialog(
+    //   context: paymentContext,
+    //   builder: (context) => ProcessingDialog(
+    //     message: 'Creating your order,  Please wait...',
+    //   ),
+    // );
+    Map<String, dynamic> body = {'razorpay_payment_id': razorPayPaymentId};
+    VerifyPayment verifyPayment =
+    await RestDatasource().verifyRazorPayPayment(body: body);
+    // Navigator.pop(paymentContext);
+    return verifyPayment;
+  }
+
+  void verifyPayment({@required PaymentSuccessResponse response,@required bool failed})async{
+    var map = _paymentProcessArgument.data;
+    setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+    map['trx_id'] = response.paymentId;
+    map['trx_status'] = 'done';
+    map['order_status'] = 'done';
+
+    //Making Subscription :D
+    bool isDone = await store.addSubscription(
+      body: map,
+    );
+
+    if (isDone) {
+      //_nullData();
+      if (map['type'] == 'event') {
+        await store.addEventParticipation(context: context).then((value){
+          if(value){
+            setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
+            navigateToEventPurchaseDone();
+          }else{
+            setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+            navigateFailed();
+          }
+        });
+      } else {
+        setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_SUCCESS));
+        navigateToPurchaseDone();
+      }
+      store.init(context: context);
+    } else {
+      //TODO failed Purchase Order not in payment :D
+      setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+      navigateFailed();
+      // FlashHelper.errorBar(paymentContext,
+      //     message:
+      //     'Failed to subscribe, Please contact support for resolution');
+    }
+  }
+
+  void verifyPaymentInDB({@required PaymentSuccessResponse response,@required bool paymentFailed})async{
+    // if(paymentFailed){
+    //   setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+    // }else{
+    //   setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+    // }
+    setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+
+    var map = _paymentProcessArgument.data;
+    setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+    map['trx_id'] = response.paymentId;
+    map['trx_status'] = paymentFailed?"failed":'done';
+    map['order_status'] = paymentFailed?"failed":'done';
+
+    //Making Subscription :D
+    bool isDone = await store.addSubscription(
+      body: map,
+    );
+
+    if (isDone) {
+      //_nullData();
+      if (map['type'] == 'event') {
+        await store.addEventParticipation(context: context).then((value){
+          if(value){
+            setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
+            navigateToEventPurchaseDone();
+          }else{
+            setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+            navigateFailed();
+          }
+        });
+      } else {
+        setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_SUCCESS));
+        navigateToPurchaseDone();
+      }
+      store.init(context: context);
+    } else {
+      //TODO failed Purchase Order not in payment :D
+      setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+      navigateFailed();
+      // FlashHelper.errorBar(paymentContext,
+      //     message:
+      //     'Failed to subscribe, Please contact support for resolution');
+    }
+  }
+
+  // void verifyRazorPayPaymentVerified({@required PaymentSuccessResponse response})async{
+  //   var map = _paymentProcessArgument.data;
+  //   setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
+  //   map['trx_id'] = response.paymentId;
+  //   map['trx_status'] = 'done';
+  //   map['order_status'] = 'done';
+  //
+  //   //Making Subscription :D
+  //   bool isDone = await store.addSubscription(
+  //     body: map,
+  //   );
+  //
+  //   if (isDone) {
+  //     //_nullData();
+  //     if (map['type'] == 'event') {
+  //       await store.addEventParticipation(context: context).then((value){
+  //         if(value){
+  //           setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
+  //           navigateToEventPurchaseDone();
+  //         }else{
+  //           setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+  //           navigateFailed();
+  //         }
+  //       });
+  //     } else {
+  //       setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_SUCCESS));
+  //       navigateToPurchaseDone();
+  //     }
+  //     store.init(context: context);
+  //   } else {
+  //     //TODO failed Purchase Order not in payment :D
+  //     setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+  //     navigateFailed();
+  //     // FlashHelper.errorBar(paymentContext,
+  //     //     message:
+  //     //     'Failed to subscribe, Please contact support for resolution');
+  //   }
+  // }
+
+  void navigateToPurchaseDone(){
+    Future.delayed(const Duration(seconds: 3), () {
+      NavigationService.navigateToReplacement(Routes.purchaseDone);
+    });
+  }
+
+  void navigateToEventPurchaseDone(){
+    Future.delayed(const Duration(seconds: 3), () {
+      NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
+    });
+  }
+
+  void navigateFailed(){
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pop(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final PaymentProcessArgument args =
-    ModalRoute.of(context).settings.arguments as PaymentProcessArgument;
+        ModalRoute.of(context).settings.arguments as PaymentProcessArgument;
 
-    if(args == null || args.price == null || args.data == null){
+    if (args == null ||
+        args.price == null ||
+        args.data == null ||
+        args.orderId == null ||
+        args.orderId.isEmpty) {
       return Scaffold(
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,10 +320,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
             //   color: Colors.white,
             //   size: 80.0,
             // ),
-            lottieImage(
-                name: 'failed',
-                width: 100,
-                repeat: false),
+            lottieImage(name: 'failed', width: 100, repeat: false),
             ListTile(
               title: Text(
                 'Payment Failed',
@@ -122,15 +334,21 @@ class _PaymentProcessState extends State<PaymentProcess> {
           ],
         ),
       );
-    }else {
-      if(!isOpen){
+    } else {
+      this._paymentProcessArgument = args;
+      if (!isOpen) {
         Future.delayed(const Duration(seconds: 2), () {
-          openCheckout();
+          openCheckout(args);
         });
       }
       return Scaffold(
           body: Container(
-            child: Column(
+        child: StreamBuilder(
+          stream: uiStream,
+          initialData: getStatusModel(PaymentStatus.PROGRESS),
+          builder: (BuildContext context,
+              AsyncSnapshot<PaymentStatusModel> snapshot){
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -142,23 +360,25 @@ class _PaymentProcessState extends State<PaymentProcess> {
                 //   size: 80.0,
                 // ),
                 lottieImage(
-                    name: _pStatus.animationName,
+                    name: snapshot.data.animationName,
                     width: 100,
-                    repeat: _pStatus.animationName == 'failed' ? false : true),
+                    repeat: snapshot.data.animationName == 'failed' ? false : true),
                 ListTile(
                   title: Text(
-                    'Paymen in progress',
+                    '${snapshot.data.heading}',
                     textAlign: TextAlign.center,
                   ),
                   subtitle: Text(
-                    'Please do not close the window or app',
+                    '${snapshot.data.subHeading}',
                     textAlign: TextAlign.center,
                   ),
                 ),
-                ElevatedButton(onPressed: openCheckout, child: Text('Open')),
+                // ElevatedButton(onPressed: openCheckout, child: Text('Open')),
               ],
-            ),
-          ));
+            );
+          },
+        ),
+      ));
     }
   }
 
@@ -171,23 +391,23 @@ class _PaymentProcessState extends State<PaymentProcess> {
     );
   }
 
-  Widget oldUI() {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Razorpay Sample App'),
-      ),
-      body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-            ElevatedButton(onPressed: openCheckout, child: Text('Open')),
-            SpinKitRipple(
-              color: Colors.white,
-              size: 50.0,
-            )
-          ])),
-    );
-  }
+  // Widget oldUI() {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text('Razorpay Sample App'),
+  //     ),
+  //     body: Center(
+  //         child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: <Widget>[
+  //           ElevatedButton(onPressed: openCheckout, child: Text('Open')),
+  //           SpinKitRipple(
+  //             color: Colors.white,
+  //             size: 50.0,
+  //           )
+  //         ])),
+  //   );
+  // }
 
   PaymentStatusModel getStatusModel(PaymentStatus status) {
     switch (status) {
@@ -216,6 +436,36 @@ class _PaymentProcessState extends State<PaymentProcess> {
             subHeading: 'Please wait while we are making your order ',
             message: 'Some Message',
             animationName: 'progress');
+      case PaymentStatus.MAKING_ORDER_FAILED:
+        return PaymentStatusModel(
+            heading: 'Order Failed',
+            subHeading: 'We are unable to place your order!',
+            message: 'If your amount deduct please contact WTF Support Center',
+            animationName: 'failed');
+      case PaymentStatus.MAKING_ORDER_SUCCESS:
+        return PaymentStatusModel(
+            heading: 'Order Completed',
+            subHeading: 'Your Order SuccessFully Placed',
+            message: 'If your amount deduct please contact WTF Support Center',
+            animationName: 'done');
+      case PaymentStatus.EVENT_ORDER_FAILED:
+        return PaymentStatusModel(
+            heading: 'Order Failed',
+            subHeading: 'We are unable to place your event order!',
+            message: 'If your amount deduct please contact WTF Support Center',
+            animationName: 'failed');
+      case PaymentStatus.EVENT_ORDER_SUCCESS:
+        return PaymentStatusModel(
+            heading: 'Order Completed',
+            subHeading: 'Your Order SuccessFully Placed',
+            message: 'Some Description :D',
+            animationName: 'done');
+      case PaymentStatus.VERIFY_PAYMENT:
+        return PaymentStatusModel(
+            heading: 'Verifying your payment',
+            subHeading: 'Please wait while we verifying payment',
+            message: 'Some Message',
+            animationName: 'progress');
       default:
         return PaymentStatusModel(
             heading: 'Payment in Progress',
@@ -226,7 +476,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
   }
 }
 
-enum PaymentStatus { FAILED, SUCCESS, CANCEL, PROGRESS, MAKING_ORDER }
+enum PaymentStatus { FAILED, SUCCESS, CANCEL, PROGRESS, MAKING_ORDER,MAKING_ORDER_FAILED,MAKING_ORDER_SUCCESS,VERIFY_PAYMENT,EVENT_ORDER_FAILED,EVENT_ORDER_SUCCESS, }
 
 class PaymentStatusModel {
   String animationName;
