@@ -29,11 +29,13 @@ class _PaymentProcessState extends State<PaymentProcess> {
   bool isOpen = false;
   Razorpay _razorpay;
   GymStore store;
-  Map<String,dynamic> paymentBody={};
+  Map<String, dynamic> paymentBody = {};
   PaymentProcessArgument _paymentProcessArgument;
 
   final uiStream = BehaviorSubject<PaymentStatusModel>();
+
   Function(PaymentStatusModel) get setUiStream => uiStream.sink.add;
+
   Stream<PaymentStatusModel> get getUiStream => uiStream.stream;
 
   @override
@@ -67,7 +69,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
       "amount": value.price.toString(),
       'currency': 'INR',
       'description':
-      'Pay to buy ${value.data['type'] == 'regular' ? 'Gym' : value.data['type'] == 'event' ? 'Event' : value.data['type'] == 'addon' ? 'Addon' : 'PT'} Subscription',
+          'Pay to buy ${value.data['type'] == 'regular' ? 'Gym' : value.data['type'] == 'event' ? 'Event' : value.data['type'] == 'addon' ? 'Addon' : 'PT'} Subscription',
       'order_id': value.orderId,
       "name": 'WTF',
       'prefill': {
@@ -94,17 +96,19 @@ class _PaymentProcessState extends State<PaymentProcess> {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) async{
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     print('razor error ---  Success Response: $response');
     // this._pStatus = getStatusModel(PaymentStatus.VERIFY_PAYMENT);
     setUiStream(getStatusModel(PaymentStatus.VERIFY_PAYMENT));
-    await store.verifyRazorPayPayment(response.paymentId,wantDialog: false).then((verifyPayment){
+    await store
+        .verifyRazorPayPayment(response.paymentId, wantDialog: false)
+        .then((verifyPayment) {
       if (verifyPayment != null &&
           verifyPayment.data != null &&
-          verifyPayment.data.status == 'captured'){
-        verifyPaymentInDB(response: response,paymentFailed: false);
-      }else{
-        verifyPaymentInDB(response: response,paymentFailed: true);
+          verifyPayment.data.status == 'captured') {
+        verifyPaymentInDB(response: response, paymentFailed: false);
+      } else {
+        verifyPaymentInDB(response: response, paymentFailed: true);
       }
     });
     // await store.verifyRazorPayPayment(response.paymentId)
@@ -113,7 +117,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
         toastLength: Toast.LENGTH_SHORT); */
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) async{
+  void _handlePaymentError(PaymentFailureResponse response) async {
     print('razor error --- Error Response: $response');
     setUiStream(getStatusModel(PaymentStatus.FAILED));
     var map = _paymentProcessArgument.data;
@@ -122,7 +126,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
     map['trx_status'] = 'failed';
     map['order_status'] = 'failed';
     await store.addSubscription(
-        body: map,
+      body: map,
     );
     // init(
     //   context: NavigationService.context,
@@ -151,12 +155,14 @@ class _PaymentProcessState extends State<PaymentProcess> {
     // );
     Map<String, dynamic> body = {'razorpay_payment_id': razorPayPaymentId};
     VerifyPayment verifyPayment =
-    await RestDatasource().verifyRazorPayPayment(body: body);
+        await RestDatasource().verifyRazorPayPayment(body: body);
     // Navigator.pop(paymentContext);
     return verifyPayment;
   }
 
-  void verifyPayment({@required PaymentSuccessResponse response,@required bool failed})async{
+  void verifyPayment(
+      {@required PaymentSuccessResponse response,
+      @required bool failed}) async {
     var map = _paymentProcessArgument.data;
     setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
     map['trx_id'] = response.paymentId;
@@ -171,11 +177,11 @@ class _PaymentProcessState extends State<PaymentProcess> {
     if (isDone) {
       //_nullData();
       if (map['type'] == 'event') {
-        await store.addEventParticipation(context: context).then((value){
-          if(value){
+        await store.addEventParticipation(context: context).then((value) {
+          if (value) {
             setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
             navigateToEventPurchaseDone();
-          }else{
+          } else {
             setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
             navigateFailed();
           }
@@ -195,7 +201,9 @@ class _PaymentProcessState extends State<PaymentProcess> {
     }
   }
 
-  void verifyPaymentInDB({@required PaymentSuccessResponse response,@required bool paymentFailed})async{
+  void verifyPaymentInDB(
+      {@required PaymentSuccessResponse response,
+      @required bool paymentFailed}) async {
     // if(paymentFailed){
     //   setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
     // }else{
@@ -206,8 +214,8 @@ class _PaymentProcessState extends State<PaymentProcess> {
     var map = _paymentProcessArgument.data;
     setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
     map['trx_id'] = response.paymentId;
-    map['trx_status'] = paymentFailed?"failed":'done';
-    map['order_status'] = paymentFailed?"failed":'done';
+    map['trx_status'] = paymentFailed ? "failed" : 'done';
+    map['order_status'] = paymentFailed ? "failed" : 'done';
 
     //Making Subscription :D
     bool isDone = await store.addSubscription(
@@ -217,11 +225,11 @@ class _PaymentProcessState extends State<PaymentProcess> {
     if (isDone) {
       //_nullData();
       if (map['type'] == 'event') {
-        await store.addEventParticipation(context: context).then((value){
-          if(value){
+        await store.addEventParticipation(context: context).then((value) {
+          if (value) {
             setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
             navigateToEventPurchaseDone();
-          }else{
+          } else {
             setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
             navigateFailed();
           }
@@ -280,19 +288,19 @@ class _PaymentProcessState extends State<PaymentProcess> {
   //   }
   // }
 
-  void navigateToPurchaseDone(){
+  void navigateToPurchaseDone() {
     Future.delayed(const Duration(seconds: 3), () {
       NavigationService.navigateToReplacement(Routes.purchaseDone);
     });
   }
 
-  void navigateToEventPurchaseDone(){
+  void navigateToEventPurchaseDone() {
     Future.delayed(const Duration(seconds: 3), () {
       NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
     });
   }
 
-  void navigateFailed(){
+  void navigateFailed() {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pop(context);
     });
@@ -347,7 +355,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
           stream: uiStream,
           initialData: getStatusModel(PaymentStatus.PROGRESS),
           builder: (BuildContext context,
-              AsyncSnapshot<PaymentStatusModel> snapshot){
+              AsyncSnapshot<PaymentStatusModel> snapshot) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -362,7 +370,8 @@ class _PaymentProcessState extends State<PaymentProcess> {
                 lottieImage(
                     name: snapshot.data.animationName,
                     width: 100,
-                    repeat: snapshot.data.animationName == 'failed' ? false : true),
+                    repeat:
+                        snapshot.data.animationName == 'failed' ? false : true),
                 ListTile(
                   title: Text(
                     '${snapshot.data.heading}',
@@ -476,7 +485,18 @@ class _PaymentProcessState extends State<PaymentProcess> {
   }
 }
 
-enum PaymentStatus { FAILED, SUCCESS, CANCEL, PROGRESS, MAKING_ORDER,MAKING_ORDER_FAILED,MAKING_ORDER_SUCCESS,VERIFY_PAYMENT,EVENT_ORDER_FAILED,EVENT_ORDER_SUCCESS, }
+enum PaymentStatus {
+  FAILED,
+  SUCCESS,
+  CANCEL,
+  PROGRESS,
+  MAKING_ORDER,
+  MAKING_ORDER_FAILED,
+  MAKING_ORDER_SUCCESS,
+  VERIFY_PAYMENT,
+  EVENT_ORDER_FAILED,
+  EVENT_ORDER_SUCCESS,
+}
 
 class PaymentStatusModel {
   String animationName;
