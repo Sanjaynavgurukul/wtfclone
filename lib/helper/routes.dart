@@ -53,6 +53,7 @@ import 'package:wtf/screen/schedule/MainWorkoutScreen.dart';
 import 'package:wtf/screen/schedule/exercise/exercise.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
 import 'package:wtf/screen/schedule/my_schedule.dart';
+import 'package:wtf/screen/schedule/new/main_workouts.dart';
 import 'package:wtf/screen/schedule/workout_complete/workout_complete.dart';
 import 'package:wtf/screen/search_screen.dart';
 import 'package:wtf/screen/side_bar_drawer/my_subscription.dart';
@@ -143,6 +144,7 @@ class Routes {
   static const String addonsCat = AddonsCat.routeName;
   static const String gymCat = GymCat.routeName;
   static const String paymentProcess = PaymentProcess.routeName;
+  static const String mainWorkout = MainWorkout.routeName;
 }
 
 class RouteGenerator {
@@ -156,7 +158,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
-
+      case Routes.mainWorkout:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: MainWorkout(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => MainWorkout(), settings: settings);
       case Routes.changeDietScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

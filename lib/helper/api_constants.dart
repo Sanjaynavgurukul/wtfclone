@@ -56,8 +56,8 @@ class Api {
   static myWorkoutSchedule(
           String date, String addonId, String subscriptionId) =>
       addonId != null
-          ? 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&addon_id=$addonId&subscription_id=$subscriptionId'
-          : 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&subscription_id=$subscriptionId';
+          ? 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&addon_id=$addonId&subscription_id=$subscriptionId'//addons
+          : 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&subscription_id=$subscriptionId';//Regular MemberShip
 
   static mySchedule(String user, String date) =>
       'subscription/myschedule?user_id=$user&date=$date';
@@ -66,7 +66,7 @@ class Api {
       'dietmapping/member?member_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
 
   static workoutDetail(String id) => 'workout/getbyid?uid=$id';
-  static const String updateTime = 'workoutmapping/update';
+  static const String updateTime = 'workoutmapping/update';//workoutx mapping update api
   static const String shiftTrainer = 'shift/add';
   static const String addEventParticipation = 'participation/add';
 

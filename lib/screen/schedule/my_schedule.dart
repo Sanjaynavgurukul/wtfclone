@@ -382,7 +382,8 @@ class ScheduleListItems extends StatelessWidget {
                               addonId:
                                   name == 'General Training' ? null : e.addonId,
                             );
-                        NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                        // NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                        NavigationService.navigateTo(Routes.mainWorkout);
                         break;
                       case 'event':
                         store.getEventById(
