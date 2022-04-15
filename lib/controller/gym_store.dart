@@ -251,7 +251,9 @@ class GymStore extends ChangeNotifier {
   List<GymCatModel> gymCatList = [];
   GymTypes nearestAddonsCatGymList;
   AddOnSlotDetails addonsCatGymSlots;
+
   MySchedule scheduleData;
+  CurrentTrainer scheduleTrainer;
 
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
@@ -2621,14 +2623,31 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> getScheduleTrainer() async {
-    currentTrainer = null;
+    scheduleTrainer = null;
     notifyListeners();
     CurrentTrainer res = await RestDatasource().getCurrentTrainer();
     if (res != null) {
-      currentTrainer = res;
-      log('trainer initialize::: ${currentTrainer.data?.toJson()}');
+      scheduleTrainer = res;
     }else{
-      currentTrainer = null;
+      scheduleTrainer = null;
+    }
+    notifyListeners();
+  }
+
+
+  Future<void> getScheduledWorkouts(
+      {String date, String addonId, String subscriptionId}) async {
+    myWorkoutSchedule = null;
+    notifyListeners();
+    MyWorkoutSchedule res = await RestDatasource().getMyWorkoutSchedule(
+      date: date,
+      addonId: addonId,
+      subscriptionId: subscriptionId,
+    );
+    if (res != null) {
+      myWorkoutSchedule = res;
+    }else{
+      myWorkoutSchedule = null;
     }
     notifyListeners();
   }
