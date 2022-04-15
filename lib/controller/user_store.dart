@@ -1,16 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:wtf/controller/webservice.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Toast.dart';
-import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
-import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/User.dart';
-import 'package:wtf/model/member_detils.dart';
 import 'package:wtf/widget/processing_dialog.dart';
 
 class UserStore extends ChangeNotifier {

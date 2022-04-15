@@ -57,7 +57,7 @@ class ScheduleData {
   Map<String, List<MyScheduleAddonData>> allData;
   String workoutAvailable;
 
-  bool hasData() =>
+  bool hasData()=>
       (regular.isNotEmpty ||
           addon.isNotEmpty ||
           event.isNotEmpty ||
@@ -126,6 +126,7 @@ class ScheduleData {
         "addon_live": List<dynamic>.from(addonLive.map((x) => x.toJson())),
         "workoutAvailable": workoutAvailable,
       };
+
 }
 
 class MyScheduleAddonData {

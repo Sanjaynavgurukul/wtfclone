@@ -29,7 +29,6 @@ class MyScheduleScreen extends StatefulWidget {
 }
 
 class _MyScheduleScreenState extends State<MyScheduleScreen> {
-  UserStore userStore;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
@@ -56,7 +55,6 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    userStore = context.watch<UserStore>();
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
@@ -66,6 +64,7 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
           shrinkWrap: true,
           cacheExtent: 200000.0,
           slivers: [
+            //This is header :D
             SliverToBoxAdapter(
               child: Container(
                 height: 98.0,
@@ -139,6 +138,7 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
                 ),
               ),
             ),
+            //This is date selection section ;D
             SliverToBoxAdapter(
               child: TableCalendar(
                 firstDay: DateTime.now().subtract(Duration(days: 14)),
@@ -255,6 +255,7 @@ class _MyScheduleScreenState extends State<MyScheduleScreen> {
                 },
               ),
             ),
+
             SliverToBoxAdapter(
               child: Container(
                 child: Column(

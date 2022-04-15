@@ -60,10 +60,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           // NavigationService.pushName(Routes.gymCat);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyHomePage()),
-          );
+          NavigationService.pushName(Routes.dateWorkoutList);
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => MyHomePage()),
+          // );
           //FirebaseCrashlytics.instance.crash();
         },
 

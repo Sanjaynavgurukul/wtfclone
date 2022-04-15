@@ -53,6 +53,7 @@ import 'package:wtf/screen/schedule/MainWorkoutScreen.dart';
 import 'package:wtf/screen/schedule/exercise/exercise.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
 import 'package:wtf/screen/schedule/my_schedule.dart';
+import 'package:wtf/screen/schedule/new/date_workout_list.dart';
 import 'package:wtf/screen/schedule/new/main_workouts.dart';
 import 'package:wtf/screen/schedule/workout_complete/workout_complete.dart';
 import 'package:wtf/screen/search_screen.dart';
@@ -145,6 +146,7 @@ class Routes {
   static const String gymCat = GymCat.routeName;
   static const String paymentProcess = PaymentProcess.routeName;
   static const String mainWorkout = MainWorkout.routeName;
+  static const String dateWorkoutList = DateWorkoutList.routeName;
 }
 
 class RouteGenerator {
@@ -158,6 +160,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.dateWorkoutList:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: DateWorkoutList(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => DateWorkoutList(), settings: settings);
       case Routes.mainWorkout:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
