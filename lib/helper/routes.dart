@@ -54,7 +54,9 @@ import 'package:wtf/screen/schedule/exercise/exercise.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
 import 'package:wtf/screen/schedule/my_schedule.dart';
 import 'package:wtf/screen/schedule/new/date_workout_list.dart';
+import 'package:wtf/screen/schedule/new/ex_start_screen.dart';
 import 'package:wtf/screen/schedule/new/main_workouts.dart';
+import 'package:wtf/screen/schedule/new/workout_details.dart';
 import 'package:wtf/screen/schedule/workout_complete/workout_complete.dart';
 import 'package:wtf/screen/search_screen.dart';
 import 'package:wtf/screen/side_bar_drawer/my_subscription.dart';
@@ -147,6 +149,8 @@ class Routes {
   static const String paymentProcess = PaymentProcess.routeName;
   static const String mainWorkout = MainWorkout.routeName;
   static const String dateWorkoutList = DateWorkoutList.routeName;
+  static const String workoutDetails = WorkoutDetails.routeName;
+  static const String exStartScreen = ExStartScreen.routeName;
 }
 
 class RouteGenerator {
@@ -160,6 +164,22 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.exStartScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: ExStartScreen(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => ExStartScreen(), settings: settings);
+      case Routes.workoutDetails:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: WorkoutDetails(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => WorkoutDetails(), settings: settings);
       case Routes.dateWorkoutList:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

@@ -17,7 +17,9 @@ import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/screen/schedule/arguments/ex_details_argument.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/global_timer_helper.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 
 class MainWorkout extends StatefulWidget {
@@ -34,64 +36,22 @@ class _MainWorkoutState extends State<MainWorkout> {
   bool trainerCalled = true;
   bool workoutCalled = true;
   bool callTimer = false;
-  int counter = 0;
 
   final watchUiStream = BehaviorSubject<int>();
 
   Function(int) get setWatchUiStream => watchUiStream.sink.add;
 
   Stream<int> get getWatchUiStream => watchUiStream.stream;
-
-  StreamController<int> streamController;
-
-  bool flag = true;
-  Stream<int> timerStream;
-  StreamSubscription<int> timerSubscription;
   String hoursStr = '00';
   String minutesStr = '00';
   String secondsStr = '00';
-
-  Stream<int> stopWatchStream() {
-    Timer timer;
-    Duration timerInterval = Duration(seconds: 1);
-
-    void stopTimer() {
-      if (timer != null) {
-        timer.cancel();
-        timer = null;
-        counter = 0;
-        streamController.close();
-      }
-    }
-
-    void tick(_) {
-      counter++;
-      streamController.add(counter);
-      if (!flag) {
-        stopTimer();
-      }
-    }
-
-    void startTimer() {
-      timer = Timer.periodic(timerInterval, tick);
-    }
-
-    streamController = StreamController<int>(
-      onListen: startTimer,
-      onCancel: stopTimer,
-      onResume: startTimer,
-      onPause: stopTimer,
-    );
-
-    return streamController.stream;
-  }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
-    counter = controlTimer();
+    timerHelper.counter = timerHelper.getPreviousTimerFromLocal();
   }
 
   void callTrainer() {
@@ -149,14 +109,16 @@ class _MainWorkoutState extends State<MainWorkout> {
           if (args == null) {
             return Center(child: Text('Something went Wrong'));
           } else {
+
             //call workout :d
             controlWorkout(args);
 
             return Scaffold(
               floatingActionButton: FloatingActionButton.extended(
+                heroTag: 'startFlag',
                 onPressed: () {},
                 label: Text(
-                  'Completed',
+                  displayTimer() ?'Stop' :'Completed',
                   style: TextStyle(fontSize: 16),
                 ),
                 icon: Icon(Icons.add),
@@ -173,27 +135,17 @@ class _MainWorkoutState extends State<MainWorkout> {
                               pinned: true,
                               floating: true,
                               actions: [
-                                !displayTimer()
+                                displayTimer()
                                     ? StreamBuilder(
                                         stream: watchUiStream,
-                                        initialData: counter,
+                                        initialData: timerHelper.counter,
                                         builder: (BuildContext context,
                                             AsyncSnapshot<int> snapshot) {
-                                          setTimeInLocal();
-                                          hoursStr =
-                                              ((snapshot.data / (60 * 60)) % 60)
-                                                  .floor()
-                                                  .toString()
-                                                  .padLeft(2, '0');
-                                          minutesStr =
-                                              ((snapshot.data / 60) % 60)
-                                                  .floor()
-                                                  .toString()
-                                                  .padLeft(2, '0');
-                                          secondsStr = (snapshot.data % 60)
-                                              .floor()
-                                              .toString()
-                                              .padLeft(2, '0');
+                                          timerHelper.setTimeInLocal();
+
+                                          hoursStr =timerHelper.convertHour(snapshot.data).toString();
+                                          minutesStr =timerHelper.convertMin(snapshot.data).toString();
+                                          secondsStr = timerHelper.convertSec(snapshot.data).toString();
                                           return Container(
                                             alignment: Alignment.center,
                                             margin: EdgeInsets.only(right: 12),
@@ -265,7 +217,8 @@ class _MainWorkoutState extends State<MainWorkout> {
                                 //Item
                                 WorkoutScheduleData item =
                                     user.myWorkoutSchedule.data[index];
-                                return WorkoutListItems(item);
+                                return itermCard(item:item);
+                                // return WorkoutListItems(item);
                               }))),
             );
           }
@@ -274,166 +227,105 @@ class _MainWorkoutState extends State<MainWorkout> {
     }
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   controlTimer();
-  //   return Scaffold(
-  //     appBar: AppBar(title: Text("Flutter StopWatch")),
-  //     body: Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           StreamBuilder(
-  //             stream: watchUiStream,
-  //             initialData: counter,
-  //             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-  //               setTimeInLocal();
-  //               hoursStr = ((snapshot.data / (60 * 60)) % 60)
-  //                   .floor()
-  //                   .toString()
-  //                   .padLeft(2, '0');
-  //               minutesStr = ((snapshot.data / 60) % 60)
-  //                   .floor()
-  //                   .toString()
-  //                   .padLeft(2, '0');
-  //               secondsStr =
-  //                   (snapshot.data % 60).floor().toString().padLeft(2, '0');
-  //               return Text(
-  //                 "$hoursStr:$minutesStr:$secondsStr",
-  //                 style: TextStyle(
-  //                   fontSize: 90.0,
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //           SizedBox(height: 30.0),
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               RaisedButton(
-  //                 padding:
-  //                     EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-  //                 onPressed: () {
-  //                   timerStream = stopWatchStream();
-  //                   timerSubscription = timerStream.listen((int newTick) {
-  //                     setWatchUiStream(newTick);
-  //                     // setState(() {
-  //                     //   hoursStr = ((newTick / (60 * 60)) % 60)
-  //                     //       .floor()
-  //                     //       .toString()
-  //                     //       .padLeft(2, '0');
-  //                     //   minutesStr = ((newTick / 60) % 60)
-  //                     //       .floor()
-  //                     //       .toString()
-  //                     //       .padLeft(2, '0');
-  //                     //   secondsStr =
-  //                     //       (newTick % 60).floor().toString().padLeft(2, '0');
-  //                     // });
-  //                   });
-  //                 },
-  //                 color: Colors.green,
-  //                 child: Text(
-  //                   'START',
-  //                   style: TextStyle(
-  //                     fontSize: 20.0,
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(width: 40.0),
-  //               RaisedButton(
-  //                 padding:
-  //                     EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-  //                 onPressed: () {
-  //                   timerSubscription.cancel();
-  //                   timerStream = null;
-  //                   setState(() {
-  //                     hoursStr = '00';
-  //                     minutesStr = '00';
-  //                     secondsStr = '00';
-  //                   });
-  //                 },
-  //                 color: Colors.red,
-  //                 child: Text(
-  //                   'RESET',
-  //                   style: TextStyle(
-  //                     color: Colors.white,
-  //                     fontSize: 20.0,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget itermCard({@required WorkoutScheduleData item}){
+    return Card(
+      color: Colors.transparent,
+      elevation: 0.0,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 12.0,
+        vertical: 10.0,
+      ),
+      child: InkWell(
+        onTap: (){
+          NavigationService.pushName(Routes.workoutDetails,argument: ExDetailsArgument(data: item.exercises));
+        },
+        child: Stack(
+          children: [
+            SizedBox(
+              height: 200,
+              child: GradientImageWidget(
+                borderRadius: BorderRadius.circular(8.0),
+                network: item.image != null
+                    ? item.image
+                    : Images.workoutImage,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.0),
+                color: Colors.white,
+                gradient: LinearGradient(
+                  begin: FractionalOffset.topCenter,
+                  end: FractionalOffset.bottomCenter,
+                  colors: const [
+                    Colors.transparent,
+                    Colors.red,
+                  ],
+                  stops: const [0.4, 1.0],
+                ),
+              ),
+            ),
 
-  // timerStream = stopWatchStream();
-  // timerSubscription = timerStream.listen((int newTick) {
-  // setWatchUiStream(newTick);
-  // });
+            Positioned(
+              bottom: 16.0,
+              left: 0.0,
+              right: 0.0,
+              child: Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: item.category + ' ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                    children: [
+                      if (item.exercises
+                          .map((e) =>
+                      e.eDuration != null && e.eDuration.isNotEmpty)
+                          .toList()[0])
+                        TextSpan(
+                          text: ' (Completed)',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   bool displayTimer() {
     bool value = locator<AppPrefs>().exerciseOn.getValue();
-    if(!value && !callTimer){
+    if(value && !callTimer){
       this.callTimer = true;
-      timerStream = stopWatchStream();
-      timerSubscription = timerStream.listen((int newTick) {
+      timerHelper.timerStream = timerHelper.stopWatchStream();
+      timerHelper.timerSubscription = timerHelper.timerStream.listen((int newTick) {
         setWatchUiStream(newTick);
       });
     }
     return value;
   }
 
-  int convertHour(int time) {
-    String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(2, '0');
-    return int.parse(hour);
-  }
-
-  int convertMin(int time) {
-    String min = ((time / 60) % 60).floor().toString().padLeft(2, '0');
-    return int.parse(min);
-  }
-
-  int convertSec(int time) {
-    String sec = (time % 60).floor().toString().padLeft(2, '0');
-    return int.parse(sec);
-  }
-
-  void setTimeInLocal() {
-    int currentDate = DateTime.now()
-        .subtract(Duration(
-            hours: convertHour(counter),
-            seconds: convertSec(counter),
-            minutes: convertMin(counter)))
-        .millisecondsSinceEpoch;
-    locator<AppPrefs>().globalTimer.setValue(currentDate);
-  }
-
-  int getGlobalTime() {
-    return locator<AppPrefs>().globalTimer.getValue();
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
-    setTimeInLocal();
-    watchUiStream.close();
-    if (timerSubscription != null) timerSubscription.cancel();
-    if (streamController != null) streamController.close();
+    timerHelper.setTimeInLocal();
+    if(watchUiStream != null ) watchUiStream.close();
+    if (timerHelper.timerSubscription != null) timerHelper.timerSubscription.cancel();
+    if (timerHelper.streamController != null) timerHelper.streamController.close();
     super.dispose();
   }
 
-  int controlTimer() {
-    DateTime date1 = DateTime.now();
-    // DateTime date2 = DateTime.now().add(Duration(seconds: getGlobalTime()));
-    DateTime date2 = DateTime.fromMillisecondsSinceEpoch(getGlobalTime());
-    final datedifferent = date1.difference(date2).inSeconds;
-    print("something $datedifferent");
 
-    return datedifferent;
-  }
 }
 
 class WorkoutListItems extends StatelessWidget {
@@ -448,7 +340,7 @@ class WorkoutListItems extends StatelessWidget {
         onTap: schedule.exercises.map((e) => e.status == 'done').toList()[0]
             ? null
             : () {
-              //This is my Code
+                //This is my Code
 
                 if (store.workoutGlobalTimer == null) {
                   if (schedule.isCompleted ||
