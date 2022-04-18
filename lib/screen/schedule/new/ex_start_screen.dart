@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/src/provider.dart';
@@ -31,11 +32,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
   StopWatchTimer _stopWatchTimer;
   VideoPlayerController _controller;
   bool workoutPaused = false;
+  bool loading = false;
   int exSet = 1;
 
   final setCount = BehaviorSubject<int>();
 
-  Function(int) get setSetsCount=> setCount.sink.add;
+  Function(int) get setSetsCount => setCount.sink.add;
 
   Stream<int> get getSetsCount => setCount.stream;
 
@@ -83,8 +85,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   //Final Method :D
-  void setExerciseIdToLocal({@required String exUid,bool removeId = false}) {
-    locator<AppPrefs>().exerciseUid.setValue(removeId?'':exUid);
+  void setExerciseIdToLocal({@required String exUid, bool removeId = false}) {
+    locator<AppPrefs>().exerciseUid.setValue(removeId ? '' : exUid);
   }
 
   void startTimer() {
@@ -125,8 +127,37 @@ class _ExStartScreenState extends State<ExStartScreen> {
     locator<AppPrefs>().exercisePause.setValue(pause);
   }
 
-  void endExercise(){
+  void endExercise() {
+    showLoadingDialog(context);
     print('End Exercise ----');
+
+  }
+
+  static Future<void> showLoadingDialog(
+      BuildContext context) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return new WillPopScope(
+              onWillPop: () async => true,
+              child: SimpleDialog(
+                  backgroundColor: Colors.black45,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CupertinoActivityIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Please Wait....",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ]),
+                    )
+                  ]));
+        });
   }
 
   @override
@@ -208,9 +239,10 @@ class _ExStartScreenState extends State<ExStartScreen> {
                       StreamBuilder(
                         stream: setCount,
                         initialData: exSet,
-                        builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+                        builder: (BuildContext context,
+                            AsyncSnapshot<int> snapshot) {
                           int c = snapshot.data;
-                          return  InkWell(
+                          return InkWell(
                             onTap: () {
                               // int itemSets = int.parse(data.sets ?? '0');
                               // if (isExPaused()) {
@@ -230,21 +262,20 @@ class _ExStartScreenState extends State<ExStartScreen> {
                               //   setExPause(true);
                               // }
 
-                              if(!workoutPaused){
+                              if (!workoutPaused) {
                                 workoutPaused = true;
                                 setExPause(workoutPaused);
 
-                                if(validateSetRep(set: data.sets)){
-                                  exSet+=1;
+                                if (validateSetRep(set: data.sets)) {
+                                  exSet += 1;
                                   setSetsCount(exSet);
                                   setSetsInLocal(exSet);
                                   // this.workoutPaused = !workoutPaused;
                                   // setExPause(workoutPaused);
-                                }else{
+                                } else {
                                   endExercise();
                                 }
-
-                              }else{
+                              } else {
                                 workoutPaused = false;
                                 setExPause(workoutPaused);
                                 setSetsCount(exSet);
@@ -256,12 +287,15 @@ class _ExStartScreenState extends State<ExStartScreen> {
                               width: double.infinity,
                               decoration: BoxDecoration(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                                      BorderRadius.all(Radius.circular(8)),
                                   color: AppConstants.bgColor),
-                              child: workoutPaused?Text('Resume'):Text('End set ${snapshot.data} of ${data.sets}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600)),
+                              child: workoutPaused
+                                  ? Text('Resume')
+                                  : Text(
+                                      'End set ${snapshot.data} of ${data.sets}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600)),
                             ),
                           );
                         },
