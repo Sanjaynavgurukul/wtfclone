@@ -1,16 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/src/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
-import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/helper/flash_helper.dart';
-import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
@@ -20,10 +16,10 @@ import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start_info.
 import 'package:wtf/screen/schedule/exercise/exercise_video.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/global_timer_helper.dart';
-import 'package:wtf/widget/custom_button.dart';
 
 class ExStartScreen extends StatefulWidget {
   static const routeName = '/exStartScreen';
+
   const ExStartScreen({Key key}) : super(key: key);
 
   @override
@@ -35,13 +31,20 @@ class _ExStartScreenState extends State<ExStartScreen> {
   StopWatchTimer _stopWatchTimer;
   VideoPlayerController _controller;
   bool workoutPaused = false;
-  int exSet = 0 ,exRep = 0;
+  int exSet = 1;
+
+  final setCount = BehaviorSubject<int>();
+
+  Function(int) get setSetsCount=> setCount.sink.add;
+
+  Stream<int> get getSetsCount => setCount.stream;
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    // this.exSet = getSetsFromLocal;
   }
 
   @override
@@ -51,6 +54,11 @@ class _ExStartScreenState extends State<ExStartScreen> {
       presetMillisecond: exTimerHelper.convertMil(true),
       mode: StopWatchMode.countUp,
     );
+    if (!isExPaused()) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
   }
 
   @override
@@ -58,90 +66,83 @@ class _ExStartScreenState extends State<ExStartScreen> {
     super.dispose();
     await _stopWatchTimer.dispose();
     _controller.dispose();
+    setCount.close();
   }
 
-  void setInitialSetRep({@required String itemUid}){
-    if(displayCountDown(itemUid: itemUid)){
-
-    }else{
-
-    }
-  }
-
-  void playVideo({@required String videoUrl}){
+  void playVideo({@required String videoUrl}) {
     print('This is video URl -- $videoUrl');
     _controller = VideoPlayerController.network(
       '$videoUrl',
       videoPlayerOptions: VideoPlayerOptions(),
     )..initialize().then((_) {
-      _controller.play();
-      _controller.addListener(() {});
-      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      if (mounted) setState(() {});
-    });
+        _controller.play();
+        _controller.addListener(() {});
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        if (mounted) setState(() {});
+      });
   }
 
-  bool displayCountDown({@required String itemUid}) {
-    String value = locator<AppPrefs>().exerciseUid.getValue();
-    if (value != null && value == itemUid) {
+  //Final Method :D
+  void setExerciseIdToLocal({@required String exUid,bool removeId = false}) {
+    locator<AppPrefs>().exerciseUid.setValue(removeId?'':exUid);
+  }
+
+  void startTimer() {
+    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+  }
+
+  void stopTimer() {
+    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+  }
+
+  void setSetsInLocal(int sets) {
+    locator<AppPrefs>().exerciseSet.setValue(sets);
+  }
+
+  int getSetsFromLocal = locator<AppPrefs>().exerciseSet.getValue();
+
+  bool validateSetRep({@required String set}) {
+    // locator<AppPrefs>().exerciseSet.setValue(1);
+    int i = int.parse(set ?? '0');
+    print('check current count --- $i $exSet');
+    if (exSet < i) {
       return true;
     } else {
       return false;
     }
   }
 
-  void setExerciseIdToLocal({@required String exUid}){
-    locator<AppPrefs>().exerciseUid.setValue(exUid);
+  bool isExPaused() {
+    return locator<AppPrefs>().exercisePause.getValue();
   }
 
-  void startTimer(){
-    _stopWatchTimer.onExecute
-        .add(StopWatchExecute.start);
-  }
-
-  void stopTimer(){
-    _stopWatchTimer.onExecute
-        .add(StopWatchExecute.stop);
-  }
-
-  void setSetsInLocal(int sets){
-    locator<AppPrefs>().exerciseSet.setValue(sets+=1);
-  }
-
-  void setRepsInLocal(int reps){
-    locator<AppPrefs>().exerciseRep.setValue(reps+=1);
-  }
-
-  bool validateSetRep({@required int set,@required int rep}){
-    int localSets = locator<AppPrefs>().exerciseSet.getValue();
-    int localReps = locator<AppPrefs>().exerciseRep.getValue();
-
-    if(set<=localSets){
-        if(rep<=localReps){
-          return true;
-        }else{
-          return false;
-        }
-    }else{
-      return false;
+  void setExPause(bool pause) {
+    if (pause) {
+      stopTimer();
+    } else {
+      startTimer();
     }
+    locator<AppPrefs>().exercisePause.setValue(pause);
+  }
 
+  void endExercise(){
+    print('End Exercise ----');
   }
 
   @override
   Widget build(BuildContext context) {
     final ExPlayDetailsArgument args =
-    ModalRoute.of(context).settings.arguments as ExPlayDetailsArgument;
+        ModalRoute.of(context).settings.arguments as ExPlayDetailsArgument;
+    //TODO remove this code ;D
+    locator<AppPrefs>().exerciseSet.setValue(1);
 
-    if(args == null || args.data== null){
-      return Center(child: Text('Something went wrong pleas try again later!'),);
-    }
-    else{
+    if (args == null || args.data == null) {
+      return Center(
+        child: Text('Something went wrong pleas try again later!'),
+      );
+    } else {
       //Argument Data :D
       Exercise data = args.data;
-
-      //Set Initial set reps in local variable ;D
-      setInitialSetRep(itemUid: data.uid);
 
       //Set ExUID into Local:D
       setExerciseIdToLocal(exUid: data.uid);
@@ -176,11 +177,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ExerciseStartInfo(data: data,),
+                      ExerciseStartInfo(
+                        data: data,
+                      ),
                       SizedBox(
                         height: 15,
                       ),
-                      // ExerciseCard(),
                       StreamBuilder<int>(
                         stream: _stopWatchTimer.secondTime,
                         initialData: _stopWatchTimer.secondTime.value,
@@ -189,7 +191,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                           print('Listen every second. $value');
                           exTimerHelper.setTimeInLocal(
                               isEx: true, counter: snap.data);
-                          return  ExerciseResult(
+                          return ExerciseResult(
                             // h: h,
                             h: timerHelper.convertHour(value),
                             m: timerHelper.convertMin(value),
@@ -203,105 +205,67 @@ class _ExStartScreenState extends State<ExStartScreen> {
                       SizedBox(
                         height: 25,
                       ),
+                      StreamBuilder(
+                        stream: setCount,
+                        initialData: exSet,
+                        builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+                          int c = snapshot.data;
+                          return  InkWell(
+                            onTap: () {
+                              // int itemSets = int.parse(data.sets ?? '0');
+                              // if (isExPaused()) {
+                              //   print('pause --');
+                              //   setExPause(false);
+                              //   startTimer();
+                              //
+                              //   if (validateSetRep(set: itemSets)) {
+                              //     setSetsInLocal(exSet);
+                              //     exSet += 1;
+                              //   } else {
+                              //
+                              //   }
+                              // } else {
+                              //   print('pause not --');
+                              //   stopTimer();
+                              //   setExPause(true);
+                              // }
 
-                      CustomButton(
-                        onTap: () async {
+                              if(!workoutPaused){
+                                workoutPaused = true;
+                                setExPause(workoutPaused);
 
-                          // print('tapped Exercise action');
-                          // try {
-                          //   if (workoutPaused) {
-                          //     stopTimer();
-                          //     setState(() {
-                          //       workoutPaused = false;
-                          //     });
-                          //   } else {
-                          //     if (int.tryParse(data.sets) > data.setsCompleted) {
-                          //       data.setsCompleted++;
-                          //       if (data.setData == null) {
-                          //         data.setData = [
-                          //           localTimer.stopwatch.elapsed.inSeconds,
-                          //         ];
-                          //       } else {
-                          //         data.setData.add(
-                          //           localTimer.stopwatch.elapsed.inSeconds,
-                          //         );
-                          //       }
-                          //       WorkoutScheduleData da = locator<AppPrefs>()
-                          //           .activeScheduleData
-                          //           .getValue();
-                          //       int index = da.exercises.indexWhere(
-                          //               (element) => element.woName == data.woName);
-                          //       print(
-                          //           'fetching exercise for index $index  & ex len: ${da.exercises.length}-----------');
-                          //       da.exercises.remove(index);
-                          //       List<Exercise> newList = [];
-                          //       for (int i = 0; i < da.exercises.length; i++) {
-                          //         if (da.exercises[i].woName != data.woName) {
-                          //           newList.add(da.exercises[i]);
-                          //         }
-                          //       }
-                          //       newList.add(data);
-                          //       da.exercises.clear();
-                          //       print(
-                          //           'fetching exercise for index $index  & ex len2: ${da.exercises.length}-----------');
-                          //       da.exercises.addAll(newList);
-                          //       print(
-                          //           'fetching exercise for index $index  & ex len3: ${da.exercises.length}-----------');
-                          //       await locator<AppPrefs>()
-                          //           .activeScheduleData
-                          //           .clear();
-                          //       context
-                          //           .read<GymStore>()
-                          //           .setSchedule(schedule: da);
-                          //       locator<AppPrefs>()
-                          //           .activeScheduleData
-                          //           .setValue(da);
-                          //
-                          //       if (data.setsCompleted ==
-                          //           int.tryParse(data.sets)) {
-                          //         data.isCompleted = true;
-                          //         int duration = 0;
-                          //         print(
-                          //             'seconds list: ${data.setData.map((e) => e).toList()}');
-                          //         // for (int i = 0; i < data.setData.length; i++) {
-                          //         //   duration += data.setData[i];
-                          //         // }
-                          //         // print(
-                          //         //     'TOTAL WORKOUT DURATION:  ${Helper.printDuration(
-                          //         //       Duration(
-                          //         //           seconds: localTimer
-                          //         //               .stopwatch.elapsed.inSeconds),
-                          //         //     )}');
-                          //         context.read<GymStore>().updateTime(
-                          //           time: Helper.printDuration(
-                          //             Duration(
-                          //                 seconds: localTimer
-                          //                     .stopwatch.elapsed.inSeconds),
-                          //           ),
-                          //         );
-                          //         NavigationService.goBack;
-                          //       } else {
-                          //         pauseTimers();
-                          //       }
-                          //     }
-                          //   }
-                          // } catch (e) {
-                          //   log('exercise save error: $e');
-                          // }
+                                if(validateSetRep(set: data.sets)){
+                                  exSet+=1;
+                                  setSetsCount(exSet);
+                                  setSetsInLocal(exSet);
+                                  // this.workoutPaused = !workoutPaused;
+                                  // setExPause(workoutPaused);
+                                }else{
+                                  endExercise();
+                                }
+
+                              }else{
+                                workoutPaused = false;
+                                setExPause(workoutPaused);
+                                setSetsCount(exSet);
+                              }
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 54,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                                  color: AppConstants.bgColor),
+                              child: workoutPaused?Text('Resume'):Text('End set ${snapshot.data} of ${data.sets}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                          );
                         },
-                        text: workoutPaused
-                            ? 'Resume'
-                            : 'End set ${data.setsCompleted + 1} of ${data.sets}',
-                        height: 40.0,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 8.0,
-                        ),
-                        bgColor: AppConstants.primaryColor,
-                        textColor: Colors.white,
-                        radius: 12.0,
-                      ),
-
+                      )
                     ],
                   ),
                 ),

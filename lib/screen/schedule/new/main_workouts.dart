@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
@@ -19,6 +20,7 @@ import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/screen/schedule/arguments/ex_details_argument.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/global_timer_helper.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 
@@ -37,21 +39,38 @@ class _MainWorkoutState extends State<MainWorkout> {
   bool workoutCalled = true;
   bool callTimer = false;
 
-  final watchUiStream = BehaviorSubject<int>();
+  StopWatchTimer _stopWatchTimer;
 
-  Function(int) get setWatchUiStream => watchUiStream.sink.add;
+  @override
+  void initState() {
+    super.initState();
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: exTimerHelper.convertMil(false),
+      mode: StopWatchMode.countUp,
+    );
+  }
 
-  Stream<int> get getWatchUiStream => watchUiStream.stream;
-  String hoursStr = '00';
-  String minutesStr = '00';
-  String secondsStr = '00';
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();
+  }
+
+  void startTimer(){
+    _stopWatchTimer.onExecute
+        .add(StopWatchExecute.start);
+  }
+
+  void stopTimer(){
+    _stopWatchTimer.onExecute
+        .add(StopWatchExecute.stop);
+  }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
-    timerHelper.counter = timerHelper.getPreviousTimerFromLocal();
   }
 
   void callTrainer() {
@@ -118,7 +137,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                 heroTag: 'startFlag',
                 onPressed: () {},
                 label: Text(
-                  displayTimer() ?'Stop' :'Completed',
+                  'Completed',
                   style: TextStyle(fontSize: 16),
                 ),
                 icon: Icon(Icons.add),
@@ -135,32 +154,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                               pinned: true,
                               floating: true,
                               actions: [
-                                displayTimer()
-                                    ? StreamBuilder(
-                                        stream: watchUiStream,
-                                        initialData: timerHelper.counter,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<int> snapshot) {
-                                          timerHelper.setTimeInLocal();
 
-                                          hoursStr =timerHelper.convertHour(snapshot.data).toString();
-                                          minutesStr =timerHelper.convertMin(snapshot.data).toString();
-                                          secondsStr = timerHelper.convertSec(snapshot.data).toString();
-                                          return Container(
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.only(right: 12),
-                                            child: Text(
-                                              "$hoursStr:$minutesStr:$secondsStr",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppConstants.bgColor
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : Container()
                               ],
                               bottom: PreferredSize(
                                   preferredSize: Size(double.infinity, 100),
@@ -304,29 +298,6 @@ class _MainWorkoutState extends State<MainWorkout> {
       ),
     );
   }
-
-  bool displayTimer() {
-    bool value = locator<AppPrefs>().exerciseOn.getValue();
-    if(value && !callTimer){
-      this.callTimer = true;
-      timerHelper.timerStream = timerHelper.stopWatchStream();
-      timerHelper.timerSubscription = timerHelper.timerStream.listen((int newTick) {
-        setWatchUiStream(newTick);
-      });
-    }
-    return value;
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    timerHelper.setTimeInLocal();
-    if(watchUiStream != null ) watchUiStream.close();
-    if (timerHelper.timerSubscription != null) timerHelper.timerSubscription.cancel();
-    if (timerHelper.streamController != null) timerHelper.streamController.close();
-    super.dispose();
-  }
-
 
 }
 
