@@ -9,8 +9,6 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
-import 'package:wtf/helper/navigation.dart';
-import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';

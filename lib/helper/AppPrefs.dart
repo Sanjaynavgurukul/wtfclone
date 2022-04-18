@@ -94,6 +94,12 @@ class AppPrefs {
             defaultValue: '28.596669322602807'),
         lng = preferences.getString(PrefsConstants.lng,
             defaultValue: '77.32866249084584'),
+
+        globalTimer = preferences.getInt(PrefsConstants.globalTimer, defaultValue: 0),
+        exerciseTimer = preferences.getInt(PrefsConstants.exerciseTimer, defaultValue: 0),
+        exerciseUid = preferences.getString(PrefsConstants.exerciseUid, defaultValue: ''),
+        exerciseOn = preferences.getBool(PrefsConstants.exerciseOn, defaultValue: false),
+
         address = preferences.getString(PrefsConstants.address,defaultValue:'Noida Sector 8');
 
   final Preference<bool> isLoggedIn;
@@ -130,6 +136,12 @@ class AppPrefs {
   final Preference<String> lat;
   final Preference<String> lng;
   final Preference<String> address;
+
+  final Preference<int> globalTimer;
+  final Preference<int> exerciseTimer;
+  final Preference<String > exerciseUid;
+  final Preference<bool > exerciseOn;
+
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -235,4 +247,10 @@ class PrefsConstants {
   static const String lat = 'lat';
   static const String lng = 'lng';
   static const String address = 'currentAddress';
+
+  //Global Timer :D
+  static const String globalTimer = 'globalTimer';
+  static const String exerciseTimer = 'exerciseTimer';
+  static const String exerciseUid = 'exerciseUid';
+  static const String exerciseOn = 'exerciseOn';
 }
