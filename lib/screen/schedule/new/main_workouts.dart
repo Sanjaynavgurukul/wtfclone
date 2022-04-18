@@ -217,6 +217,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                 //Item
                                 WorkoutScheduleData item =
                                     user.myWorkoutSchedule.data[index];
+                                print('check list item image -- ${item.image}');
                                 return itermCard(item:item);
                                 // return WorkoutListItems(item);
                               }))),
@@ -237,7 +238,8 @@ class _MainWorkoutState extends State<MainWorkout> {
       ),
       child: InkWell(
         onTap: (){
-          NavigationService.pushName(Routes.workoutDetails,argument: ExDetailsArgument(data: item.exercises));
+          print('check imaghe url --- ${item.image}');
+          NavigationService.pushName(Routes.workoutDetails,argument: ExDetailsArgument(data: item.exercises,coverImage: item.image));
         },
         child: Stack(
           children: [

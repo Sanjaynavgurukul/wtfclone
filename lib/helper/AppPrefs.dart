@@ -99,6 +99,8 @@ class AppPrefs {
         exerciseTimer = preferences.getInt(PrefsConstants.exerciseTimer, defaultValue: 0),
         exerciseUid = preferences.getString(PrefsConstants.exerciseUid, defaultValue: ''),
         exerciseOn = preferences.getBool(PrefsConstants.exerciseOn, defaultValue: false),
+        exerciseSet = preferences.getInt(PrefsConstants.exerciseSet, defaultValue: 0),
+        exerciseRep = preferences.getInt(PrefsConstants.exerciseRep, defaultValue: 0),
 
         address = preferences.getString(PrefsConstants.address,defaultValue:'Noida Sector 8');
 
@@ -141,6 +143,9 @@ class AppPrefs {
   final Preference<int> exerciseTimer;
   final Preference<String > exerciseUid;
   final Preference<bool > exerciseOn;
+  final Preference<int > exerciseSet;
+  final Preference<int > exerciseRep;
+
 
 
   Future<bool> setBool(String key, bool value) async {
@@ -253,4 +258,6 @@ class PrefsConstants {
   static const String exerciseTimer = 'exerciseTimer';
   static const String exerciseUid = 'exerciseUid';
   static const String exerciseOn = 'exerciseOn';
+  static const String exerciseSet = 'exerciseSet';
+  static const String exerciseRep = 'exerciseRep';
 }

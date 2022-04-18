@@ -673,6 +673,7 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     String url =
         BASE_URL + Api.myWorkoutSchedule(date, addonId, subscriptionId);
+    print('base url workout --- $url');
     var res = await _netUtil.get(url, headers: mapHeader);
     print('resp getMyWorkoutSchedule: $res');
     return MyWorkoutSchedule.fromJson(res);

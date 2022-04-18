@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ExerciseResult extends StatelessWidget {
-  const ExerciseResult({Key key, this.h, this.m, this.s}) : super(key: key);
-  final h, m, s;
+  ExerciseResult({Key key, this.h = 0, this.m = 0, this.s = 0}) : super(key: key);
+  int h, m, s;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,6 +20,15 @@ class ExerciseResult extends StatelessWidget {
           //     _getSubtext(h.toString(), 'h'),
           //   ],
           // ),
+          Column(
+            children: [
+              _getText('Hour'),
+              SizedBox(
+                height: 10,
+              ),
+              _getSubtext(h.toString(), 'h'),
+            ],
+          ),
           Column(
             children: [
               _getText('Minutes'),

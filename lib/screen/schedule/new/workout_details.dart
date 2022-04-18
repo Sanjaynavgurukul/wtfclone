@@ -25,6 +25,203 @@ class WorkoutDetails extends StatefulWidget {
   _WorkoutDetailsState createState() => _WorkoutDetailsState();
 }
 
+class _WorkoutDetailsState extends State<WorkoutDetails> {
+  GymStore user;
+  StopWatchTimer _stopWatchTimer;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    user = context.watch<GymStore>();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: exTimerHelper.convertMil(true),
+      mode: StopWatchMode.countUp,
+    );
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ExDetailsArgument args =
+        ModalRoute.of(context).settings.arguments as ExDetailsArgument;
+    if (args == null) {
+      return Center(
+        child: Text('Something Went Wrong Please try again later!'),
+      );
+    } else {
+      var exList = args.data;
+      print('cover Image --- ${args.coverImage}');
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.BACK_GROUND_BG,
+          title: Text('Exercise'),
+          bottom: PreferredSize(
+            preferredSize: Size(double.infinity, 200),
+            child: Container(
+              child: Image.network(
+                '${args.coverImage}',
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                      child: Text(
+                        "Failed",
+                      ));
+                },
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                          : null,
+                    ),
+                  );
+                },
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Container(
+          width: 200,
+          height: 54,
+          alignment: Alignment.center,
+          child: Text(
+            'End Exercise',
+            style: TextStyle(fontSize: 20),
+          ),
+          decoration: BoxDecoration(
+              color: AppConstants.bgColor,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              border: Border.all(width: 1, color: AppConstants.bgColor)),
+        ),
+        body: ListView.builder(
+            padding: EdgeInsets.only(top: 16, bottom: 76),
+            itemCount: exList.length,
+            itemBuilder: (context, index) {
+              Exercise item = exList[index];
+              bool displayTimer = displayCountDown(itemUid: item.uid);
+              bool completed = item.status == 'done';
+              if (displayTimer) {
+                _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+              }
+              return ListTile(
+                dense: true,
+                leading: Icon(
+                  Icons.check_circle,
+                  color:
+                      completed ? Colors.green : Colors.grey.withOpacity(0.5),
+                ),
+                title: Text(
+                  item.woName ?? 'No Name',
+                  style: TextStyle(fontSize: 20),
+                ),
+                subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
+                trailing: InkWell(
+                  onTap: () {
+                    // user.setExercise(item);
+                    // _modalBottomSheetMenu(
+                    //   context,
+                    //   locator<AppPrefs>()
+                    //       .activeScheduleData
+                    //       .getValue()
+                    //       .exercises
+                    //       .indexOf(item),
+                    //   item
+                    // );
+
+                    NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        border: Border.all(
+                            width: 1,
+                            color: displayTimer
+                                ? AppConstants.bgColor
+                                : Colors.white)),
+                    child: displayTimer && !completed
+                        ? Text('Resume')
+                        : Text(completed ? 'Completed' : 'Start'),
+                  ),
+                ),
+              );
+            }),
+      );
+    }
+  }
+
+  bool displayCountDown({@required String itemUid}) {
+    String value = locator<AppPrefs>().exerciseUid.getValue();
+    if (value != null && value == itemUid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // void _modalBottomSheetMenu(
+  //     context,
+  //     int index,
+  //     Exercise item
+  //     ) async {
+  //   // _controller.pause();
+  //
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (context) => ExerciseStart(
+  //         data: item,
+  //       ),
+  //     ),
+  //   );
+  //   // await showModalBottomSheet(
+  //   //   enableDrag: true,
+  //   //   backgroundColor: Colors.black,
+  //   //   isDismissible: false,
+  //   //   isScrollControlled: true,
+  //   //   context: context,
+  //   //   builder: (builder) {
+  //   //     return new Container(
+  //   //       height: Get.height - (kToolbarHeight),
+  //   //       decoration: new BoxDecoration(
+  //   //         color: Colors.transparent,
+  //   //         borderRadius: new BorderRadius.only(
+  //   //           topLeft: const Radius.circular(10.0),
+  //   //           topRight: const Radius.circular(10.0),
+  //   //         ),
+  //   //       ),
+  //   //       child: ExerciseStart(
+  //   //         startVideo: () {
+  //   //           // setState(() {
+  //   //           //   _controller.play();
+  //   //           // });
+  //   //         },
+  //   //         // execiseIndex: index,
+  //   //         data: widget.data,
+  //   //       ),
+  //   //     );
+  //   //   },
+  //   // );
+  //   setState(() {});
+  // }
+}
+
 // class _WorkoutDetailsState extends State<WorkoutDetails> {
 //
 //   StopWatchTimer _stopWatchTimer;
@@ -161,137 +358,3 @@ class WorkoutDetails extends StatefulWidget {
 //
 //
 //
-
-class _WorkoutDetailsState extends State<WorkoutDetails> {
-  GymStore user;
-  StopWatchTimer _stopWatchTimer;
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    user = context.watch<GymStore>();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _stopWatchTimer = StopWatchTimer(
-      presetMillisecond: exTimerHelper.convertMil(true),
-      mode: StopWatchMode.countUp,
-    );
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await _stopWatchTimer.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ExDetailsArgument args =
-        ModalRoute.of(context).settings.arguments as ExDetailsArgument;
-    if (args == null) {
-      return Center(
-        child: Text('Something Went Wrong Please try again later!'),
-      );
-    } else {
-      var exList = args.data;
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.BACK_GROUND_BG,
-          title: Text('Exercise'),
-          bottom: PreferredSize(
-            preferredSize: Size(double.infinity, 160),
-            child: Container(),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          width: 200,
-          height: 54,
-          alignment: Alignment.center,
-          child: Text(
-            'End Exercise',
-            style: TextStyle(fontSize: 20),
-          ),
-          decoration: BoxDecoration(
-              color: AppConstants.bgColor,
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border.all(width: 1, color: AppConstants.bgColor)),
-        ),
-        body: ListView.builder(
-            padding: EdgeInsets.only(top: 16, bottom: 76),
-            itemCount: exList.length,
-            itemBuilder: (context, index) {
-              Exercise item = exList[index];
-              bool displayTimer = displayCountDown(itemUid: item.uid);
-              bool completed = item.status == 'done';
-              if (displayTimer) {
-                _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-              }
-              return ListTile(
-                dense: true,
-                leading: Icon(
-                  Icons.check_circle,
-                  color:
-                      completed ? Colors.green : Colors.grey.withOpacity(0.5),
-                ),
-                title: Text(
-                  item.woName ?? 'No Name',
-                  style: TextStyle(fontSize: 20),
-                ),
-                subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
-                trailing: InkWell(
-                  onTap: () {
-                    NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item));
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ExerciseStart(
-                    //       data: item,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        border: Border.all(
-                            width: 1,
-                            color: displayTimer
-                                ? AppConstants.bgColor
-                                : Colors.white)),
-                    child: displayTimer && !completed
-                        ? StreamBuilder<int>(
-                            stream: _stopWatchTimer.secondTime,
-                            initialData: _stopWatchTimer.secondTime.value,
-                            builder: (context, snap) {
-                              final value = snap.data;
-                              print('Listen every second. $value');
-                              exTimerHelper.setTimeInLocal(
-                                  isEx: true, counter: snap.data);
-                              return Text(
-                                '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
-                              );
-                            },
-                          )
-                        : Text(completed ? 'Completed' : 'Start'),
-                  ),
-                ),
-              );
-            }),
-      );
-    }
-  }
-
-  bool displayCountDown({@required String itemUid}) {
-    String value = locator<AppPrefs>().exerciseUid.getValue();
-    if (value != null && value == itemUid) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}

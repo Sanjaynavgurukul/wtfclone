@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/model/my_workout_schedule_model.dart';
 
 class ExerciseStartInfo extends StatelessWidget {
-  const ExerciseStartInfo({Key key}) : super(key: key);
+  final Exercise data;
+  const ExerciseStartInfo({Key key,@required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class ExerciseStartInfo extends StatelessWidget {
                   height: 10,
                 ),
                 _getSubtext(
-                    context.read<GymStore>().selectedExercise.woName ?? 'N/A'),
+                    data.woName ?? 'N/A'),
               ],
             ),
           ),
@@ -36,7 +36,7 @@ class ExerciseStartInfo extends StatelessWidget {
                   height: 10,
                 ),
                 _getSubtext(
-                    context.read<GymStore>().selectedExercise.reps ?? 'N/A'),
+                    data.reps ?? 'N/A'),
               ],
             ),
           ),
@@ -50,7 +50,7 @@ class ExerciseStartInfo extends StatelessWidget {
                   height: 10,
                 ),
                 _getSubtext(
-                    context.read<GymStore>().selectedExercise.sets ?? 'N/A'),
+                    data.sets ?? 'N/A'),
               ],
             ),
           )

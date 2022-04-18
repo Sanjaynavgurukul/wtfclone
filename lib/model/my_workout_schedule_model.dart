@@ -101,7 +101,7 @@ class WorkoutScheduleData {
     return WorkoutScheduleData(
       category: json["category"],
       exercises: json['exercises'] != null ? temp : [],
-      image: json.containsKey('cover_image') ? json['cover_image'] : null,
+      image: json.containsKey('category_image') ? json['category_image'] : null,
       isCompleted: json['isCompleted'] ?? false,
       description: json.containsKey('description')
           ? json['description']
