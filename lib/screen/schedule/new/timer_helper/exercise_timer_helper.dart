@@ -25,14 +25,36 @@ class ExerciseTimerHelper{
     if(!isEx){
       return locator<AppPrefs>().globalTimer.getValue()??0;
     }else{
+      print('check get exTime ---- ${locator<AppPrefs>().exerciseTimer.getValue()??0}');
       return locator<AppPrefs>().exerciseTimer.getValue()??0;
+    }
+  }
+
+  void setTimeInLocal({@required int counter, bool isEx}) {
+    int currentDate = DateTime.now()
+        .subtract(Duration(
+        hours: convertHour(counter),
+        seconds: convertSec(counter),
+        minutes: convertMin(counter)))
+        .millisecondsSinceEpoch;
+
+    if(isEx){
+      locator<AppPrefs>().exerciseTimer.setValue(currentDate);
+    }else{
+      locator<AppPrefs>().globalTimer.setValue(currentDate);
     }
   }
 
   int getPreviousTimerFromLocal(bool isEx) {
     DateTime date1 = DateTime.now();
     // DateTime date2 = DateTime.now().add(Duration(seconds: getGlobalTime()));
-    DateTime date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
+    DateTime date2;
+    if(getTimer(isEx) == 0){
+      date2 = DateTime.now();
+    }else{
+      date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
+    }
+
     final datedifferent = date1.difference(date2).inSeconds;
     print("something $datedifferent");
 

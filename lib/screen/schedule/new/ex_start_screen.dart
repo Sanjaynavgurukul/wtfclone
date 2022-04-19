@@ -47,18 +47,11 @@ class _ExStartScreenState extends State<ExStartScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
-    // this.exSet = getSetsFromLocal;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    print('check dara --- ${exTimerHelper.convertMil(true)}');
     _stopWatchTimer = StopWatchTimer(
       presetMillisecond: exTimerHelper.convertMil(true),
       mode: StopWatchMode.countUp,
     );
-
+    this.exSet = getSetsFromLocal;
     if (!isExPaused()) {
       startTimer();
     } else {
@@ -67,8 +60,15 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    print('check dara --- ${exTimerHelper.convertMil(true)}');
+  }
+
+  @override
   void dispose() async {
     super.dispose();
+    stopTimer();
     await _stopWatchTimer.dispose();
     _controller.dispose();
     setCount.close();
@@ -101,7 +101,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   void setSetsInLocal(int sets) {
+    print('setting reps --- $sets');
     locator<AppPrefs>().exerciseSet.setValue(sets);
+    print('setting reps --- from pref ${locator<AppPrefs>().exerciseSet.getValue()}');
   }
 
   int getSetsFromLocal = locator<AppPrefs>().exerciseSet.getValue();
@@ -136,6 +138,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
     user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString()).then((value){
       if(value){
         print('check this code is initialize ---');
+        stopTimer();
         exTimerHelper.setExTimerToZero();
         setExerciseIdToLocal(exUid: '',removeId: true);
         setExPause(false);
@@ -180,9 +183,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
   Widget build(BuildContext context) {
     final ExPlayDetailsArgument args =
         ModalRoute.of(context).settings.arguments as ExPlayDetailsArgument;
-    //TODO remove this code ;D
-    locator<AppPrefs>().exerciseSet.setValue(1);
-
     if (args == null || args.data == null) {
       return Center(
         child: Text('Something went wrong pleas try again later!'),
@@ -236,8 +236,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
                         builder: (context, snap) {
                           final value = snap.data;
                           print('Listen every second. $value');
-                          // exTimerHelper.setTimeInLocal(
-                          //     isEx: true, counter: snap.data);
+                          exTimerHelper.setTimeInLocal(
+                              isEx: true, counter: snap.data);
                           return ExerciseResult(
                             // h: h,
                             h: timerHelper.convertHour(value),
@@ -257,27 +257,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
                         initialData: exSet,
                         builder: (BuildContext context,
                             AsyncSnapshot<int> snapshot) {
-                          int c = snapshot.data;
                           return InkWell(
                             onTap: () {
-                              // int itemSets = int.parse(data.sets ?? '0');
-                              // if (isExPaused()) {
-                              //   print('pause --');
-                              //   setExPause(false);
-                              //   startTimer();
-                              //
-                              //   if (validateSetRep(set: itemSets)) {
-                              //     setSetsInLocal(exSet);
-                              //     exSet += 1;
-                              //   } else {
-                              //
-                              //   }
-                              // } else {
-                              //   print('pause not --');
-                              //   stopTimer();
-                              //   setExPause(true);
-                              // }
-
                               if (!workoutPaused) {
                                 workoutPaused = true;
                                 setExPause(workoutPaused);
@@ -289,6 +270,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                                   // this.workoutPaused = !workoutPaused;
                                   // setExPause(workoutPaused);
                                 } else {
+
                                   endExercise(item: data);
                                 }
                               } else {
