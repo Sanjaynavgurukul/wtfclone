@@ -260,6 +260,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                 Navigator.pop(context);
                 setExerciserOnStatus(true);
                 startTimer();
+                navigateToNext(item: item);
               },
               child: Container(
                   padding: EdgeInsets.all(16),
