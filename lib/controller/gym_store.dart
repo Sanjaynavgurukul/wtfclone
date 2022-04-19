@@ -163,6 +163,7 @@ class GymStore extends ChangeNotifier {
   List<SubscriptionData> addOnSubscriptions;
   List<SubscriptionData> addOnLiveSubscriptions;
   List<SubscriptionData> eventSubscriptions;
+  List<SubscriptionData> pt;
 
   NewTrainersModel newTrainers;
 
@@ -1674,6 +1675,7 @@ class GymStore extends ChangeNotifier {
       addOnSubscriptions = [];
       addOnLiveSubscriptions = [];
       eventSubscriptions = [];
+      pt = [];
       notifyListeners();
       //TODO: uncomment these when api is fixed
       MemberSubscriptions res = await RestDatasource()
@@ -1689,7 +1691,7 @@ class GymStore extends ChangeNotifier {
             if (element.type == 'regular') {
               regularSubscriptions.add(element);
             }
-            if (element.type == 'addon' || element.type == 'addon_pt') {
+            if (element.type == 'addon') {
               addOnSubscriptions.add(element);
             }
             if (element.type == 'addon_live') {
@@ -1698,6 +1700,10 @@ class GymStore extends ChangeNotifier {
             if (element.type == 'event') {
               eventSubscriptions.add(element);
             }
+            if (element.type == 'addon_pt') {
+              pt.add(element);
+            }
+
           }
         });
         log('Total:: ${memberSubscriptions.data.length} ,  regular: ${regularSubscriptions.length} , live:: ${addOnLiveSubscriptions.length}');

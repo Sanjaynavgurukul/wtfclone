@@ -58,11 +58,19 @@ class _DietScheduleState extends State<DietSchedule> {
     if (store.dietItem != null &&
         store.dietItem.data != null &&
         store.dietItem.data.first.day != null) {
+
       store.dietItem.data.first.day.breakfast.map((e) {
         if (e.consumptionStatus ?? false) {
           consumed += 1;
         }
       }).toList();
+
+      store.dietItem.data.first.day.mmSnack.map((e) {
+        if (e.consumptionStatus ?? false) {
+          consumed += 1;
+        }
+      }).toList();
+
       store.dietItem.data.first.day.dinner.map((e) {
         if (e.consumptionStatus ?? false) {
           consumed += 1;
@@ -162,6 +170,18 @@ class _DietScheduleState extends State<DietSchedule> {
                                     day: day,
                                   )
                                 : Container(),
+
+                            store.dietItem.data.first.day.mmSnack.isNotEmpty
+                                ? Nutritioncard(
+                              nutrionType: store.dietItem.data.first.day
+                                  .mmSnack.first.category,
+                              breakfast:
+                              store.dietItem.data.first.day.mmSnack,
+                              date: date,
+                              day: day,
+                            )
+                                : Container(),
+
                             store.dietItem.data.first.day.lunch.isNotEmpty
                                 ? Nutritioncard(
                                     nutrionType: store.dietItem.data.first.day

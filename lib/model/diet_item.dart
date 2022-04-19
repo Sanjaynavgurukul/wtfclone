@@ -100,14 +100,10 @@ class Datum {
 }
 
 class Day {
-  Day({
-    this.breakfast,
-    this.lunch,
-    this.dinner,
-    this.snacks,
-  });
+  Day({this.breakfast, this.lunch, this.dinner, this.snacks, this.mmSnack});
 
   List<Breakfast> breakfast;
+  List<Breakfast> mmSnack;
   List<Breakfast> lunch;
   List<Breakfast> dinner;
   List<Breakfast> snacks;
@@ -120,6 +116,10 @@ class Day {
         breakfast: json.containsKey('breakfast')
             ? List<Breakfast>.from(
                 json["breakfast"].map((x) => Breakfast.fromJson(x)))
+            : [],
+        mmSnack: json.containsKey('mmsnacks')
+            ? List<Breakfast>.from(
+                json["mmsnacks"].map((x) => Breakfast.fromJson(x)))
             : [],
         lunch: json.containsKey('lunch')
             ? List<Breakfast>.from(
