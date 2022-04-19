@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/src/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -21,7 +17,6 @@ import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/screen/schedule/arguments/ex_details_argument.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/global_timer_helper.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 
 class MainWorkout extends StatefulWidget {
@@ -48,6 +43,10 @@ class _MainWorkoutState extends State<MainWorkout> {
       presetMillisecond: exTimerHelper.convertMil(false),
       mode: StopWatchMode.countUp,
     );
+
+    if(validateGlobalTimer()){
+      startTimer();
+    }
   }
 
   @override
@@ -66,11 +65,16 @@ class _MainWorkoutState extends State<MainWorkout> {
         .add(StopWatchExecute.stop);
   }
 
+  void setExerciserOnStatus(bool status){
+    locator<AppPrefs>().exerciseOn.setValue(status);
+  }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+
   }
 
   void callTrainer() {
@@ -154,7 +158,22 @@ class _MainWorkoutState extends State<MainWorkout> {
                               pinned: true,
                               floating: true,
                               actions: [
-
+                                if (validateGlobalTimer()) StreamBuilder<int>(
+                                  stream: _stopWatchTimer.secondTime,
+                                  initialData: _stopWatchTimer.secondTime.value,
+                                  builder: (context, snap) {
+                                    int value = snap.data;
+                                    exTimerHelper.setTimeInLocal(counter: value,isEx: false);
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.only(right: 16),
+                                      child: Text(
+                                        '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
+                                        style: TextStyle(color: AppConstants.bgColor,fontSize: 20,fontWeight: FontWeight.w600),
+                                      ),
+                                    );
+                                  },
+                                ) else Container(),
                               ],
                               bottom: PreferredSize(
                                   preferredSize: Size(double.infinity, 100),
@@ -232,8 +251,43 @@ class _MainWorkoutState extends State<MainWorkout> {
       ),
       child: InkWell(
         onTap: (){
-          print('check imaghe url --- ${item.image}');
-          NavigationService.pushName(Routes.workoutDetails,argument: ExDetailsArgument(data: item.exercises,coverImage: item.image));
+          if(validateGlobalTimer()){
+            navigateToNext(item: item);
+          }else{
+            // set up the button
+            Widget okButton = InkWell(
+              onTap: (){
+                Navigator.pop(context);
+                setExerciserOnStatus(true);
+                startTimer();
+              },
+              child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: AppConstants.bgColor
+                  ),
+                  child:  Text("Start Workout",style:TextStyle(color: Colors.white))
+              ),
+            );
+
+            // set up the AlertDialog
+            AlertDialog alert = AlertDialog(
+              title: Text("Warning!"),
+              content: Text("You haven\'t start workout!",),
+              actions: [
+                okButton,
+              ],
+            );
+
+            // show the dialog
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              },
+            );
+          }
         },
         child: Stack(
           children: [
@@ -297,6 +351,15 @@ class _MainWorkoutState extends State<MainWorkout> {
         ),
       ),
     );
+  }
+
+  void navigateToNext({@required WorkoutScheduleData item}){
+    NavigationService.pushName(Routes.workoutDetails,argument: ExDetailsArgument(data: item.exercises,coverImage: item.image));
+  }
+
+  bool validateGlobalTimer(){
+    bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
+    return isWorkoutOn;
   }
 
 }

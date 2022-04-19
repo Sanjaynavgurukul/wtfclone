@@ -255,9 +255,14 @@ class PrefsConstants {
 
   //Global Timer :D
   static const String globalTimer = 'globalTimer';
+  static const String exerciseOn = 'exerciseOn';
+
+  //Exercise Pref Data :D
+  static const String mainEx = 'mainEx';
+  static const String exDetail = 'exDetail';
+
   static const String exerciseTimer = 'exerciseTimer';
   static const String exerciseUid = 'exerciseUid';
-  static const String exerciseOn = 'exerciseOn';
   static const String exerciseSet = 'exerciseSet';
   static const String exercisePause = 'exercisePause';
 }
