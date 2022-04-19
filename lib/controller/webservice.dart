@@ -755,7 +755,7 @@ class RestDatasource {
       "status": "done",
       "e_duration": time
     };
-    print('body: $body');
+    print('body exercise --: $body');
     return _netUtil
         .put(
       url,

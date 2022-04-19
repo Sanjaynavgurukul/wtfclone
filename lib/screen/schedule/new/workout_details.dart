@@ -145,7 +145,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     //   item
                     // );
 
-                    NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item));
+                    NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true)));
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),

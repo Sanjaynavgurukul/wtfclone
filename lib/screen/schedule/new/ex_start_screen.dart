@@ -8,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
@@ -52,10 +53,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
   @override
   void initState() {
     super.initState();
+    print('check dara --- ${exTimerHelper.convertMil(true)}');
     _stopWatchTimer = StopWatchTimer(
       presetMillisecond: exTimerHelper.convertMil(true),
       mode: StopWatchMode.countUp,
     );
+
     if (!isExPaused()) {
       startTimer();
     } else {
@@ -127,10 +130,23 @@ class _ExStartScreenState extends State<ExStartScreen> {
     locator<AppPrefs>().exercisePause.setValue(pause);
   }
 
-  void endExercise() {
+  void endExercise({@required Exercise item,}) {
     showLoadingDialog(context);
     print('End Exercise ----');
-
+    user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString()).then((value){
+      if(value){
+        print('check this code is initialize ---');
+        exTimerHelper.setExTimerToZero();
+        setExerciseIdToLocal(exUid: '',removeId: true);
+        setExPause(false);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }else{
+        Navigator.pop(context);
+        FlashHelper.informationBar(context,
+            message: 'Something Went Wrong!!');
+      }
+    });
   }
 
   static Future<void> showLoadingDialog(
@@ -220,8 +236,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
                         builder: (context, snap) {
                           final value = snap.data;
                           print('Listen every second. $value');
-                          exTimerHelper.setTimeInLocal(
-                              isEx: true, counter: snap.data);
+                          // exTimerHelper.setTimeInLocal(
+                          //     isEx: true, counter: snap.data);
                           return ExerciseResult(
                             // h: h,
                             h: timerHelper.convertHour(value),
@@ -273,7 +289,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                                   // this.workoutPaused = !workoutPaused;
                                   // setExPause(workoutPaused);
                                 } else {
-                                  endExercise();
+                                  endExercise(item: data);
                                 }
                               } else {
                                 workoutPaused = false;

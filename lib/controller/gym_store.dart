@@ -2651,4 +2651,15 @@ class GymStore extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<bool> updateScheduleExercise({@required String itemUid,@required String exTime}) async {
+
+    bool isUpdated = await RestDatasource().updateTime(id: itemUid,time: exTime);
+    if(isUpdated){
+      notifyListeners();
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

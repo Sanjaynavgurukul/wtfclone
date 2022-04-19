@@ -43,18 +43,24 @@ class ExerciseTimerHelper{
     return getPreviousTimerFromLocal(isEx)*1000;
   }
 
-  void setTimeInLocal({@required bool isEx,@required int counter}) {
-    int currentDate = DateTime.now()
-        .subtract(Duration(
-        hours: convertHour(counter),
-        seconds: convertSec(counter),
-        minutes: convertMin(counter)))
-        .millisecondsSinceEpoch;
-    if(!isEx){
-      locator<AppPrefs>().globalTimer.setValue(currentDate);
-    }else{
-      locator<AppPrefs>().exerciseTimer.setValue(currentDate);
-    }
+  void setExTimerToZero(){
+    print('zero method called---');
+    locator<AppPrefs>().exerciseTimer.setValue(0);
+    print('zero method called--- ${locator<AppPrefs>().exerciseTimer.getValue()}');
   }
+
+  // void setTimeInLocal({@required bool isEx,@required int counter}) {
+  //   int currentDate = DateTime.now()
+  //       .subtract(Duration(
+  //       hours: convertHour(counter),
+  //       seconds: convertSec(counter),
+  //       minutes: convertMin(counter)))
+  //       .millisecondsSinceEpoch;
+  //   if(!isEx){
+  //     locator<AppPrefs>().globalTimer.setValue(currentDate);
+  //   }else{
+  //     locator<AppPrefs>().exerciseTimer.setValue(currentDate);
+  //   }
+  // }
 }
 final exTimerHelper = ExerciseTimerHelper();
