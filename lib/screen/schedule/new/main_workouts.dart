@@ -238,7 +238,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                 WorkoutScheduleData item =
                                     user.myWorkoutSchedule.data[index];
                                 print('check list item image -- ${item.image}');
-                                return itermCard(item: item);
+                                return itermCard(item: item,index: index);
                                 // return WorkoutListItems(item);
                               }))),
             );
@@ -248,7 +248,7 @@ class _MainWorkoutState extends State<MainWorkout> {
     }
   }
 
-  Widget itermCard({@required WorkoutScheduleData item}) {
+  Widget itermCard({@required WorkoutScheduleData item,@required int index}) {
     return Card(
       color: Colors.transparent,
       elevation: 0.0,
@@ -259,7 +259,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       child: InkWell(
         onTap: () {
           if (validateGlobalTimer()) {
-            navigateToNext(item: item);
+            navigateToNext(item: item,index: index);
           } else {
             // set up the button
             Widget okButton = InkWell(
@@ -267,7 +267,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                 Navigator.pop(context);
                 setExerciserOnStatus(true);
                 startTimer();
-                navigateToNext(item: item);
+                navigateToNext(item: item,index: index);
               },
               child: Container(
                   padding: EdgeInsets.all(16),
@@ -367,10 +367,10 @@ class _MainWorkoutState extends State<MainWorkout> {
     );
   }
 
-  void navigateToNext({@required WorkoutScheduleData item}) {
+  void navigateToNext({@required WorkoutScheduleData item,@required int index}) {
     NavigationService.pushName(Routes.workoutDetails,
         argument:
-            ExDetailsArgument(data: item.exercises, coverImage: item.image));
+            ExDetailsArgument(data: item.exercises, coverImage: item.image,index: index));
   }
 
   bool validateGlobalTimer() {

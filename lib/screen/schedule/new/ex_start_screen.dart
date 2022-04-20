@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -133,12 +134,15 @@ class _ExStartScreenState extends State<ExStartScreen> {
     print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
     if(saved){
-      user.getMyWorkoutSchedules(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
+      user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
         stopTimer();
-        exTimerHelper.setExTimerToZero(isGlobal:false);
-        exTimerHelper.setExUid(itemUid: '');
-        exTimerHelper.setExSetsToZero();
-        setExPause(false);
+        locator<AppPrefs>().exerciseTimer.setValue(0);
+        locator<AppPrefs>().exerciseUid.setValue('');
+        locator<AppPrefs>().exerciseSet.setValue(1);
+        locator<AppPrefs>().exercisePause.setValue(false);
+        // exTimerHelper.setExUid(itemUid: '');
+        // exTimerHelper.setExSetsToZero();
+        // setExPause(false);
         Navigator.pop(context);
         Navigator.pop(context);
       });
@@ -192,157 +196,159 @@ class _ExStartScreenState extends State<ExStartScreen> {
       print('check data : ${data.video}  ${data.woName}');
       playVideo(videoUrl: data.video);
 
-      return WillPopScope(
-        onWillPop: () async {
-          return true;
-          // if (localTimer != null && localTimer.stopwatch.isRunning) {
-          //   FlashHelper.informationBar(context,
-          //       message: 'Please complete Exercise first.');
-          //   return false;
-          // } else {
-          //   return true;
-          // }
-        },
-        child: SafeArea(
-          child: Scaffold(
-            bottomNavigationBar: Material(
-              elevation: 12.0,
-              child: IntrinsicHeight(
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    bottom: 20.0,
-                    left: 16.0,
-                    right: 16.0,
-                    top: 12.0,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ExerciseStartInfo(
-                        data: data,
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      StreamBuilder<int>(
-                        stream: _stopWatchTimer.secondTime,
-                        initialData: _stopWatchTimer.secondTime.value,
-                        builder: (context, snap) {
-                          final value = snap.data;
-                          print('Listen every second. $value');
-                          exTimerHelper.setTimeInLocal(
-                              isEx: true, counter: snap.data);
-                          return ExerciseResult(
-                            // h: h,
-                            h: timerHelper.convertHour(value),
-                            m: timerHelper.convertMin(value),
-                            s: timerHelper.convertSec(value),
-                          );
-                          // return Text(
-                          //   '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
-                          // );
-                        },
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      StreamBuilder(
-                        stream: setCount,
-                        initialData: exSet,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<int> snapshot) {
-                          return InkWell(
-                            onTap: () {
-                              if (!workoutPaused) {
-                                workoutPaused = true;
-                                setExPause(workoutPaused);
+      return Consumer<GymStore>(
+        builder: (context, store, child) => WillPopScope(
+          onWillPop: () async {
+            return true;
+            // if (localTimer != null && localTimer.stopwatch.isRunning) {
+            //   FlashHelper.informationBar(context,
+            //       message: 'Please complete Exercise first.');
+            //   return false;
+            // } else {
+            //   return true;
+            // }
+          },
+          child: SafeArea(
+            child: Scaffold(
+              bottomNavigationBar: Material(
+                elevation: 12.0,
+                child: IntrinsicHeight(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 20.0,
+                      left: 16.0,
+                      right: 16.0,
+                      top: 12.0,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ExerciseStartInfo(
+                          data: data,
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        StreamBuilder<int>(
+                          stream: _stopWatchTimer.secondTime,
+                          initialData: _stopWatchTimer.secondTime.value,
+                          builder: (context, snap) {
+                            final value = snap.data;
+                            print('Listen every second. $value');
+                            exTimerHelper.setTimeInLocal(
+                                isEx: true, counter: snap.data);
+                            return ExerciseResult(
+                              // h: h,
+                              h: timerHelper.convertHour(value),
+                              m: timerHelper.convertMin(value),
+                              s: timerHelper.convertSec(value),
+                            );
+                            // return Text(
+                            //   '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
+                            // );
+                          },
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        StreamBuilder(
+                          stream: setCount,
+                          initialData: exSet,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<int> snapshot) {
+                            return InkWell(
+                              onTap: () {
+                                if (!workoutPaused) {
+                                  workoutPaused = true;
+                                  setExPause(workoutPaused);
 
-                                if (validateSetRep(set: data.sets)) {
-                                  exSet += 1;
-                                  setSetsCount(exSet);
-                                  setSetsInLocal(exSet);
-                                  // this.workoutPaused = !workoutPaused;
-                                  // setExPause(workoutPaused);
+                                  if (validateSetRep(set: data.sets)) {
+                                    exSet += 1;
+                                    setSetsCount(exSet);
+                                    setSetsInLocal(exSet);
+                                    // this.workoutPaused = !workoutPaused;
+                                    // setExPause(workoutPaused);
+                                  } else {
+
+                                    endExercise(item: data);
+                                  }
                                 } else {
-
-                                  endExercise(item: data);
+                                  workoutPaused = false;
+                                  setExPause(workoutPaused);
+                                  setSetsCount(exSet);
                                 }
-                              } else {
-                                workoutPaused = false;
-                                setExPause(workoutPaused);
-                                setSetsCount(exSet);
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 54,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  color: AppConstants.bgColor),
-                              child: workoutPaused
-                                  ? Text('Resume')
-                                  : Text(
-                                      'End set ${snapshot.data} of ${data.sets}',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600)),
-                            ),
-                          );
-                        },
-                      )
-                    ],
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 54,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                    color: AppConstants.bgColor),
+                                child: workoutPaused
+                                    ? Text('Resume')
+                                    : Text(
+                                    'End set ${snapshot.data} of ${data.sets}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // ExerciseStartButtons(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  ExerciseVideo(
-                    controller: _controller,
-                    onPausePlay: () {
-                      setState(() {
-                        _controller.value.isPlaying
-                            ? _controller.pause()
-                            : _controller.play();
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  UIHelper.verticalSpace(30.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // ExerciseStartButtons(),
+                    SizedBox(
+                      height: 15,
                     ),
-                    child: Html(
-                      data: data.description ?? ' - - -',
-                      // padding: EdgeInsets.all(8.0),
-                      // customRender: (node, children) {
-                      //   if (node is dom.Element) {
-                      //     switch (node.localName) {
-                      //       case "custom_tag": // using this, you can handle custom tags in your HTML
-                      //         return Column(children: children);
-                      //     }
-                      //   }
-                      // },
+                    ExerciseVideo(
+                      controller: _controller,
+                      onPausePlay: () {
+                        setState(() {
+                          _controller.value.isPlaying
+                              ? _controller.pause()
+                              : _controller.play();
+                        });
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
+                    SizedBox(
+                      height: 15,
+                    ),
+                    UIHelper.verticalSpace(30.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                      ),
+                      child: Html(
+                        data: data.description ?? ' - - -',
+                        // padding: EdgeInsets.all(8.0),
+                        // customRender: (node, children) {
+                        //   if (node is dom.Element) {
+                        //     switch (node.localName) {
+                        //       case "custom_tag": // using this, you can handle custom tags in your HTML
+                        //         return Column(children: children);
+                        //     }
+                        //   }
+                        // },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        )
       );
     }
   }
