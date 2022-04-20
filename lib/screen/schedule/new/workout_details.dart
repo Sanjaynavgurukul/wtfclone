@@ -120,19 +120,19 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 trailing: InkWell(
                   onTap: () {
                     if(!completed) {
-                      if(displayTimer){
+                      // if(displayTimer){
                         exTimerHelper.setExUid(itemUid: item.uid);
                         NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
                           setState(() {
 
                           });
                         });
-                      }else{
-                        FlashHelper.informationBar(
-                          context,
-                          message: 'Already Running another exercise please complete then start this one!',
-                        );
-                      }
+                      // }else{
+                      //   FlashHelper.informationBar(
+                      //     context,
+                      //     message: 'Already Running another exercise please complete then start this one!',
+                      //   );
+                      // }
                     }else{
                       FlashHelper.informationBar(
                         context,
@@ -160,9 +160,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     }
   }
 
-  bool alreadyResumed(){
-
-  }
 
   bool displayCountDown({@required String itemUid}) {
     String value = locator<AppPrefs>().exerciseUid.getValue();

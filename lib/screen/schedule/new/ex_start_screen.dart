@@ -128,12 +128,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
     locator<AppPrefs>().exercisePause.setValue(pause);
   }
 
-  void endExercise({@required Exercise item,}) {
+  void endExercise({@required Exercise item,})async{
     showLoadingDialog(context);
     print('End Exercise ----');
-    user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString()).then((value){
-      if(value){
-        print('check this code is initialize ---');
+    bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
+    if(saved){
+      user.getMyWorkoutSchedules(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
         stopTimer();
         exTimerHelper.setExTimerToZero(isGlobal:false);
         exTimerHelper.setExUid(itemUid: '');
@@ -141,12 +141,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
         setExPause(false);
         Navigator.pop(context);
         Navigator.pop(context);
-      }else{
-        Navigator.pop(context);
-        FlashHelper.informationBar(context,
-            message: 'Something Went Wrong!!');
-      }
-    });
+      });
+    }else{
+      Navigator.pop(context);
+      FlashHelper.informationBar(context,
+          message: 'Something Went Wrong!!');
+    }
   }
 
   static Future<void> showLoadingDialog(

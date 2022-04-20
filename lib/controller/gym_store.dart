@@ -2647,12 +2647,17 @@ class GymStore extends ChangeNotifier {
   Future<void> getScheduledWorkouts(
       {String date, String addonId, String subscriptionId}) async {
     myWorkoutSchedule = null;
+    workoutDate = date;
+    workoutAddonId = addonId;
+    workoutSubscriptionId = subscriptionId;
+    print('check argument details -- $workoutDate -- $workoutAddonId -- $workoutSubscriptionId');
     notifyListeners();
     MyWorkoutSchedule res = await RestDatasource().getMyWorkoutSchedule(
-      date: date,
-      addonId: addonId,
-      subscriptionId: subscriptionId,
+      date: workoutDate,
+      addonId: workoutAddonId,
+      subscriptionId: workoutSubscriptionId,
     );
+
     if (res != null) {
       myWorkoutSchedule = res;
     } else {
