@@ -38,13 +38,11 @@ class _MainWorkoutState extends State<MainWorkout> {
 
   StopWatchTimer _stopWatchTimer;
 
+
+
   @override
   void initState() {
     super.initState();
-    _stopWatchTimer = StopWatchTimer(
-      presetMillisecond: exTimerHelper.convertMil(false),
-      mode: StopWatchMode.countUp,
-    );
 
     if (globalTimerIsOn()) {
       startTimer();
@@ -74,6 +72,10 @@ class _MainWorkoutState extends State<MainWorkout> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: exTimerHelper.convertMil(false),
+      mode: StopWatchMode.countUp,
+    );
   }
 
   void callTrainer() {
@@ -172,7 +174,6 @@ class _MainWorkoutState extends State<MainWorkout> {
         }else{
           startTimer();
           locator<AppPrefs>().exerciseOn.setValue(true);
-          showSnack(message: 'Completed');
           user.workoutNotification(start: true,header: type);
           setState(() {
           });
@@ -223,8 +224,7 @@ class _MainWorkoutState extends State<MainWorkout> {
               floatingActionButton: FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
-                  print('check date -- ${exTimerHelper.convertMin(120)}');
-                  // validateOnPress(args.workoutType);
+                  validateOnPress(args.workoutType);
                 },
                 label: Text(
                   globalTimerIsOn() ? 'End Workout' : 'Start Workout',

@@ -9,32 +9,35 @@ import 'package:wtf/model/my_workout_schedule_model.dart';
 class ExerciseTimerHelper {
   final List<ExShareModel> globalList = [];
   int convertHour(int time) {
-    String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(2, '0');
-    return int.parse(hour);
+    // String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(1, '0');
+    int hour = ((time / (60 * 60)) % 60).floor();
+    String fD = hour.toString().padLeft(2,'0');
+    return int.parse(fD);
   }
 
   int convertMin(int time) {
-    String min = ((time / 60) % 60).floor().toString().padLeft(2, '0');
-
-    return int.parse(min);
+    // String min = ((time / 60) % 60).floor().toString();
+    // String min = ((time / 60) % 60).floor().toString().padLeft(1, '0');
+    int min = ((time / 60) % 60).floor();
+    print('check data -- min -- $min');
+    String fD = min.toString().padLeft(2,'0');
+    print('check data -- min -- $fD');
+    return int.parse(fD);
   }
 
   int convertSec(int time) {
-    String sec = (time % 60).floor().toString().padLeft(2, '0');
-    return int.parse(sec);
+    // String sec = (time % 60).floor().toString();
+    String sec = (time % 60).floor().toString();
+    String fD = sec.padLeft(2,'0');
+    return int.parse(fD);
   }
 
   int getTimer(bool isEx) {
     if(isEx){
-      locator<AppPrefs>().startExTimer.getValue();
+      return locator<AppPrefs>().startExTimer.getValue();
     }else{
-      locator<AppPrefs>().globalTimer.getValue();
+      return locator<AppPrefs>().globalTimer.getValue();
     }
-  }
-
-  void setDataToLocal(ExShareModel model) {
-    // String en = encode(data);
-    // locator<AppPrefs>().exerciseData.setValue(en);
   }
 
   String encode(List<ExShareModel> musics) => json.encode(
@@ -90,14 +93,32 @@ class ExerciseTimerHelper {
     }
   }
 
+  String getTimeFormat(bool isEx){
+    // DateTime date1 = DateTime.now();
+    // DateTime date2;
+    // if (getTimer(isEx) == 0) {
+    //   date2 = DateTime.now();
+    // } else {
+    //   date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
+    // }
+    //
+
+    int convert = convertMin(120);
+
+  }
+
   int getPreviousTimerFromLocal(bool isEx) {
     DateTime date1 = DateTime.now();
-    // DateTime date2 = DateTime.now().add(Duration(seconds: getGlobalTime()));
+    print("something 1");
     DateTime date2;
+    print("something 2 ${getTimer(isEx)}");
     if (getTimer(isEx) == 0) {
+      print("something 3");
       date2 = DateTime.now();
     } else {
+      print("something 4");
       date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
+      print("something 5");
     }
 
     final datedifferent = date1.difference(date2).inSeconds;
@@ -107,7 +128,10 @@ class ExerciseTimerHelper {
   }
 
   int convertMil(bool isEx) {
-    return getPreviousTimerFromLocal(isEx) * 1000;
+    print('check null * ---');
+    int d1 = getPreviousTimerFromLocal(isEx);
+    print('check null * --- $d1');
+    return 0;
   }
 
 
@@ -117,19 +141,6 @@ class ExerciseTimerHelper {
     return value == itemUid;
   }
 
-// void setTimeInLocal({@required bool isEx,@required int counter}) {
-//   int currentDate = DateTime.now()
-//       .subtract(Duration(
-//       hours: convertHour(counter),
-//       seconds: convertSec(counter),
-//       minutes: convertMin(counter)))
-//       .millisecondsSinceEpoch;
-//   if(!isEx){
-//     locator<AppPrefs>().globalTimer.setValue(currentDate);
-//   }else{
-//     locator<AppPrefs>().exerciseTimer.setValue(currentDate);
-//   }
-// }
 }
 
 final exTimerHelper = ExerciseTimerHelper();

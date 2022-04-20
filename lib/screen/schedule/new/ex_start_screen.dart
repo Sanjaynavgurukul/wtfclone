@@ -37,6 +37,11 @@ class _ExStartScreenState extends State<ExStartScreen> {
   bool loading = false;
   int exSet = 1;
 
+  final setCount = BehaviorSubject<int>();
+
+  Function(int) get setSetsCount => setCount.sink.add;
+
+  Stream<int> get getSetsCount => setCount.stream;
 
   @override
   void didChangeDependencies() {
@@ -62,6 +67,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
     stopTimer();
     await _stopWatchTimer.dispose();
     _controller.dispose();
+    setCount.close();
   }
 
   void playVideo({@required String videoUrl}) {
@@ -70,11 +76,11 @@ class _ExStartScreenState extends State<ExStartScreen> {
       '$videoUrl',
       videoPlayerOptions: VideoPlayerOptions(),
     )..initialize().then((_) {
-        _controller.play();
-        _controller.addListener(() {});
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        if (mounted) setState(() {});
-      });
+      _controller.play();
+      _controller.addListener(() {});
+      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      if (mounted) setState(() {});
+    });
   }
 
   void startTimer() {
@@ -119,24 +125,23 @@ class _ExStartScreenState extends State<ExStartScreen> {
 
   void endExercise({@required Exercise item,})async{
     showLoadingDialog(context);
-      //'HH:mm:ss'
-    // print('End Exercise ----');
+    print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
-    // if(saved){
-    //   user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
-    //     stopTimer();
-    //     locator<AppPrefs>().exerciseTimer.setValue(0);
-    //     locator<AppPrefs>().exerciseUid.setValue('');
-    //     locator<AppPrefs>().exerciseSet.setValue(1);
-    //     locator<AppPrefs>().exercisePause.setValue(false);
-    //     Navigator.pop(context);
-    //     Navigator.pop(context);
-    //   });
-    // }else{
-    //   Navigator.pop(context);
-    //   FlashHelper.informationBar(context,
-    //       message: 'Something Went Wrong!!');
-    // }
+    if(saved){
+      user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
+        stopTimer();
+        locator<AppPrefs>().startExTimer.setValue(0);
+        locator<AppPrefs>().exerciseUid.setValue('');
+        locator<AppPrefs>().exerciseSet.setValue(1);
+        locator<AppPrefs>().exercisePause.setValue(false);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
+    }else{
+      Navigator.pop(context);
+      FlashHelper.informationBar(context,
+          message: 'Something Went Wrong!!');
+    }
   }
 
   static Future<void> showLoadingDialog(
@@ -169,7 +174,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
   @override
   Widget build(BuildContext context) {
     final ExPlayDetailsArgument args =
-        ModalRoute.of(context).settings.arguments as ExPlayDetailsArgument;
+    ModalRoute.of(context).settings.arguments as ExPlayDetailsArgument;
     if (args == null || args.data == null) {
       return Center(
         child: Text('Something went wrong pleas try again later!'),
@@ -183,112 +188,158 @@ class _ExStartScreenState extends State<ExStartScreen> {
       playVideo(videoUrl: data.video);
 
       return Consumer<GymStore>(
-        builder: (context, store, child) => WillPopScope(
-          onWillPop: () async {
-            return true;
-            // if (localTimer != null && localTimer.stopwatch.isRunning) {
-            //   FlashHelper.informationBar(context,
-            //       message: 'Please complete Exercise first.');
-            //   return false;
-            // } else {
-            //   return true;
-            // }
-          },
-          child: SafeArea(
-            child: Scaffold(
-              bottomNavigationBar: Material(
-                elevation: 12.0,
-                child: IntrinsicHeight(
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      bottom: 20.0,
-                      left: 16.0,
-                      right: 16.0,
-                      top: 12.0,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ExerciseStartInfo(
-                          data: data,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        StreamBuilder<int>(
-                          stream: _stopWatchTimer.secondTime,
-                          initialData: _stopWatchTimer.secondTime.value,
-                          builder: (context, snap) {
-                            final value = snap.data;
-                            print('Listen every second. $value');
-                            exTimerHelper.setTimeInLocal(
-                                isEx: true, counter: snap.data);
-                            return ExerciseResult(
-                              // h: h,
-                              h: timerHelper.convertHour(value),
-                              m: timerHelper.convertMin(value),
-                              s: timerHelper.convertSec(value),
-                            );
-                            // return Text(
-                            //   '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
-                            // );
-                          },
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                      ],
+          builder: (context, store, child) => WillPopScope(
+            onWillPop: () async {
+              return true;
+              // if (localTimer != null && localTimer.stopwatch.isRunning) {
+              //   FlashHelper.informationBar(context,
+              //       message: 'Please complete Exercise first.');
+              //   return false;
+              // } else {
+              //   return true;
+              // }
+            },
+            child: SafeArea(
+              child: Scaffold(
+                bottomNavigationBar: Material(
+                  elevation: 12.0,
+                  child: IntrinsicHeight(
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 20.0,
+                        left: 16.0,
+                        right: 16.0,
+                        top: 12.0,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ExerciseStartInfo(
+                            data: data,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          StreamBuilder<int>(
+                            stream: _stopWatchTimer.secondTime,
+                            initialData: _stopWatchTimer.secondTime.value,
+                            builder: (context, snap) {
+                              final value = snap.data;
+                              print('Listen every second. $value');
+                              exTimerHelper.setTimeInLocal(
+                                  isEx: true, counter: snap.data);
+                              return ExerciseResult(
+                                // h: h,
+                                h: timerHelper.convertHour(value),
+                                m: timerHelper.convertMin(value),
+                                s: timerHelper.convertSec(value),
+                              );
+                              // return Text(
+                              //   '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
+                              // );
+                            },
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          StreamBuilder(
+                            stream: setCount,
+                            initialData: exSet,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<int> snapshot) {
+                              return InkWell(
+                                onTap: () {
+                                  if (!workoutPaused) {
+                                    workoutPaused = true;
+                                    setExPause(workoutPaused);
+
+                                    if (validateSetRep(set: data.sets)) {
+                                      exSet += 1;
+                                      setSetsCount(exSet);
+                                      setSetsInLocal(exSet);
+                                      // this.workoutPaused = !workoutPaused;
+                                      // setExPause(workoutPaused);
+                                    } else {
+
+                                      endExercise(item: data);
+                                    }
+                                  } else {
+                                    workoutPaused = false;
+                                    setExPause(workoutPaused);
+                                    setSetsCount(exSet);
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 54,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                      color: AppConstants.bgColor),
+                                  child: workoutPaused
+                                      ? Text('Resume')
+                                      : Text(
+                                      'End set ${snapshot.data} of ${data.sets}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600)),
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // ExerciseStartButtons(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    ExerciseVideo(
-                      controller: _controller,
-                      onPausePlay: () {
-                        setState(() {
-                          _controller.value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    UIHelper.verticalSpace(30.0),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // ExerciseStartButtons(),
+                      SizedBox(
+                        height: 15,
                       ),
-                      child: Html(
-                        data: data.description ?? ' - - -',
-                        // padding: EdgeInsets.all(8.0),
-                        // customRender: (node, children) {
-                        //   if (node is dom.Element) {
-                        //     switch (node.localName) {
-                        //       case "custom_tag": // using this, you can handle custom tags in your HTML
-                        //         return Column(children: children);
-                        //     }
-                        //   }
-                        // },
+                      ExerciseVideo(
+                        controller: _controller,
+                        onPausePlay: () {
+                          setState(() {
+                            _controller.value.isPlaying
+                                ? _controller.pause()
+                                : _controller.play();
+                          });
+                        },
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 15,
+                      ),
+                      UIHelper.verticalSpace(30.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                        ),
+                        child: Html(
+                          data: data.description ?? ' - - -',
+                          // padding: EdgeInsets.all(8.0),
+                          // customRender: (node, children) {
+                          //   if (node is dom.Element) {
+                          //     switch (node.localName) {
+                          //       case "custom_tag": // using this, you can handle custom tags in your HTML
+                          //         return Column(children: children);
+                          //     }
+                          //   }
+                          // },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        )
+          )
       );
     }
   }
