@@ -9,27 +9,20 @@ import 'package:wtf/model/my_workout_schedule_model.dart';
 class ExerciseTimerHelper {
   final List<ExShareModel> globalList = [];
   int convertHour(int time) {
-    // String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(1, '0');
-    int hour = ((time / (60 * 60)) % 60).floor();
-    String fD = hour.toString().padLeft(2,'0');
-    return int.parse(fD);
+    String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(2, '0');
+    return int.parse(hour);
   }
 
   int convertMin(int time) {
-    // String min = ((time / 60) % 60).floor().toString();
-    // String min = ((time / 60) % 60).floor().toString().padLeft(1, '0');
-    int min = ((time / 60) % 60).floor();
-    print('check data -- min -- $min');
-    String fD = min.toString().padLeft(2,'0');
-    print('check data -- min -- $fD');
-    return int.parse(fD);
+
+    String min = ((time / 60) % 60).floor().toString().padLeft(2, '0');
+    return int.parse(min);
   }
 
   int convertSec(int time) {
     // String sec = (time % 60).floor().toString();
-    String sec = (time % 60).floor().toString();
-    String fD = sec.padLeft(2,'0');
-    return int.parse(fD);
+    String sec = (time % 60).floor().toString().padLeft(2,'0');
+    return int.parse(sec);
   }
 
   int getTimer(bool isEx) {
@@ -129,9 +122,9 @@ class ExerciseTimerHelper {
 
   int convertMil(bool isEx) {
     print('check null * ---');
-    int d1 = getPreviousTimerFromLocal(isEx);
+    int d1 = getPreviousTimerFromLocal(isEx) * 1000;
     print('check null * --- $d1');
-    return 0;
+    return d1;
   }
 
 

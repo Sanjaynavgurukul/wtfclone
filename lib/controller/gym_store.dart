@@ -2719,4 +2719,33 @@ class GymStore extends ChangeNotifier {
       });
     }
   }
+
+
+  Future<String> verifyCompletedWorkout({BuildContext context}) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+    List<String> exercises = [];
+    //TODO:  WORKOUT CAL LOGIC
+    for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
+      exercises.addAll(
+          myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
+    }
+    print('exercise list: ${exercises.map((e) => e).toList()}');
+    Map<String, dynamic> body = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "trainer_id": currentTrainer.data.userId,
+      "date": locator<AppPrefs>().selectedWorkoutDate.getValue(),
+      "workout_mapping_id": exercises,
+      'addon_id': selectedSchedule.addonId,
+      'subscription_id': selectedSchedule.uid,
+    };
+    print('verification body: $body');
+    String uid = await workoutVerification(context: context, body: body);
+    Navigator.pop(context);
+    return uid;
+  }
 }

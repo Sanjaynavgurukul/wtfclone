@@ -43,6 +43,10 @@ class _MainWorkoutState extends State<MainWorkout> {
   @override
   void initState() {
     super.initState();
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: exTimerHelper.convertMil(false),
+      mode: StopWatchMode.countUp,
+    );
 
     if (globalTimerIsOn()) {
       startTimer();
@@ -72,10 +76,6 @@ class _MainWorkoutState extends State<MainWorkout> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
-    _stopWatchTimer = StopWatchTimer(
-      presetMillisecond: exTimerHelper.convertMil(false),
-      mode: StopWatchMode.countUp,
-    );
   }
 
   void callTrainer() {
@@ -182,12 +182,18 @@ class _MainWorkoutState extends State<MainWorkout> {
         print('sanjay here -- all workout is  completed');
         if(globalTimerIsOn()){
           //todo here save Final Code :D
-          stopTimer();
-          locator<AppPrefs>().globalTimer.setValue(0);
-          locator<AppPrefs>().exerciseOn.setValue(false);
-          showSnack(message: 'Completed');
-          user.workoutNotification(start: false,header: '');
-          setState(() {
+          user.verifyCompletedWorkout().then((value){
+            if(value != null || value.isNotEmpty){
+              stopTimer();
+              locator<AppPrefs>().globalTimer.setValue(0);
+              locator<AppPrefs>().exerciseOn.setValue(false);
+              showSnack(message: 'Completed');
+              user.workoutNotification(start: false,header: '');
+              setState(() {
+              });
+            }else{
+              showSnack(message: 'Something Went Wrong!');
+            }
           });
         }else{
           showSnack(message: 'ALl Workout Completed!');
