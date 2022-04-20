@@ -77,7 +77,7 @@ class ExerciseTimerHelper {
     }
   }
 
-  void setTimeInLocal({@required int counter, bool isEx}) async{
+  void setTimeInLocal({@required int counter, bool isEx}) {
     int currentDate = DateTime.now()
         .subtract(Duration(
             hours: convertHour(counter),
@@ -86,9 +86,9 @@ class ExerciseTimerHelper {
         .millisecondsSinceEpoch;
 
     if (isEx) {
-      await locator<AppPrefs>().exerciseTimer.setValue(currentDate);
+      locator<AppPrefs>().exerciseTimer.setValue(currentDate);
     } else {
-      await locator<AppPrefs>().globalTimer.setValue(currentDate);
+      locator<AppPrefs>().globalTimer.setValue(currentDate);
     }
   }
 
@@ -112,20 +112,21 @@ class ExerciseTimerHelper {
     return getPreviousTimerFromLocal(isEx) * 1000;
   }
 
-  void setExSetsToZero()async{
-    await locator<AppPrefs>().exerciseSet.setValue(1);
+  void setExSetsToZero(){
+    locator<AppPrefs>().exerciseSet.setValue(1);
   }
 
-  void setExUid({@required String itemUid})async{
-    await locator<AppPrefs>().exerciseUid.setValue(itemUid);
+  void setExUid({@required String itemUid}){
+    locator<AppPrefs>().exerciseUid.setValue(itemUid);
   }
 
-  void setExTimerToZero({bool isGlobal = true}) async{
+
+  void setExTimerToZero({bool isGlobal = true}) {
     print('zero method called---');
     if (isGlobal) {
-      await locator<AppPrefs>().globalTimer.setValue(0);
+      locator<AppPrefs>().globalTimer.setValue(0);
     } else {
-      await locator<AppPrefs>().exerciseTimer.setValue(0);
+      locator<AppPrefs>().exerciseTimer.setValue(0);
     }
     print(
         'zero method called--- ${locator<AppPrefs>().exerciseTimer.getValue()}');

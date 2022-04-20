@@ -233,8 +233,8 @@ class _MainWorkoutState extends State<MainWorkout> {
                           ? Center(child: Text("no Workout available"))
                           : ListView.builder(
                               itemCount: user.myWorkoutSchedule.data.length,
+                              padding: EdgeInsets.only(bottom: 80),
                               itemBuilder: (context, index) {
-                                //Item
                                 WorkoutScheduleData item =
                                     user.myWorkoutSchedule.data[index];
                                 print('check list item image -- ${item.image}');

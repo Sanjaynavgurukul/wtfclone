@@ -256,6 +256,9 @@ class GymStore extends ChangeNotifier {
   MySchedule scheduleData;
   CurrentTrainer scheduleTrainer;
 
+  //TODO this is temporary variables this will change each timer when you come to my schedule :D
+  String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '';
+
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
     notifyListeners();
@@ -627,8 +630,6 @@ class GymStore extends ChangeNotifier {
       String orderId = await generateRazorPayId(
           context: context, amount: price, subBody: body);
       if (orderId.isNotEmpty) {
-
-
         var options = {
           "key": Helper.razorPayKey,
           "amount": price.toString(),
@@ -681,17 +682,19 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<VerifyPayment> verifyRazorPayPayment(String razorPayPaymentId,{bool wantDialog = true}) async {
-    if(wantDialog) showDialog(
-      context: paymentContext,
-      builder: (context) => ProcessingDialog(
-        message: 'Creating your order,  Please wait...',
-      ),
-    );
+  Future<VerifyPayment> verifyRazorPayPayment(String razorPayPaymentId,
+      {bool wantDialog = true}) async {
+    if (wantDialog)
+      showDialog(
+        context: paymentContext,
+        builder: (context) => ProcessingDialog(
+          message: 'Creating your order,  Please wait...',
+        ),
+      );
     Map<String, dynamic> body = {'razorpay_payment_id': razorPayPaymentId};
     VerifyPayment verifyPayment =
         await RestDatasource().verifyRazorPayPayment(body: body);
-    if(wantDialog)Navigator.pop(paymentContext);
+    if (wantDialog) Navigator.pop(paymentContext);
     return verifyPayment;
   }
 
@@ -721,13 +724,13 @@ class GymStore extends ChangeNotifier {
       if (isDone) {
         //_nullData();
         if (subscriptionBody['type'] == 'event') {
-          await addEventParticipation(context: paymentContext).then((value){
-            if(value){
+          await addEventParticipation(context: paymentContext).then((value) {
+            if (value) {
               NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
-            }else{
+            } else {
               FlashHelper.errorBar(paymentContext,
                   message:
-                  'Failed to subscribe, Please contact support for resolution');
+                      'Failed to subscribe, Please contact support for resolution');
             }
           });
 
@@ -756,13 +759,13 @@ class GymStore extends ChangeNotifier {
           'subscription added   --- event type is: ${subscriptionBody['type']}');
       if (isDone) {
         if (subscriptionBody['type'] == 'event') {
-          await addEventParticipation(context: paymentContext).then((value){
-            if(value){
+          await addEventParticipation(context: paymentContext).then((value) {
+            if (value) {
               NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
-            }else{
+            } else {
               FlashHelper.errorBar(paymentContext,
                   message:
-                  'Failed to subscribe, Please contact support for resolution');
+                      'Failed to subscribe, Please contact support for resolution');
             }
           });
 
@@ -1080,7 +1083,7 @@ class GymStore extends ChangeNotifier {
     if (isAdded) {
       // NavigationService.navigateToReplacement(Routes.eventPurchaseDone);
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -1703,7 +1706,6 @@ class GymStore extends ChangeNotifier {
             if (element.type == 'addon_pt') {
               pt.add(element);
             }
-
           }
         });
         log('Total:: ${memberSubscriptions.data.length} ,  regular: ${regularSubscriptions.length} , live:: ${addOnLiveSubscriptions.length}');
@@ -2605,12 +2607,14 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getAddOnsCatGymSlots({@required String date, @required String addons_uid})async{
+  Future<void> getAddOnsCatGymSlots(
+      {@required String date, @required String addons_uid}) async {
     addonsCatGymSlots = null;
-    var v =await RestDatasource().getAddOnsCatGymSlots(date: date,addon_uid: addons_uid);
-    if(v.data != null || v != null){
+    var v = await RestDatasource()
+        .getAddOnsCatGymSlots(date: date, addon_uid: addons_uid);
+    if (v.data != null || v != null) {
       addonsCatGymSlots = v;
-    }else{
+    } else {
       addonsCatGymSlots = null;
     }
     notifyListeners();
@@ -2622,7 +2626,7 @@ class GymStore extends ChangeNotifier {
     MySchedule res = await RestDatasource().getMySchedule(date: date);
     if (res != null) {
       scheduleData = res;
-    }else{
+    } else {
       scheduleData = null;
     }
     notifyListeners();
@@ -2634,12 +2638,11 @@ class GymStore extends ChangeNotifier {
     CurrentTrainer res = await RestDatasource().getCurrentTrainer();
     if (res != null) {
       scheduleTrainer = res;
-    }else{
+    } else {
       scheduleTrainer = null;
     }
     notifyListeners();
   }
-
 
   Future<void> getScheduledWorkouts(
       {String date, String addonId, String subscriptionId}) async {
@@ -2652,19 +2655,20 @@ class GymStore extends ChangeNotifier {
     );
     if (res != null) {
       myWorkoutSchedule = res;
-    }else{
+    } else {
       myWorkoutSchedule = null;
     }
     notifyListeners();
   }
 
-  Future<bool> updateScheduleExercise({@required String itemUid,@required String exTime}) async {
-
-    bool isUpdated = await RestDatasource().updateTime(id: itemUid,time: exTime);
-    if(isUpdated){
+  Future<bool> updateScheduleExercise(
+      {@required String itemUid, @required String exTime}) async {
+    bool isUpdated =
+        await RestDatasource().updateTime(id: itemUid, time: exTime);
+    if (isUpdated) {
       notifyListeners();
       return true;
-    }else{
+    } else {
       return false;
     }
   }

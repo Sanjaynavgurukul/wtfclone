@@ -6,6 +6,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
@@ -34,7 +35,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     super.didChangeDependencies();
     user = context.watch<GymStore>();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,25 +119,25 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
                 trailing: InkWell(
                   onTap: () {
-                    // user.setExercise(item);
-                    // _modalBottomSheetMenu(
-                    //   context,
-                    //   locator<AppPrefs>()
-                    //       .activeScheduleData
-                    //       .getValue()
-                    //       .exercises
-                    //       .indexOf(item),
-                    //   item
-                    // );
                     if(!completed) {
-                      exTimerHelper.setExUid(itemUid: item.uid);
-                      NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
-                        setState(() {
+                      if(displayTimer){
+                        exTimerHelper.setExUid(itemUid: item.uid);
+                        NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                          setState(() {
 
+                          });
                         });
-                      });
+                      }else{
+                        FlashHelper.informationBar(
+                          context,
+                          message: 'Already Running another exercise please complete then start this one!',
+                        );
+                      }
                     }else{
-
+                      FlashHelper.informationBar(
+                        context,
+                        message: 'Exercise Already Completed',
+                      );
                     }
                   },
                   child: Container(
@@ -158,6 +158,10 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
             }),
       );
     }
+  }
+
+  bool alreadyResumed(){
+
   }
 
   bool displayCountDown({@required String itemUid}) {
