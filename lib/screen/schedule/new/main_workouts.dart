@@ -34,6 +34,7 @@ class _MainWorkoutState extends State<MainWorkout> {
   bool trainerCalled = true;
   bool workoutCalled = true;
   bool callTimer = false;
+  bool allCompleted = false;
 
   StopWatchTimer _stopWatchTimer;
 
@@ -45,7 +46,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       mode: StopWatchMode.countUp,
     );
 
-    if (validateGlobalTimer()) {
+    if (globalTimerIsOn()) {
       startTimer();
     }
   }
@@ -110,6 +111,89 @@ class _MainWorkoutState extends State<MainWorkout> {
     callWorkouts(date: date, subScriptionId: subId, addonId: addonsId);
   }
 
+  bool allWorkoutCompleted(){
+    List<bool> data = [];
+    user.myWorkoutSchedule.data.forEach((element) {
+      if(element.exercises
+          .map((e) =>
+      e.eDuration != null && e.eDuration.isNotEmpty)
+          .toList()[0]){
+        data.add(true);
+      }else{
+        data.add(false);
+      }
+    });
+    print('check list val --- ${data.toString()}');
+    if(data.contains(false)){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  void showSnack({@required String message}){
+    FlashHelper.informationBar(
+      context,
+      message: '${message}',
+    );
+  }
+
+  void onPressStartButton(String type){
+    if(!allWorkoutCompleted()){
+      if(globalTimerIsOn()){
+        showSnack(message: 'To End workout complete all your exercises!');
+      }else{
+        locator<AppPrefs>().exerciseOn.setValue(true);
+        startTimer();
+        user.workoutNotification(start: true,header: type);
+        setState(() {
+        });
+      }
+    }else{
+      if(globalTimerIsOn()){
+        print('abc checking -- All completed ----- ');
+        stopTimer();
+        locator<AppPrefs>().globalTimer.setValue(0);
+        locator<AppPrefs>().exerciseOn.setValue(false);
+        user.workoutNotification(start: false,header: '');
+        setState(() {
+        });
+      }else{
+        showSnack(message: 'All Workout Completed!');
+      }
+    }
+  }
+
+  void validateOnPress(String type){
+      if(!allWorkoutCompleted()){
+        print('sanjay here -- all workout is not completed');
+        if(globalTimerIsOn()){
+          showSnack(message: 'To end workout you have to finish your all exercises!');
+        }else{
+          startTimer();
+          locator<AppPrefs>().exerciseOn.setValue(true);
+          showSnack(message: 'Completed');
+          user.workoutNotification(start: true,header: type);
+          setState(() {
+          });
+        }
+      }else{
+        print('sanjay here -- all workout is  completed');
+        if(globalTimerIsOn()){
+          //todo here save Final Code :D
+          stopTimer();
+          locator<AppPrefs>().globalTimer.setValue(0);
+          locator<AppPrefs>().exerciseOn.setValue(false);
+          showSnack(message: 'Completed');
+          user.workoutNotification(start: false,header: '');
+          setState(() {
+          });
+        }else{
+          showSnack(message: 'ALl Workout Completed!');
+        }
+      }
+  }
+
   @override
   Widget build(BuildContext context) {
     final MainWorkoutArgument args =
@@ -138,9 +222,11 @@ class _MainWorkoutState extends State<MainWorkout> {
                   FloatingActionButtonLocation.centerFloat,
               floatingActionButton: FloatingActionButton.extended(
                 heroTag: 'startFlag',
-                onPressed: () {},
+                onPressed: () {
+                  validateOnPress(args.workoutType);
+                },
                 label: Text(
-                  validateGlobalTimer() ? 'End Workout' : 'Start Wworkout',
+                  globalTimerIsOn() ? 'End Workout' : 'Start Workout',
                   style: TextStyle(fontSize: 16),
                 ),
                 icon: Icon(Icons.add),
@@ -157,7 +243,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                               pinned: true,
                               floating: true,
                               actions: [
-                                if (validateGlobalTimer())
+                                if (globalTimerIsOn())
                                   StreamBuilder<int>(
                                     stream: _stopWatchTimer.secondTime,
                                     initialData:
@@ -238,6 +324,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                 WorkoutScheduleData item =
                                     user.myWorkoutSchedule.data[index];
                                 print('check list item image -- ${item.image}');
+
                                 return itermCard(item: item,index: index);
                                 // return WorkoutListItems(item);
                               }))),
@@ -248,7 +335,7 @@ class _MainWorkoutState extends State<MainWorkout> {
     }
   }
 
-  Widget itermCard({@required WorkoutScheduleData item,@required int index}) {
+  Widget itermCard({@required WorkoutScheduleData item,@required int index,String type}) {
     return Card(
       color: Colors.transparent,
       elevation: 0.0,
@@ -258,44 +345,10 @@ class _MainWorkoutState extends State<MainWorkout> {
       ),
       child: InkWell(
         onTap: () {
-          if (validateGlobalTimer()) {
+          if (globalTimerIsOn()) {
             navigateToNext(item: item,index: index);
           } else {
-            // set up the button
-            Widget okButton = InkWell(
-              onTap: () {
-                Navigator.pop(context);
-                setExerciserOnStatus(true);
-                startTimer();
-                navigateToNext(item: item,index: index);
-              },
-              child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: AppConstants.bgColor),
-                  child: Text("Start Workout",
-                      style: TextStyle(color: Colors.white))),
-            );
-
-            // set up the AlertDialog
-            AlertDialog alert = AlertDialog(
-              title: Text("Warning!"),
-              content: Text(
-                "You haven\'t start workout!",
-              ),
-              actions: [
-                okButton,
-              ],
-            );
-
-            // show the dialog
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return alert;
-              },
-            );
+            showSnack(message: 'Please Start Workout First');
           }
         },
         child: Stack(
@@ -373,7 +426,7 @@ class _MainWorkoutState extends State<MainWorkout> {
             ExDetailsArgument(data: item.exercises, coverImage: item.image,index: index));
   }
 
-  bool validateGlobalTimer() {
+  bool globalTimerIsOn() {
     bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
     return isWorkoutOn;
   }

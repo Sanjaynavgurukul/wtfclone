@@ -31,13 +31,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   List<Exercise> list = [];
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ExDetailsArgument args =
         ModalRoute.of(context).settings.arguments as ExDetailsArgument;
@@ -107,7 +100,6 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   Exercise item = list[index];
-                  bool displayTimer = displayCountDown(itemUid: item.uid);
                   bool completed = item.status == 'done';
                   return ListTile(
                     dense: true,
@@ -124,20 +116,28 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     trailing: InkWell(
                       onTap: () {
                         if(!completed) {
-                          // if(displayTimer){
-                          exTimerHelper.setExUid(itemUid: item.uid);
-                          NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
-                            list = user.myWorkoutSchedule.data[args.index].exercises;
-                            setState(() {
+                          if(alreadyExists()){
+                            if(getExistItemId() == item.uid){
+                              NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                                list = user.myWorkoutSchedule.data[args.index].exercises;
+                                setState(() {
 
+                                });
+                              });
+                            }else{
+                              FlashHelper.informationBar(
+                                context,
+                                message: 'Already Running another exercise please complete then start this one!',
+                              );
+                            }
+                          }else{
+                            NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                              list = user.myWorkoutSchedule.data[args.index].exercises;
+                              setState(() {
+
+                              });
                             });
-                          });
-                          // }else{
-                          //   FlashHelper.informationBar(
-                          //     context,
-                          //     message: 'Already Running another exercise please complete then start this one!',
-                          //   );
-                          // }
+                          }
                         }else{
                           FlashHelper.informationBar(
                             context,
@@ -151,10 +151,10 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                             border: Border.all(
                                 width: 1,
-                                color: displayTimer
+                                color: alreadyExists()
                                     ? AppConstants.bgColor
                                     : Colors.white)),
-                        child: displayTimer && !completed
+                        child: alreadyExists() && !completed
                             ? Text('Resume')
                             : Text(completed ? 'Completed' : 'Start'),
                       ),
@@ -171,13 +171,17 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     return list.any((file) => file.status == "pending");
   }
 
-  bool displayCountDown({@required String itemUid}) {
+  bool alreadyExists(){
     String value = locator<AppPrefs>().exerciseUid.getValue();
-    if (value != null && value == itemUid) {
-      return true;
-    } else {
+    if(value.isEmpty){
       return false;
+    }else{
+      return true;
     }
+  }
+
+  String getExistItemId(){
+    return locator<AppPrefs>().exerciseUid.getValue();
   }
 
 }

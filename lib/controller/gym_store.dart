@@ -543,8 +543,7 @@ class GymStore extends ChangeNotifier {
                 id: 10,
                 channelKey: '123456',
                 title: 'Workout Started',
-                body:
-                    '${locator<AppPrefs>().selectedMySchedule.getValue()} workouts have been started.',
+                body: '${locator<AppPrefs>().selectedMySchedule.getValue()} workouts have been started.',
                 // createdLifeCycle: NotificationLifeCycle.Background,
                 // createdSource: NotificationSource.Local,
                 notificationLayout: NotificationLayout.BigPicture,
@@ -1536,6 +1535,8 @@ class GymStore extends ChangeNotifier {
     //   'addon_id': mySchedule.data.addonPt.first.addonId,
     // };
     // print('verification body: $body');
+
+    //TODO check workouit here
     workoutMappingId = await RestDatasource().getWorkoutVerification(
       date: locator<AppPrefs>().selectedWorkoutDate.getValue(),
     );
@@ -2675,6 +2676,47 @@ class GymStore extends ChangeNotifier {
       return true;
     } else {
       return false;
+    }
+  }
+
+  void workoutNotification({@required bool start,@required String header}){
+    if(start){
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
+        if (!isAllowed) {
+          // Insert here your friendly dialog box before call the request method
+          // This is very important to not harm the user experience
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        } else {
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: 10,
+              channelKey: '123456',
+              title: 'Workout Started',
+              body:
+              '$header workouts have been started.',
+              // createdLifeCycle: NotificationLifeCycle.Background,
+              // createdSource: NotificationSource.Local,
+              notificationLayout: NotificationLayout.BigPicture,
+              // displayedLifeCycle: NotificationLifeCycle.Background,
+              customSound: 'resource://raw/res_morph_power_rangers',
+              locked: true,
+              // autoDismissible: false,
+              autoCancel: true,
+              // wakeUpScreen: true,
+              // autoCancel: false,
+              displayOnBackground: true,
+              backgroundColor: AppConstants.primaryColor,
+              bigPicture: Images.workoutNotification,
+              icon: 'resource://drawable/ic_notification',
+              displayOnForeground: true,
+            ),
+          );
+        }
+      });
+    }else{
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        AwesomeNotifications().cancel(10);
+      });
     }
   }
 }

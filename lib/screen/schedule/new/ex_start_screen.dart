@@ -62,12 +62,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    print('check dara --- ${exTimerHelper.convertMil(true)}');
-  }
-
-  @override
   void dispose() async {
     super.dispose();
     stopTimer();
@@ -140,9 +134,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
         locator<AppPrefs>().exerciseUid.setValue('');
         locator<AppPrefs>().exerciseSet.setValue(1);
         locator<AppPrefs>().exercisePause.setValue(false);
-        // exTimerHelper.setExUid(itemUid: '');
-        // exTimerHelper.setExSetsToZero();
-        // setExPause(false);
         Navigator.pop(context);
         Navigator.pop(context);
       });
