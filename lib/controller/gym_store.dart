@@ -2740,7 +2740,7 @@ class GymStore extends ChangeNotifier {
       "trainer_id": currentTrainer.data.userId,
       "date": locator<AppPrefs>().selectedWorkoutDate.getValue(),
       "workout_mapping_id": exercises,
-      'addon_id': selectedSchedule.addonId,
+      'addon_id': workoutAddonId,
       'subscription_id': selectedSchedule.uid,
     };
     print('verification body: $body');

@@ -182,7 +182,7 @@ class _MainWorkoutState extends State<MainWorkout> {
         print('sanjay here -- all workout is  completed');
         if(globalTimerIsOn()){
           //todo here save Final Code :D
-          user.verifyCompletedWorkout().then((value){
+          user.verifyCompletedWorkout(context: context).then((value){
             if(value != null || value.isNotEmpty){
               stopTimer();
               locator<AppPrefs>().globalTimer.setValue(0);

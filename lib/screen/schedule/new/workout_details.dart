@@ -33,7 +33,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
   @override
   Widget build(BuildContext context) {
     final ExDetailsArgument args =
-        ModalRoute.of(context).settings.arguments as ExDetailsArgument;
+    ModalRoute.of(context).settings.arguments as ExDetailsArgument;
     if (args == null) {
       return Center(
         child: Text('Something Went Wrong Please try again later!'),
@@ -100,6 +100,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   Exercise item = list[index];
+                  bool displayTimer = alreadyInProgress(itemUid: item.uid);
                   bool completed = item.status == 'done';
                   return ListTile(
                     dense: true,
@@ -115,9 +116,14 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
                     trailing: InkWell(
                       onTap: () {
-                        if(true) {
-                          if(alreadyExists()){
-                            if(getExistItemId() == item.uid){
+                        if(!completed) {
+                          // if(displayTimer){
+                          // }else{
+
+                          // }
+                          if(exInProgress()){
+                            if(alreadyInProgress(itemUid: item.uid)){
+                              locator<AppPrefs>().exerciseUid.setValue(item.uid);
                               NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
                                 list = user.myWorkoutSchedule.data[args.index].exercises;
                                 setState(() {
@@ -131,6 +137,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                               );
                             }
                           }else{
+                            locator<AppPrefs>().exerciseUid.setValue(item.uid);
                             NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
                               list = user.myWorkoutSchedule.data[args.index].exercises;
                               setState(() {
@@ -151,10 +158,10 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                             border: Border.all(
                                 width: 1,
-                                color: alreadyExists()
+                                color: displayTimer
                                     ? AppConstants.bgColor
                                     : Colors.white)),
-                        child: alreadyExists() && !completed
+                        child: displayTimer && !completed
                             ? Text('Resume')
                             : Text(completed ? 'Completed' : 'Start'),
                       ),
@@ -171,17 +178,21 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
     return list.any((file) => file.status == "pending");
   }
 
-  bool alreadyExists(){
-    String value = locator<AppPrefs>().exerciseUid.getValue();
-    if(value.isEmpty){
-      return false;
-    }else{
+  bool exInProgress(){
+    String id = locator<AppPrefs>().exerciseUid.getValue();
+    if(id != null && id.isNotEmpty){
       return true;
+    }else{
+      return false;
     }
   }
-
-  String getExistItemId(){
-    return locator<AppPrefs>().exerciseUid.getValue();
+  bool alreadyInProgress({@required String itemUid}) {
+    String value = locator<AppPrefs>().exerciseUid.getValue();
+    if (value != null && value == itemUid) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

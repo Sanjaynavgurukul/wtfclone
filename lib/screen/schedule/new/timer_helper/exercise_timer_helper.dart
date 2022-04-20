@@ -8,21 +8,21 @@ import 'package:wtf/model/my_workout_schedule_model.dart';
 
 class ExerciseTimerHelper {
   final List<ExShareModel> globalList = [];
-  int convertHour(int time) {
+  String convertHour(int time) {
     String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(2, '0');
-    return int.parse(hour);
+    return hour;
   }
 
-  int convertMin(int time) {
+  String convertMin(int time) {
 
     String min = ((time / 60) % 60).floor().toString().padLeft(2, '0');
-    return int.parse(min);
+    return min;
   }
 
-  int convertSec(int time) {
+  String convertSec(int time) {
     // String sec = (time % 60).floor().toString();
     String sec = (time % 60).floor().toString().padLeft(2,'0');
-    return int.parse(sec);
+    return sec;
   }
 
   int getTimer(bool isEx) {
@@ -74,9 +74,9 @@ class ExerciseTimerHelper {
   void setTimeInLocal({@required int counter, bool isEx}) {
     int currentDate = DateTime.now()
         .subtract(Duration(
-            hours: convertHour(counter),
-            seconds: convertSec(counter),
-            minutes: convertMin(counter)))
+            hours: int.parse(convertHour(counter)),
+            seconds: int.parse(convertSec(counter)),
+            minutes: int.parse(convertMin(counter))))
         .millisecondsSinceEpoch;
 
     if (isEx) {
@@ -84,20 +84,6 @@ class ExerciseTimerHelper {
     } else {
       locator<AppPrefs>().globalTimer.setValue(currentDate);
     }
-  }
-
-  String getTimeFormat(bool isEx){
-    // DateTime date1 = DateTime.now();
-    // DateTime date2;
-    // if (getTimer(isEx) == 0) {
-    //   date2 = DateTime.now();
-    // } else {
-    //   date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
-    // }
-    //
-
-    int convert = convertMin(120);
-
   }
 
   int getPreviousTimerFromLocal(bool isEx) {

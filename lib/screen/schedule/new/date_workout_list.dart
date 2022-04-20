@@ -270,144 +270,151 @@ class ScheduleListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: schedule
-            .map(
-              (e) =>
-              InkWell(
-                onTap: () {
-                  NavigationService.pushName(Routes.mainWorkout,
-                      argument: MainWorkoutArgument(
-                          data: e, workoutType: name, time: selectedDate));
-                },
-                child: Card(
-                  color: Colors.transparent,
-                  elevation: 0.0,
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        child: GradientImageWidget(
-                          borderRadius: BorderRadius.circular(8.0),
-                          network: name == 'General Training'
-                              ? Images.generalTraining
-                              : name == 'Personal Training'
-                              ? Images.personalTraining
-                              : e.gymCoverImage
-                              .startsWith('https://wtfupme')
-                              ? null
-                              : e.gymCoverImage,
-                          stops: [0.01, 1.0],
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          color: Colors.white,
-                          gradient: LinearGradient(
-                            begin: FractionalOffset.topCenter,
-                            end: FractionalOffset.bottomCenter,
-                            colors: const [
-                              Colors.transparent,
-                              Colors.red,
-                            ],
-                            stops: const [0.4, 1.0],
+    return Consumer<GymStore>(
+      builder: (context, store, child) => Padding(
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: schedule
+              .map(
+                (e) =>
+                InkWell(
+                  onTap: () {
+                    context.read<GymStore>().setSelectedSchedule(
+                      context: context,
+                      val: schedule.first,
+                    );
+                    store.getCurrentTrainer(context: context);
+                    NavigationService.pushName(Routes.mainWorkout,
+                        argument: MainWorkoutArgument(
+                            data: e, workoutType: name, time: selectedDate));
+                  },
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 0.0,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child: GradientImageWidget(
+                            borderRadius: BorderRadius.circular(8.0),
+                            network: name == 'General Training'
+                                ? Images.generalTraining
+                                : name == 'Personal Training'
+                                ? Images.personalTraining
+                                : e.gymCoverImage
+                                .startsWith('https://wtfupme')
+                                ? null
+                                : e.gymCoverImage,
+                            stops: [0.01, 1.0],
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 16.0,
-                        left: 0.0,
-                        right: 0.0,
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                name == 'addon'
-                                    ? e.addonName
-                                    : name == 'event'
-                                    ? e.eventName +
-                                    ' (${e.eventType == 'regular' ? 'Event' : e
-                                        .eventType ?? ''})'
-                                    : name,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              UIHelper.verticalSpace(10.0),
-                              if (name == 'Personal Training' ||
-                                  name == 'addon')
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          'Total Session: ${e.nSession ?? 0}'),
-                                      Text(
-                                          'Completed Session: ${e
-                                              .completedSession ?? 0}'),
-                                    ],
-                                  ),
-                                ),
-                              if (name == 'event')
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.only(top: 4.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Addon: - ${e.addonName}',
-                                      ),
-                                      Text(
-                                        'Gym Name - ${e.gymname}',
-                                      ),
-                                      Text(
-                                        'Address: ${e.gymAddress1}, ${e
-                                            .gymAddress2}',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              if (name == 'Live Sessions')
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.only(top: 4.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${e.addonName}',
-                                      ),
-                                      Text(
-                                        '${e.gymname}',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ],
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.white,
+                            gradient: LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              colors: const [
+                                Colors.transparent,
+                                Colors.red,
+                              ],
+                              stops: const [0.4, 1.0],
+                            ),
                           ),
                         ),
-                      )
-                    ],
+                        Positioned(
+                          bottom: 16.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  name == 'addon'
+                                      ? e.addonName
+                                      : name == 'event'
+                                      ? e.eventName +
+                                      ' (${e.eventType == 'regular' ? 'Event' : e
+                                          .eventType ?? ''})'
+                                      : name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                                UIHelper.verticalSpace(10.0),
+                                if (name == 'Personal Training' ||
+                                    name == 'addon')
+                                  Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            'Total Session: ${e.nSession ?? 0}'),
+                                        Text(
+                                            'Completed Session: ${e
+                                                .completedSession ?? 0}'),
+                                      ],
+                                    ),
+                                  ),
+                                if (name == 'event')
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(top: 4.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Addon: - ${e.addonName}',
+                                        ),
+                                        Text(
+                                          'Gym Name - ${e.gymname}',
+                                        ),
+                                        Text(
+                                          'Address: ${e.gymAddress1}, ${e
+                                              .gymAddress2}',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (name == 'Live Sessions')
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(top: 4.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${e.addonName}',
+                                        ),
+                                        Text(
+                                          '${e.gymname}',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-        )
-            .toList(),
-      ),
+          )
+              .toList(),
+        ),
+      )
     );
   }
 }
