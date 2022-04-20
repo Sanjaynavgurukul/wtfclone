@@ -37,11 +37,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
   bool loading = false;
   int exSet = 1;
 
-  final setCount = BehaviorSubject<int>();
-
-  Function(int) get setSetsCount => setCount.sink.add;
-
-  Stream<int> get getSetsCount => setCount.stream;
 
   @override
   void didChangeDependencies() {
@@ -67,7 +62,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
     stopTimer();
     await _stopWatchTimer.dispose();
     _controller.dispose();
-    setCount.close();
   }
 
   void playVideo({@required String videoUrl}) {
@@ -125,23 +119,24 @@ class _ExStartScreenState extends State<ExStartScreen> {
 
   void endExercise({@required Exercise item,})async{
     showLoadingDialog(context);
-    print('End Exercise ----');
+      //'HH:mm:ss'
+    // print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
-    if(saved){
-      user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
-        stopTimer();
-        locator<AppPrefs>().exerciseTimer.setValue(0);
-        locator<AppPrefs>().exerciseUid.setValue('');
-        locator<AppPrefs>().exerciseSet.setValue(1);
-        locator<AppPrefs>().exercisePause.setValue(false);
-        Navigator.pop(context);
-        Navigator.pop(context);
-      });
-    }else{
-      Navigator.pop(context);
-      FlashHelper.informationBar(context,
-          message: 'Something Went Wrong!!');
-    }
+    // if(saved){
+    //   user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
+    //     stopTimer();
+    //     locator<AppPrefs>().exerciseTimer.setValue(0);
+    //     locator<AppPrefs>().exerciseUid.setValue('');
+    //     locator<AppPrefs>().exerciseSet.setValue(1);
+    //     locator<AppPrefs>().exercisePause.setValue(false);
+    //     Navigator.pop(context);
+    //     Navigator.pop(context);
+    //   });
+    // }else{
+    //   Navigator.pop(context);
+    //   FlashHelper.informationBar(context,
+    //       message: 'Something Went Wrong!!');
+    // }
   }
 
   static Future<void> showLoadingDialog(
@@ -242,52 +237,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
                         SizedBox(
                           height: 25,
                         ),
-                        StreamBuilder(
-                          stream: setCount,
-                          initialData: exSet,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<int> snapshot) {
-                            return InkWell(
-                              onTap: () {
-                                if (!workoutPaused) {
-                                  workoutPaused = true;
-                                  setExPause(workoutPaused);
-
-                                  if (validateSetRep(set: data.sets)) {
-                                    exSet += 1;
-                                    setSetsCount(exSet);
-                                    setSetsInLocal(exSet);
-                                    // this.workoutPaused = !workoutPaused;
-                                    // setExPause(workoutPaused);
-                                  } else {
-
-                                    endExercise(item: data);
-                                  }
-                                } else {
-                                  workoutPaused = false;
-                                  setExPause(workoutPaused);
-                                  setSetsCount(exSet);
-                                }
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 54,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                                    color: AppConstants.bgColor),
-                                child: workoutPaused
-                                    ? Text('Resume')
-                                    : Text(
-                                    'End set ${snapshot.data} of ${data.sets}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                            );
-                          },
-                        )
                       ],
                     ),
                   ),

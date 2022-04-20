@@ -115,7 +115,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
                     trailing: InkWell(
                       onTap: () {
-                        if(!completed) {
+                        if(true) {
                           if(alreadyExists()){
                             if(getExistItemId() == item.uid){
                               NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){

@@ -223,7 +223,8 @@ class _MainWorkoutState extends State<MainWorkout> {
               floatingActionButton: FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
-                  validateOnPress(args.workoutType);
+                  print('check date -- ${exTimerHelper.convertMin(120)}');
+                  // validateOnPress(args.workoutType);
                 },
                 label: Text(
                   globalTimerIsOn() ? 'End Workout' : 'Start Workout',

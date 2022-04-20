@@ -94,18 +94,24 @@ class AppPrefs {
             defaultValue: '28.596669322602807'),
         lng = preferences.getString(PrefsConstants.lng,
             defaultValue: '77.32866249084584'),
-
-        globalTimer = preferences.getInt(PrefsConstants.globalTimer, defaultValue: 0),
-        exerciseData = preferences.getString(PrefsConstants.exerciseData, defaultValue: ''),
-        exerciseOn = preferences.getBool(PrefsConstants.exerciseOn, defaultValue: false),
-        inProgressEx = preferences.getString(PrefsConstants.inProgressEx, defaultValue: ''),
-
-        exerciseTimer = preferences.getInt(PrefsConstants.exerciseTimer, defaultValue: 0),
-        exerciseUid = preferences.getString(PrefsConstants.exerciseUid, defaultValue: ''),
-        exercisePause = preferences.getBool(PrefsConstants.exercisePause, defaultValue: false),
-        exerciseSet = preferences.getInt(PrefsConstants.exerciseSet, defaultValue: 1),
-
-        address = preferences.getString(PrefsConstants.address,defaultValue:'Noida Sector 8');
+        globalTimer =
+            preferences.getInt(PrefsConstants.globalTimer, defaultValue: 0),
+        exerciseData = preferences.getString(PrefsConstants.exerciseData,
+            defaultValue: ''),
+        exerciseOn =
+            preferences.getBool(PrefsConstants.exerciseOn, defaultValue: false),
+        inProgressEx = preferences.getString(PrefsConstants.inProgressEx,
+            defaultValue: ''),
+        exerciseUid =
+            preferences.getString(PrefsConstants.exerciseUid, defaultValue: ''),
+        exercisePause = preferences.getBool(PrefsConstants.exercisePause,
+            defaultValue: false),
+        exerciseSet =
+            preferences.getInt(PrefsConstants.exerciseSet, defaultValue: 1),
+        startExTimer =
+            preferences.getInt(PrefsConstants.startExTimer, defaultValue: 0),
+        address = preferences.getString(PrefsConstants.address,
+            defaultValue: 'Noida Sector 8');
 
   final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
@@ -146,13 +152,11 @@ class AppPrefs {
   final Preference<bool> exerciseOn;
   final Preference<String> exerciseData;
 
-  final Preference<int> exerciseTimer;
-  final Preference<String > exerciseUid;
-  final Preference<String > inProgressEx;
-  final Preference<bool > exercisePause;
-  final Preference<int > exerciseSet;
-
-
+  final Preference<String> exerciseUid;
+  final Preference<String> inProgressEx;
+  final Preference<bool> exercisePause;
+  final Preference<int> exerciseSet;
+  final Preference<int> startExTimer;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -269,9 +273,9 @@ class PrefsConstants {
 
   static const String exerciseData = 'exerciseData';
 
-  static const String exerciseTimer = 'exerciseTimer';
   static const String exerciseUid = 'exerciseUid';
   static const String exerciseSet = 'exerciseSet';
   static const String exercisePause = 'exercisePause';
   static const String inProgressEx = 'inProgressEx';
+  static const String startExTimer = 'startExTimer';
 }

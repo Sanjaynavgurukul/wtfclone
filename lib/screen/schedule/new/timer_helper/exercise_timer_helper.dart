@@ -25,12 +25,10 @@ class ExerciseTimerHelper {
   }
 
   int getTimer(bool isEx) {
-    if (!isEx) {
-      return locator<AppPrefs>().globalTimer.getValue() ?? 0;
-    } else {
-      print(
-          'check get exTime ---- ${locator<AppPrefs>().exerciseTimer.getValue() ?? 0}');
-      return locator<AppPrefs>().exerciseTimer.getValue() ?? 0;
+    if(isEx){
+      locator<AppPrefs>().startExTimer.getValue();
+    }else{
+      locator<AppPrefs>().globalTimer.getValue();
     }
   }
 
@@ -86,7 +84,7 @@ class ExerciseTimerHelper {
         .millisecondsSinceEpoch;
 
     if (isEx) {
-      locator<AppPrefs>().exerciseTimer.setValue(currentDate);
+      locator<AppPrefs>().startExTimer.setValue(currentDate);
     } else {
       locator<AppPrefs>().globalTimer.setValue(currentDate);
     }
@@ -112,29 +110,7 @@ class ExerciseTimerHelper {
     return getPreviousTimerFromLocal(isEx) * 1000;
   }
 
-  void setExSetsToZero(){
-    locator<AppPrefs>().exerciseSet.setValue(1);
-  }
 
-  void setExUid({@required String itemUid}){
-    locator<AppPrefs>().exerciseUid.setValue(itemUid);
-  }
-
-
-  void setExTimerToZero({bool isGlobal = true}) {
-    print('zero method called---');
-    if (isGlobal) {
-      locator<AppPrefs>().globalTimer.setValue(0);
-    } else {
-      locator<AppPrefs>().exerciseTimer.setValue(0);
-    }
-    print(
-        'zero method called--- ${locator<AppPrefs>().exerciseTimer.getValue()}');
-  }
-
-  void inProgressWorkoutUid(){
-
-  }
 
   bool getInProgressItemUid({@required String itemUid}){
     String value = locator<AppPrefs>().inProgressEx.getValue();
