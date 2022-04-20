@@ -34,7 +34,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
   StopWatchTimer _stopWatchTimer;
   VideoPlayerController _controller;
   bool workoutPaused = false;
-  bool loading = false;
   int exSet = 1;
 
   final setCount = BehaviorSubject<int>();
@@ -54,17 +53,17 @@ class _ExStartScreenState extends State<ExStartScreen> {
     );
     this.exSet = getSetsFromLocal;
     this.workoutPaused = isExPaused();
-    if (!workoutPaused) {
-      startTimer();
-    } else {
+    if (workoutPaused) {
       stopTimer();
+    } else {
+      startTimer();
     }
   }
 
   @override
   void dispose() async {
     super.dispose();
-    stopTimer();
+    // stopTimer();
     await _stopWatchTimer.dispose();
     _controller.dispose();
     setCount.close();
@@ -128,15 +127,14 @@ class _ExStartScreenState extends State<ExStartScreen> {
     print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
     if(saved){
-      user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId).then((value){
-        stopTimer();
-        locator<AppPrefs>().startExTimer.setValue(0);
-        locator<AppPrefs>().exerciseUid.setValue('');
-        locator<AppPrefs>().exerciseSet.setValue(1);
-        locator<AppPrefs>().exercisePause.setValue(false);
-        Navigator.pop(context);
-        Navigator.pop(context);
-      });
+      stopTimer();
+      locator<AppPrefs>().startExTimer.setValue(0);
+      locator<AppPrefs>().exerciseUid.setValue('');
+      locator<AppPrefs>().exerciseSet.setValue(1);
+      locator<AppPrefs>().exercisePause.setValue(false);
+      await user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId);
+      Navigator.pop(context);
+      Navigator.pop(context);
     }else{
       Navigator.pop(context);
       FlashHelper.informationBar(context,

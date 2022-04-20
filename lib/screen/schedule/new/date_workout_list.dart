@@ -130,8 +130,10 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
                           this.callMethod = true;
                           _selectedDay = selectedDay;
                           _focusedDay = focusedDay;
+                          var date =
+                          Helper.formatDate2(selectedDay.toIso8601String());
+                          user.workoutSelectedDate = date;
                         });
-
                         // Call `setState()` when updating the selected day
 
                         // var date =

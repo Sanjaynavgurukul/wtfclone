@@ -257,7 +257,7 @@ class GymStore extends ChangeNotifier {
   CurrentTrainer scheduleTrainer;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
-  String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '';
+  String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
 
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
@@ -1540,6 +1540,7 @@ class GymStore extends ChangeNotifier {
     workoutMappingId = await RestDatasource().getWorkoutVerification(
       date: locator<AppPrefs>().selectedWorkoutDate.getValue(),
     );
+
     NavigationService.goBack;
     notifyListeners();
     if (workoutMappingId.isNotEmpty && selectedSchedule.type != 'regular') {
@@ -2679,7 +2680,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  void workoutNotification({@required bool start,@required String header}){
+  void workoutNotification({@required bool start,@required String header,bool showCal = false,BuildContext context}){
     if(start){
       AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
         if (!isAllowed) {
@@ -2717,11 +2718,47 @@ class GymStore extends ChangeNotifier {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         AwesomeNotifications().cancel(10);
       });
+
+      if (showCal) {
+        getWorkoutCalculations(context: context);
+      }
     }
   }
 
+  Future<String> verifyCompletedWorkout({BuildContext context})async{
 
-  Future<String> verifyCompletedWorkout({BuildContext context}) async {
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+
+    //Get All Completed Exercised UID
+    List<String> exercises = [];
+    for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
+      exercises.addAll(
+          myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
+    }
+
+    //Verify Workout POST BODY
+    Map<String, dynamic> body = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "trainer_id": currentTrainer.data.userId,
+      "date": locator<AppPrefs>().selectedWorkoutDate.getValue(),
+      "workout_mapping_id": exercises,
+      'addon_id': workoutAddonId,
+      'subscription_id': workoutSubscriptionId,
+    };
+
+    //Validating in DB
+    String uid = await workoutVerification(context: context, body: body);
+    Navigator.pop(context);
+    return uid;
+  }
+
+  ///Check Here
+  Future<void> getWorkoutCalculations({BuildContext context}) async {
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
@@ -2735,17 +2772,102 @@ class GymStore extends ChangeNotifier {
           myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
     }
     print('exercise list: ${exercises.map((e) => e).toList()}');
-    Map<String, dynamic> body = {
-      "user_id": locator<AppPrefs>().memberId.getValue(),
-      "trainer_id": currentTrainer.data.userId,
-      "date": locator<AppPrefs>().selectedWorkoutDate.getValue(),
-      "workout_mapping_id": exercises,
-      'addon_id': workoutAddonId,
-      'subscription_id': selectedSchedule.uid,
-    };
-    print('verification body: $body');
-    String uid = await workoutVerification(context: context, body: body);
-    Navigator.pop(context);
-    return uid;
+    // Map<String, dynamic> body = {
+    //   "user_id": locator<AppPrefs>().memberId.getValue(),
+    //   "trainer_id": currentTrainer.data.userId,
+    //   "date": Helper.formatDate2(
+    //       locator<AppPrefs>().currentWorkoutDaySelected.getValue()),
+    //   "workout_mapping_id": exercises,
+    //   'addon_id': mySchedule.data.addonPt.first.addonId,
+    // };
+    // print('verification body: $body');
+
+    //TODO check workouit here
+    workoutMappingId = await RestDatasource().getWorkoutVerification(
+      date: workoutSelectedDate,
+    );
+
+    NavigationService.goBack;
+    notifyListeners();
+    if (workoutMappingId.isNotEmpty && selectedSchedule.type != 'regular') {
+      bool isVerified = await showModalBottomSheet<bool>(
+        context: context,
+        builder: (context) {
+          return OtpVerifySheet(
+            onVerified: (val) {},
+            uid: workoutMappingId,
+          );
+        },
+        enableDrag: true,
+        isDismissible: false,
+        isScrollControlled: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            12.0,
+          ),
+        ),
+        backgroundColor: AppColors.PRIMARY_COLOR,
+      );
+      if (isVerified) {
+        showDialog(
+          context: context,
+          builder: (context) => ProcessingDialog(
+            message: 'Please wait...',
+          ),
+        );
+        getMySchedules(
+            date: workoutSelectedDate);
+        WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+          context: context,
+          body: {'exercises': exercises},
+        );
+        Navigator.pop(context);
+        // manageGlobalTimer(context: context, mode: 'stop');
+        if (res != null) {
+          await getMyWorkoutSchedules(
+            date: workoutSelectedDate,
+            addonId: selectedSchedule.addonId,
+            subscriptionId: selectedSchedule.uid,
+          );
+          completedWorkout = res;
+          notifyListeners();
+          NavigationService.goBack;
+          NavigationService.navigateTo(Routes.exerciseDone);
+        }
+      } else {}
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => ProcessingDialog(
+          message: 'Please wait...',
+        ),
+      );
+      Map<String, dynamic> body = {
+        'uid': workoutMappingId,
+        'otp': '',
+      };
+      bool isVerified = await workoutOtpVerification(
+        context: context,
+        body: body,
+      );
+      getMySchedules(date: workoutSelectedDate);
+      WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+        context: context,
+        body: {'exercises': exercises},
+      );
+      Navigator.pop(context);
+      // manageGlobalTimer(context: context, mode: 'stop');
+      if (res != null) {
+        await getMyWorkoutSchedules(
+          date: workoutSelectedDate,
+          addonId: selectedSchedule.addonId,
+          subscriptionId: selectedSchedule.uid,
+        );
+        completedWorkout = res;
+        notifyListeners();
+        NavigationService.goBack;
+        NavigationService.navigateTo(Routes.exerciseDone);
+      }
+    }
   }
 }

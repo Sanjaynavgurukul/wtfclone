@@ -90,6 +90,7 @@ class _OtpVerifySheetState extends State<OtpVerifySheet> {
                           'otp': otpController.text,
                           'uid': widget.uid,
                         };
+                        //TODO trainer otp
                         bool isVerified = await store.workoutOtpVerification(
                           context: context,
                           body: body,

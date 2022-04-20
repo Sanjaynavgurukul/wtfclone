@@ -34,11 +34,8 @@ class _MainWorkoutState extends State<MainWorkout> {
   bool trainerCalled = true;
   bool workoutCalled = true;
   bool callTimer = false;
-  bool allCompleted = false;
 
   StopWatchTimer _stopWatchTimer;
-
-
 
   @override
   void initState() {
@@ -140,32 +137,6 @@ class _MainWorkoutState extends State<MainWorkout> {
     );
   }
 
-  void onPressStartButton(String type){
-    if(!allWorkoutCompleted()){
-      if(globalTimerIsOn()){
-        showSnack(message: 'To End workout complete all your exercises!');
-      }else{
-        locator<AppPrefs>().exerciseOn.setValue(true);
-        startTimer();
-        user.workoutNotification(start: true,header: type);
-        setState(() {
-        });
-      }
-    }else{
-      if(globalTimerIsOn()){
-        print('abc checking -- All completed ----- ');
-        stopTimer();
-        locator<AppPrefs>().globalTimer.setValue(0);
-        locator<AppPrefs>().exerciseOn.setValue(false);
-        user.workoutNotification(start: false,header: '');
-        setState(() {
-        });
-      }else{
-        showSnack(message: 'All Workout Completed!');
-      }
-    }
-  }
-
   void validateOnPress(String type){
       if(!allWorkoutCompleted()){
         print('sanjay here -- all workout is not completed');
@@ -174,7 +145,7 @@ class _MainWorkoutState extends State<MainWorkout> {
         }else{
           startTimer();
           locator<AppPrefs>().exerciseOn.setValue(true);
-          user.workoutNotification(start: true,header: type);
+          user.workoutNotification(start: true,header: type,context: context,showCal: false);
           setState(() {
           });
         }
@@ -188,7 +159,7 @@ class _MainWorkoutState extends State<MainWorkout> {
               locator<AppPrefs>().globalTimer.setValue(0);
               locator<AppPrefs>().exerciseOn.setValue(false);
               showSnack(message: 'Completed');
-              user.workoutNotification(start: false,header: '');
+              user.workoutNotification(start: false,header: '',showCal: true,context: context);
               setState(() {
               });
             }else{
