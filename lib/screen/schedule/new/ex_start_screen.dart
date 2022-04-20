@@ -52,7 +52,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
       mode: StopWatchMode.countUp,
     );
     this.exSet = getSetsFromLocal;
-    if (!isExPaused()) {
+    this.workoutPaused = isExPaused();
+    if (!workoutPaused) {
       startTimer();
     } else {
       stopTimer();
@@ -85,11 +86,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         if (mounted) setState(() {});
       });
-  }
-
-  //Final Method :D
-  void setExerciseIdToLocal({@required String exUid, bool removeId = false}) {
-    locator<AppPrefs>().exerciseUid.setValue(removeId ? '' : exUid);
   }
 
   void startTimer() {
@@ -139,8 +135,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
       if(value){
         print('check this code is initialize ---');
         stopTimer();
-        exTimerHelper.setExTimerToZero();
-        setExerciseIdToLocal(exUid: '',removeId: true);
+        exTimerHelper.setExTimerToZero(isGlobal:false);
+        exTimerHelper.setExUid(itemUid: '');
+        exTimerHelper.setExSetsToZero();
         setExPause(false);
         Navigator.pop(context);
         Navigator.pop(context);
@@ -190,9 +187,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
     } else {
       //Argument Data :D
       Exercise data = args.data;
-
-      //Set ExUID into Local:D
-      setExerciseIdToLocal(exUid: data.uid);
 
       //Load Video :D
       print('check data : ${data.video}  ${data.woName}');
