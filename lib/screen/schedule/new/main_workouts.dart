@@ -355,6 +355,10 @@ class _MainWorkoutState extends State<MainWorkout> {
 
   Widget itermCard(
       {@required WorkoutScheduleData item, @required int index, String type}) {
+    bool isCompleted = item.exercises
+        .map((e) =>
+    e.eDuration != null && e.eDuration.isNotEmpty)
+        .toList()[0];
     return Card(
       color: Colors.transparent,
       elevation: 0.0,
@@ -366,7 +370,11 @@ class _MainWorkoutState extends State<MainWorkout> {
         onTap: () {
           //TODO code changed here if condition should be on true condition ;D
           if (globalTimerIsOn()) {
-            navigateToNext(item: item, index: index);
+            if(!isCompleted){
+              navigateToNext(item: item, index: index);
+            }else{
+              showSnack(message: 'Workout Already Completed');
+            }
           } else {
             showSnack(message: 'Please Start Workout First');
           }
@@ -409,10 +417,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                       fontSize: 16.0,
                     ),
                     children: [
-                      if (item.exercises
-                          .map((e) =>
-                              e.eDuration != null && e.eDuration.isNotEmpty)
-                          .toList()[0])
+                      if (isCompleted)
                         TextSpan(
                           text: ' (Completed)',
                           style: TextStyle(
