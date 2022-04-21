@@ -134,10 +134,15 @@ class _ExStartScreenState extends State<ExStartScreen> {
     print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
     if(saved){
+      print('End Exercise ---- saved timer');
       exTimerHelper.setExTimeToZero();
+      print('End Exercise ---- saved timer zero ${locator<AppPrefs>().startExTimer.getValue()}');
       locator<AppPrefs>().exerciseUid.setValue('');
+      print('End Exercise ---- saved exercise uid empty ${locator<AppPrefs>().exerciseUid.getValue()}');
       locator<AppPrefs>().exerciseSet.setValue(1);
+      print('End Exercise ---- saved exercise sets empty ${locator<AppPrefs>().exerciseSet.getValue()}');
       locator<AppPrefs>().exercisePause.setValue(false);
+      print('End Exercise ---- saved exercise paused to false  ${locator<AppPrefs>().exercisePause.getValue()}');
       await user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId);
       Navigator.pop(context);
       Navigator.pop(context);

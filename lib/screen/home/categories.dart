@@ -62,7 +62,8 @@ class _CategoriesState extends State<Categories> {
         break;
       case 1:
         context.read<GymStore>().getActiveSubscriptions(context: context);
-        NavigationService.navigateTo(Routes.mySchedule);
+        // NavigationService.navigateTo(Routes.mySchedule);
+        NavigationService.pushName(Routes.dateWorkoutList);
         break;
       case 2:
         print('checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');

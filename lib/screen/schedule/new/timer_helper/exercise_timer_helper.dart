@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
@@ -27,6 +28,7 @@ class ExerciseTimerHelper {
 
   int getTimer(bool isEx) {
     if(isEx){
+      print('check data from local exTimer ${locator<AppPrefs>().startExTimer.getValue()}');
       return locator<AppPrefs>().startExTimer.getValue();
     }else{
       return locator<AppPrefs>().globalTimer.getValue();

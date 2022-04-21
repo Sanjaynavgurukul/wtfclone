@@ -81,18 +81,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // NavigationService.pushName(Routes.gymCat);
-          NavigationService.pushName(Routes.dateWorkoutList);
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => MyHomePage()),
-          // );
-          //FirebaseCrashlytics.instance.crash();
-        },
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // NavigationService.pushName(Routes.gymCat);
+      //     NavigationService.pushName(Routes.dateWorkoutList);
+      //     // Navigator.push(
+      //     //   context,
+      //     //   MaterialPageRoute(builder: (context) => MyHomePage()),
+      //     // );
+      //     //FirebaseCrashlytics.instance.crash();
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);

@@ -5,6 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/place_picker.dart';
+import 'package:place_picker/widgets/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -18,11 +21,13 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/all_events.dart';
 import 'package:wtf/model/gym_add_on.dart';
+import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/new_gym/gym/gym_list_screen.dart';
 import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/ComingSoonWidget.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
+import 'package:wtf/widget/gym_list_search_adapter.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 import '../main.dart';
@@ -54,20 +59,130 @@ class _ExplorePageState extends State<ExplorePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  child: SearchBar(
-                    onClickLocation: (){
-                      context.read<GymStore>().getDiscoverNow(
-                        context: context,
-                        type: 'gym',
-                      );
-                    },
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 6.0,
+                Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: InkWell(
+                            onTap: (){
+                              FocusScope.of(context).unfocus();
+                              store.determinePosition(context);
+                              showSearch(
+                                  context: context,
+                                  delegate: GymListSearchAdapter(
+                                      searchableList:
+                                      store.allGyms.data,
+                                      onClick: (GymModelData data){
+                                    print('gym iD --- from nav ${data.userId}');
+                                    NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: data, gymId: data.userId));
+                                  }));
+                            },
+                            child: TextFormField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(
+                                  top: 0.0,
+                                  bottom: 0.0,
+                                  left: 17,
+                                ),
+                                hintText: 'Search your favourite WTF gyms',
+                                hintStyle: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13.0,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    // store.determinePosition();
+                                    // NavigationService.navigateTo(
+                                    //     Routes.searchScreen);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(5.0),
+                                    height: 25,
+                                    width: 25,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Color(0xffBA1406),
+                                            Color(0xff490000),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(4.0)),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                        size: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: Color(0xff2d2d2d),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      UIHelper.horizontalSpace(12.0),
+                      Flexible(
+                        child: InkWell(
+                          onTap: () async {
+                            LocationResult result =
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PlacePicker(
+                                  Helper.googleMapKey,
+                                  displayLocation:
+                                  LatLng(store.getLat(), store.getLng()),
+                                ),
+                              ),
+                            );
+                            print(result);
+                            setState(() {
+                              print('Checking selected new location ----');
+                              if (result != null) {
+                                print('User has choose new location -----');
+                                store.tempLat = result.latLng.latitude;
+                                store.tempLng = result.latLng.longitude;
+                              } else {
+                                print('Same as previous location ----');
+                              }
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset('assets/svg/change.svg'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                // Container(
+                //   child: SearchBar(
+                //     onClickLocation: (){
+                //       context.read<GymStore>().getDiscoverNow(
+                //         context: context,
+                //         type: 'gym',
+                //       );
+                //     },
+                //   ),
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 12.0,
+                //     vertical: 6.0,
+                //   ),
+                // ),
                 UIHelper.verticalSpace(10.0),
                 CommonBanner(
                   bannerType: "explore",

@@ -138,39 +138,38 @@ class _MainWorkoutState extends State<MainWorkout> {
   }
 
   void validateOnPress(String type){
-    user.verifyCompletedWorkout(context: context);
-      // if(!allWorkoutCompleted()){
-      //   print('sanjay here -- all workout is not completed');
-      //   if(globalTimerIsOn()){
-      //     showSnack(message: 'To end workout you have to finish your all exercises!');
-      //   }else{
-      //     startTimer();
-      //     locator<AppPrefs>().exerciseOn.setValue(true);
-      //     user.workoutNotification(start: true,header: type,);
-      //     setState(() {
-      //     });
-      //   }
-      // }else{
-      //   print('sanjay here -- all workout is  completed');
-      //   if(globalTimerIsOn()){
-      //     //todo here save Final Code :D
-      //     user.verifyCompletedWorkout(context: context).then((value){
-      //       if(value != null){
-      //         stopTimer();
-      //         locator<AppPrefs>().globalTimer.setValue(0);
-      //         locator<AppPrefs>().exerciseOn.setValue(false);
-      //         showSnack(message: 'Completed');
-      //         user.workoutNotification(start: false,header: '');
-      //         setState(() {
-      //         });
-      //       }else{
-      //         showSnack(message: 'Something Went Wrong!');
-      //       }
-      //     });
-      //   }else{
-      //     showSnack(message: 'ALl Workout Completed!');
-      //   }
-      // }
+      if(!allWorkoutCompleted()){
+        print('sanjay here -- all workout is not completed');
+        if(globalTimerIsOn()){
+          showSnack(message: 'To end workout you have to finish your all exercises!');
+        }else{
+          startTimer();
+          locator<AppPrefs>().exerciseOn.setValue(true);
+          user.workoutNotification(start: true,header: type,);
+          setState(() {
+          });
+        }
+      }else{
+        print('sanjay here -- all workout is  completed');
+        if(globalTimerIsOn()){
+          //todo here save Final Code :D
+          user.verifyCompletedWorkout(context: context).then((value){
+            if(value != null){
+              stopTimer();
+              locator<AppPrefs>().globalTimer.setValue(0);
+              locator<AppPrefs>().exerciseOn.setValue(false);
+              showSnack(message: 'Completed');
+              user.workoutNotification(start: false,header: '');
+              setState(() {
+              });
+            }else{
+              showSnack(message: 'Something Went Wrong!');
+            }
+          });
+        }else{
+          showSnack(message: 'ALl Workout Completed!');
+        }
+      }
   }
 
   @override

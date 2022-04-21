@@ -424,7 +424,7 @@ class _DietCardState extends State<DietCard> {
           Positioned(
             top: -10.0,
             right: 10.0,
-            child: (!data.consumptionStatus)
+            child: (data.consumptionStatus != null && !data.consumptionStatus)
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
