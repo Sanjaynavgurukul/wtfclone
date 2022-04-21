@@ -123,8 +123,6 @@ class GymStore extends ChangeNotifier {
 
   GymTypes selectedGymTypes;
 
-  MyWorkoutSchedule myWorkoutSchedule;
-
   MySchedule mySchedule;
 
   MySchedule addonMySchedules;
@@ -256,8 +254,11 @@ class GymStore extends ChangeNotifier {
   MySchedule scheduleData;
   CurrentTrainer scheduleTrainer;
 
-  //TODO this is temporary variables this will change each timer when you come to my schedule :D
+  //Workout Variables :D
+  MyWorkoutSchedule myWorkoutSchedule;
   String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
+
+  //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
   Future<void> setEventSubmission({List<Submission> data}) async {
     selectedSubmissions = data;
@@ -1442,17 +1443,22 @@ class GymStore extends ChangeNotifier {
 
   Future<String> workoutVerification(
       {BuildContext context, Map<String, dynamic> body}) async {
+
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
         message: 'Please wait...',
       ),
     );
+
     if (selectedSchedule.type == 'regular') {
       body['type'] = selectedSchedule.type;
     }
+
     String isSaved = await RestDatasource().workoutVerification(body: body);
+
     Navigator.pop(context);
+
     if (isSaved.isNotEmpty) {
       // FlashHelper.successBar(context, message: 'Body Fat result Saved');
       return isSaved;
@@ -2722,6 +2728,7 @@ class GymStore extends ChangeNotifier {
       if (showCal) {
         getWorkoutCalculations(context: context);
       }
+
     }
   }
 
@@ -2745,7 +2752,7 @@ class GymStore extends ChangeNotifier {
     Map<String, dynamic> body = {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "trainer_id": currentTrainer.data.userId,
-      "date": locator<AppPrefs>().selectedWorkoutDate.getValue(),
+      "date": workoutSelectedDate,
       "workout_mapping_id": exercises,
       'addon_id': workoutAddonId,
       'subscription_id': workoutSubscriptionId,
@@ -2765,12 +2772,14 @@ class GymStore extends ChangeNotifier {
         message: 'Please wait...',
       ),
     );
+
     List<String> exercises = [];
     //TODO:  WORKOUT CAL LOGIC
     for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
       exercises.addAll(
           myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
     }
+
     print('exercise list: ${exercises.map((e) => e).toList()}');
     // Map<String, dynamic> body = {
     //   "user_id": locator<AppPrefs>().memberId.getValue(),
@@ -2783,6 +2792,7 @@ class GymStore extends ChangeNotifier {
     // print('verification body: $body');
 
     //TODO check workouit here
+
     workoutMappingId = await RestDatasource().getWorkoutVerification(
       date: workoutSelectedDate,
     );
@@ -2808,6 +2818,7 @@ class GymStore extends ChangeNotifier {
         ),
         backgroundColor: AppColors.PRIMARY_COLOR,
       );
+
       if (isVerified) {
         showDialog(
           context: context,
@@ -2815,6 +2826,7 @@ class GymStore extends ChangeNotifier {
             message: 'Please wait...',
           ),
         );
+
         getMySchedules(
             date: workoutSelectedDate);
         WorkoutComplete res = await RestDatasource().getWorkoutCalculation(

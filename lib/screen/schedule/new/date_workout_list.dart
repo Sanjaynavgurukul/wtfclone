@@ -284,7 +284,7 @@ class ScheduleListItems extends StatelessWidget {
                   onTap: () {
                     context.read<GymStore>().setSelectedSchedule(
                       context: context,
-                      val: schedule.first,
+                      val: e,
                     );
                     store.getCurrentTrainer(context: context);
                     NavigationService.pushName(Routes.mainWorkout,
