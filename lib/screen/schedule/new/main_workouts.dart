@@ -224,32 +224,6 @@ class _MainWorkoutState extends State<MainWorkout> {
                               forceElevated: innerBoxIsScrolled,
                               pinned: true,
                               floating: true,
-                              actions: [
-                                if (globalTimerIsOn())
-                                  StreamBuilder<int>(
-                                    stream: _stopWatchTimer.secondTime,
-                                    initialData:
-                                        _stopWatchTimer.secondTime.value,
-                                    builder: (context, snap) {
-                                      int value = snap.data;
-                                      exTimerHelper.setTimeInLocal(
-                                          counter: value, isEx: false);
-                                      return Container(
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.only(right: 16),
-                                        child: Text(
-                                          '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
-                                          style: TextStyle(
-                                              color: AppConstants.bgColor,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                else
-                                  Container(),
-                              ],
                               bottom: PreferredSize(
                                   preferredSize: Size(double.infinity, 100),
                                   child: Padding(
@@ -262,21 +236,38 @@ class _MainWorkoutState extends State<MainWorkout> {
                                             ),
                                             Text(
                                                 '${user.scheduleTrainer.data.name ?? 'No Name'}'),
-                                            SizedBox(height: 2,),
+                                            SizedBox(
+                                              height: 2,
+                                            ),
                                             Text(
                                                 '${user.scheduleTrainer.data.description ?? ''}'),
-                                            SizedBox(height: 4,),
+                                            SizedBox(
+                                              height: 4,
+                                            ),
                                             RatingBar(
-                                              initialRating: double.parse(user.scheduleTrainer.data.rating??'0.0'),
+                                              initialRating: double.parse(user
+                                                      .scheduleTrainer
+                                                      .data
+                                                      .rating ??
+                                                  '0.0'),
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
                                               itemCount: 5,
                                               itemSize: 16,
-                                              ignoreGestures:true,
+                                              ignoreGestures: true,
                                               ratingWidget: RatingWidget(
-                                                full: Icon(Icons.star,color: AppConstants.bgColor,),
-                                                half: Icon(Icons.star_half,color: AppConstants.bgColor,),
-                                                empty: Icon(Icons.star_border_outlined,color: Colors.grey,),
+                                                full: Icon(
+                                                  Icons.star,
+                                                  color: AppConstants.bgColor,
+                                                ),
+                                                half: Icon(
+                                                  Icons.star_half,
+                                                  color: AppConstants.bgColor,
+                                                ),
+                                                empty: Icon(
+                                                  Icons.star_border_outlined,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
                                               itemPadding: EdgeInsets.symmetric(
                                                   horizontal: 1.0),
@@ -288,30 +279,49 @@ class _MainWorkoutState extends State<MainWorkout> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                         ),
-                                        leading: Wrap(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 30.0,
-                                              backgroundImage: NetworkImage(
-                                                  '${user.scheduleTrainer.data.trainerProfile}' ??
-                                                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                            )
-                                            // Container(
-                                            //   decoration: BoxDecoration(
-                                            //       borderRadius:
-                                            //           BorderRadius.all(
-                                            //               Radius.circular(100)),
-                                            //       color: Colors.grey),
-                                            //   width: 60,
-                                            //   height: 60,
-                                            // ),
-                                          ],
+                                        leading: CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: NetworkImage(
+                                              '${user.scheduleTrainer.data.trainerProfile}' ??
+                                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                          backgroundColor: Colors.transparent,
+                                          child: Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: Container(
+                                              width: 26,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(100)),
+                                                color: AppColors.BACK_GROUND_BG,
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/certified.png',
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        trailing: Image.asset(
-                                          'assets/images/certified.png',
-                                        ),
+                                        trailing: globalTimerIsOn()
+                                            ? StreamBuilder<int>(
+                                                stream:
+                                                    _stopWatchTimer.secondTime,
+                                                initialData: _stopWatchTimer
+                                                    .secondTime.value,
+                                                builder: (context, snap) {
+                                                  int value = snap.data;
+                                                  exTimerHelper.setTimeInLocal(
+                                                      counter: value,
+                                                      isEx: false);
+                                                  return  Text(
+                                                    '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 30,
+                                                        fontWeight:
+                                                        FontWeight.w600),
+                                                  );
+                                                },
+                                              )
+                                            : SizedBox(),
                                       ),
                                       padding: EdgeInsets.only(
                                           left: 12,

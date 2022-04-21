@@ -58,7 +58,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
 
     this.exSet = getSetsFromLocal;
     this.workoutPaused = isExPaused();
-    if (workoutPaused&&!endingProcess) {
+    if (workoutPaused&&endingProcess) {
       stopTimer();
     } else {
       startTimer();
