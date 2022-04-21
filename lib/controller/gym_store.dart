@@ -2867,12 +2867,14 @@ class GymStore extends ChangeNotifier {
       ),
     );
 
+    print('Workout Data Check --- before called');
     //Get All Completed Exercised UID
     List<String> exercises = [];
     for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
       exercises.addAll(
           myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
     }
+    print('Workout Data Check --- after called');
 
     //Verify Workout POST BODY
     Map<String, dynamic> body = {

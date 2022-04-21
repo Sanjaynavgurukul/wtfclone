@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -110,66 +111,67 @@ class _MainWorkoutState extends State<MainWorkout> {
     callWorkouts(date: date, subScriptionId: subId, addonId: addonsId);
   }
 
-  bool allWorkoutCompleted(){
+  bool allWorkoutCompleted() {
     List<bool> data = [];
     user.myWorkoutSchedule.data.forEach((element) {
-      if(element.exercises
-          .map((e) =>
-      e.eDuration != null && e.eDuration.isNotEmpty)
-          .toList()[0]){
+      if (element.exercises
+          .map((e) => e.eDuration != null && e.eDuration.isNotEmpty)
+          .toList()[0]) {
         data.add(true);
-      }else{
+      } else {
         data.add(false);
       }
     });
     print('check list val --- ${data.toString()}');
-    if(data.contains(false)){
+    if (data.contains(false)) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
-  void showSnack({@required String message}){
+  void showSnack({@required String message}) {
     FlashHelper.informationBar(
       context,
       message: '${message}',
     );
   }
 
-  void validateOnPress(String type){
-      if(!allWorkoutCompleted()){
-        print('sanjay here -- all workout is not completed');
-        if(globalTimerIsOn()){
-          showSnack(message: 'To end workout you have to finish your all exercises!');
-        }else{
-          startTimer();
-          locator<AppPrefs>().exerciseOn.setValue(true);
-          user.workoutNotification(start: true,header: type,);
-          setState(() {
-          });
-        }
-      }else{
-        print('sanjay here -- all workout is  completed');
-        if(globalTimerIsOn()){
-          //todo here save Final Code :D
-          user.verifyCompletedWorkout(context: context).then((value){
-            if(value != null){
-              stopTimer();
-              locator<AppPrefs>().globalTimer.setValue(0);
-              locator<AppPrefs>().exerciseOn.setValue(false);
-              showSnack(message: 'Completed');
-              user.workoutNotification(start: false,header: '');
-              setState(() {
-              });
-            }else{
-              showSnack(message: 'Something Went Wrong!');
-            }
-          });
-        }else{
-          showSnack(message: 'ALl Workout Completed!');
-        }
+  void validateOnPress(String type) {
+    if (!allWorkoutCompleted()) {
+      print('sanjay here -- all workout is not completed');
+      if (globalTimerIsOn()) {
+        showSnack(
+            message: 'To end workout you have to finish your all exercises!');
+      } else {
+        startTimer();
+        locator<AppPrefs>().exerciseOn.setValue(true);
+        user.workoutNotification(
+          start: true,
+          header: type,
+        );
+        setState(() {});
       }
+    } else {
+      print('sanjay here -- all workout is  completed');
+      if (globalTimerIsOn()) {
+        //todo here save Final Code :D
+        user.verifyCompletedWorkout(context: context).then((value) {
+          if (value != null) {
+            stopTimer();
+            locator<AppPrefs>().globalTimer.setValue(0);
+            locator<AppPrefs>().exerciseOn.setValue(false);
+            showSnack(message: 'Completed');
+            user.workoutNotification(start: false, header: '');
+            setState(() {});
+          } else {
+            showSnack(message: 'Something Went Wrong!');
+          }
+        });
+      } else {
+        showSnack(message: 'ALl Workout Completed!');
+      }
+    }
   }
 
   @override
@@ -207,7 +209,9 @@ class _MainWorkoutState extends State<MainWorkout> {
                   globalTimerIsOn() ? 'End Workout' : 'Start Workout',
                   style: TextStyle(fontSize: 16),
                 ),
-                icon: globalTimerIsOn()?Icon(Icons.pause_circle_filled):Icon(Icons.play_circle_fill),
+                icon: globalTimerIsOn()
+                    ? Icon(Icons.pause_circle_filled)
+                    : Icon(Icons.play_circle_fill),
               ),
               body: DefaultTabController(
                   length: 0,
@@ -258,10 +262,28 @@ class _MainWorkoutState extends State<MainWorkout> {
                                             ),
                                             Text(
                                                 '${user.scheduleTrainer.data.name ?? 'No Name'}'),
+                                            SizedBox(height: 2,),
                                             Text(
                                                 '${user.scheduleTrainer.data.description ?? ''}'),
-                                            Text(
-                                                '${user.scheduleTrainer.data.rating ?? ''}'),
+                                            SizedBox(height: 4,),
+                                            RatingBar(
+                                              initialRating: double.parse(user.scheduleTrainer.data.rating??'0.0'),
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemSize: 16,
+                                              ignoreGestures:true,
+                                              ratingWidget: RatingWidget(
+                                                full: Icon(Icons.star,color: AppConstants.bgColor,),
+                                                half: Icon(Icons.star_half,color: AppConstants.bgColor,),
+                                                empty: Icon(Icons.star_border_outlined,color: Colors.grey,),
+                                              ),
+                                              itemPadding: EdgeInsets.symmetric(
+                                                  horizontal: 1.0),
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              },
+                                            ),
                                           ],
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -270,9 +292,11 @@ class _MainWorkoutState extends State<MainWorkout> {
                                           children: [
                                             CircleAvatar(
                                               radius: 30.0,
-                                              backgroundImage:
-                                              NetworkImage('${user.scheduleTrainer.data.trainerProfile}'??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                                              backgroundColor: Colors.transparent,
+                                              backgroundImage: NetworkImage(
+                                                  '${user.scheduleTrainer.data.trainerProfile}' ??
+                                                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                              backgroundColor:
+                                                  Colors.transparent,
                                             )
                                             // Container(
                                             //   decoration: BoxDecoration(
@@ -309,7 +333,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                     user.myWorkoutSchedule.data[index];
                                 print('check list item image -- ${item.image}');
 
-                                return itermCard(item: item,index: index);
+                                return itermCard(item: item, index: index);
                                 // return WorkoutListItems(item);
                               }))),
             );
@@ -319,7 +343,8 @@ class _MainWorkoutState extends State<MainWorkout> {
     }
   }
 
-  Widget itermCard({@required WorkoutScheduleData item,@required int index,String type}) {
+  Widget itermCard(
+      {@required WorkoutScheduleData item, @required int index, String type}) {
     return Card(
       color: Colors.transparent,
       elevation: 0.0,
@@ -331,7 +356,7 @@ class _MainWorkoutState extends State<MainWorkout> {
         onTap: () {
           //TODO code changed here if condition should be on true condition ;D
           if (globalTimerIsOn()) {
-            navigateToNext(item: item,index: index);
+            navigateToNext(item: item, index: index);
           } else {
             showSnack(message: 'Please Start Workout First');
           }
@@ -391,24 +416,29 @@ class _MainWorkoutState extends State<MainWorkout> {
                 ),
               ),
             ),
-            exTimerHelper.getInProgressItemUid(itemUid: item.category)?Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                  decoration: BoxDecoration(color: AppConstants.bgColor,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(8))),
-                  padding:EdgeInsets.all(8),
-                  child: Text('In Progress')),
-            ):Container()
+            exTimerHelper.getInProgressItemUid(itemUid: item.category)
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: AppConstants.bgColor,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8))),
+                        padding: EdgeInsets.all(8),
+                        child: Text('In Progress')),
+                  )
+                : Container()
           ],
         ),
       ),
     );
   }
 
-  void navigateToNext({@required WorkoutScheduleData item,@required int index}) {
+  void navigateToNext(
+      {@required WorkoutScheduleData item, @required int index}) {
     NavigationService.pushName(Routes.workoutDetails,
-        argument:
-            ExDetailsArgument(data: item.exercises, coverImage: item.image,index: index));
+        argument: ExDetailsArgument(
+            data: item.exercises, coverImage: item.image, index: index));
   }
 
   bool globalTimerIsOn() {
