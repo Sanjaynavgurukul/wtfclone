@@ -36,6 +36,9 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    var date =
+    Helper.formatDate2(DateTime.now().toIso8601String());
+    user.workoutSelectedDate = date;
   }
 
   void callData() {
@@ -132,6 +135,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
                           _focusedDay = focusedDay;
                           var date =
                           Helper.formatDate2(selectedDay.toIso8601String());
+                          print('check date on select');
                           user.workoutSelectedDate = date;
                         });
                         // Call `setState()` when updating the selected day

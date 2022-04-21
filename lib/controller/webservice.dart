@@ -215,14 +215,19 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
     String url = BASE_URL + Api.workoutVerification();
     log('url: $url');
+    print('check workoutVerification body $body');
     var res = await _netUtil.post(
       url,
       body: body,
       headers: mapHeader,
     );
+    print('check workoutVerification res $res');
     String isAdded = '';
     if (res != null && res.containsKey('uid')) {
+      print('check workoutVerification res is not null ${res['uid']}');
       isAdded = res['uid'];
+    }else{
+      print('check workoutVerification res is on null');
     }
     return Future.value(isAdded);
   }

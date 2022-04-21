@@ -145,7 +145,7 @@ class _MainWorkoutState extends State<MainWorkout> {
         }else{
           startTimer();
           locator<AppPrefs>().exerciseOn.setValue(true);
-          user.workoutNotification(start: true,header: type,context: context,showCal: false);
+          user.workoutNotification(start: true,header: type,);
           setState(() {
           });
         }
@@ -154,12 +154,12 @@ class _MainWorkoutState extends State<MainWorkout> {
         if(globalTimerIsOn()){
           //todo here save Final Code :D
           user.verifyCompletedWorkout(context: context).then((value){
-            if(value != null || value.isNotEmpty){
+            if(value != null){
               stopTimer();
               locator<AppPrefs>().globalTimer.setValue(0);
               locator<AppPrefs>().exerciseOn.setValue(false);
               showSnack(message: 'Completed');
-              user.workoutNotification(start: false,header: '',showCal: true,context: context);
+              user.workoutNotification(start: false,header: '');
               setState(() {
               });
             }else{
@@ -324,7 +324,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       child: InkWell(
         onTap: () {
           //TODO code changed here if condition should be on true condition ;D
-          if (!globalTimerIsOn()) {
+          if (globalTimerIsOn()) {
             navigateToNext(item: item,index: index);
           } else {
             showSnack(message: 'Please Start Workout First');

@@ -1442,33 +1442,6 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<String> workoutVerification(
-      {BuildContext context, Map<String, dynamic> body}) async {
-
-    showDialog(
-      context: context,
-      builder: (context) => ProcessingDialog(
-        message: 'Please wait...',
-      ),
-    );
-
-    if (selectedSchedule.type == 'regular') {
-      body['type'] = selectedSchedule.type;
-    }
-
-    String isSaved = await RestDatasource().workoutVerification(body: body);
-
-    Navigator.pop(context);
-
-    if (isSaved.isNotEmpty) {
-      // FlashHelper.successBar(context, message: 'Body Fat result Saved');
-      return isSaved;
-    } else {
-      // FlashHelper.errorBar(context, message: 'Please try again!');
-      return '';
-    }
-  }
-
   Future<bool> workoutOtpVerification(
       {BuildContext context, Map<String, dynamic> body}) async {
     showDialog(
@@ -2675,83 +2648,6 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void workoutNotification({@required bool start,@required String header,bool showCal = false,BuildContext context}){
-    if(start){
-      AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
-        if (!isAllowed) {
-          // Insert here your friendly dialog box before call the request method
-          // This is very important to not harm the user experience
-          AwesomeNotifications().requestPermissionToSendNotifications();
-        } else {
-          AwesomeNotifications().createNotification(
-            content: NotificationContent(
-              id: 10,
-              channelKey: '123456',
-              title: 'Workout Started',
-              body:
-              '$header workouts have been started.',
-              // createdLifeCycle: NotificationLifeCycle.Background,
-              // createdSource: NotificationSource.Local,
-              notificationLayout: NotificationLayout.BigPicture,
-              // displayedLifeCycle: NotificationLifeCycle.Background,
-              customSound: 'resource://raw/res_morph_power_rangers',
-              locked: true,
-              // autoDismissible: false,
-              autoCancel: true,
-              // wakeUpScreen: true,
-              // autoCancel: false,
-              displayOnBackground: true,
-              backgroundColor: AppConstants.primaryColor,
-              bigPicture: Images.workoutNotification,
-              icon: 'resource://drawable/ic_notification',
-              displayOnForeground: true,
-            ),
-          );
-        }
-      });
-    }else{
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        AwesomeNotifications().cancel(10);
-      });
-
-      if (showCal) {
-        getWorkoutCalculations(context: context);
-      }
-
-    }
-  }
-
-  Future<String> verifyCompletedWorkout({BuildContext context})async{
-
-    showDialog(
-      context: context,
-      builder: (context) => ProcessingDialog(
-        message: 'Please wait...',
-      ),
-    );
-
-    //Get All Completed Exercised UID
-    List<String> exercises = [];
-    for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
-      exercises.addAll(
-          myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
-    }
-
-    //Verify Workout POST BODY
-    Map<String, dynamic> body = {
-      "user_id": locator<AppPrefs>().memberId.getValue(),
-      "trainer_id": currentTrainer.data.userId,
-      "date": workoutSelectedDate,
-      "workout_mapping_id": exercises,
-      'addon_id': workoutAddonId,
-      'subscription_id': workoutSubscriptionId,
-    };
-
-    //Validating in DB
-    String uid = await workoutVerification(context: context, body: body);
-    Navigator.pop(context);
-    return uid;
-  }
 
   ///Check Here
   Future<void> getWorkoutCalculations({BuildContext context}) async {
@@ -2893,4 +2789,195 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //Control Notification :D
+  void workoutNotification({@required bool start,@required String header}){
+    if(start){
+      AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
+        if (!isAllowed) {
+          // Insert here your friendly dialog box before call the request method
+          // This is very important to not harm the user experience
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        } else {
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: 10,
+              channelKey: '123456',
+              title: 'Workout Started',
+              body:
+              '$header workouts have been started.',
+              // createdLifeCycle: NotificationLifeCycle.Background,
+              // createdSource: NotificationSource.Local,
+              notificationLayout: NotificationLayout.BigPicture,
+              // displayedLifeCycle: NotificationLifeCycle.Background,
+              customSound: 'resource://raw/res_morph_power_rangers',
+              locked: true,
+              // autoDismissible: false,
+              autoCancel: true,
+              // wakeUpScreen: true,
+              // autoCancel: false,
+              displayOnBackground: true,
+              backgroundColor: AppConstants.primaryColor,
+              bigPicture: Images.workoutNotification,
+              icon: 'resource://drawable/ic_notification',
+              displayOnForeground: true,
+            ),
+          );
+        }
+      });
+    }else{
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        AwesomeNotifications().cancel(10);
+      });
+    }
+  }
+
+  Future<String> workoutVerification(
+      {BuildContext context, Map<String, dynamic> body}) async {
+
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+
+    if (selectedSchedule.type == 'regular') {
+      body['type'] = selectedSchedule.type;
+    }
+
+    String isSaved = await RestDatasource().workoutVerification(body: body);
+
+    Navigator.pop(context);
+
+    if (isSaved.isNotEmpty) {
+      // FlashHelper.successBar(context, message: 'Body Fat result Saved');
+      return isSaved;
+    } else {
+      // FlashHelper.errorBar(context, message: 'Please try again!');
+      return '';
+    }
+  }
+
+  //Verify All Completed Workout :D
+  Future<String> verifyCompletedWorkout({BuildContext context})async{
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+
+    //Get All Completed Exercised UID
+    List<String> exercises = [];
+    for (int i = 0; i < myWorkoutSchedule.data.length; i++) {
+      exercises.addAll(
+          myWorkoutSchedule.data[i].exercises.map((e) => e.uid).toList());
+    }
+
+    //Verify Workout POST BODY
+    Map<String, dynamic> body = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "trainer_id": currentTrainer.data.userId,
+      "date": workoutSelectedDate,
+      "workout_mapping_id": exercises,
+      'addon_id': workoutAddonId,
+      'subscription_id': workoutSubscriptionId,
+    };
+
+    //Validating in DB
+    String uid = await workoutVerification(context: context, body: body);
+    print('Workout Data Check --- all workout validate UID $uid');
+
+    Navigator.pop(context);
+    //check WorkoutVerification is Done or not
+    if(uid == null || uid.isEmpty){
+      return null;
+    }else{
+      workoutMappingId = await RestDatasource().getWorkoutVerification(
+        date: workoutSelectedDate,
+      );
+      //Check if Workout Mapping id is no null or not :D
+      if (workoutMappingId.isNotEmpty && selectedSchedule.type != 'regular') {
+        bool isVerified = await showModalBottomSheet<bool>(
+          context: context,
+          builder: (context) {
+            return OtpVerifySheet(
+              onVerified: (val) {},
+              uid: workoutMappingId,
+            );
+          },
+          enableDrag: true,
+          isDismissible: false,
+          isScrollControlled: false,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              12.0,
+            ),
+          ),
+          backgroundColor: AppColors.PRIMARY_COLOR,
+        );
+        if (isVerified) {
+          showDialog(
+            context: context,
+            builder: (context) => ProcessingDialog(
+              message: 'Please wait...',
+            ),
+          );
+          getMySchedules(
+              date: locator<AppPrefs>().selectedWorkoutDate.getValue());
+          WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+            context: context,
+            body: {'exercises': exercises},
+          );
+          Navigator.pop(context);
+          // manageGlobalTimer(context: context, mode: 'stop');
+          if (res != null) {
+            await getMyWorkoutSchedules(
+              date: locator<AppPrefs>().selectedWorkoutDate.getValue(),
+              addonId: selectedSchedule.addonId,
+              subscriptionId: selectedSchedule.uid,
+            );
+            completedWorkout = res;
+            notifyListeners();
+            NavigationService.goBack;
+            NavigationService.navigateTo(Routes.exerciseDone);
+          }
+        } else {}
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => ProcessingDialog(
+            message: 'Please wait...',
+          ),
+        );
+        Map<String, dynamic> body = {
+          'uid': workoutMappingId,
+          'otp': '',
+        };
+        bool isVerified = await workoutOtpVerification(
+          context: context,
+          body: body,
+        );
+        getMySchedules(date: workoutSelectedDate);
+        WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
+          context: context,
+          body: {'exercises': exercises},
+        );
+        Navigator.pop(context);
+        // manageGlobalTimer(context: context, mode: 'stop');
+        if (res != null) {
+          await getMyWorkoutSchedules(
+            date: workoutSelectedDate,
+            addonId: workoutAddonId,
+            subscriptionId: workoutSubscriptionId,
+          );
+          completedWorkout = res;
+          notifyListeners();
+          NavigationService.goBack;
+          NavigationService.navigateTo(Routes.exerciseDone);
+        }
+      }
+      return uid;
+    }
+  }
 }
