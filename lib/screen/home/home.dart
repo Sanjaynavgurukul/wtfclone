@@ -43,25 +43,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
   bool abc = false;
   bool abc2 = false;
-  StopWatchTimer _stopWatchTimer;
+  // StopWatchTimer _stopWatchTimer;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _stopWatchTimer = StopWatchTimer(
-      presetMillisecond: exTimerHelper.convertMil(false),
-      mode: StopWatchMode.countUp,
-    );
-
-    if (globalTimerIsOn()) {
-      startTimer();
-    }
+    // _stopWatchTimer = StopWatchTimer(
+    //   presetMillisecond: exTimerHelper.convertMil(false),
+    //   mode: StopWatchMode.countUp,
+    // );
+    //
+    // if (globalTimerIsOn()) {
+    //   startTimer();
+    // }
   }
 
-  void startTimer() {
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-  }
+  // void startTimer() {
+  //   _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+  // }
 
   bool globalTimerIsOn() {
     bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
@@ -105,25 +105,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (globalTimerIsOn())
-                StreamBuilder<int>(
-                    stream: _stopWatchTimer.secondTime,
-                    initialData: _stopWatchTimer.secondTime.value,
-                    builder: (context, snap) {
-                      int value = snap.data;
-                      return ListTile(
-                        title: Text('Workout on',textAlign: TextAlign.center,),
-                        subtitle: Text(
-                          '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}'
-                            ,textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: AppConstants.bgColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        trailing: Icon(Icons.navigate_next_sharp),
-                      );
-                    }),
+              // if (globalTimerIsOn())
+              //   StreamBuilder<int>(
+              //       stream: _stopWatchTimer.secondTime,
+              //       initialData: _stopWatchTimer.secondTime.value,
+              //       builder: (context, snap) {
+              //         int value = snap.data;
+              //         return ListTile(
+              //           title: Text('Workout on',textAlign: TextAlign.center,),
+              //           subtitle: Text(
+              //             '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}'
+              //               ,textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //                 color: AppConstants.bgColor,
+              //                 fontSize: 20,
+              //                 fontWeight: FontWeight.w600),
+              //           ),
+              //           trailing: Icon(Icons.navigate_next_sharp),
+              //         );
+              //       }),
               CommonBanner(
                 bannerType: "FC_banner",
                 second_banner_pref: 'WTF_banner',

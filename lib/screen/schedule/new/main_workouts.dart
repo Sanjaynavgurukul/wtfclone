@@ -138,38 +138,39 @@ class _MainWorkoutState extends State<MainWorkout> {
   }
 
   void validateOnPress(String type){
-      if(!allWorkoutCompleted()){
-        print('sanjay here -- all workout is not completed');
-        if(globalTimerIsOn()){
-          showSnack(message: 'To end workout you have to finish your all exercises!');
-        }else{
-          startTimer();
-          locator<AppPrefs>().exerciseOn.setValue(true);
-          user.workoutNotification(start: true,header: type,);
-          setState(() {
-          });
-        }
-      }else{
-        print('sanjay here -- all workout is  completed');
-        if(globalTimerIsOn()){
-          //todo here save Final Code :D
-          user.verifyCompletedWorkout(context: context).then((value){
-            if(value != null){
-              stopTimer();
-              locator<AppPrefs>().globalTimer.setValue(0);
-              locator<AppPrefs>().exerciseOn.setValue(false);
-              showSnack(message: 'Completed');
-              user.workoutNotification(start: false,header: '');
-              setState(() {
-              });
-            }else{
-              showSnack(message: 'Something Went Wrong!');
-            }
-          });
-        }else{
-          showSnack(message: 'ALl Workout Completed!');
-        }
-      }
+    user.verifyCompletedWorkout(context: context);
+      // if(!allWorkoutCompleted()){
+      //   print('sanjay here -- all workout is not completed');
+      //   if(globalTimerIsOn()){
+      //     showSnack(message: 'To end workout you have to finish your all exercises!');
+      //   }else{
+      //     startTimer();
+      //     locator<AppPrefs>().exerciseOn.setValue(true);
+      //     user.workoutNotification(start: true,header: type,);
+      //     setState(() {
+      //     });
+      //   }
+      // }else{
+      //   print('sanjay here -- all workout is  completed');
+      //   if(globalTimerIsOn()){
+      //     //todo here save Final Code :D
+      //     user.verifyCompletedWorkout(context: context).then((value){
+      //       if(value != null){
+      //         stopTimer();
+      //         locator<AppPrefs>().globalTimer.setValue(0);
+      //         locator<AppPrefs>().exerciseOn.setValue(false);
+      //         showSnack(message: 'Completed');
+      //         user.workoutNotification(start: false,header: '');
+      //         setState(() {
+      //         });
+      //       }else{
+      //         showSnack(message: 'Something Went Wrong!');
+      //       }
+      //     });
+      //   }else{
+      //     showSnack(message: 'ALl Workout Completed!');
+      //   }
+      // }
   }
 
   @override
@@ -268,15 +269,21 @@ class _MainWorkoutState extends State<MainWorkout> {
                                         ),
                                         leading: Wrap(
                                           children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                  color: Colors.grey),
-                                              width: 60,
-                                              height: 60,
-                                            ),
+                                            CircleAvatar(
+                                              radius: 30.0,
+                                              backgroundImage:
+                                              NetworkImage('${user.scheduleTrainer.data.trainerProfile}'??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                              backgroundColor: Colors.transparent,
+                                            )
+                                            // Container(
+                                            //   decoration: BoxDecoration(
+                                            //       borderRadius:
+                                            //           BorderRadius.all(
+                                            //               Radius.circular(100)),
+                                            //       color: Colors.grey),
+                                            //   width: 60,
+                                            //   height: 60,
+                                            // ),
                                           ],
                                         ),
                                         trailing: Image.asset(

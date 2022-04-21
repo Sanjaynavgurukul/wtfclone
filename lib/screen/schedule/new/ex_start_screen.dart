@@ -18,7 +18,6 @@ import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_result.dart
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start_info.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_video.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/global_timer_helper.dart';
 
 class ExStartScreen extends StatefulWidget {
   static const routeName = '/exStartScreen';
@@ -153,10 +152,10 @@ class _ExStartScreenState extends State<ExStartScreen> {
       BuildContext context) async {
     return showDialog<void>(
         context: context,
-        barrierDismissible: true,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return new WillPopScope(
-              onWillPop: () async => true,
+              onWillPop: () async => false,
               child: SimpleDialog(
                   backgroundColor: Colors.black45,
                   children: <Widget>[
@@ -238,9 +237,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
                                   isEx: true, counter: snap.data);
                               return ExerciseResult(
                                 // h: h,
-                                h: timerHelper.convertHour(value),
-                                m: timerHelper.convertMin(value),
-                                s: timerHelper.convertSec(value),
+                                h: exTimerHelper.convertHour(value),
+                                m: exTimerHelper.convertMin(value),
+                                s: exTimerHelper.convertSec(value),
                               );
                               // return Text(
                               //   '${timerHelper.convertHour(value)}:${timerHelper.convertMin(value)}:${timerHelper.convertSec(value)}',
@@ -268,7 +267,6 @@ class _ExStartScreenState extends State<ExStartScreen> {
                                       // this.workoutPaused = !workoutPaused;
                                       // setExPause(workoutPaused);
                                     } else {
-
                                       endExercise(item: data);
                                     }
                                   } else {

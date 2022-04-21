@@ -121,9 +121,9 @@ class _ExerciseStartState extends State<ExerciseStart> {
                     // ExerciseCard(),
                     ExerciseResult(
                       // h: h,
-                      h: 0,
-                      m: 0,
-                      s: 0,
+                      h: '00',
+                      m: '00',
+                      s: '00',
                     ),
                     SizedBox(
                       height: 25,

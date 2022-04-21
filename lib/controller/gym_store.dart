@@ -2891,13 +2891,17 @@ class GymStore extends ChangeNotifier {
     Navigator.pop(context);
     //check WorkoutVerification is Done or not
     if(uid == null || uid.isEmpty){
+      print('Workout Verified checking --- not verified');
       return null;
     }else{
+      print('Workout Verified checking --- verified $uid');
       workoutMappingId = await RestDatasource().getWorkoutVerification(
         date: workoutSelectedDate,
       );
+      print('Workout Verified checking --- workoutMappingId $workoutMappingId');
       //Check if Workout Mapping id is no null or not :D
       if (workoutMappingId.isNotEmpty && selectedSchedule.type != 'regular') {
+        print('Workout Verified checking --- not regular');
         bool isVerified = await showModalBottomSheet<bool>(
           context: context,
           builder: (context) {
@@ -2944,6 +2948,7 @@ class GymStore extends ChangeNotifier {
           }
         } else {}
       } else {
+        print('Workout Verified checking --- regular');
         showDialog(
           context: context,
           builder: (context) => ProcessingDialog(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ExerciseResult extends StatelessWidget {
-  ExerciseResult({Key key, this.h = 0, this.m = 0, this.s = 0}) : super(key: key);
-  int h, m, s;
+  ExerciseResult({Key key, this.h = '00', this.m = '00', this.s = '00'}) : super(key: key);
+  String h, m, s;
   @override
   Widget build(BuildContext context) {
     return Padding(
