@@ -163,7 +163,7 @@ class _MyWtfState extends State<MyWtf> {
                       setState(() {
                         store.myWorkoutSchedule = null;
                       });
-                      NavigationService.navigateTo(Routes.mySchedule);
+                      NavigationService.navigateTo(Routes.dateWorkoutList);
                     },
                     image: 'schedule',
                     text: 'My Schedule',

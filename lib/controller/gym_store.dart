@@ -477,10 +477,12 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<void> getCurrentAttendance({BuildContext context}) async {
+    log(''
+        ' called');
     AttendanceDetails res =
         await RestDatasource().getCurrentAttendance(context: context);
     if (res != null) {
-      log('attendance updated: ${res.toJson()}');
+      log('attendance updated: -- ${res.toJson()}');
       attendanceDetails = res;
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         notifyListeners();
@@ -513,7 +515,7 @@ class GymStore extends ChangeNotifier {
     if (jsonResp != null && jsonResp['status']) {
       getCurrentAttendance(context: context);
       NavigationService.goBack;
-      NavigationService.navigateTo(Routes.mySchedule);
+      NavigationService.navigateTo(Routes.dateWorkoutList);
     } else {
       FlashHelper.errorBar(
         context,

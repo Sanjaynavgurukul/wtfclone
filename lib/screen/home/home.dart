@@ -915,7 +915,7 @@ class TodayScheduleItem extends StatelessWidget {
                   EdgeInsets.only(left: 12, right: 12, bottom: 8, top: 26),
               title: Text(scheduleName ?? '',
                   style: TextStyle(
-                      color: Color(0xffFF8F8F), fontWeight: FontWeight.w500)),
+                      color: Color(0xffFF8F8F), fontWeight: FontWeight.w500,fontSize: 16)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -925,7 +925,7 @@ class TodayScheduleItem extends StatelessWidget {
                   Text(
                     data?.gymname ?? '',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
+                        color: Colors.white, fontWeight: FontWeight.w700,fontSize: 16),
                   ),
                   SizedBox(
                     height: 4,
@@ -933,7 +933,7 @@ class TodayScheduleItem extends StatelessWidget {
                   Text(
                     '${data.gymAddress1 ?? 'address'} , ${data.gymAddress2 ?? ' is here'}',
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w500),
+                        color: Colors.white, fontWeight: FontWeight.w500,fontSize: 16),
                   ),
                 ],
               ),
@@ -1012,6 +1012,7 @@ class TodayScheduleItem extends StatelessWidget {
                                 context: context,
                                 val: data,
                               );
+                          //TODO check here checkin
                           context
                               .read<GymStore>()
                               .getCurrentAttendance(context: context);
@@ -1062,7 +1063,7 @@ class TodayScheduleItem extends StatelessWidget {
                               break;
                           }
                         } else {
-                          NavigationService.navigateTo(Routes.mySchedule);
+                          NavigationService.navigateTo(Routes.dateWorkoutList);
                         }
                       },
                       child: Container(

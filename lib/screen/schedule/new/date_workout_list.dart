@@ -290,10 +290,33 @@ class ScheduleListItems extends StatelessWidget {
                       context: context,
                       val: e,
                     );
-                    store.getCurrentTrainer(context: context);
-                    NavigationService.pushName(Routes.mainWorkout,
-                        argument: MainWorkoutArgument(
-                            data: e, workoutType: name, time: selectedDate));
+                    // if(e.type != 'addon_live'){
+                    //
+                    // }
+                    // NavigationService.pushName(Routes.mainWorkout,
+                    //     argument: MainWorkoutArgument(
+                    //         data: e, workoutType: name, time: selectedDate));
+
+                    if(e.type != 'addon_live'){
+                      if(store.attendanceDetails.data.status == 'active'){
+                        NavigationService.pushName(Routes.mainWorkout,
+                            argument: MainWorkoutArgument(
+                                data: e, workoutType: name, time: selectedDate));
+                      }else{
+                      context
+                          .read<GymStore>()
+                          .getCurrentAttendance(context: context);
+                      print('check attendence status --- ${store.attendanceDetails.data.status}');
+                      store.getCurrentTrainer(context: context);
+                      Navigator.pop(context);
+                      NavigationService.navigateTo(Routes.mainAttendance);
+                      }
+                    }else{
+                      NavigationService.pushName(Routes.mainWorkout,
+                          argument: MainWorkoutArgument(
+                              data: e, workoutType: name, time: selectedDate));
+                    }
+
                   },
                   child: Card(
                     color: Colors.transparent,

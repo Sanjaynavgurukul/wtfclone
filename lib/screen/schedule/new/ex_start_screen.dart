@@ -31,10 +31,10 @@ class ExStartScreen extends StatefulWidget {
 class _ExStartScreenState extends State<ExStartScreen> {
   GymStore user;
   StopWatchTimer _stopWatchTimer;
-  VideoPlayerController _controller;
   bool workoutPaused = false;
   int exSet = 1;
   bool endingProcess = false;
+  int preTimerFromLocal = 0;
 
   final setCount = BehaviorSubject<int>();
 
@@ -47,44 +47,32 @@ class _ExStartScreenState extends State<ExStartScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
-  }
-
-  void setPreData(){
-    print('milisecond --- ${exTimerHelper.convertMil(true)}');
-    _stopWatchTimer = StopWatchTimer(
-      presetMillisecond: exTimerHelper.convertMil(true),
-      mode: StopWatchMode.countUp,
-    );
-
+    //Set Pre Data Sets :D
     this.exSet = getSetsFromLocal;
     this.workoutPaused = isExPaused();
-    if (workoutPaused&&endingProcess) {
-      stopTimer();
-    } else {
+    preTimerFromLocal = exTimerHelper.convertMil(true);
+    setPreData(preTimerFromLocal);
+
+    if(!workoutPaused && !endingProcess)
       startTimer();
+    else{
+      stopTimer();
     }
+  }
+
+  void setPreData(int time){
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: time,
+      mode: StopWatchMode.countUp,
+    );
   }
 
   @override
   void dispose() async {
     super.dispose();
-    // stopTimer();
+    stopTimer();
     await _stopWatchTimer.dispose();
-    _controller.dispose();
     setCount.close();
-  }
-
-  void playVideo({@required String videoUrl}) {
-    print('This is video URl -- $videoUrl');
-    _controller = VideoPlayerController.network(
-      '$videoUrl',
-      videoPlayerOptions: VideoPlayerOptions(),
-    )..initialize().then((_) {
-      _controller.play();
-      _controller.addListener(() {});
-      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      if (mounted) setState(() {});
-    });
   }
 
   void startTimer() {
@@ -96,9 +84,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   void setSetsInLocal(int sets) {
-    print('setting reps --- $sets');
     locator<AppPrefs>().exerciseSet.setValue(sets);
-    print('setting reps --- from pref ${locator<AppPrefs>().exerciseSet.getValue()}');
   }
 
   int getSetsFromLocal = locator<AppPrefs>().exerciseSet.getValue();
@@ -130,6 +116,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
   void endExercise({@required Exercise item,})async{
     this.endingProcess = true;
     stopTimer();
+    setState(() {
+
+    });
     showLoadingDialog(context);
     print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
@@ -192,12 +181,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
       //Argument Data :D
       Exercise data = args.data;
 
-      //Set Pre Data Sets :D
-      setPreData();
-
       //Load Video :D
-      print('check data : ${data.video}  ${data.woName}');
-      playVideo(videoUrl: data.video);
 
       return Consumer<GymStore>(
           builder: (context, store, child) => WillPopScope(
@@ -238,8 +222,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
                             builder: (context, snap) {
                               final value = snap.data;
                               print('Listen every second. $value');
-                              exTimerHelper.setTimeInLocal(
+                              if(!endingProcess) exTimerHelper.setTimeInLocal(
                                   isEx: true, counter: snap.data);
+                              print('Check Tiemr after save --- ${locator<AppPrefs>().startExTimer.getValue()}');
                               return ExerciseResult(
                                 // h: h,
                                 h: exTimerHelper.convertHour(value),
@@ -311,16 +296,8 @@ class _ExStartScreenState extends State<ExStartScreen> {
                       SizedBox(
                         height: 15,
                       ),
-                      ExerciseVideo(
-                        controller: _controller,
-                        onPausePlay: () {
-                          setState(() {
-                            _controller.value.isPlaying
-                                ? _controller.pause()
-                                : _controller.play();
-                          });
-                        },
-                      ),
+                      VideoPlayerScreen(url: data.video,),
+
                       SizedBox(
                         height: 15,
                       ),
@@ -355,4 +332,51 @@ class _ExStartScreenState extends State<ExStartScreen> {
     }
   }
 
+}
+
+class VideoPlayerScreen extends StatefulWidget {
+   VideoPlayerScreen({Key key,@required this.url}) : super(key: key);
+  final String url;
+
+  @override
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = VideoPlayerController.network(
+      widget.url??"https://d1gzvbhpg92x41.cloudfront.net/workout_upload/TBLzo5i6OrtXo/1650287910669-cominghh_soon_-_42890%20%28Original%29.mp4",
+      videoPlayerOptions: VideoPlayerOptions(),
+    )..initialize().then((_) {
+      _controller.play();
+      _controller.addListener(() {});
+      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      if (mounted) setState(() {});
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return  ExerciseVideo(
+      controller: _controller,
+      onPausePlay: () {
+        setState(() {
+          _controller.value.isPlaying
+              ? _controller.pause()
+              : _controller.play();
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+  }
 }

@@ -101,7 +101,7 @@ class Routes {
   static const String buySubscriptionScreen = '/buySubscriptionScreen';
   static const String bookingSummaryScreen = '/bookingSummaryScreen';
   static const String bookingSummaryAddOn = '/bookingSummaryAddOn';
-  static const String mySchedule = '/mySchedule';
+  // static const String mySchedule = '/mySchedule';
   static const String ptClassPage = '/ptClassPage';
   static const String poweredPages = '/poweredPages';
   static const String profile = '/profile';
@@ -532,14 +532,14 @@ class RouteGenerator {
             : CupertinoPageRoute(
                 builder: (context) => BookingSummaryAddOn(),
                 settings: settings);
-      case Routes.mySchedule:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-                widget: MyScheduleScreen(),
-                settings: settings,
-              )
-            : CupertinoPageRoute(
-                builder: (context) => MyScheduleScreen(), settings: settings);
+      // case Routes.mySchedule:
+      //   return Platform.isAndroid
+      //       ? _FadedTransitionRoute(
+      //           widget: MyScheduleScreen(),
+      //           settings: settings,
+      //         )
+      //       : CupertinoPageRoute(
+      //           builder: (context) => MyScheduleScreen(), settings: settings);
       case Routes.mainWorkoutScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
