@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -21,6 +22,7 @@ import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/upcoming_events.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/custom_expansion_tile.dart';
@@ -41,6 +43,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
   bool abc = false;
   bool abc2 = false;
+  StopWatchTimer _stopWatchTimer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _stopWatchTimer = StopWatchTimer(
+      presetMillisecond: exTimerHelper.convertMil(false),
+      mode: StopWatchMode.countUp,
+    );
+
+    if (globalTimerIsOn()) {
+      startTimer();
+    }
+  }
+
+  void startTimer() {
+    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+  }
+
+  bool globalTimerIsOn() {
+    bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
+    return isWorkoutOn;
+  }
 
   @override
   void didChangeDependencies() {
@@ -56,7 +82,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           // NavigationService.pushName(Routes.gymCat);
           NavigationService.pushName(Routes.dateWorkoutList);
           // Navigator.push(
@@ -65,7 +91,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // );
           //FirebaseCrashlytics.instance.crash();
         },
-
         child: Icon(Icons.add),
       ),
       body: RefreshIndicator(
@@ -80,6 +105,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (globalTimerIsOn())
+                StreamBuilder<int>(
+                    stream: _stopWatchTimer.secondTime,
+                    initialData: _stopWatchTimer.secondTime.value,
+                    builder: (context, snap) {
+                      int value = snap.data;
+                      return ListTile(
+                        title: Text('Workout on',textAlign: TextAlign.center,),
+                        subtitle: Text(
+                          '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}'
+                            ,textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: AppConstants.bgColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        trailing: Icon(Icons.navigate_next_sharp),
+                      );
+                    }),
               CommonBanner(
                 bannerType: "FC_banner",
                 second_banner_pref: 'WTF_banner',

@@ -207,7 +207,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                   globalTimerIsOn() ? 'End Workout' : 'Start Workout',
                   style: TextStyle(fontSize: 16),
                 ),
-                icon: Icon(Icons.add),
+                icon: globalTimerIsOn()?Icon(Icons.pause_circle_filled):Icon(Icons.play_circle_fill),
               ),
               body: DefaultTabController(
                   length: 0,
