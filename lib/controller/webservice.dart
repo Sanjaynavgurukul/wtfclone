@@ -149,6 +149,7 @@ class RestDatasource {
       url,
       headers: mapHeader,
     );
+    print('attendence response $response');
     AttendanceDetails res;
     if (response != null) res = AttendanceDetails.fromJson(response);
     return Future.value(res);

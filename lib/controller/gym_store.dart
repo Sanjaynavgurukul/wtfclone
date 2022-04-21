@@ -488,6 +488,8 @@ class GymStore extends ChangeNotifier {
         notifyListeners();
       });
       log('attendance updated2: ${attendanceDetails.toJson()}');
+    }else{
+      print('this method is hit ---');
     }
   }
 

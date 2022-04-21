@@ -7,6 +7,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
@@ -290,32 +291,126 @@ class ScheduleListItems extends StatelessWidget {
                       context: context,
                       val: e,
                     );
-                    // if(e.type != 'addon_live'){
-                    //
-                    // }
-                    // NavigationService.pushName(Routes.mainWorkout,
-                    //     argument: MainWorkoutArgument(
-                    //         data: e, workoutType: name, time: selectedDate));
-
-                    if(e.type != 'addon_live'){
-                      if(store.attendanceDetails.data.status == 'active'){
+                    store.getCurrentTrainer(context: context);
+                    switch (name) {
+                      case 'Personal Training':
+                      case 'General Training':
+                        print(
+                            'schedule:: ${schedule.map((e) => e.toJson()).toList()}');
+                        // locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        // locator<AppPrefs>()
+                        //     .selectedMyScheduleName
+                        //     .setValue(name);
+                        // locator<AppPrefs>()
+                        //     .selectedWorkoutDate
+                        //     .setValue(Helper.formatDate2(
+                        //   selectedDate.toIso8601String(),
+                        // ));
+                        // locator<AppPrefs>().selectedMyScheduleData.setValue(e);
+                        context.read<GymStore>().getMyWorkoutSchedules(
+                          date: Helper.formatDate2(
+                            selectedDate.toIso8601String(),
+                          ),
+                          subscriptionId: e.uid,
+                          addonId:
+                          name == 'General Training' ? null : e.addonId,
+                        );
+                        // NavigationService.navigateTo(Routes.mainWorkoutScreen);
                         NavigationService.pushName(Routes.mainWorkout,
                             argument: MainWorkoutArgument(
                                 data: e, workoutType: name, time: selectedDate));
-                      }else{
-                      context
-                          .read<GymStore>()
-                          .getCurrentAttendance(context: context);
-                      print('check attendence status --- ${store.attendanceDetails.data.status}');
-                      store.getCurrentTrainer(context: context);
-                      Navigator.pop(context);
-                      NavigationService.navigateTo(Routes.mainAttendance);
-                      }
-                    }else{
-                      NavigationService.pushName(Routes.mainWorkout,
-                          argument: MainWorkoutArgument(
-                              data: e, workoutType: name, time: selectedDate));
+                        break;
+                      case 'event':
+                        store.getEventById(
+                            context: context, eventId: e.eventId);
+                        // locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        // locator<AppPrefs>()
+                        //     .selectedMyScheduleName
+                        //     .setValue(e.eventName);
+                        NavigationService.navigateTo(Routes.eventDetails);
+                        break;
+                      case 'addon':
+                        // locator<AppPrefs>().selectedMySchedule.setValue(name);
+                        // locator<AppPrefs>()
+                        //     .selectedMyScheduleName
+                        //     .setValue(e.addonName);
+                        // print('addonId: ${e.addonId}');
+                        // locator<AppPrefs>()
+                        //     .selectedWorkoutDate
+                        //     .setValue(Helper.formatDate2(
+                        //   selectedDate.toIso8601String(),
+                        // ));
+                        // locator<AppPrefs>().selectedMyScheduleData.setValue(e);
+                        context.read<GymStore>().getMyWorkoutSchedules(
+                            date: Helper.formatDate2(
+                              selectedDate.toIso8601String(),
+                            ),
+                            subscriptionId: e.uid,
+                            addonId: e.addonId);
+                        // NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                        NavigationService.pushName(Routes.mainWorkout,
+                            argument: MainWorkoutArgument(
+                                data: e, workoutType: name, time: selectedDate));
+                        break;
+                      case 'Live Sessions':
+                        switch (e.roomStatus) {
+                          case 'scheduled':
+                            FlashHelper.informationBar(
+                              context,
+                              message:
+                              'Trainer has not started the live session yet',
+                            );
+                            break;
+                          case 'started':
+                            context.read<GymStore>().joinLiveSession(
+                              addonName: e.addonName,
+                              liveClassId: e.liveClassId,
+                              roomId: e.roomId,
+                              context: context,
+                              addonId: e.addonId,
+                            );
+                            break;
+                          case 'completed':
+                            FlashHelper.informationBar(
+                              context,
+                              message: 'Trainer has ended the live session',
+                            );
+                            break;
+                          default:
+                            break;
+                        }
+                        break;
                     }
+
+                    // context.read<GymStore>().setSelectedSchedule(
+                    //   context: context,
+                    //   val: e,
+                    // );
+                    // store.getCurrentTrainer(context: context);
+                    //
+                    // context
+                    //     .read<GymStore>()
+                    //     .getCurrentAttendance(context: context);
+                    //
+                    // NavigationService.pushName(Routes.mainWorkout,
+                    //     argument: MainWorkoutArgument(
+                    //         data: e, workoutType: name, time: selectedDate));
+                    //
+                    // if(e.type != 'addon_live'){
+                    //   if(store.attendanceDetails.data.status == 'active'){
+                    //     NavigationService.pushName(Routes.mainWorkout,
+                    //         argument: MainWorkoutArgument(
+                    //             data: e, workoutType: name, time: selectedDate));
+                    //   }else{
+                    //     print('check attendence status --- ${store.attendanceDetails.data.status}');
+                    //     Navigator.pop(context);
+                    //     NavigationService.navigateTo(Routes.mainAttendance);
+                    //   }
+                    // }else{
+                    //   NavigationService.pushName(Routes.mainWorkout,
+                    //       argument: MainWorkoutArgument(
+                    //           data: e, workoutType: name, time: selectedDate));
+                    // }
 
                   },
                   child: Card(

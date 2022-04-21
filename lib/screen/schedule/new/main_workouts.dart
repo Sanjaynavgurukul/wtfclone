@@ -203,7 +203,22 @@ class _MainWorkoutState extends State<MainWorkout> {
               floatingActionButton: FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
-                  validateOnPress(args.workoutType);
+                  if(user.workoutDate == Helper.formatDate2(
+                      DateTime.now().toIso8601String())){
+                    if(user.attendanceDetails != null &&
+                        user.attendanceDetails.data != null){
+                      validateOnPress(args.workoutType);
+                    }else{
+                      showSnack(message: 'Please mark your attendance first.');
+                      NavigationService.navigateTo(
+                          Routes.mainAttendance);
+                    }
+                  }else{
+                    showSnack(message: 'Only present day sessions can be started.');
+                  }
+
+                  //TODO uncomment code change Here
+                  // validateOnPress(args.workoutType);
                 },
                 label: Text(
                   globalTimerIsOn() ? 'End Workout' : 'Start Workout',
