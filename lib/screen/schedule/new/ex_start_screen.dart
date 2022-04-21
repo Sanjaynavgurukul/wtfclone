@@ -35,6 +35,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
   VideoPlayerController _controller;
   bool workoutPaused = false;
   int exSet = 1;
+  bool endingProcess = false;
 
   final setCount = BehaviorSubject<int>();
 
@@ -47,13 +48,18 @@ class _ExStartScreenState extends State<ExStartScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+  }
+
+  void setPreData(){
+    print('milisecond --- ${exTimerHelper.convertMil(true)}');
     _stopWatchTimer = StopWatchTimer(
       presetMillisecond: exTimerHelper.convertMil(true),
       mode: StopWatchMode.countUp,
     );
+
     this.exSet = getSetsFromLocal;
     this.workoutPaused = isExPaused();
-    if (workoutPaused) {
+    if (workoutPaused&&!endingProcess) {
       stopTimer();
     } else {
       startTimer();
@@ -123,12 +129,13 @@ class _ExStartScreenState extends State<ExStartScreen> {
   }
 
   void endExercise({@required Exercise item,})async{
+    this.endingProcess = true;
+    stopTimer();
     showLoadingDialog(context);
     print('End Exercise ----');
     bool saved = await user.updateScheduleExercise(itemUid: item.uid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
     if(saved){
-      stopTimer();
-      locator<AppPrefs>().startExTimer.setValue(0);
+      exTimerHelper.setExTimeToZero();
       locator<AppPrefs>().exerciseUid.setValue('');
       locator<AppPrefs>().exerciseSet.setValue(1);
       locator<AppPrefs>().exercisePause.setValue(false);
@@ -180,6 +187,9 @@ class _ExStartScreenState extends State<ExStartScreen> {
     } else {
       //Argument Data :D
       Exercise data = args.data;
+
+      //Set Pre Data Sets :D
+      setPreData();
 
       //Load Video :D
       print('check data : ${data.video}  ${data.woName}');

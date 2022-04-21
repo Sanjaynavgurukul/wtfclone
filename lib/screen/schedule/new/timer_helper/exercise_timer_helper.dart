@@ -88,22 +88,13 @@ class ExerciseTimerHelper {
 
   int getPreviousTimerFromLocal(bool isEx) {
     DateTime date1 = DateTime.now();
-    print("something 1");
     DateTime date2;
-    print("something 2 ${getTimer(isEx)}");
     if (getTimer(isEx) == 0) {
-      print("something 3");
-      date2 = DateTime.now();
+      return 0;
     } else {
-      print("something 4");
       date2 = DateTime.fromMillisecondsSinceEpoch(getTimer(isEx));
-      print("something 5");
+      return date1.difference(date2).inSeconds;
     }
-
-    final datedifferent = date1.difference(date2).inSeconds;
-    print("something $datedifferent");
-
-    return datedifferent;
   }
 
   int convertMil(bool isEx) {
@@ -113,11 +104,13 @@ class ExerciseTimerHelper {
     return d1;
   }
 
-
-
   bool getInProgressItemUid({@required String itemUid}){
     String value = locator<AppPrefs>().inProgressEx.getValue();
     return value == itemUid;
+  }
+
+  void setExTimeToZero()async{
+    await locator<AppPrefs>().startExTimer.setValue(0);
   }
 
 }

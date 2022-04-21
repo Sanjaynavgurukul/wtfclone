@@ -323,7 +323,8 @@ class _MainWorkoutState extends State<MainWorkout> {
       ),
       child: InkWell(
         onTap: () {
-          if (globalTimerIsOn()) {
+          //TODO code changed here if condition should be on true condition ;D
+          if (!globalTimerIsOn()) {
             navigateToNext(item: item,index: index);
           } else {
             showSnack(message: 'Please Start Workout First');

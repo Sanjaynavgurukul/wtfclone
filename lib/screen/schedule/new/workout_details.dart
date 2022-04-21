@@ -116,41 +116,51 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     subtitle: Text('Reps : ${item.reps}   Sets : ${item.sets}'),
                     trailing: InkWell(
                       onTap: () {
-                        if(!completed) {
-                          // if(displayTimer){
-                          // }else{
+                        locator<AppPrefs>().exerciseUid.setValue(item.uid);
+                        print('this is current time count --- ${exTimerHelper.convertMil(true)}');
+                        NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                          list = user.myWorkoutSchedule.data[args.index].exercises;
+                          setState(() {
 
-                          // }
-                          if(exInProgress()){
-                            if(alreadyInProgress(itemUid: item.uid)){
-                              locator<AppPrefs>().exerciseUid.setValue(item.uid);
-                              NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
-                                list = user.myWorkoutSchedule.data[args.index].exercises;
-                                setState(() {
-
-                                });
-                              });
-                            }else{
-                              FlashHelper.informationBar(
-                                context,
-                                message: 'Already Running another exercise please complete then start this one!',
-                              );
-                            }
-                          }else{
-                            locator<AppPrefs>().exerciseUid.setValue(item.uid);
-                            NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
-                              list = user.myWorkoutSchedule.data[args.index].exercises;
-                              setState(() {
-
-                              });
-                            });
-                          }
-                        }else{
-                          FlashHelper.informationBar(
-                            context,
-                            message: 'Exercise Already Completed',
-                          );
-                        }
+                          });
+                        });
+                        //TODO commnet above code and un-comment below code :D
+                        // if(!completed) {
+                        //   // if(displayTimer){
+                        //   // }else{
+                        //
+                        //   // }
+                        //   if(exInProgress()){
+                        //     if(alreadyInProgress(itemUid: item.uid)){
+                        //       locator<AppPrefs>().exerciseUid.setValue(item.uid);
+                        //       NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                        //         list = user.myWorkoutSchedule.data[args.index].exercises;
+                        //         setState(() {
+                        //
+                        //         });
+                        //       });
+                        //     }else{
+                        //       FlashHelper.informationBar(
+                        //         context,
+                        //         message: 'Already Running another exercise please complete then start this one!',
+                        //       );
+                        //     }
+                        //   }else{
+                        //     locator<AppPrefs>().exerciseUid.setValue(item.uid);
+                        //     print('this is current time count --- ${exTimerHelper.convertMil(true)}');
+                        //     NavigationService.pushName(Routes.exStartScreen,argument: ExPlayDetailsArgument(data: item,timeCount: exTimerHelper.convertMil(true))).then((value){
+                        //       list = user.myWorkoutSchedule.data[args.index].exercises;
+                        //       setState(() {
+                        //
+                        //       });
+                        //     });
+                        //   }
+                        // }else{
+                        //   FlashHelper.informationBar(
+                        //     context,
+                        //     message: 'Exercise Already Completed',
+                        //   );
+                        // }
                       },
                       child: Container(
                         padding: EdgeInsets.all(12),
@@ -186,6 +196,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
       return false;
     }
   }
+
   bool alreadyInProgress({@required String itemUid}) {
     String value = locator<AppPrefs>().exerciseUid.getValue();
     if (value != null && value == itemUid) {

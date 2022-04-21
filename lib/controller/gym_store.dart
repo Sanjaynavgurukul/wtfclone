@@ -71,6 +71,7 @@ import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/home/jitsi_meeting.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/screen/stopwatch.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/Shimmer/values/type.dart';
@@ -2674,18 +2675,6 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> updateScheduleExercise(
-      {@required String itemUid, @required String exTime}) async {
-    bool isUpdated =
-        await RestDatasource().updateTime(id: itemUid, time: exTime);
-    if (isUpdated) {
-      notifyListeners();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   void workoutNotification({@required bool start,@required String header,bool showCal = false,BuildContext context}){
     if(start){
       AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
@@ -2793,6 +2782,7 @@ class GymStore extends ChangeNotifier {
 
     //TODO check workouit here
 
+    //TODO no idea
     workoutMappingId = await RestDatasource().getWorkoutVerification(
       date: workoutSelectedDate,
     );
@@ -2829,6 +2819,7 @@ class GymStore extends ChangeNotifier {
 
         getMySchedules(
             date: workoutSelectedDate);
+        //TODO Feed Page Details like e-duration and total cal
         WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
           context: context,
           body: {'exercises': exercises},
@@ -2882,4 +2873,24 @@ class GymStore extends ChangeNotifier {
       }
     }
   }
+
+
+  //New Methods Here
+  Future<bool> updateScheduleExercise(
+      {@required String itemUid, @required String exTime}) async {
+    String timerTaken = '${exTimerHelper.convertHour(int.parse(exTime))}:${exTimerHelper.convertMin(int.parse(exTime))}:${exTimerHelper.convertSec(int.parse(exTime))}';
+    print('Workout Data Check --- itemUID : $itemUid exTime : $timerTaken');
+
+    bool isUpdated =
+    await RestDatasource().updateTime(id: itemUid, time: timerTaken);
+    if (isUpdated) {
+      print('Workout Data Check --- updated into database');
+      notifyListeners();
+      return true;
+    } else {
+      print('Workout Data Check --- not updated into database');
+      return false;
+    }
+  }
+
 }
