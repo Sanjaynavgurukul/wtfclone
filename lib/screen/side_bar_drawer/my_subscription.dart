@@ -923,7 +923,7 @@ class _MySubscriptionState extends State<MySubscription> {
                                           Flexible(
                                             child: RichText(
                                               text: TextSpan(
-                                                text: 'Plan Name:  \n',
+                                                text: 'Addon Name:  \n',
                                                 style: TextStyle(
                                                   color: Colors.white
                                                       .withOpacity(0.6),
@@ -931,7 +931,7 @@ class _MySubscriptionState extends State<MySubscription> {
                                                 ),
                                                 children: [
                                                   TextSpan(
-                                                    text: e.planName,
+                                                    text: e.addonName,
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 16.0,

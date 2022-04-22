@@ -441,7 +441,7 @@ class GymCard extends StatelessWidget {
           //       context: context,
           //       gymId: item.userId,
           //     );
-          print('gym iD --- from nav ${item.userId}');
+          print('gym iD --- from nav ${item.userId} ${item.longitude}---${item.latitude}');
           NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: item, gymId: item.userId));
 
           // Navigator.of(context).push(
