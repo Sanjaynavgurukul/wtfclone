@@ -443,7 +443,6 @@ class ScheduleListItems extends StatelessWidget {
                           default:
                             break;
                         }
-
                         break;
                     }
                   },

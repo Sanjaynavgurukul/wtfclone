@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 
@@ -71,6 +72,33 @@ class ExerciseTimerHelper {
     }else{
       return null;
     }
+  }
+
+  bool isPreviousDate(){
+   int previousDateExerciseCheck = locator<AppPrefs>().startExTimer.getValue();
+   String exUidExists = locator<AppPrefs>().exerciseUid.getValue();
+
+   if(exUidExists.isNotEmpty && exUidExists != null){
+     String tDate = Helper.formatDate2(
+         DateTime.now().toIso8601String());
+     String pDate = Helper.formatDate2(
+         DateTime.fromMillisecondsSinceEpoch(previousDateExerciseCheck).toIso8601String());
+
+     print('check date tDate --- $tDate');
+     print('check date pDate --- $pDate');
+     if(tDate == pDate){
+       print('check date same --');
+       return false;
+     }else{
+       print('check date not same --');
+       locator<AppPrefs>().exerciseUid.setValue('');
+       locator<AppPrefs>().startExTimer.setValue(0);
+       locator<AppPrefs>().exercisePause.setValue(false);
+       return true;
+     }
+   }else{
+     return false;
+   }
   }
 
   void setTimeInLocal({@required int counter, bool isEx}) {

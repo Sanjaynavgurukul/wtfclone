@@ -1182,6 +1182,7 @@ class GymStore extends ChangeNotifier {
       if (currentPosition.latitude != null || currentPosition.latitude != 0.0) {
         print('set new lat lng (LAT) -- ${currentPosition.latitude}');
         locator<AppPrefs>().lat.setValue(currentPosition.latitude.toString());
+        tempLat =  currentPosition.latitude;
         print(
             'set new lat lng (LAT pref) -- ${locator<AppPrefs>().lat.getValue()}');
       }
@@ -1190,22 +1191,23 @@ class GymStore extends ChangeNotifier {
           currentPosition.longitude != 0.0) {
         print('set new lat lng (LNG) -- ${currentPosition.longitude}');
         locator<AppPrefs>().lng.setValue(currentPosition.longitude.toString());
+        tempLng =  currentPosition.latitude;
         print(
             'set new lat lng (LNG pref) -- ${locator<AppPrefs>().lng.getValue()}');
       }
 
       getUserLocation();
       notifyListeners();
-      log(currentPosition.toJson().toString());
-      log(currentPosition.latitude.toString());
-      log(currentPosition.longitude.toString());
-      // final addresses = await Geocoder.google(Helper.googleMapKey)
-      // Coordinates coordinates =
-      //     Coordinates(currentPosition.latitude, currentPosition.longitude);
-      // // final addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      // final addresses = await Geocoder.google(Helper.googleMapKey)
-      //     .findAddressesFromCoordinates(coordinates);
-      // currentAddress = addresses.first;
+      // log(currentPosition.toJson().toString());
+      // log(currentPosition.latitude.toString());
+      // log(currentPosition.longitude.toString());
+      // // final addresses = await Geocoder.google(Helper.googleMapKey)
+      // // Coordinates coordinates =
+      // //     Coordinates(currentPosition.latitude, currentPosition.longitude);
+      // // // final addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      // // final addresses = await Geocoder.google(Helper.googleMapKey)
+      // //     .findAddressesFromCoordinates(coordinates);
+      // // currentAddress = addresses.first;
       await _getGooglecoo(currentPosition.latitude, currentPosition.longitude)
           .then((value) {
         print(

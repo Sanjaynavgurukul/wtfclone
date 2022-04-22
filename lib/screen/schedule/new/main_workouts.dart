@@ -144,6 +144,7 @@ class _MainWorkoutState extends State<MainWorkout> {
         showSnack(
             message: 'To end workout you have to finish your all exercises!');
       } else {
+        exTimerHelper.isPreviousDate();
         startTimer();
         locator<AppPrefs>().exerciseOn.setValue(true);
         user.workoutNotification(
@@ -192,8 +193,9 @@ class _MainWorkoutState extends State<MainWorkout> {
           );
         } else {
           if (args == null) {
-            return Center(child: Text('Something went Wrong'));
+            return Center(child: Text('Workout already started'));
           } else {
+
             //call workout :d
             controlWorkout(args);
 

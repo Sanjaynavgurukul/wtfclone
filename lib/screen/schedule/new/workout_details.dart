@@ -112,7 +112,7 @@ class _WorkoutDetailsState extends State<WorkoutDetails> {
                     trailing: InkWell(
                       onTap: () {
                         //TODO commnet above code and un-comment below code :D
-                        if(completed) {
+                        if(!completed) {
                           // if(displayTimer){
                           // }else{
 
