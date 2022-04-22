@@ -142,7 +142,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       print('sanjay here -- all workout is not completed');
       if (globalTimerIsOn()) {
         showSnack(
-            message: 'To end workout you have to finish your all exercises!');
+            message: 'To end workout you have to complete all your exercises!');
       } else {
         exTimerHelper.isPreviousDate();
         startTimer();
@@ -166,11 +166,11 @@ class _MainWorkoutState extends State<MainWorkout> {
             user.workoutNotification(start: false, header: '');
             setState(() {});
           } else {
-            showSnack(message: 'Something Went Wrong!');
+            showSnack(message: 'Workout already started!');
           }
         });
       } else {
-        showSnack(message: 'ALl Workout Completed!');
+        showSnack(message: 'All Workout Completed!');
       }
     }
   }
@@ -182,7 +182,7 @@ class _MainWorkoutState extends State<MainWorkout> {
 
     if (args.data == null) {
       return Center(
-        child: Text('Something Went Wrong Please try again later'),
+        child: Text('Workout already started'),
       );
     } else {
       return Consumer<GymStore>(builder: (context, user, child) {
@@ -192,7 +192,7 @@ class _MainWorkoutState extends State<MainWorkout> {
           );
         } else {
           if (args == null) {
-            return Center(child: Text('Workout already started'));
+            return Center(child: Text('Something went wrong please try again later!'));
           } else {
 
             //call workout :d
@@ -204,6 +204,7 @@ class _MainWorkoutState extends State<MainWorkout> {
               floatingActionButton: FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
+                  print('cehck data date --  ${user.workoutDate}');
                   if(user.workoutDate == Helper.formatDate2(
                       DateTime.now().toIso8601String())){
                     if(user.attendanceDetails != null &&

@@ -42,7 +42,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
     user = context.watch<GymStore>();
     var date =
     Helper.formatDate2(DateTime.now().toIso8601String());
-    user.workoutSelectedDate = date;
+    user.workoutDate = date;
   }
 
   void callData() {
