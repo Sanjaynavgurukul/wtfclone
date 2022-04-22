@@ -11,10 +11,16 @@ class FlexibleAppBar extends StatelessWidget {
 
   const FlexibleAppBar({this.images, this.color});
 
+  void printVideoUrl(List<Gallery> list){
+    for(var v in list){
+      print('media -- ${v.images}');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-
+    printVideoUrl(images);
+    print('image respose --- ');
     return Container(
       padding: EdgeInsets.only(top: statusBarHeight),
       height: statusBarHeight + appBarHeight,

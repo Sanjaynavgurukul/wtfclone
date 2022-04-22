@@ -258,6 +258,7 @@ class GymStore extends ChangeNotifier {
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
   String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
+  // String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
@@ -74,31 +75,71 @@ class ExerciseTimerHelper {
     }
   }
 
+  bool isSameTime(String sheduleTime){
+    String tDate = Helper.formatDate2(
+        DateTime.now().toIso8601String());
+    print('isSame date printed --$sheduleTime  ${tDate == sheduleTime}');
+    return tDate == sheduleTime;
+  }
+
   bool isPreviousDate(){
-   int previousDateExerciseCheck = locator<AppPrefs>().startExTimer.getValue();
-   String exUidExists = locator<AppPrefs>().exerciseUid.getValue();
+    bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
+    if(isWorkoutOn){
+      var format = new DateFormat('dd-MMM-yyyy');
+      print('workout timer status -- workout is on');
+      int wTimerDate = locator<AppPrefs>().globalTimer.getValue();
+      print('workout timer status --- date value $wTimerDate');
+      var date = new DateTime.fromMillisecondsSinceEpoch(wTimerDate);
+      String pFormatDate = format.format(date);
+      print('workout timer status --- date value pDate $pFormatDate');
 
-   if(exUidExists.isNotEmpty && exUidExists != null){
-     String tDate = Helper.formatDate2(
-         DateTime.now().toIso8601String());
-     String pDate = Helper.formatDate2(
-         DateTime.fromMillisecondsSinceEpoch(previousDateExerciseCheck).toIso8601String());
+      DateTime cDate = DateTime.now();
+      String cFormatDate = format.format(cDate);
+      print('workout timer status --- date value tDate $cFormatDate');
 
-     print('check date tDate --- $tDate');
-     print('check date pDate --- $pDate');
-     if(tDate == pDate){
-       print('check date same --');
-       return false;
-     }else{
-       print('check date not same --');
-       locator<AppPrefs>().exerciseUid.setValue('');
-       locator<AppPrefs>().startExTimer.setValue(0);
-       locator<AppPrefs>().exercisePause.setValue(false);
-       return true;
-     }
-   }else{
-     return false;
-   }
+      if(cFormatDate != pFormatDate){
+        locator<AppPrefs>().exerciseUid.setValue('');
+        locator<AppPrefs>().globalTimer.setValue(0);
+        locator<AppPrefs>().exercisePause.setValue(false);
+        locator<AppPrefs>().exerciseOn.setValue(false);
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      //Workout not on
+      print('workout timer status -- workout is not on');
+      return false;
+    }
+
+
+   // int previousDateExerciseCheck = locator<AppPrefs>().startExTimer.getValue();
+   // String exUidExists = locator<AppPrefs>().exerciseUid.getValue();
+   // bool isWorkoutOn = locator<AppPrefs>().exerciseOn.getValue();
+   // if(exUidExists.isNotEmpty && exUidExists != null || isWorkoutOn){
+   //   String tDate = Helper.formatDate2(
+   //       DateTime.now().toIso8601String());
+   //   //
+   //   // String pDate = Helper.formatDate2(
+   //   //     DateTime.fromMillisecondsSinceEpoch(previousDateExerciseCheck).toIso8601String());
+   //    print('convert pDate ${previousDateExerciseCheck} -- $isWorkoutOn');
+   //   // print('check date tDate --- $tDate');
+   //   // print('check date pDate --- $pDate');
+   //   if(!isWorkoutOn){
+   //     print('check date same --');
+   //     return false;
+   //   }else{
+   //     print('check date not same --');
+   //     locator<AppPrefs>().exerciseUid.setValue('');
+   //     locator<AppPrefs>().startExTimer.setValue(0);
+   //     locator<AppPrefs>().exercisePause.setValue(false);
+   //     locator<AppPrefs>().exerciseOn.setValue(false);
+   //     return true;
+   //   }
+   // }else{
+   //   print('check date null condition --');
+   //   return false;
+   // }
   }
 
   void setTimeInLocal({@required int counter, bool isEx}) {

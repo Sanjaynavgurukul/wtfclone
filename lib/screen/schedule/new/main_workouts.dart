@@ -45,7 +45,6 @@ class _MainWorkoutState extends State<MainWorkout> {
       presetMillisecond: exTimerHelper.convertMil(false),
       mode: StopWatchMode.countUp,
     );
-
     if (globalTimerIsOn()) {
       startTimer();
     }
@@ -74,6 +73,7 @@ class _MainWorkoutState extends State<MainWorkout> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    print('current check date -- ${user.workoutDate}');
   }
 
   // void callTrainer() {
@@ -100,9 +100,7 @@ class _MainWorkoutState extends State<MainWorkout> {
   }
 
   void controlWorkout(MainWorkoutArgument args) {
-    String date = Helper.formatDate2(
-      args.time.toIso8601String(),
-    );
+    String date = user.workoutDate;
     String subId = args.data.uid;
     String addonsId =
     args.workoutType == 'General Training' ? null : args.data.addonId;
@@ -144,7 +142,6 @@ class _MainWorkoutState extends State<MainWorkout> {
         showSnack(
             message: 'To end workout you have to complete all your exercises!');
       } else {
-        exTimerHelper.isPreviousDate();
         startTimer();
         locator<AppPrefs>().exerciseOn.setValue(true);
         user.workoutNotification(
@@ -194,14 +191,12 @@ class _MainWorkoutState extends State<MainWorkout> {
           if (args == null) {
             return Center(child: Text('Something went wrong please try again later!'));
           } else {
-
             //call workout :d
             //controlWorkout(args);
-
             return Scaffold(
               floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: FloatingActionButton.extended(
+              floatingActionButton: exTimerHelper.isSameTime(user.workoutDate) ? FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
                   print('cehck data date --  ${user.workoutDate}');
@@ -216,7 +211,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                           Routes.mainAttendance);
                     }
                   }else{
-                    showSnack(message: 'Only present day sessions can be started.');
+                    showSnack(message: 'Only present day workout can be started.');
                   }
 
                   //TODO uncomment code change Here
@@ -229,7 +224,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                 icon: globalTimerIsOn()
                     ? Icon(Icons.pause_circle_filled)
                     : Icon(Icons.play_circle_fill),
-              ),
+              ):null,
               body: DefaultTabController(
                   length: 0,
                   child: NestedScrollView(
@@ -317,7 +312,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                             ),
                                           ),
                                         ),
-                                        trailing: globalTimerIsOn()
+                                        trailing: globalTimerIsOn() && exTimerHelper.isSameTime(user.workoutDate)
                                             ? StreamBuilder<int>(
                                           stream:
                                           _stopWatchTimer.secondTime,
@@ -386,14 +381,18 @@ class _MainWorkoutState extends State<MainWorkout> {
       child: InkWell(
         onTap: () {
           //TODO code changed here if condition should be on true condition ;D
-          if (globalTimerIsOn()) {
-            if(!isCompleted){
-              navigateToNext(item: item, index: index);
-            }else{
-              showSnack(message: 'Workout Already Completed');
+          if(exTimerHelper.isSameTime(user.workoutDate)){
+            if (globalTimerIsOn()) {
+              if(!isCompleted){
+                navigateToNext(item: item, index: index);
+              }else{
+                showSnack(message: 'Workout Already Completed');
+              }
+            } else {
+              showSnack(message: 'Please Start Workout First');
             }
-          } else {
-            showSnack(message: 'Please Start Workout First');
+          }else{
+            showSnack(message: 'Only present day workout can be started.');
           }
         },
         child: Stack(

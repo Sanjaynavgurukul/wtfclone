@@ -15,6 +15,7 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -42,7 +43,10 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
     user = context.watch<GymStore>();
     var date =
     Helper.formatDate2(DateTime.now().toIso8601String());
-    user.workoutDate = date;
+    if(user.workoutDate.isEmpty || user.workoutDate == null){
+      user.workoutDate = date;
+    }
+    print('final date checking --- ${user.workoutDate}');
   }
 
   void callData() {
@@ -51,6 +55,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
       if (callMethod) {
         this.callMethod = false;
         user.getScheduleData(date:Helper.formatDate2(_selectedDay.toIso8601String()),);
+        print('final date checking called method --- ${user.workoutDate}');
       }
     });
   }
@@ -173,8 +178,9 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
                     // Call `setState()` when updating the selected day
                     var date =
                     Helper.formatDate2(selectedDay.toIso8601String());
+                    print('final date checking time first--- ${date}');
                     user.workoutDate = date;
-                    print(date);
+                    print('final date checking time second--- ${user.workoutDate}');
                     context
                         .read<GymStore>()
                         .getMySchedules(
@@ -185,6 +191,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
                         // print('From MySchedule ${mySchedule.data}');
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
+                        print('final date checking after setState --- ${user.workoutDate}');
                       });
                     });
                   }
@@ -281,7 +288,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
                                     e,
                               ),
                               schedule: e,
-                              selectedDate: _selectedDay,
+                              selectedDate: user.workoutDate,
                             ),
                           )
                               .toList(),
@@ -315,7 +322,7 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
 
 class ScheduleListItems extends StatelessWidget {
   final String name;
-  final DateTime selectedDate;
+  final String selectedDate;
   final List<MyScheduleAddonData> schedule;
 
   const ScheduleListItems({
@@ -327,58 +334,60 @@ class ScheduleListItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<GymStore>(
-      builder: (context, store, child) => Padding(
-        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: schedule
-              .map(
-                (e) =>
-                InkWell(
-                  onTap: () {
-                    context.read<GymStore>().setSelectedSchedule(
-                      context: context,
-                      val: e,
-                    );
-                    store.getCurrentTrainer(context: context);
-                    switch (name) {
-                      case 'Personal Training':
-                      case 'General Training':
-                        print(
-                            'schedule:: ${schedule.map((e) => e.toJson()).toList()}');
-                        // locator<AppPrefs>().selectedMySchedule.setValue(name);
-                        // locator<AppPrefs>()
-                        //     .selectedMyScheduleName
-                        //     .setValue(name);
-                        // locator<AppPrefs>()
-                        //     .selectedWorkoutDate
-                        //     .setValue(Helper.formatDate2(
-                        //   selectedDate.toIso8601String(),
-                        // ));
-                        // locator<AppPrefs>().selectedMyScheduleData.setValue(e);
-                        context.read<GymStore>().getMyWorkoutSchedules(
-                          date: Helper.formatDate2(
-                            selectedDate.toIso8601String(),
-                          ),
-                          subscriptionId: e.uid,
-                          addonId:
-                          name == 'General Training' ? null : e.addonId,
-                        );
-                        // NavigationService.navigateTo(Routes.mainWorkoutScreen);
-                        NavigationService.pushName(Routes.mainWorkout,
-                            argument: MainWorkoutArgument(
-                                data: e, workoutType: name, time: selectedDate));
-                        break;
-                      case 'event':
-                        store.getEventById(
-                            context: context, eventId: e.eventId);
-                        // locator<AppPrefs>().selectedMySchedule.setValue(name);
-                        // locator<AppPrefs>()
-                        //     .selectedMyScheduleName
-                        //     .setValue(e.eventName);
-                        NavigationService.navigateTo(Routes.eventDetails);
-                        break;
-                      case 'addon':
+      builder: (context, store, child){
+        print('check onclick workjout date =--- ${selectedDate}');
+        return Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: schedule
+                .map(
+                  (e) =>
+                  InkWell(
+                    onTap: () {
+                      print('selected date --- ${selectedDate}');
+                      exTimerHelper.isPreviousDate();
+                      context.read<GymStore>().setSelectedSchedule(
+                        context: context,
+                        val: e,
+                      );
+                      store.getCurrentTrainer(context: context);
+                      switch (name) {
+                        case 'Personal Training':
+                        case 'General Training':
+                          print(
+                              'schedule:: ${schedule.map((e) => e.toJson()).toList()}');
+                          // locator<AppPrefs>().selectedMySchedule.setValue(name);
+                          // locator<AppPrefs>()
+                          //     .selectedMyScheduleName
+                          //     .setValue(name);
+                          // locator<AppPrefs>()
+                          //     .selectedWorkoutDate
+                          //     .setValue(Helper.formatDate2(
+                          //   selectedDate.toIso8601String(),
+                          // ));
+                          // locator<AppPrefs>().selectedMyScheduleData.setValue(e);
+                          context.read<GymStore>().getMyWorkoutSchedules(
+                            date: selectedDate,
+                            subscriptionId: e.uid,
+                            addonId:
+                            name == 'General Training' ? null : e.addonId,
+                          );
+                          // NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                          NavigationService.pushName(Routes.mainWorkout,
+                              argument: MainWorkoutArgument(
+                                  data: e, workoutType: name));
+                          break;
+                        case 'event':
+                          store.getEventById(
+                              context: context, eventId: e.eventId);
+                          // locator<AppPrefs>().selectedMySchedule.setValue(name);
+                          // locator<AppPrefs>()
+                          //     .selectedMyScheduleName
+                          //     .setValue(e.eventName);
+                          NavigationService.navigateTo(Routes.eventDetails);
+                          break;
+                        case 'addon':
                         // locator<AppPrefs>().selectedMySchedule.setValue(name);
                         // locator<AppPrefs>()
                         //     .selectedMyScheduleName
@@ -390,204 +399,203 @@ class ScheduleListItems extends StatelessWidget {
                         //   selectedDate.toIso8601String(),
                         // ));
                         // locator<AppPrefs>().selectedMyScheduleData.setValue(e);
-                        context.read<GymStore>().getMyWorkoutSchedules(
-                            date: Helper.formatDate2(
-                              selectedDate.toIso8601String(),
-                            ),
-                            subscriptionId: e.uid,
-                            addonId: e.addonId);
-                        // NavigationService.navigateTo(Routes.mainWorkoutScreen);
-                        NavigationService.pushName(Routes.mainWorkout,
-                            argument: MainWorkoutArgument(
-                                data: e, workoutType: name, time: selectedDate));
-                        break;
-                      case 'Live Sessions':
-                        switch (e.roomStatus) {
-                          case 'scheduled':
-                            FlashHelper.informationBar(
-                              context,
-                              message:
-                              'Trainer has not started the live session yet',
-                            );
-                            break;
-                          case 'started':
-                            context.read<GymStore>().joinLiveSession(
-                              addonName: e.addonName,
-                              liveClassId: e.liveClassId,
-                              roomId: e.roomId,
-                              context: context,
-                              addonId: e.addonId,
-                            );
-                            break;
-                          case 'completed':
-                            FlashHelper.informationBar(
-                              context,
-                              message: 'Trainer has ended the live session',
-                            );
-                            break;
-                          default:
-                            break;
-                        }
-                        break;
-                    }
+                          context.read<GymStore>().getMyWorkoutSchedules(
+                              date: selectedDate,
+                              subscriptionId: e.uid,
+                              addonId: e.addonId);
+                          // NavigationService.navigateTo(Routes.mainWorkoutScreen);
+                          NavigationService.pushName(Routes.mainWorkout,
+                              argument: MainWorkoutArgument(
+                                  data: e, workoutType: name));
+                          break;
+                        case 'Live Sessions':
+                          switch (e.roomStatus) {
+                            case 'scheduled':
+                              FlashHelper.informationBar(
+                                context,
+                                message:
+                                'Trainer has not started the live session yet',
+                              );
+                              break;
+                            case 'started':
+                              context.read<GymStore>().joinLiveSession(
+                                addonName: e.addonName,
+                                liveClassId: e.liveClassId,
+                                roomId: e.roomId,
+                                context: context,
+                                addonId: e.addonId,
+                              );
+                              break;
+                            case 'completed':
+                              FlashHelper.informationBar(
+                                context,
+                                message: 'Trainer has ended the live session',
+                              );
+                              break;
+                            default:
+                              break;
+                          }
+                          break;
+                      }
 
-                    // context.read<GymStore>().setSelectedSchedule(
-                    //   context: context,
-                    //   val: e,
-                    // );
-                    // store.getCurrentTrainer(context: context);
-                    //
-                    // context
-                    //     .read<GymStore>()
-                    //     .getCurrentAttendance(context: context);
-                    //
-                    // NavigationService.pushName(Routes.mainWorkout,
-                    //     argument: MainWorkoutArgument(
-                    //         data: e, workoutType: name, time: selectedDate));
-                    //
-                    // if(e.type != 'addon_live'){
-                    //   if(store.attendanceDetails.data.status == 'active'){
-                    //     NavigationService.pushName(Routes.mainWorkout,
-                    //         argument: MainWorkoutArgument(
-                    //             data: e, workoutType: name, time: selectedDate));
-                    //   }else{
-                    //     print('check attendence status --- ${store.attendanceDetails.data.status}');
-                    //     Navigator.pop(context);
-                    //     NavigationService.navigateTo(Routes.mainAttendance);
-                    //   }
-                    // }else{
-                    //   NavigationService.pushName(Routes.mainWorkout,
-                    //       argument: MainWorkoutArgument(
-                    //           data: e, workoutType: name, time: selectedDate));
-                    // }
+                      // context.read<GymStore>().setSelectedSchedule(
+                      //   context: context,
+                      //   val: e,
+                      // );
+                      // store.getCurrentTrainer(context: context);
+                      //
+                      // context
+                      //     .read<GymStore>()
+                      //     .getCurrentAttendance(context: context);
+                      //
+                      // NavigationService.pushName(Routes.mainWorkout,
+                      //     argument: MainWorkoutArgument(
+                      //         data: e, workoutType: name, time: selectedDate));
+                      //
+                      // if(e.type != 'addon_live'){
+                      //   if(store.attendanceDetails.data.status == 'active'){
+                      //     NavigationService.pushName(Routes.mainWorkout,
+                      //         argument: MainWorkoutArgument(
+                      //             data: e, workoutType: name, time: selectedDate));
+                      //   }else{
+                      //     print('check attendence status --- ${store.attendanceDetails.data.status}');
+                      //     Navigator.pop(context);
+                      //     NavigationService.navigateTo(Routes.mainAttendance);
+                      //   }
+                      // }else{
+                      //   NavigationService.pushName(Routes.mainWorkout,
+                      //       argument: MainWorkoutArgument(
+                      //           data: e, workoutType: name, time: selectedDate));
+                      // }
 
-                  },
-                  child: Card(
-                    color: Colors.transparent,
-                    elevation: 0.0,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          child: GradientImageWidget(
-                            borderRadius: BorderRadius.circular(8.0),
-                            network: name == 'General Training'
-                                ? Images.generalTraining
-                                : name == 'Personal Training'
-                                ? Images.personalTraining
-                                : e.gymCoverImage
-                                .startsWith('https://wtfupme')
-                                ? null
-                                : e.gymCoverImage,
-                            stops: [0.01, 1.0],
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: Colors.white,
-                            gradient: LinearGradient(
-                              begin: FractionalOffset.topCenter,
-                              end: FractionalOffset.bottomCenter,
-                              colors: const [
-                                Colors.transparent,
-                                Colors.red,
-                              ],
-                              stops: const [0.4, 1.0],
+                    },
+                    child: Card(
+                      color: Colors.transparent,
+                      elevation: 0.0,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: GradientImageWidget(
+                              borderRadius: BorderRadius.circular(8.0),
+                              network: name == 'General Training'
+                                  ? Images.generalTraining
+                                  : name == 'Personal Training'
+                                  ? Images.personalTraining
+                                  : e.gymCoverImage
+                                  .startsWith('https://wtfupme')
+                                  ? null
+                                  : e.gymCoverImage,
+                              stops: [0.01, 1.0],
                             ),
                           ),
-                        ),
-                        Positioned(
-                          bottom: 16.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  name == 'addon'
-                                      ? e.addonName
-                                      : name == 'event'
-                                      ? e.eventName +
-                                      ' (${e.eventType == 'regular' ? 'Event' : e
-                                          .eventType ?? ''})'
-                                      : name,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                                UIHelper.verticalSpace(10.0),
-                                if (name == 'Personal Training' ||
-                                    name == 'addon')
-                                  Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            'Total Session: ${e.nSession ?? 0}'),
-                                        Text(
-                                            'Completed Session: ${e
-                                                .completedSession ?? 0}'),
-                                      ],
-                                    ),
-                                  ),
-                                if (name == 'event')
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(top: 4.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Addon: - ${e.addonName}',
-                                        ),
-                                        Text(
-                                          'Gym Name - ${e.gymname}',
-                                        ),
-                                        Text(
-                                          'Address: ${e.gymAddress1}, ${e
-                                              .gymAddress2}',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                if (name == 'Live Sessions')
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(top: 4.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '${e.addonName}',
-                                        ),
-                                        Text(
-                                          '${e.gymname}',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                              ],
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.0),
+                              color: Colors.white,
+                              gradient: LinearGradient(
+                                begin: FractionalOffset.topCenter,
+                                end: FractionalOffset.bottomCenter,
+                                colors: const [
+                                  Colors.transparent,
+                                  Colors.red,
+                                ],
+                                stops: const [0.4, 1.0],
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                          Positioned(
+                            bottom: 16.0,
+                            left: 0.0,
+                            right: 0.0,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    name == 'addon'
+                                        ? e.addonName
+                                        : name == 'event'
+                                        ? e.eventName +
+                                        ' (${e.eventType == 'regular' ? 'Event' : e
+                                            .eventType ?? ''})'
+                                        : name,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  UIHelper.verticalSpace(10.0),
+                                  if (name == 'Personal Training' ||
+                                      name == 'addon')
+                                    Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              'Total Session: ${e.nSession ?? 0}'),
+                                          Text(
+                                              'Completed Session: ${e
+                                                  .completedSession ?? 0}'),
+                                        ],
+                                      ),
+                                    ),
+                                  if (name == 'event')
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 4.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Addon: - ${e.addonName}',
+                                          ),
+                                          Text(
+                                            'Gym Name - ${e.gymname}',
+                                          ),
+                                          Text(
+                                            'Address: ${e.gymAddress1}, ${e
+                                                .gymAddress2}',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if (name == 'Live Sessions')
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(top: 4.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${e.addonName}',
+                                          ),
+                                          Text(
+                                            '${e.gymname}',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-          )
-              .toList(),
-        ),
-      )
+            )
+                .toList(),
+          ),
+        );
+      }
     );
   }
 }
