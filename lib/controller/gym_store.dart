@@ -253,7 +253,7 @@ class GymStore extends ChangeNotifier {
   AddOnSlotDetails addonsCatGymSlots;
 
   MySchedule scheduleData;
-  CurrentTrainer scheduleTrainer;
+  // CurrentTrainer scheduleTrainer;
 
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
@@ -1295,6 +1295,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //TODO here
   Future<void> getMyWorkoutSchedules(
       {String date, String addonId, String subscriptionId}) async {
     loading = true;
@@ -2620,17 +2621,17 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getScheduleTrainer() async {
-    scheduleTrainer = null;
-    notifyListeners();
-    CurrentTrainer res = await RestDatasource().getCurrentTrainer();
-    if (res != null) {
-      scheduleTrainer = res;
-    } else {
-      scheduleTrainer = null;
-    }
-    notifyListeners();
-  }
+  // Future<void> getScheduleTrainer() async {
+  //   scheduleTrainer = null;
+  //   notifyListeners();
+  //   CurrentTrainer res = await RestDatasource().getCurrentTrainer();
+  //   if (res != null) {
+  //     scheduleTrainer = res;
+  //   } else {
+  //     scheduleTrainer = null;
+  //   }
+  //   notifyListeners();
+  // }
 
   Future<void> getScheduledWorkouts(
       {String date, String addonId, String subscriptionId}) async {

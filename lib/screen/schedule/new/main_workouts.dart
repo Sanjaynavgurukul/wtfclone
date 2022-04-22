@@ -76,15 +76,15 @@ class _MainWorkoutState extends State<MainWorkout> {
     user = context.watch<GymStore>();
   }
 
-  void callTrainer() {
-    print('called -----');
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (trainerCalled) {
-        this.trainerCalled = false;
-        user.getScheduleTrainer();
-      }
-    });
-  }
+  // void callTrainer() {
+  //   print('called -----');
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     if (trainerCalled) {
+  //       this.trainerCalled = false;
+  //       user.getScheduleTrainer();
+  //     }
+  //   });
+  // }
 
   void callWorkouts(
       {@required String date,
@@ -180,14 +180,13 @@ class _MainWorkoutState extends State<MainWorkout> {
     final MainWorkoutArgument args =
     ModalRoute.of(context).settings.arguments as MainWorkoutArgument;
 
-    callTrainer();
     if (args.data == null) {
       return Center(
         child: Text('Something Went Wrong Please try again later'),
       );
     } else {
       return Consumer<GymStore>(builder: (context, user, child) {
-        if (user.scheduleTrainer == null || user.scheduleTrainer.data == null) {
+        if (user.currentTrainer == null || user.currentTrainer.data == null || user.myWorkoutSchedule == null || user.myWorkoutSchedule.data == null) {
           return Center(
             child: CupertinoActivityIndicator(),
           );
@@ -197,7 +196,7 @@ class _MainWorkoutState extends State<MainWorkout> {
           } else {
 
             //call workout :d
-            controlWorkout(args);
+            //controlWorkout(args);
 
             return Scaffold(
               floatingActionButtonLocation:
@@ -252,18 +251,18 @@ class _MainWorkoutState extends State<MainWorkout> {
                                               height: 8,
                                             ),
                                             Text(
-                                                '${user.scheduleTrainer.data.name ?? 'No Name'}'),
+                                                '${user.currentTrainer.data.name ?? 'No Name'}'),
                                             SizedBox(
                                               height: 2,
                                             ),
                                             Text(
-                                                '${user.scheduleTrainer.data.description ?? ''}'),
+                                                '${user.currentTrainer.data.description ?? ''}'),
                                             SizedBox(
                                               height: 4,
                                             ),
                                             RatingBar(
                                               initialRating: double.parse(user
-                                                  .scheduleTrainer
+                                                  .currentTrainer
                                                   .data
                                                   .rating ??
                                                   '0.0'),
@@ -299,7 +298,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                                         leading: CircleAvatar(
                                           radius: 30,
                                           backgroundImage: NetworkImage(
-                                              '${user.scheduleTrainer.data.trainerProfile}' ??
+                                              '${user.currentTrainer.data.trainerProfile}' ??
                                                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
                                           backgroundColor: Colors.transparent,
                                           child: Align(
