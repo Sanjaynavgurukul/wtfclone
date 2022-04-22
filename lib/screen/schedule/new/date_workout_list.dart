@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
@@ -14,7 +15,9 @@ import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
+import 'package:wtf/screen/side_bar_drawer/SidebarDrawer.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class DateWorkoutList extends StatefulWidget {
   static const routeName = '/dateWorkoutList';
@@ -62,201 +65,247 @@ class _DateWorkoutListState extends State<DateWorkoutList> {
   Widget build(BuildContext context) {
     //Calling initial Data :D
     callData();
-    return Scaffold(
-      appBar: AppBar(
+
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: AppColors.BACK_GROUND_BG,
-        title: Text('My Schedule'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          onRefreshPage();
-        },
-        child: CustomScrollView(
+        body: CustomScrollView(
           primary: true,
           shrinkWrap: true,
           cacheExtent: 200000.0,
           slivers: [
-            //Date Selection Section :D
+            //This is header :D
             SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TableCalendar(
-                    firstDay: DateTime.now().subtract(Duration(days: 14)),
-                    lastDay: DateTime.now().add(
-                      Duration(days: 365),
-                    ),
-                    focusedDay: _focusedDay,
-                    calendarFormat: _calendarFormat,
-                    availableCalendarFormats: {
-                      // CalendarFormat.twoWeeks: '2 weeks',
-                      CalendarFormat.twoWeeks: '2 Week',
-                      CalendarFormat.month: 'Month',
-                    },
-                    headerVisible: true,
-                    headerStyle: HeaderStyle(
-                      titleTextStyle: TextStyle(
-                        color: Colors.white,
+              child: Container(
+                height: 98.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UIHelper.verticalSpace(20.0),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 14.0,
                       ),
-                      formatButtonTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      formatButtonDecoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      rightChevronIcon: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                      ),
-                      leftChevronIcon: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                      ),
-                    ),
-                    selectedDayPredicate: (day) {
-                      // Use `selectedDayPredicate` to determine which day is currently selected.
-                      // If this returns true, then `day` will be marked as selected.
-
-                      // Using `isSameDay` is recommended to disregard
-                      // the time-part of compared DateTime objects.
-                      return isSameDay(_selectedDay, day);
-                    },
-                    formatAnimationCurve: Curves.easeInOutCubic,
-                    pageAnimationCurve: Curves.easeInOutCubic,
-                    formatAnimationDuration: Duration(milliseconds: 800),
-                    pageAnimationDuration: Duration(milliseconds: 800),
-                    onDaySelected: (selectedDay, focusedDay) {
-                      if (!isSameDay(_selectedDay, selectedDay)) {
-                        setState(() {
-                          // print('From MySchedule ${mySchedule.data}');
-                          this.callMethod = true;
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                          var date =
-                          Helper.formatDate2(selectedDay.toIso8601String());
-                          print('check date on select');
-                          user.workoutSelectedDate = date;
-                        });
-                        // Call `setState()` when updating the selected day
-
-                        // var date =
-                        // Helper.formatDate2(selectedDay.toIso8601String());
-                        // locator<AppPrefs>().selectedWorkoutDate.setValue(date);
-                        // print(date);
-                        // context
-                        //     .read<GymStore>()
-                        //     .getMySchedules(
-                        //   date: date,
-                        // )
-                        //     .then((value) {
-                        //   setState(() {
-                        //     // print('From MySchedule ${mySchedule.data}');
-                        //     _selectedDay = selectedDay;
-                        //     _focusedDay = focusedDay;
-                        //   });
-                        // });
-                      }
-                    },
-                    daysOfWeekStyle: DaysOfWeekStyle(
-                      weekdayStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                      ),
-                      weekendStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              NavigationService.goBack;
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              'MY SCHEDULE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Spacer(
+                            flex: 1,
+                          ),
+                        ],
                       ),
                     ),
-                    calendarStyle: CalendarStyle(
-                      selectedDecoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      todayDecoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                      ),
-                      defaultTextStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                      ),
-                      disabledTextStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.1),
-                      ),
-                      holidayTextStyle: TextStyle(
-                        color: Colors.red.withOpacity(0.4),
-                      ),
-                      outsideTextStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                      ),
-                      weekendTextStyle: TextStyle(
-                        color: Colors.red.withOpacity(0.8),
-                      ),
-                    ),
-                    onFormatChanged: (format) {
-                      if (_calendarFormat != format) {
-                        // Call `setState()` when updating calendar format
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      }
-                    },
-                    onPageChanged: (focusedDay) {
-                      // No need to call `setState()` here
-                      _focusedDay = focusedDay;
-                    },
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _calendarFormat =
-                        _calendarFormat == CalendarFormat.month
-                            ? CalendarFormat.twoWeeks
-                            : CalendarFormat.month;
-                      });
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/svg/arrow_down.svg',
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+            //This is date selection section ;D
             SliverToBoxAdapter(
-              child: Consumer<GymStore>(builder: (context, user, snapshot) {
-                if (user.scheduleData == null) {
-                  return Center(
-                    child: CupertinoActivityIndicator(),
-                  );
-                } else {
-                  return user.scheduleData.data.allData.isEmpty ||
-                      user.scheduleData.data.allData == null
-                      ? Center(
-                    child: Text('No Workout Found'),
-                  )
-                      : Flexible(
-                    child: Column(
-                      children: user.scheduleData.data.allData.values
-                          .map(
-                            (e) =>
-                            ScheduleListItems(
-                              name: user.scheduleData.data.allData.keys
+              child: TableCalendar(
+                firstDay: DateTime.now().subtract(Duration(days: 14)),
+                lastDay: DateTime.now().add(
+                  Duration(days: 365),
+                ),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                availableCalendarFormats: {
+                  // CalendarFormat.twoWeeks: '2 weeks',
+                  CalendarFormat.twoWeeks: '2 Week',
+                  CalendarFormat.month: 'Month',
+                },
+                headerVisible: true,
+                headerStyle: HeaderStyle(
+                  titleTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  formatButtonTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  formatButtonDecoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  rightChevronIcon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
+                  leftChevronIcon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+                selectedDayPredicate: (day) {
+                  // Use `selectedDayPredicate` to determine which day is currently selected.
+                  // If this returns true, then `day` will be marked as selected.
+
+                  // Using `isSameDay` is recommended to disregard
+                  // the time-part of compared DateTime objects.
+                  return isSameDay(_selectedDay, day);
+                },
+                formatAnimationCurve: Curves.easeInOutCubic,
+                pageAnimationCurve: Curves.easeInOutCubic,
+                formatAnimationDuration: Duration(milliseconds: 800),
+                pageAnimationDuration: Duration(milliseconds: 800),
+                onDaySelected: (selectedDay, focusedDay) {
+                  if (!isSameDay(_selectedDay, selectedDay)) {
+                    // Call `setState()` when updating the selected day
+                    var date =
+                    Helper.formatDate2(selectedDay.toIso8601String());
+                    user.workoutDate = date;
+                    print(date);
+                    context
+                        .read<GymStore>()
+                        .getMySchedules(
+                      date: date,
+                    )
+                        .then((value) {
+                      setState(() {
+                        // print('From MySchedule ${mySchedule.data}');
+                        _selectedDay = selectedDay;
+                        _focusedDay = focusedDay;
+                      });
+                    });
+                  }
+                },
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                  ),
+                  weekendStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                  ),
+                ),
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  defaultTextStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                  ),
+                  disabledTextStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.1),
+                  ),
+                  holidayTextStyle: TextStyle(
+                    color: Colors.red.withOpacity(0.4),
+                  ),
+                  outsideTextStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                  ),
+                  weekendTextStyle: TextStyle(
+                    color: Colors.red.withOpacity(0.8),
+                  ),
+                ),
+                onFormatChanged: (format) {
+                  if (_calendarFormat != format) {
+                    // Call `setState()` when updating calendar format
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  // No need to call `setState()` here
+                  _focusedDay = focusedDay;
+                },
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _calendarFormat =
+                          _calendarFormat == CalendarFormat.month
+                              ? CalendarFormat.twoWeeks
+                              : CalendarFormat.month;
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/svg/arrow_down.svg',
+                        color: Colors.red,
+                      ),
+                    ),
+                    UIHelper.verticalSpace(8.0),
+                    if (user.mySchedule != null)
+                      SizedBox(
+                        height: 20,
+                      ),
+                    Flexible(
+                      child: Consumer<GymStore>(
+                        builder: (context, store, child) => store.mySchedule !=
+                            null
+                            ? store.mySchedule.data != null &&
+                            store.mySchedule.data.allData.isNotEmpty
+                            ? Wrap(
+                          children:
+                          store.mySchedule.data.allData.values
+                              .map(
+                                (e) => ScheduleListItems(
+                              name: store.mySchedule.data
+                                  .allData.keys
                                   .firstWhere(
                                     (element) =>
-                                user.scheduleData.data
+                                store.mySchedule.data
                                     .allData[element] ==
                                     e,
                               ),
                               schedule: e,
                               selectedDate: _selectedDay,
                             ),
-                      )
-                          .toList(),
+                          )
+                              .toList(),
+                        )
+                            : Center(
+                          child: Text(
+                            'No Schedules!',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        )
+                            : Align(
+                          alignment: Alignment.topCenter,
+                          child: Loading(),
+                        ),
+                      ),
                     ),
-                  );
-                }
-              }),
-            )
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

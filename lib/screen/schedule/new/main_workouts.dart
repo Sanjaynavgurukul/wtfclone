@@ -223,7 +223,7 @@ class _MainWorkoutState extends State<MainWorkout> {
                   // validateOnPress(args.workoutType);
                 },
                 label: Text(
-                  globalTimerIsOn() ? 'End Workout' : 'Start Workout',
+                  globalTimerIsOn() ? 'End Workout' :allWorkoutCompleted()?'Completed': 'Start Workout',
                   style: TextStyle(fontSize: 16),
                 ),
                 icon: globalTimerIsOn()
