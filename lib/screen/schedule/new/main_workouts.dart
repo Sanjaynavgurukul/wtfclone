@@ -76,15 +76,15 @@ class _MainWorkoutState extends State<MainWorkout> {
     user = context.watch<GymStore>();
   }
 
-  void callTrainer() {
-    print('called -----');
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (trainerCalled) {
-        this.trainerCalled = false;
-        user.getScheduleTrainer();
-      }
-    });
-  }
+  // void callTrainer() {
+  //   print('called -----');
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     if (trainerCalled) {
+  //       this.trainerCalled = false;
+  //       user.getScheduleTrainer();
+  //     }
+  //   });
+  // }
 
   void callWorkouts(
       {@required String date,
@@ -142,7 +142,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       print('sanjay here -- all workout is not completed');
       if (globalTimerIsOn()) {
         showSnack(
-            message: 'To end workout you have to finish your all exercises!');
+            message: 'To end workout you have to complete all your exercises!');
       } else {
         exTimerHelper.isPreviousDate();
         startTimer();
@@ -166,11 +166,11 @@ class _MainWorkoutState extends State<MainWorkout> {
             user.workoutNotification(start: false, header: '');
             setState(() {});
           } else {
-            showSnack(message: 'Something Went Wrong!');
+            showSnack(message: 'Workout Already Started');
           }
         });
       } else {
-        showSnack(message: 'ALl Workout Completed!');
+        showSnack(message: 'All Workout Completed!');
       }
     }
   }
@@ -180,191 +180,187 @@ class _MainWorkoutState extends State<MainWorkout> {
     final MainWorkoutArgument args =
         ModalRoute.of(context).settings.arguments as MainWorkoutArgument;
 
-    callTrainer();
+
     if (args.data == null) {
       return Center(
         child: Text('Something Went Wrong Please try again later'),
       );
     } else {
+      // //call workout :d
+      // controlWorkout(args);
+
       return Consumer<GymStore>(builder: (context, user, child) {
-        if (user.scheduleTrainer == null || user.scheduleTrainer.data == null) {
+        if (user.myWorkoutSchedule == null) {
           return Center(
             child: CupertinoActivityIndicator(),
           );
         } else {
-          if (args == null) {
-            return Center(child: Text('Workout already started'));
-          } else {
 
-            //call workout :d
-            controlWorkout(args);
-
-            return Scaffold(
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: FloatingActionButton.extended(
-                heroTag: 'startFlag',
-                onPressed: () {
-                  if(user.workoutDate == Helper.formatDate2(
-                      DateTime.now().toIso8601String())){
-                    if(user.attendanceDetails != null &&
-                        user.attendanceDetails.data != null){
-                      validateOnPress(args.workoutType);
-                    }else{
-                      showSnack(message: 'Please mark your attendance first.');
-                      NavigationService.navigateTo(
-                          Routes.mainAttendance);
-                    }
+          return Scaffold(
+            floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: FloatingActionButton.extended(
+              heroTag: 'startFlag',
+              onPressed: () {
+                if(user.workoutDate == Helper.formatDate2(
+                    DateTime.now().toIso8601String())){
+                  if(user.attendanceDetails != null &&
+                      user.attendanceDetails.data != null){
+                    validateOnPress(args.workoutType);
                   }else{
-                    showSnack(message: 'Only present day sessions can be started.');
+                    showSnack(message: 'Please mark your attendance first.');
+                    NavigationService.navigateTo(
+                        Routes.mainAttendance);
                   }
+                }else{
+                  showSnack(message: 'Only present day sessions can be started.');
+                }
 
-                  //TODO uncomment code change Here
-                  // validateOnPress(args.workoutType);
-                },
-                label: Text(
-                  globalTimerIsOn() ? 'End Workout' :allWorkoutCompleted()?'Completed': 'Start Workout',
-                  style: TextStyle(fontSize: 16),
-                ),
-                icon: globalTimerIsOn()
-                    ? Icon(Icons.pause_circle_filled)
-                    : Icon(Icons.play_circle_fill),
+                //TODO uncomment code change Here
+                // validateOnPress(args.workoutType);
+              },
+              label: Text(
+                globalTimerIsOn() ? 'End Workout' :allWorkoutCompleted()?'Completed': 'Start Workout',
+                style: TextStyle(fontSize: 16),
               ),
-              body: DefaultTabController(
-                  length: 0,
-                  child: NestedScrollView(
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          new SliverAppBar(
-                              title: Text(args.workoutType ?? 'No Name'),
-                              forceElevated: innerBoxIsScrolled,
-                              pinned: true,
-                              floating: true,
-                              bottom: PreferredSize(
-                                  preferredSize: Size(double.infinity, 100),
-                                  child: Padding(
-                                      child: ListTile(
-                                        title: Text('Current Trainer'),
-                                        subtitle: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                                '${user.scheduleTrainer.data.name ?? 'No Name'}'),
-                                            SizedBox(
-                                              height: 2,
-                                            ),
-                                            Text(
-                                                '${user.scheduleTrainer.data.description ?? ''}'),
-                                            SizedBox(
-                                              height: 4,
-                                            ),
-                                            RatingBar(
-                                              initialRating: double.parse(user
-                                                      .scheduleTrainer
-                                                      .data
-                                                      .rating ??
-                                                  '0.0'),
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemSize: 16,
-                                              ignoreGestures: true,
-                                              ratingWidget: RatingWidget(
-                                                full: Icon(
-                                                  Icons.star,
-                                                  color: AppConstants.bgColor,
-                                                ),
-                                                half: Icon(
-                                                  Icons.star_half,
-                                                  color: AppConstants.bgColor,
-                                                ),
-                                                empty: Icon(
-                                                  Icons.star_border_outlined,
-                                                  color: Colors.grey,
-                                                ),
+              icon: globalTimerIsOn()
+                  ? Icon(Icons.pause_circle_filled)
+                  : Icon(Icons.play_circle_fill),
+            ),
+            body: DefaultTabController(
+                length: 0,
+                child: NestedScrollView(
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        new SliverAppBar(
+                            title: Text(args.workoutType ?? 'No Name'),
+                            forceElevated: innerBoxIsScrolled,
+                            pinned: true,
+                            floating: true,
+                            bottom: PreferredSize(
+                                preferredSize: Size(double.infinity, 100),
+                                child: Padding(
+                                    child: ListTile(
+                                      title: Text('Current Trainer'),
+                                      subtitle: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                              '${user.scheduleTrainer.data.name ?? 'No Name'}'),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                              '${user.scheduleTrainer.data.description ?? ''}'),
+                                          SizedBox(
+                                            height: 4,
+                                          ),
+                                          RatingBar(
+                                            initialRating: double.parse(user
+                                                .scheduleTrainer
+                                                .data
+                                                .rating ??
+                                                '0.0'),
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemSize: 16,
+                                            ignoreGestures: true,
+                                            ratingWidget: RatingWidget(
+                                              full: Icon(
+                                                Icons.star,
+                                                color: AppConstants.bgColor,
                                               ),
-                                              itemPadding: EdgeInsets.symmetric(
-                                                  horizontal: 1.0),
-                                              onRatingUpdate: (rating) {
-                                                print(rating);
-                                              },
+                                              half: Icon(
+                                                Icons.star_half,
+                                                color: AppConstants.bgColor,
+                                              ),
+                                              empty: Icon(
+                                                Icons.star_border_outlined,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ],
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                        ),
-                                        leading: CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: NetworkImage(
-                                              '${user.scheduleTrainer.data.trainerProfile}' ??
-                                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                                          backgroundColor: Colors.transparent,
-                                          child: Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: Container(
-                                              width: 26,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(100)),
-                                                color: AppColors.BACK_GROUND_BG,
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/certified.png',
-                                              ),
+                                            itemPadding: EdgeInsets.symmetric(
+                                                horizontal: 1.0),
+                                            onRatingUpdate: (rating) {
+                                              print(rating);
+                                            },
+                                          ),
+                                        ],
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                      ),
+                                      leading: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            '${user.scheduleTrainer.data.trainerProfile}' ??
+                                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                        backgroundColor: Colors.transparent,
+                                        child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Container(
+                                            width: 26,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(100)),
+                                              color: AppColors.BACK_GROUND_BG,
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/certified.png',
                                             ),
                                           ),
                                         ),
-                                        trailing: globalTimerIsOn()
-                                            ? StreamBuilder<int>(
-                                                stream:
-                                                    _stopWatchTimer.secondTime,
-                                                initialData: _stopWatchTimer
-                                                    .secondTime.value,
-                                                builder: (context, snap) {
-                                                  int value = snap.data;
-                                                  exTimerHelper.setTimeInLocal(
-                                                      counter: value,
-                                                      isEx: false);
-                                                  return  Text(
-                                                    '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                        FontWeight.w600),
-                                                  );
-                                                },
-                                              )
-                                            : SizedBox(),
                                       ),
-                                      padding: EdgeInsets.only(
-                                          left: 12,
-                                          right: 12,
-                                          top: 0,
-                                          bottom: 8))),
-                              backgroundColor: AppColors.BACK_GROUND_BG),
-                        ];
-                      },
-                      body: user.myWorkoutSchedule == null ||
-                              user.myWorkoutSchedule.data == null ||
-                              user.myWorkoutSchedule.data.length == 0
-                          ? Center(child: Text("no Workout available"))
-                          : ListView.builder(
-                              itemCount: user.myWorkoutSchedule.data.length,
-                              padding: EdgeInsets.only(bottom: 80),
-                              itemBuilder: (context, index) {
-                                WorkoutScheduleData item =
-                                    user.myWorkoutSchedule.data[index];
-                                print('check list item image -- ${item.image}');
+                                      trailing: globalTimerIsOn()
+                                          ? StreamBuilder<int>(
+                                        stream:
+                                        _stopWatchTimer.secondTime,
+                                        initialData: _stopWatchTimer
+                                            .secondTime.value,
+                                        builder: (context, snap) {
+                                          int value = snap.data;
+                                          exTimerHelper.setTimeInLocal(
+                                              counter: value,
+                                              isEx: false);
+                                          return  Text(
+                                            '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 30,
+                                                fontWeight:
+                                                FontWeight.w600),
+                                          );
+                                        },
+                                      )
+                                          : SizedBox(),
+                                    ),
+                                    padding: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        top: 0,
+                                        bottom: 8))),
+                            backgroundColor: AppColors.BACK_GROUND_BG),
+                      ];
+                    },
+                    body: user.myWorkoutSchedule == null ||
+                        user.myWorkoutSchedule.data == null ||
+                        user.myWorkoutSchedule.data.length == 0
+                        ? Center(child: Text("no Workout available"))
+                        : ListView.builder(
+                        itemCount: user.myWorkoutSchedule.data.length,
+                        padding: EdgeInsets.only(bottom: 80),
+                        itemBuilder: (context, index) {
+                          WorkoutScheduleData item =
+                          user.myWorkoutSchedule.data[index];
+                          print('check list item image -- ${item.image}');
 
-                                return itermCard(item: item, index: index);
-                                // return WorkoutListItems(item);
-                              }))),
-            );
-          }
+                          return itermCard(item: item, index: index);
+                          // return WorkoutListItems(item);
+                        }))),
+          );
         }
       });
     }
