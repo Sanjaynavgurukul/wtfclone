@@ -23,6 +23,8 @@ class _FlexibleAppBarState extends State<FlexibleAppBar> {
   bool isAutoPlay = true;
   bool speaketOff = true;
   bool onVolume = false;
+  bool hasVideo = false;
+  int videoIndex = 0;
 
 
   List<Gallery> slider = [
@@ -55,120 +57,53 @@ class _FlexibleAppBarState extends State<FlexibleAppBar> {
       color: widget.color,
       child: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
-          child:
-          CarouselSlider.builder(
-              options: CarouselOptions(
-                height: 330.0,
-                viewportFraction: 1,
-                enlargeCenterPage: false,
-                pageSnapping: true,
-                autoPlay: isAutoPlay,
-                autoPlayInterval: Duration(seconds: 3),
-                autoPlayAnimationDuration: Duration(milliseconds: 800),
-              ),
-              itemCount: widget.images.length,
-              itemBuilder: (BuildContext context, int itemIndex,
-                  int pageViewIndex) {
-                var i = widget.images[itemIndex];
-                if (i.type == 'video') {
-                  return VideoPlayerScreen(url: i.images, isPlaying: (val) {
-                    if (val) {
-                      print('video is playing -=- true');
-                      setState(() {
-                        this.isAutoPlay = false;
-                      });
-                    } else {
-                      setState(() {
-                        this.isAutoPlay = true;
-                      });
-                      print('video is playing -=- false');
-                    }
-                  },
-                    enableVolume: onVolume,
-                  onVolume: (val){
-                      this.onVolume = val;
-                    },);
-                } else {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(0.0),
-                    child: Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(0))),
-                          child: Image.network(
-                            i.images,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Center(
-                                  child: Text(
-                                    "Failed to load image",
-                                  ));
-                            },
-                            loadingBuilder: (BuildContext context,
-                                Widget child,
-                                ImageChunkEvent loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                      null
-                                      ? loadingProgress
-                                      .cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes
-                                      : null,
-                                ),
-                              );
-                            },
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-              }
-          )
-          // child: CarouselSlider(
-          // options: CarouselOptions(
-          //   height: 330.0,
-          //   viewportFraction: 1,
-          //   enlargeCenterPage: false,
-          //   pageSnapping: true,
-          //   autoPlay: isAutoPlay,
-          //   autoPlayInterval: Duration(seconds: 3),
-          //   autoPlayAnimationDuration: Duration(milliseconds: 800),
-          // ),
-          // items: widget.images.map(
-          //       (i) {
-          //     return ClipRRect(
-          //       borderRadius: BorderRadius.circular(0.0),
-          //       child: Builder(
-          //         builder: (BuildContext context) {
-          //           if (i.images == null) {
-          //             return Center(
-          //               child: Text("No image data"),
-          //             );
+          // child:
+          // CarouselSlider.builder(
+          //   carouselController: carouselController,
+          //     options: CarouselOptions(
+          //       height: 330.0,
+          //       viewportFraction: 1,
+          //       enlargeCenterPage: false,
+          //       pageSnapping: true,
+          //       autoPlay: isAutoPlay,
+          //       autoPlayInterval: Duration(seconds: 3),
+          //       autoPlayAnimationDuration: Duration(milliseconds: 800),
+          //       onPageChanged:(i,val){
+          //         setState(() {
+          //           this.isAutoPlay = true;
+          //           carouselController.startAutoPlay();
+          //         });
+          //       }
+          //     ),
+          //     itemCount: widget.images.length,
+          //     itemBuilder: (BuildContext context, int itemIndex,
+          //         int pageViewIndex) {
+          //       var i = widget.images[itemIndex];
+          //       if (i.type == 'video') {
+          //         print('check video index == $itemIndex');
+          //         return VideoPlayerScreen(url: i.images, isPlaying: (val) {
+          //           if (val) {
+          //             print('video is playing -=- true');
+          //             setState(() {
+          //               this.isAutoPlay = false;
+          //               this.videoIndex = itemIndex;
+          //             });
           //           } else {
-          //             if (i.type == 'video') {
-          //               return VideoPlayerScreen(url: i.images, isPlaying: (
-          //                   val) {
-          //                 if (val) {
-          //                   print('video is playing -=- true');
-          //                   setState(() {
-          //                     this.isAutoPlay = false;
-          //                   });
-          //                 } else {
-          //
-          //                   setState(() {
-          //                     this.isAutoPlay = true;
-          //                   });
-          //                   print('video is playing -=- false');
-          //                 }
-          //               });
-          //             } else {
+          //             setState(() {
+          //               this.isAutoPlay = true;
+          //             });
+          //             print('video is playing -=- false');
+          //           }
+          //         },
+          //           enableVolume: onVolume,
+          //         onVolume: (val){
+          //             this.onVolume = val;
+          //           },);
+          //       } else {
+          //         return ClipRRect(
+          //           borderRadius: BorderRadius.circular(0.0),
+          //           child: Builder(
+          //             builder: (BuildContext context) {
           //               return Container(
           //                 decoration: BoxDecoration(
           //                     borderRadius:
@@ -201,13 +136,83 @@ class _FlexibleAppBarState extends State<FlexibleAppBar> {
           //                   height: double.infinity,
           //                 ),
           //               );
-          //             }
-          //           }
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ).toList()),
+          //             },
+          //           ),
+          //         );
+          //       }
+          //     }
+          // )
+          child: CarouselSlider(
+          options: CarouselOptions(
+            height: 330.0,
+            viewportFraction: 1,
+            enlargeCenterPage: false,
+            pageSnapping: true,
+            autoPlay: isAutoPlay,
+            autoPlayInterval: Duration(seconds: 3),
+            autoPlayAnimationDuration: Duration(milliseconds: 800),
+          ),
+          items: widget.images.map(
+                (i) {
+                  if (i.images == null) {
+                    return Center(
+                      child: Text("No image data"),
+                    );
+                  } else {
+                    if (i.type == 'video') {
+                      return VideoPlayerScreen(
+                        url: i.images, isPlaying: (
+                          val) {
+                        if (val) {
+                          print('video is playing -=- true');
+                          setState(() {
+                            this.isAutoPlay = false;
+                          });
+                        } else {
+
+                          setState(() {
+                            this.isAutoPlay = true;
+                          });
+                          print('video is playing -=- false');
+                        }
+                      },);
+                    } else {
+                      return Container(
+                        decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(0))),
+                        child: Image.network(
+                          i.images,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                                child: Text(
+                                  "Failed to load image",
+                                ));
+                          },
+                          loadingBuilder: (BuildContext context,
+                              Widget child,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                    null
+                                    ? loadingProgress
+                                    .cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          },
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      );
+                    }
+                  }
+            },
+          ).toList()),
     ),);
   }
 }

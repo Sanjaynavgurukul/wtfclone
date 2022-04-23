@@ -365,7 +365,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         widget.isPlaying(_controller.value.isPlaying);
       });
       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      if (mounted) setState(() {});
+      if (mounted) setState(() {
+      });
     });
   }
 
