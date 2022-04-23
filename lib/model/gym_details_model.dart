@@ -26,6 +26,7 @@ class GymDetailsModel {
 
   bool status;
   GymModelData data;
+
   // List<Gallery> gallery;
   // List<Equipment> equipment;
   // List<Benfit> benefits;
@@ -218,30 +219,45 @@ class Equipment {
 }
 
 class Gallery {
-  Gallery({
-    this.uid,
-    this.gymId,
-    this.categoryId,
-    this.images,
-  });
+  Gallery(
+      {this.uid,
+      this.images,
+      this.type,
+      this.status,
+      this.category_id,
+      this.date_added,
+      this.gym_id,
+      this.last_updated});
 
   String uid;
-  String gymId;
-  String categoryId;
+  String gym_id;
+  String category_id;
   String images;
+  String status;
+  String date_added;
+  String last_updated;
+  String type;
 
   factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
         uid: json["uid"],
-        gymId: json["gym_id"],
-        categoryId: json["category_id"],
+        gym_id: json["gym_id"],
+        category_id: json["category_id"],
+        status: json["status"],
+        date_added: json["date_added"],
+        last_updated: json["last_updated"],
+        type: json["type"],
         images: json["images"] == null ? null : json["images"],
       );
 
   Map<String, dynamic> toJson() => {
         "uid": uid,
-        "gym_id": gymId,
-        "category_id": categoryId,
         "images": images == null ? null : images,
+        "gym_id": gym_id,
+        "category_id": category_id,
+        "status": status,
+        "date_added": date_added,
+        "last_updated": last_updated,
+        "type": type,
       };
 }
 

@@ -100,6 +100,7 @@ class ExerciseTimerHelper {
       if(cFormatDate != pFormatDate){
         locator<AppPrefs>().exerciseUid.setValue('');
         locator<AppPrefs>().globalTimer.setValue(0);
+        locator<AppPrefs>().startExTimer.setValue(0);
         locator<AppPrefs>().exercisePause.setValue(false);
         locator<AppPrefs>().exerciseOn.setValue(false);
         return true;
