@@ -27,6 +27,7 @@ import 'package:wtf/screen/gym/arguments/plan_page_argument.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/subscriptions/argument/payment_process_argument.dart';
 import 'package:wtf/screen/subscriptions/buy_subscription_screen.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   @override
@@ -955,7 +956,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                   BorderRadius.all(Radius.circular(8)),
                               color: AppConstants.bgColor),
                           child: loading
-                              ? CupertinoActivityIndicator()
+                              ? Loading()
                               : Text('Verify OTP',
                                   style: TextStyle(
                                       color: Colors.white,

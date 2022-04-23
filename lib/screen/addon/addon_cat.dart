@@ -15,6 +15,7 @@ import 'package:wtf/helper/colors.dart';
 import 'package:wtf/model/add_on_slot_details.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/common_widgets/flexible_app_bar.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class AddonsCat extends StatefulWidget {
   static const String routeName = '/addonsCat';
@@ -85,7 +86,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
     return Consumer<GymStore>(builder: (context, user, snapshot) {
       if (user.addonsCatList == null || user.addonsCatList.isEmpty) {
         return Center(
-          child: CupertinoActivityIndicator(),
+          child: Loading()
         );
       } else {
         setTabBarController(user.addonsCatList.length);
@@ -148,7 +149,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                 },
                 child: user.addonsCatList.isEmpty
                     ? Center(
-                        child: CupertinoActivityIndicator(),
+                        child: Loading(),
                       )
                     : Column(
                         children: [
@@ -183,7 +184,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                                       : Center(child: Text('No Data Found')),
                                 )
                               : Center(
-                                  child: CupertinoActivityIndicator(),
+                                  child: Loading(),
                                 )
                         ],
                       ),
@@ -454,7 +455,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                   return Container(
                     height: 800,
                     child: Center(
-                      child: CupertinoActivityIndicator(),
+                      child: Loading(),
                     ),
                   );
                 } else {
@@ -543,7 +544,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                               Colors.black,
                               BlendMode.srcATop,
                             ),
-                            child: const CupertinoActivityIndicator(),
+                            child: Loading(),
                           )),
                     );
                   } else {
@@ -901,7 +902,7 @@ class _AddonsCatState extends State<AddonsCat> with TickerProviderStateMixin {
                         padding: EdgeInsets.only(top: 30),
                         alignment: Alignment.topCenter,
                         height: 800,
-                        child: CupertinoActivityIndicator(),
+                        child: Loading(),
                       ),
                     );
                   } else {

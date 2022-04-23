@@ -9,6 +9,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/gym_cat_model.dart';
 import 'package:wtf/screen/gym/gym_category_screen.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 import 'arguments/gym_cat_argument.dart';
 
@@ -53,7 +54,7 @@ class _GymCatState extends State<GymCat> {
     return Consumer<GymStore>(builder: (context, user, snapshot) {
       if (user.gymCatList == null || user.gymCatList.isEmpty) {
         return Center(
-          child: CupertinoActivityIndicator(),
+          child: Loading()
         );
       } else {
         return Scaffold(
@@ -68,7 +69,7 @@ class _GymCatState extends State<GymCat> {
               },
               child: user.gymCatList.isEmpty
                   ? Center(
-                child: CupertinoActivityIndicator(),
+                child: Loading()
               )
                   : SingleChildScrollView(
                 child: Container(

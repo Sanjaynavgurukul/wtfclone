@@ -18,6 +18,7 @@ import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_result.dart
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start_info.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_video.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class ExStartScreen extends StatefulWidget {
   static const routeName = '/exStartScreen';
@@ -155,7 +156,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                   children: <Widget>[
                     Center(
                       child: Column(children: [
-                        CupertinoActivityIndicator(),
+                        Loading(),
                         SizedBox(
                           height: 10,
                         ),

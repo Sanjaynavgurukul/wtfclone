@@ -60,7 +60,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return Consumer<GymStore>(builder: (context, user, snapshot) {
       if (user.selectedGymTypes == null || user.selectedGymTypes.data == null) {
         return Center(
-          child: CupertinoActivityIndicator(),
+          child: Loading(),
         );
       } else {
         //This is data

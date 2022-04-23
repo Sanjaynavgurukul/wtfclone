@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/new_gym/gym/bloc/gym_list_bloc.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class GymListScreen extends StatefulWidget {
   const GymListScreen({Key key}) : super(key: key);
@@ -27,7 +28,7 @@ class _GymListScreenState extends State<GymListScreen> {
             },
             builder: (context, state) {
               if(state is GymListInitial){
-                return Center(child: CupertinoActivityIndicator(),);
+                return Center(child: Loading(),);
               }else if(state is GymListFetchedState){
                 _data = state.gymModel;
                 return Container();
