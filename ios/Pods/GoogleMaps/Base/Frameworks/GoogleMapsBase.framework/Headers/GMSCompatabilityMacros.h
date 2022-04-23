@@ -11,7 +11,9 @@
 #import <Foundation/Foundation.h>
 
 #if defined(SWIFT_SDK_OVERLAY_UIKIT_EPOCH)
-#define GMS_SWIFT_NAME_2_0_3_0(name_swift_2, name_swift_3) NS_SWIFT_NAME(name_swift_3)
+#define GMS_SWIFT_NAME_2_0_3_0(name_swift_2, name_swift_3) \
+  NS_SWIFT_NAME(name_swift_3)
 #else
-#define GMS_SWIFT_NAME_2_0_3_0(name_swift_2, name_swift_3) NS_SWIFT_NAME(name_swift_2)
+#define GMS_SWIFT_NAME_2_0_3_0(name_swift_2, name_swift_3) \
+  NS_SWIFT_NAME(name_swift_2)
 #endif

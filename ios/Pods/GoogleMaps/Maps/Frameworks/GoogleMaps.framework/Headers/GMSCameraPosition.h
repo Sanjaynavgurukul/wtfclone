@@ -14,9 +14,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
-* An immutable class that aggregates all camera position parameters.
+ * An immutable class that aggregates all camera position parameters.
  */
-@interface GMSCameraPosition : NSObject<NSCopying, NSMutableCopying>
+@interface GMSCameraPosition : NSObject <NSCopying, NSMutableCopying>
 
 /**
  * Location on the Earth towards which the camera points.

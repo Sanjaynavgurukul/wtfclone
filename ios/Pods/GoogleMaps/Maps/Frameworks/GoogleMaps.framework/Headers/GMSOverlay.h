@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  * This supports the NSCopying protocol; [overlay_ copy] will return a copy of the overlay type, but
  * with |map| set to nil.
  */
-@interface GMSOverlay : NSObject<NSCopying>
+@interface GMSOverlay : NSObject <NSCopying>
 
 /**
  * Title, a short description of the overlay. Some overlays, such as markers, will display the title

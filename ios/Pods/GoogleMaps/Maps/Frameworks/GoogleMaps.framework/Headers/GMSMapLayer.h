@@ -48,7 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
  * </pre>
  *
  * Note that these properties are not view-based. Please see "Animating View and Layer Changes
- * Together" in the <a href="http://developer.apple.com/library/ios/#documentation/windowsviews/conceptual/viewpg_iphoneos/AnimatingViews/AnimatingViews.html">
+ * Together" in the <a
+ * href="http://developer.apple.com/library/ios/#documentation/windowsviews/conceptual/viewpg_iphoneos/AnimatingViews/AnimatingViews.html">
  * View Programming Guide for iOS</a>.
  */
 

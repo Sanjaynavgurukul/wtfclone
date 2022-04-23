@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  * GMSPath encapsulates an immutable array of CLLocationCooordinate2D. All the coordinates of a
  * GMSPath must be valid. The mutable counterpart is GMSMutablePath.
  */
-@interface GMSPath : NSObject<NSCopying, NSMutableCopying>
+@interface GMSPath : NSObject <NSCopying, NSMutableCopying>
 
 /** Convenience constructor for an empty path. */
 + (instancetype)path;

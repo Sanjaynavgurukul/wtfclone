@@ -39,7 +39,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** Delegate for events on GMSMapView. */
-@protocol GMSMapViewDelegate<NSObject>
+@protocol GMSMapViewDelegate <NSObject>
 
 @optional
 
@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param mapView The map view that was tapped.
  * @param gesture If YES, this is occurring due to a user gesture.
-*/
+ */
 - (void)mapView:(GMSMapView *)mapView willMove:(BOOL)gesture;
 
 /**

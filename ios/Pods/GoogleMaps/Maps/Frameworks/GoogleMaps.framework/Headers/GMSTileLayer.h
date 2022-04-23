@@ -24,7 +24,7 @@ FOUNDATION_EXTERN UIImage *const kGMSTileLayerNoTile;
  * GMSTileReceiver is provided to GMSTileLayer when a tile request is made, allowing the callback to
  * be later (or immediately) invoked.
  */
-@protocol GMSTileReceiver<NSObject>
+@protocol GMSTileReceiver <NSObject>
 - (void)receiveTileWithX:(NSUInteger)x
                        y:(NSUInteger)y
                     zoom:(NSUInteger)zoom

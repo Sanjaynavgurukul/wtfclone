@@ -257,7 +257,7 @@ class GymStore extends ChangeNotifier {
 
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
-  String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
+  String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '';
   // String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
@@ -2688,7 +2688,7 @@ class GymStore extends ChangeNotifier {
 
     //TODO no idea
     workoutMappingId = await RestDatasource().getWorkoutVerification(
-      date: workoutSelectedDate,
+      date: workoutDate,
     );
 
     NavigationService.goBack;
@@ -2722,7 +2722,7 @@ class GymStore extends ChangeNotifier {
         );
 
         getMySchedules(
-            date: workoutSelectedDate);
+            date: workoutDate);
         //TODO Feed Page Details like e-duration and total cal
         WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
           context: context,
@@ -2732,7 +2732,7 @@ class GymStore extends ChangeNotifier {
         // manageGlobalTimer(context: context, mode: 'stop');
         if (res != null) {
           await getMyWorkoutSchedules(
-            date: workoutSelectedDate,
+            date: workoutDate,
             addonId: selectedSchedule.addonId,
             subscriptionId: selectedSchedule.uid,
           );
@@ -2757,7 +2757,7 @@ class GymStore extends ChangeNotifier {
         context: context,
         body: body,
       );
-      getMySchedules(date: workoutSelectedDate);
+      getMySchedules(date: workoutDate);
       WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
         context: context,
         body: {'exercises': exercises},
@@ -2766,7 +2766,7 @@ class GymStore extends ChangeNotifier {
       // manageGlobalTimer(context: context, mode: 'stop');
       if (res != null) {
         await getMyWorkoutSchedules(
-          date: workoutSelectedDate,
+          date: workoutDate,
           addonId: selectedSchedule.addonId,
           subscriptionId: selectedSchedule.uid,
         );
@@ -2888,7 +2888,7 @@ class GymStore extends ChangeNotifier {
     Map<String, dynamic> body = {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "trainer_id": currentTrainer.data.userId,
-      "date": workoutSelectedDate,
+      "date": workoutDate,
       "workout_mapping_id": exercises,
       'addon_id': workoutAddonId,
       'subscription_id': workoutSubscriptionId,
@@ -2906,7 +2906,7 @@ class GymStore extends ChangeNotifier {
     }else{
       print('Workout Verified checking --- verified $uid');
       workoutMappingId = await RestDatasource().getWorkoutVerification(
-        date: workoutSelectedDate,
+        date: workoutDate,
       );
       print('Workout Verified checking --- workoutMappingId $workoutMappingId');
       //Check if Workout Mapping id is no null or not :D
@@ -2973,7 +2973,7 @@ class GymStore extends ChangeNotifier {
           context: context,
           body: body,
         );
-        getMySchedules(date: workoutSelectedDate);
+        getMySchedules(date: workoutDate);
         WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
           context: context,
           body: {'exercises': exercises},
@@ -2982,7 +2982,7 @@ class GymStore extends ChangeNotifier {
         // manageGlobalTimer(context: context, mode: 'stop');
         if (res != null) {
           await getMyWorkoutSchedules(
-            date: workoutSelectedDate,
+            date: workoutDate,
             addonId: workoutAddonId,
             subscriptionId: workoutSubscriptionId,
           );

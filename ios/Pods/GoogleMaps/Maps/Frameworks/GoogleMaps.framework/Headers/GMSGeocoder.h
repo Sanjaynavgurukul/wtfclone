@@ -36,8 +36,7 @@ typedef NS_ENUM(NSInteger, GMSGeocoderErrorCode) {
  *
  * @related GMSGeocoder
  */
-typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *_Nullable,
-                                          NSError *_Nullable);
+typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *_Nullable, NSError *_Nullable);
 
 /**
  * Exposes a service for reverse geocoding. This maps Earth coordinates (latitude and longitude) to
@@ -61,7 +60,7 @@ typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *_Nullable,
 @end
 
 /** A collection of results from a reverse geocode request. */
-@interface GMSReverseGeocodeResponse : NSObject<NSCopying>
+@interface GMSReverseGeocodeResponse : NSObject <NSCopying>
 
 /** Returns the first result, or nil if no results were available. */
 - (nullable GMSAddress *)firstResult;

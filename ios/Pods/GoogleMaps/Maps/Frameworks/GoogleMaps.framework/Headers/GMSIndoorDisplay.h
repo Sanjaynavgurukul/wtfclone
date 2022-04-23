@@ -16,7 +16,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** Delegate for events on GMSIndoorDisplay. */
-@protocol GMSIndoorDisplayDelegate<NSObject>
+@protocol GMSIndoorDisplayDelegate <NSObject>
 @optional
 
 /**

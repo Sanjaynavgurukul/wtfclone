@@ -296,7 +296,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                       SizedBox(
                         height: 15,
                       ),
-                      VideoPlayerScreen(url: data.video,isPlaying:(val){}),
+                      VideoPlayerScreen(url: data.video,isPlaying:(val){},isEx: true,),
 
                       SizedBox(
                         height: 15,
@@ -335,11 +335,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
 }
 
 class VideoPlayerScreen extends StatefulWidget {
-   VideoPlayerScreen({Key key,@required this.url,this.isPlaying,this.enableVolume = true,this.onVolume}) : super(key: key);
+   VideoPlayerScreen({Key key,@required this.url,this.isPlaying,this.enableVolume = true,this.onVolume,this.isEx = false}) : super(key: key);
   final String url;
    bool enableVolume;
   final Function(bool) isPlaying;
   final Function(bool) onVolume;
+  final bool isEx;
 
 
   @override
@@ -372,7 +373,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return !widget.isEx?Stack(
       children: [
         InkWell(
           onTap: (){
@@ -401,21 +402,21 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           }, icon: Icon(_controller.value.volume == 0.0?Icons.volume_off_sharp:Icons.volume_up)),
         ),
       ],
+    ):
+     ExerciseVideo(
+      controller: _controller,
+
+      onPausePlay: () {
+        setState(() {
+          if( _controller.value.isPlaying){
+            _controller.pause();
+          }else{
+            _controller.play();
+          }
+
+        });
+      },
     );
-    // return  ExerciseVideo(
-    //   controller: _controller,
-    //
-    //   onPausePlay: () {
-    //     setState(() {
-    //       if( _controller.value.isPlaying){
-    //         _controller.pause();
-    //       }else{
-    //         _controller.play();
-    //       }
-    //
-    //     });
-    //   },
-    // );
   }
 
   @override

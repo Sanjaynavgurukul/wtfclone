@@ -99,10 +99,8 @@ BOOL GMSGeometryContainsLocation(CLLocationCoordinate2D point, GMSPath *path, BO
  * RadiusEarth==6371009.
  */
 FOUNDATION_EXPORT
-BOOL GMSGeometryIsLocationOnPathTolerance(CLLocationCoordinate2D point,
-                                          GMSPath *path,
-                                          BOOL geodesic,
-                                          CLLocationDistance tolerance);
+BOOL GMSGeometryIsLocationOnPathTolerance(CLLocationCoordinate2D point, GMSPath *path,
+                                          BOOL geodesic, CLLocationDistance tolerance);
 
 /**
  * Same as GMSGeometryIsLocationOnPath(point, path, geodesic, tolerance), with a default tolerance
@@ -183,8 +181,7 @@ CLLocationDirection GMSGeometryHeading(CLLocationCoordinate2D from, CLLocationCo
  * Both coordinates must be valid.
  */
 FOUNDATION_EXPORT
-CLLocationCoordinate2D GMSGeometryOffset(CLLocationCoordinate2D from,
-                                         CLLocationDistance distance,
+CLLocationCoordinate2D GMSGeometryOffset(CLLocationCoordinate2D from, CLLocationDistance distance,
                                          CLLocationDirection heading);
 
 /**
@@ -195,8 +192,7 @@ CLLocationCoordinate2D GMSGeometryOffset(CLLocationCoordinate2D from,
  */
 FOUNDATION_EXPORT
 CLLocationCoordinate2D GMSGeometryInterpolate(CLLocationCoordinate2D from,
-                                              CLLocationCoordinate2D to,
-                                              double fraction);
+                                              CLLocationCoordinate2D to, double fraction);
 
 /**
  * Returns an NSArray of GMSStyleSpan constructed by repeated application of style and length
@@ -220,10 +216,8 @@ CLLocationCoordinate2D GMSGeometryInterpolate(CLLocationCoordinate2D from,
  * </pre>
  */
 FOUNDATION_EXPORT
-NSArray<GMSStyleSpan *> *GMSStyleSpans(GMSPath *path,
-                                       NSArray<GMSStrokeStyle *> *styles,
-                                       NSArray<NSNumber *> *lengths,
-                                       GMSLengthKind lengthKind);
+NSArray<GMSStyleSpan *> *GMSStyleSpans(GMSPath *path, NSArray<GMSStrokeStyle *> *styles,
+                                       NSArray<NSNumber *> *lengths, GMSLengthKind lengthKind);
 
 /**
  * Similar to GMSStyleSpans(path, styles, lengths, lengthKind) but additionally takes an initial
@@ -232,10 +226,8 @@ NSArray<GMSStyleSpan *> *GMSStyleSpans(GMSPath *path,
  * |lengthOffset| the length (e.g. in meters) that should be skipped initially from |lengths|.
  */
 FOUNDATION_EXPORT
-NSArray<GMSStyleSpan *> *GMSStyleSpansOffset(GMSPath *path,
-                                             NSArray<GMSStrokeStyle *> *styles,
-                                             NSArray<NSNumber *> *lengths,
-                                             GMSLengthKind lengthKind,
+NSArray<GMSStyleSpan *> *GMSStyleSpansOffset(GMSPath *path, NSArray<GMSStrokeStyle *> *styles,
+                                             NSArray<NSNumber *> *lengths, GMSLengthKind lengthKind,
                                              double lengthOffset);
 
 /**@}*/

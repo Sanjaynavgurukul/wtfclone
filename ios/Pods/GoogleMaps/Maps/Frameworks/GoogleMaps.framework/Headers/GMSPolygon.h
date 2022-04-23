@@ -45,6 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** Whether this polygon should be rendered with geodesic correction. */
 @property(nonatomic) BOOL geodesic;
 
+/** Provides the Core Animation layer for this GMSPolygon. */
+@property(nonatomic, readonly) GMSPolygonLayer *layer;
+
 /**
  * Convenience constructor for GMSPolygon for a particular path. Other properties will have default
  * values.

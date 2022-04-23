@@ -37,8 +37,7 @@
  * Replace the coordinate at |index| with |coord|. If |index| is after the end, grows the array with
  * an undefined coordinate.
  */
-- (void)replaceCoordinateAtIndex:(NSUInteger)index
-                  withCoordinate:(CLLocationCoordinate2D)coord;
+- (void)replaceCoordinateAtIndex:(NSUInteger)index withCoordinate:(CLLocationCoordinate2D)coord;
 
 /**
  * Remove entry at |index|.

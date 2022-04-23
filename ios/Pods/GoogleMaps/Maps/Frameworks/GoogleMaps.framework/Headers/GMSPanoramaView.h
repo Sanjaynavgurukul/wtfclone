@@ -24,7 +24,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /** Delegate for events on GMSPanoramaView. */
-@protocol GMSPanoramaViewDelegate<NSObject>
+@protocol GMSPanoramaViewDelegate <NSObject>
 @optional
 
 /**
@@ -41,8 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * This is invoked every time the |view|.panorama property changes.
  */
-- (void)panoramaView:(GMSPanoramaView *)view
-    didMoveToPanorama:(nullable GMSPanorama *)panorama;
+- (void)panoramaView:(GMSPanoramaView *)view didMoveToPanorama:(nullable GMSPanorama *)panorama;
 
 /**
  * Called when the panorama change was caused by invoking moveToPanoramaNearCoordinate:. The
@@ -185,7 +184,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Modifies the camera according to |cameraUpdate|, over |duration| (specified in seconds).
  */
 - (void)updateCamera:(GMSPanoramaCameraUpdate *)cameraUpdate
-   animationDuration:(NSTimeInterval)duration;
+    animationDuration:(NSTimeInterval)duration;
 
 /**
  * Requests a panorama near |coordinate|.

@@ -20,11 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * A result from a reverse geocode request, containing a human-readable address. This class is
- * immutable and should be obtained via GMSGeocoder.
+ * immutable and should not be instantiated directly unless under testing circumstances. Obtain an
+ * instance via GMSGeocoder.
  *
  * Some of the fields may be nil, indicating they are not present.
  */
-@interface GMSAddress : NSObject<NSCopying>
+@interface GMSAddress : NSObject <NSCopying, NSSecureCoding>
 
 /** Location, or kLocationCoordinate2DInvalid if unknown. */
 @property(nonatomic, readonly) CLLocationCoordinate2D coordinate;
