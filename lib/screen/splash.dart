@@ -252,7 +252,7 @@ class SplashWidget extends StatelessWidget {
                           text: "Sign In",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              NavigationService.navigateToReplacement(
+                              NavigationService.pushName(
                                   Routes.login);
                             })
                     ],

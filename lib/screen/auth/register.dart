@@ -571,11 +571,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 .init(context: context);
                                             auth.registerMethod = null;
                                             locator<AppPrefs>().memberAdded.setValue(false);
+                                            // Future.delayed(
+                                            //     Duration(seconds: 1),
+                                            //     () => NavigationService
+                                            //         .navigateToReplacement(
+                                            //             Routes.userDetail));
                                             Future.delayed(
                                                 Duration(seconds: 1),
-                                                () => NavigationService
-                                                    .navigateToReplacement(
-                                                        Routes.userDetail));
+                                                () {
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
+                                                });
                                           } else {
                                             _scaffoldKey.currentState
                                                 .showSnackBar(new SnackBar(
@@ -608,9 +614,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                           if (res['status']) {
                                             Future.delayed(
                                               Duration(seconds: 1),
-                                              () => NavigationService
-                                                  .navigateToReplacement(
-                                                      Routes.userDetail),
+                                              () => Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false),
                                             );
                                           }
                                         } else {
