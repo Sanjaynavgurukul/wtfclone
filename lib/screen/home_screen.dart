@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
                         'assets/svg/nav_bar/dashboard.svg',
 
                         semanticsLabel: 'Dashboard Icon'
-                    ), title: Text('Dashboard')),
+                    ), label: 'Dashboard'),
                 BottomNavigationBarItem(
                     activeIcon:new SvgPicture.asset(
                       'assets/svg/nav_bar/explore.svg',
@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen>
                         'assets/svg/nav_bar/explore.svg',
 
                         semanticsLabel: 'Explore icon'
-                    ), title: Text('Explore')),
+                    ), label: 'Explore'),
                 BottomNavigationBarItem(
                     activeIcon:new SvgPicture.asset(
                       'assets/svg/nav_bar/wtf.svg',
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen>
                         'assets/svg/nav_bar/wtf.svg',
 
                         semanticsLabel: 'wtf icon'
-                    ), title: Text('My WTF')),
+                    ), label: 'My WTF'),
                 BottomNavigationBarItem(
                     activeIcon:new SvgPicture.asset(
                       'assets/svg/nav_bar/coin.svg',
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen>
                         'assets/svg/nav_bar/coin.svg',
 
                         semanticsLabel: 'coin icon'
-                    ), title: Text('Coins')),
+                    ), label: 'Coins'),
               ],
               currentIndex: store.currentIndex,
               fixedColor: Colors.white,

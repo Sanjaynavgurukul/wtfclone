@@ -77,13 +77,13 @@ class _LandingScreenState extends State<LandingScreen> {
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard), title: Text('Dashboard')),
+                icon: Icon(Icons.dashboard), label: 'Dashboard'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.widgets), title: Text('Explore')),
+                icon: Icon(Icons.widgets), label: 'Explore'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle), title: Text('My WTF')),
+                icon: Icon(Icons.account_circle), label: 'My WTF'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.favorite), title: Text('Coins')),
+                icon: Icon(Icons.favorite), label: 'Coins'),
           ],
           currentIndex: pageIndex,
           fixedColor: Colors.white,
