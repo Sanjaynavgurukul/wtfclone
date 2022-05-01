@@ -11,6 +11,7 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/api_helper.dart';
 import 'package:wtf/helper/network_utils.dart';
+import 'package:wtf/model/100ms_model.dart';
 import 'package:wtf/model/ActiveSubscriptions.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/model/AttendanceDetails.dart';
@@ -226,7 +227,7 @@ class RestDatasource {
     if (res != null && res.containsKey('uid')) {
       print('check workoutVerification res is not null ${res['uid']}');
       isAdded = res['uid'];
-    }else{
+    } else {
       print('check workoutVerification res is on null');
     }
     return Future.value(isAdded);
@@ -1043,7 +1044,8 @@ class RestDatasource {
         .get(
       url,
       headers: mapHeader,
-    ).then((dynamic res) {
+    )
+        .then((dynamic res) {
       log(res.toString());
       print("response of getBodyStats : " + res.toString());
       Stats model = Stats.fromJson(res);
@@ -1724,7 +1726,7 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-    String finalUrl = Api.getNearestCatGym(lat:lat, lng:lng, cat_id: cat_id);
+    String finalUrl = Api.getNearestCatGym(lat: lat, lng: lng, cat_id: cat_id);
     return _netUtil
         .get(BASE_URL + finalUrl, headers: mapHeader)
         .then((dynamic res) {
@@ -1732,21 +1734,20 @@ class RestDatasource {
       GymTypes model = res != null && res['status']
           ? GymTypes.fromJson(res)
           : GymTypes(
-        data: [],
-      );
+              data: [],
+            );
       return model;
     });
   }
 
-  Future<List<GymCatModel>> getGymCat()async{
+  Future<List<GymCatModel>> getGymCat() async {
     String token = locator<AppPrefs>().token.getValue();
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     String finalUrl = Api.getGymCat();
-    var res =
-    await _netUtil.get(BASE_URL + finalUrl, headers: mapHeader);
+    var res = await _netUtil.get(BASE_URL + finalUrl, headers: mapHeader);
     print('get gym cat response --- $res');
 
     if (res['status']) {
@@ -1762,8 +1763,7 @@ class RestDatasource {
   }
 
   Future<AddOnSlotDetails> getAddOnsCatGymSlots(
-      {@required String date, @required String addon_uid})async{
-
+      {@required String date, @required String addon_uid}) async {
     String token = locator<AppPrefs>().token.getValue();
     print("get Gym Slot details 3");
     Map<String, String> mapHeader = Map();
@@ -1773,7 +1773,7 @@ class RestDatasource {
     String url = BASE_URL + Api.getAddOnsGymsSlots(date: date);
     print('url: $url');
     var res =
-    await _netUtil.post(url, headers: mapHeader, body: {'uid': addon_uid});
+        await _netUtil.post(url, headers: mapHeader, body: {'uid': addon_uid});
     print("get Gym Slot details 5");
     print("response of Get Gym Slot details : " + res.toString());
     print("get Gym Slot details 6");
@@ -1782,7 +1782,8 @@ class RestDatasource {
     return Future.value(model);
   }
 
-  Future<GymTypes> getCatNearByGymsList({String lat, String lng,String cat_id}) async {
+  Future<GymTypes> getCatNearByGymsList(
+      {String lat, String lng, String cat_id}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
@@ -1796,12 +1797,27 @@ class RestDatasource {
       GymTypes model = res != null && res['status']
           ? GymTypes.fromJson(res)
           : GymTypes(
-        data: [],
-      );
+              data: [],
+            );
       return model;
     });
   }
 
-
-
+  Future<MsModel> get100msData(
+      {@required String name, @required String description}) async {
+    String token = locator<AppPrefs>().token.getValue();
+    // print("get Gym Slot details 3");
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    // print("get Gym Slot details 4");
+    // String url = BASE_URL + Api.getAddOnsGymsSlots(date: date);
+    // print('url: $url');
+    var res = await _netUtil.post(BASE_URL+'live/room',headers: mapHeader,
+        body: {"name": "$name", "description": "$description","role":"guest"});
+    print("response of Get 100ms details : " + res.toString());
+    MsModel model;
+    if (res != null && res["status"]) model = MsModel.fromJson(res);
+    return Future.value(model);
+  }
 }

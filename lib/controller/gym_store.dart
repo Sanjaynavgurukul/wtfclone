@@ -29,6 +29,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/social_auth_services.dart';
 import 'package:wtf/helper/strings.dart';
+import 'package:wtf/model/100ms_model.dart';
 import 'package:wtf/model/ActiveSubscriptions.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/model/AttendanceDetails.dart';
@@ -258,6 +259,7 @@ class GymStore extends ChangeNotifier {
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
   String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
+  MsModel msModel;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
@@ -421,13 +423,14 @@ class GymStore extends ChangeNotifier {
           .setValue(res['pt_verification_id']);
       locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
       log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
-      await showDialog(
-        context: context,
-        builder: (context) => JitsiMeeting(
-          meetingRoomId: roomId,
-          meetingSubject: addonName,
-        ),
-      );
+      //TODO check jisi meet
+      // await showDialog(
+      //   context: context,
+      //   builder: (context) => JitsiMeeting(
+      //     meetingRoomId: roomId,
+      //     meetingSubject: addonName,
+      //   ),
+      // );
       // Navigator.of(context).push(
       //   CupertinoPageRoute(
       //     builder: (context) => JitsiMeeting(
@@ -2989,4 +2992,23 @@ class GymStore extends ChangeNotifier {
       return uid;
     }
   }
+
+
+  Future<MsModel> get100Ms({BuildContext context})async{
+    showDialog(
+      context: context,
+      builder: (context) => ProcessingDialog(
+        message: 'Please wait...',
+      ),
+    );
+
+   var value = await RestDatasource().get100msData(name: 'Live Claees', description: 'Live classes Description');
+   if(value != null){
+     Navigator.pop(context);
+     return value;
+   }else{
+     return null;
+   }
+  }
+
 }

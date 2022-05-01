@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 import 'package:wtf/controller/auth_controller.dart';
 import 'package:wtf/controller/dynamic_links.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
     Provider.debugCheckInvalidValueType = null;
     await setupLocator();
     await Firebase.initializeApp();
+    Wakelock.enable();
     //Firebase FirebaseCrashlytics :d
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     AwesomeNotifications().initialize(
@@ -57,7 +59,7 @@ Future<void> main() async {
       ],
     );
     // SharedPref.pref = await SharedPreferences.getInstance();
-
+    
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
@@ -185,6 +187,7 @@ class _MyAppState extends State<MyApp>
       child: ScreenUtilInit(
         designSize: Size(480, 960),
         builder: () => MaterialApp(
+          scaffoldMessengerKey: GlobalKey<ScaffoldMessengerState>(),
           debugShowCheckedModeBanner: false,
           title: 'WTF',
           darkTheme: ThemeData(

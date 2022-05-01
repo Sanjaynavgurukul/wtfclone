@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -1161,23 +1160,24 @@ class CommonAppBar extends StatelessWidget {
             color: Colors.white,
           ),
           UIHelper.horizontalSpace(10.0),
-          PreferenceBuilder<String>(
-            preference: locator<AppPrefs>().dateAdded,
-            builder: (context, snapshot) {
-              print('date added value --- $snapshot');
-              return snapshot != null
-                  ? Text(
-                      // '',
-                      'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11.0,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Container();
-            },
-          ),
+          //TODO cehck Jitsi
+          // PreferenceBuilder<String>(
+          //   preference: locator<AppPrefs>().dateAdded,
+          //   builder: (context, snapshot) {
+          //     print('date added value --- $snapshot');
+          //     return snapshot != null
+          //         ? Text(
+          //             // '',
+          //             'Joined ${Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hour') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('hours') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minutes') || Jiffy(snapshot).startOf(Units.DAY).fromNow().contains('minute') ? 'today' : '\n${Jiffy(snapshot).startOf(Units.DAY).fromNow()}'}',
+          //             style: TextStyle(
+          //               fontWeight: FontWeight.w500,
+          //               fontSize: 11.0,
+          //               color: Colors.white,
+          //             ),
+          //           )
+          //         : Container();
+          //   },
+          // ),
         ],
       ),
     );

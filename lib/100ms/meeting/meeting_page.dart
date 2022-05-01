@@ -13,7 +13,6 @@ import 'package:wtf/100ms/common/ui/organisms/chat_bottom_sheet.dart';
 import 'package:wtf/100ms/common/ui/organisms/offline_screen.dart';
 import 'package:wtf/100ms/common/util/utility_components.dart';
 import 'package:wtf/100ms/enum/meeting_flow.dart';
-import 'package:wtf/100ms/logs/custom_singleton_logger.dart';
 import 'package:wtf/100ms/meeting/meeting_store.dart';
 import 'package:wtf/100ms/meeting/peer_track_node.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +43,6 @@ class MeetingPage extends StatefulWidget {
 
 class _MeetingPageState extends State<MeetingPage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  CustomLogger logger = CustomLogger();
   int appBarIndex = 0;
   bool audioViewOn = false;
   bool videoPreviousState = false;
@@ -53,6 +51,7 @@ class _MeetingPageState extends State<MeetingPage>
 
   @override
   void initState() {
+    print('Meeting page called in init state----');
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initMeeting();

@@ -102,12 +102,6 @@
 @import image_picker;
 #endif
 
-#if __has_include(<jitsi_meet/JitsiMeetPlugin.h>)
-#import <jitsi_meet/JitsiMeetPlugin.h>
-#else
-@import jitsi_meet;
-#endif
-
 #if __has_include(<location/LocationPlugin.h>)
 #import <location/LocationPlugin.h>
 #else
@@ -223,7 +217,6 @@
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
   [HmssdkFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"HmssdkFlutterPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
-  [JitsiMeetPlugin registerWithRegistrar:[registry registrarForPlugin:@"JitsiMeetPlugin"]];
   [LocationPlugin registerWithRegistrar:[registry registrarForPlugin:@"LocationPlugin"]];
   [MapsLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"MapsLauncherPlugin"]];
   [OTPPlugin registerWithRegistrar:[registry registrarForPlugin:@"OTPPlugin"]];

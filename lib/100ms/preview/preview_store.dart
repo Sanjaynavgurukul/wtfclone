@@ -4,16 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:wtf/100ms/manager/HmsSdkManager.dart';
 import 'package:wtf/100ms/service/room_service.dart';
+import 'package:wtf/model/100ms_model.dart';
 
 class PreviewStore extends ChangeNotifier
     implements HMSPreviewListener, HMSLogListener {
-  List<HMSVideoTrack> localTracks = [];
+  List<HMSVideoTrack> previewTrack = [];
+
+  PreviewStore();
 
   HMSPeer peer;
 
   HMSException error;
 
-  bool isHLSLink = false;
+  //bool isHLSLink = false;
   HMSRoom room;
 
   bool isVideoOn = true;
@@ -34,39 +37,37 @@ class PreviewStore extends ChangeNotifier
   @override
   void onPreview({@required HMSRoom room, @required List<HMSTrack> localTracks}) {
     this.room = room;
+
+    print('100ms cross checking check local tracks length --- ${localTracks.length}');
+
     for (HMSPeer each in room.peers) {
       if (each.isLocal) {
         peer = each;
         if (each.role.name.indexOf("hls-") == 0) {
-          isHLSLink = true;
+          //isHLSLink = true;
           notifyListeners();
         }
         break;
       }
     }
+
     List<HMSVideoTrack> videoTracks = [];
     for (var track in localTracks) {
       if (track.kind == HMSTrackKind.kHMSTrackKindVideo) {
         videoTracks.add(track as HMSVideoTrack);
       }
     }
-    this.localTracks = videoTracks;
+    //
+    print('100ms cross checking check local tracks length 2 --- ${videoTracks.length}');
+    this.previewTrack = videoTracks;
     notifyListeners();
   }
 
   Future<bool> startPreview(
-      {@required String user, @required String roomId}) async {
-    List<String> token =
-        await RoomService().getToken(user: user, room: roomId);
-
-    if (token == null) return false;
-    if (token[0] == null) return false;
-    FirebaseCrashlytics.instance.setUserIdentifier(token[0]);
-    HMSConfig config = HMSConfig(
-        authToken: token[0],
-        userName: user,
-        endPoint: token[1] == "true" ? "" : "https://qa-init.100ms.live/init",
-        captureNetworkQualityInPreview: true);
+      {MsModel model}) async {
+    print('check meeting token ----${model.token}');
+    HMSConfig config = HMSConfig(authToken: model.token,
+        userName: 'Sanjay',captureNetworkQualityInPreview: true);
 
     HmsSdkManager.hmsSdkInteractor?.preview(config: config);
     return true;

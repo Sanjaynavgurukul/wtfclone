@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:wtf/100ms/main.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
@@ -18,16 +18,13 @@ import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/MemberSubscriptions.dart';
 import 'package:wtf/model/my_schedule_model.dart';
-
 import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/home/categories.dart';
 import 'package:wtf/screen/home/upcoming_events.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/custom_expansion_tile.dart';
 import 'package:wtf/widget/progress_loader.dart';
-
 import '../ExplorePage.dart';
 import '../event/EventDetails.dart';
 
@@ -81,18 +78,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // NavigationService.pushName(Routes.gymCat);
-      //     NavigationService.pushName(Routes.dateWorkoutList);
-      //     // Navigator.push(
-      //     //   context,
-      //     //   MaterialPageRoute(builder: (context) => MyHomePage()),
-      //     // );
-      //     //FirebaseCrashlytics.instance.crash();
-      //   },
-      //   child: Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           context.read<GymStore>().init(context: context);

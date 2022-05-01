@@ -2,7 +2,7 @@
     package="com.wtf.member"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -18,13 +18,19 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-<!--    <queries>-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+
+    <!--    <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>-->
+<!--    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>-->
+
+
+    <!--    <queries>-->
 <!--        <package android:name="com.facebook.katana" />-->
 <!--    </queries>-->
 
@@ -64,13 +70,13 @@
 <!--       </activity>-->
 
        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+           android:name=".MainActivity"
+           android:launchMode="singleTop"
+           android:theme="@style/LaunchTheme"
+           android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+           android:hardwareAccelerated="true"
+           android:windowSoftInputMode="adjustResize"
+           android:exported="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -99,7 +105,7 @@
         </activity>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
