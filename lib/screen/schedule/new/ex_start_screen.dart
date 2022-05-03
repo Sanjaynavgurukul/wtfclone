@@ -296,7 +296,7 @@ class _ExStartScreenState extends State<ExStartScreen> {
                       SizedBox(
                         height: 15,
                       ),
-                      VideoPlayerScreen(url: data.video,),
+                      VideoPlayerScreen(url: data.video,isPlaying:(val){}),
 
                       SizedBox(
                         height: 15,
@@ -335,8 +335,12 @@ class _ExStartScreenState extends State<ExStartScreen> {
 }
 
 class VideoPlayerScreen extends StatefulWidget {
-   VideoPlayerScreen({Key key,@required this.url}) : super(key: key);
+   VideoPlayerScreen({Key key,@required this.url,this.isPlaying,this.enableVolume = true,this.onVolume}) : super(key: key);
   final String url;
+   bool enableVolume;
+  final Function(bool) isPlaying;
+  final Function(bool) onVolume;
+
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
@@ -351,26 +355,67 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     _controller = VideoPlayerController.network(
       widget.url??"https://d1gzvbhpg92x41.cloudfront.net/workout_upload/TBLzo5i6OrtXo/1650287910669-cominghh_soon_-_42890%20%28Original%29.mp4",
-      videoPlayerOptions: VideoPlayerOptions(),
+      videoPlayerOptions: VideoPlayerOptions(
+      ),
     )..initialize().then((_) {
       _controller.play();
-      _controller.addListener(() {});
+      _controller.setVolume(widget.enableVolume?1.0:0.0);
+      _controller.addListener(() {
+        print('check playing or not --- ${_controller.value.isPlaying}');
+        widget.isPlaying(_controller.value.isPlaying);
+      });
       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      if (mounted) setState(() {});
+      if (mounted) setState(() {
+      });
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    return  ExerciseVideo(
-      controller: _controller,
-      onPausePlay: () {
-        setState(() {
-          _controller.value.isPlaying
-              ? _controller.pause()
-              : _controller.play();
-        });
-      },
+    return Stack(
+      children: [
+        InkWell(
+          onTap: (){
+            _controller.value.isPlaying
+                ? _controller.pause()
+                : _controller.play();
+          },
+          child: VideoPlayer(
+            _controller,
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: IconButton(onPressed: (){
+            if(_controller.value.volume != 0.0){
+              setState(() {
+                _controller.setVolume(0.0);
+                widget.onVolume(false);
+              });
+            }else{
+              setState(() {
+                _controller.setVolume(1.0);
+                widget.onVolume(true);
+              });
+            }
+          }, icon: Icon(_controller.value.volume == 0.0?Icons.volume_off_sharp:Icons.volume_up)),
+        ),
+      ],
     );
+    // return  ExerciseVideo(
+    //   controller: _controller,
+    //
+    //   onPausePlay: () {
+    //     setState(() {
+    //       if( _controller.value.isPlaying){
+    //         _controller.pause();
+    //       }else{
+    //         _controller.play();
+    //       }
+    //
+    //     });
+    //   },
+    // );
   }
 
   @override

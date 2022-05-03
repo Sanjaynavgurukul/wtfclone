@@ -258,12 +258,11 @@ class GymStore extends ChangeNotifier {
   AddOnSlotDetails addonsCatGymSlots;
 
   MySchedule scheduleData;
-  CurrentTrainer scheduleTrainer;
+  // CurrentTrainer scheduleTrainer;
 
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
   String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '',workoutSelectedDate = '';
-  MsModel msModel;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
@@ -553,6 +552,8 @@ class GymStore extends ChangeNotifier {
         notifyListeners();
       });
       log('attendance updated2: ${attendanceDetails.toJson()}');
+    }else{
+      print('this method is hit ---');
     }
   }
 
@@ -1245,6 +1246,7 @@ class GymStore extends ChangeNotifier {
       if (currentPosition.latitude != null || currentPosition.latitude != 0.0) {
         print('set new lat lng (LAT) -- ${currentPosition.latitude}');
         locator<AppPrefs>().lat.setValue(currentPosition.latitude.toString());
+        tempLat =  currentPosition.latitude;
         print(
             'set new lat lng (LAT pref) -- ${locator<AppPrefs>().lat.getValue()}');
       }
@@ -1253,22 +1255,23 @@ class GymStore extends ChangeNotifier {
           currentPosition.longitude != 0.0) {
         print('set new lat lng (LNG) -- ${currentPosition.longitude}');
         locator<AppPrefs>().lng.setValue(currentPosition.longitude.toString());
+        tempLng =  currentPosition.latitude;
         print(
             'set new lat lng (LNG pref) -- ${locator<AppPrefs>().lng.getValue()}');
       }
 
       getUserLocation();
       notifyListeners();
-      log(currentPosition.toJson().toString());
-      log(currentPosition.latitude.toString());
-      log(currentPosition.longitude.toString());
-      // final addresses = await Geocoder.google(Helper.googleMapKey)
-      // Coordinates coordinates =
-      //     Coordinates(currentPosition.latitude, currentPosition.longitude);
-      // // final addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      // final addresses = await Geocoder.google(Helper.googleMapKey)
-      //     .findAddressesFromCoordinates(coordinates);
-      // currentAddress = addresses.first;
+      // log(currentPosition.toJson().toString());
+      // log(currentPosition.latitude.toString());
+      // log(currentPosition.longitude.toString());
+      // // final addresses = await Geocoder.google(Helper.googleMapKey)
+      // // Coordinates coordinates =
+      // //     Coordinates(currentPosition.latitude, currentPosition.longitude);
+      // // // final addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      // // final addresses = await Geocoder.google(Helper.googleMapKey)
+      // //     .findAddressesFromCoordinates(coordinates);
+      // // currentAddress = addresses.first;
       await _getGooglecoo(currentPosition.latitude, currentPosition.longitude)
           .then((value) {
         print(
@@ -1356,6 +1359,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
+  //TODO here
   Future<void> getMyWorkoutSchedules(
       {String date, String addonId, String subscriptionId}) async {
     loading = true;
@@ -2684,17 +2688,17 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getScheduleTrainer() async {
-    scheduleTrainer = null;
-    notifyListeners();
-    CurrentTrainer res = await RestDatasource().getCurrentTrainer();
-    if (res != null) {
-      scheduleTrainer = res;
-    } else {
-      scheduleTrainer = null;
-    }
-    notifyListeners();
-  }
+  // Future<void> getScheduleTrainer() async {
+  //   scheduleTrainer = null;
+  //   notifyListeners();
+  //   CurrentTrainer res = await RestDatasource().getCurrentTrainer();
+  //   if (res != null) {
+  //     scheduleTrainer = res;
+  //   } else {
+  //     scheduleTrainer = null;
+  //   }
+  //   notifyListeners();
+  // }
 
   Future<void> getScheduledWorkouts(
       {String date, String addonId, String subscriptionId}) async {
@@ -3057,23 +3061,5 @@ class GymStore extends ChangeNotifier {
       return uid;
     }
   }
-
-
-  Future<MsModel> get100Ms({BuildContext context})async{
-    showDialog(
-      context: context,
-      builder: (context) => ProcessingDialog(
-        message: 'Please wait...',
-      ),
-    );
-
-   var value = await RestDatasource().get100msData(name: 'Live Claees', description: 'Live classes Description');
-   if(value != null){
-     Navigator.pop(context);
-     return value;
-   }else{
-     return null;
-   }
-  }
-
 }
+

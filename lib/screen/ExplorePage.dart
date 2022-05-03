@@ -137,6 +137,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       Flexible(
                         child: InkWell(
                           onTap: () async {
+                            store.determinePosition(context);
                             LocationResult result =
                             await Navigator.of(context).push(
                               MaterialPageRoute(
@@ -152,8 +153,11 @@ class _ExplorePageState extends State<ExplorePage> {
                               print('Checking selected new location ----');
                               if (result != null) {
                                 print('User has choose new location -----');
-                                store.tempLat = result.latLng.latitude;
-                                store.tempLng = result.latLng.longitude;
+                                // store.tempLat = result.latLng.latitude;
+                                locator<AppPrefs>().lat.setValue(result.latLng.latitude.toString());
+                                locator<AppPrefs>().lng.setValue(result.latLng.longitude.toString());
+                                // store.tempLng = result.latLng.longitude;
+                                context.read<GymStore>().init(context: context);
                               } else {
                                 print('Same as previous location ----');
                               }

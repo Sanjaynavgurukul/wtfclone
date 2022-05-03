@@ -441,7 +441,7 @@ class GymCard extends StatelessWidget {
           //       context: context,
           //       gymId: item.userId,
           //     );
-          print('gym iD --- from nav ${item.userId}');
+          print('gym iD --- from nav ${item.userId} ${item.longitude}---${item.latitude}');
           NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: item, gymId: item.userId));
 
           // Navigator.of(context).push(
@@ -687,7 +687,8 @@ class GymCard extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                   fontSize: 18,
                                   fontStyle: FontStyle.normal)),
-                          Text(item.address1 + ' ' + item.address2),
+                          SizedBox(height: 4,),
+                          Text(item.address1 + ' ' + item.address2,style: TextStyle(fontSize: 14,color: Colors.grey.shade300),),
                         ],
                       ),
                       trailing: Column(

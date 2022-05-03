@@ -176,13 +176,13 @@ code_sign_if_enabled() {
 }
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${PODS_ROOT}/razorpay-pod/Pod/Razorpay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCrashlytics/FirebaseCrashlytics.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseMessaging/FirebaseMessaging.framework"
@@ -195,6 +195,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Toast/Toast.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/audioplayers/audioplayers.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_local_notifications/flutter_local_notifications.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_native_image/flutter_native_image.framework"
@@ -221,15 +222,16 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/razorpay-pod/Razorpay.framework"
 fi
 if [[ "$CONFIGURATION" == "Profile" ]]; then
-  install_framework "${PODS_ROOT}/razorpay-pod/Pod/Razorpay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCrashlytics/FirebaseCrashlytics.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseMessaging/FirebaseMessaging.framework"
@@ -242,6 +244,7 @@ if [[ "$CONFIGURATION" == "Profile" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Toast/Toast.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/audioplayers/audioplayers.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_local_notifications/flutter_local_notifications.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_native_image/flutter_native_image.framework"
@@ -268,15 +271,16 @@ if [[ "$CONFIGURATION" == "Profile" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/razorpay-pod/Razorpay.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${PODS_ROOT}/razorpay-pod/Pod/Razorpay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FirebaseCrashlytics/FirebaseCrashlytics.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FirebaseMessaging/FirebaseMessaging.framework"
@@ -289,6 +293,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Toast/Toast.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/audioplayers/audioplayers.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_local_notifications/flutter_local_notifications.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/flutter_native_image/flutter_native_image.framework"
@@ -315,6 +320,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/razorpay-pod/Razorpay.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

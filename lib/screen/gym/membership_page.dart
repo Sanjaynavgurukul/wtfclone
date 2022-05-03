@@ -68,6 +68,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
       //TODO call Data here because gym id
     }else{
       var gym = args.gym;
+      // gymStore.selectedGymDetail = GymDetailsModel(data: gym,status: true,message: 'Gym Found');
       gymStore.selectedGymDetail = GymDetailsModel(data: gym,status: true,message: 'Gym Found');
 
       return Scaffold(
@@ -278,15 +279,20 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                 ),
                                 trailing: InkWell(
                                   onTap: () {
+                                    print('lat and lng -- ${gym.latitude} -- ${gym.longitude}');
                                     MapsLauncher.launchCoordinates(
-                                      double.tryParse(
-                                        gymStore.selectedGymDetail
-                                            .data.latitude,
-                                      ),
-                                      double.tryParse(
-                                        gymStore.selectedGymDetail
-                                            .data.longitude,
-                                      ),
+                                      double.parse(gym.latitude),
+                                        double.parse(gym.longitude)
+                                      // double.tryParse(
+                                      //   gym.longitude
+                                      //   // gymStore.selectedGymDetail
+                                      //   //     .data.latitude,
+                                      // ),
+                                      // double.tryParse(
+                                      //   gym.longitude
+                                      //   // gymStore.selectedGymDetail
+                                      //   //     .data.longitude,
+                                      // ),
                                     );
                                   },
                                   child: Container(

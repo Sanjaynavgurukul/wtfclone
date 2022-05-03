@@ -1,11 +1,11 @@
 ${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh
-${PODS_ROOT}/razorpay-pod/Pod/Razorpay.framework
 ${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework
 ${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework
 ${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework
 ${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework
+${BUILT_PRODUCTS_DIR}/FirebaseCrashlytics/FirebaseCrashlytics.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework
 ${BUILT_PRODUCTS_DIR}/FirebaseMessaging/FirebaseMessaging.framework
@@ -18,6 +18,7 @@ ${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework
 ${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework
 ${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework
 ${BUILT_PRODUCTS_DIR}/Toast/Toast.framework
+${BUILT_PRODUCTS_DIR}/audioplayers/audioplayers.framework
 ${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework
 ${BUILT_PRODUCTS_DIR}/flutter_local_notifications/flutter_local_notifications.framework
 ${BUILT_PRODUCTS_DIR}/flutter_native_image/flutter_native_image.framework
@@ -44,3 +45,4 @@ ${BUILT_PRODUCTS_DIR}/wakelock/wakelock.framework
 ${BUILT_PRODUCTS_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework
 ${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/JitsiMeetSDK.framework/JitsiMeetSDK
 ${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK/WebRTC.framework/WebRTC
+${PODS_XCFRAMEWORKS_BUILD_DIR}/razorpay-pod/Razorpay.framework/Razorpay

@@ -227,8 +227,8 @@ class GymModelData {
           is_partial: json["is_partial"] != null ? int.parse(
               json["is_partial"].toString() ?? '0') : 0,
           cover_image: json["cover_image"],
-          latitude: json["lat"],
-          longitude: json["long"],
+          latitude: json["latitude"],
+          longitude: json["longitude"],
           leaseAgreement: json["lease_agreement"],
           electricityBill: json["electricity_bill"],
           bankStatement: json["bank_statement"],

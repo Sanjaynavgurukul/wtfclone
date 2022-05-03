@@ -45,7 +45,6 @@ class _MainWorkoutState extends State<MainWorkout> {
       presetMillisecond: exTimerHelper.convertMil(false),
       mode: StopWatchMode.countUp,
     );
-
     if (globalTimerIsOn()) {
       startTimer();
     }
@@ -74,22 +73,23 @@ class _MainWorkoutState extends State<MainWorkout> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    print('current check date -- ${user.workoutDate}');
   }
 
-  void callTrainer() {
-    print('called -----');
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (trainerCalled) {
-        this.trainerCalled = false;
-        user.getScheduleTrainer();
-      }
-    });
-  }
+  // void callTrainer() {
+  //   print('called -----');
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     if (trainerCalled) {
+  //       this.trainerCalled = false;
+  //       user.getScheduleTrainer();
+  //     }
+  //   });
+  // }
 
   void callWorkouts(
       {@required String date,
-      @required String subScriptionId,
-      @required String addonId}) {
+        @required String subScriptionId,
+        @required String addonId}) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (workoutCalled) {
         this.workoutCalled = false;
@@ -100,12 +100,10 @@ class _MainWorkoutState extends State<MainWorkout> {
   }
 
   void controlWorkout(MainWorkoutArgument args) {
-    String date = Helper.formatDate2(
-      args.time.toIso8601String(),
-    );
+    String date = user.workoutDate;
     String subId = args.data.uid;
     String addonsId =
-        args.workoutType == 'General Training' ? null : args.data.addonId;
+    args.workoutType == 'General Training' ? null : args.data.addonId;
 
     //Calling data :D
     callWorkouts(date: date, subScriptionId: subId, addonId: addonsId);
@@ -142,7 +140,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       print('sanjay here -- all workout is not completed');
       if (globalTimerIsOn()) {
         showSnack(
-            message: 'To end workout you have to finish your all exercises!');
+            message: 'To end workout you have to complete all your exercises!');
       } else {
         startTimer();
         locator<AppPrefs>().exerciseOn.setValue(true);
@@ -165,11 +163,11 @@ class _MainWorkoutState extends State<MainWorkout> {
             user.workoutNotification(start: false, header: '');
             setState(() {});
           } else {
-            showSnack(message: 'Something Went Wrong!');
+            showSnack(message: 'Workout already started!');
           }
         });
       } else {
-        showSnack(message: 'ALl Workout Completed!');
+        showSnack(message: 'All Workout Completed!');
       }
     }
   }
@@ -177,42 +175,56 @@ class _MainWorkoutState extends State<MainWorkout> {
   @override
   Widget build(BuildContext context) {
     final MainWorkoutArgument args =
-        ModalRoute.of(context).settings.arguments as MainWorkoutArgument;
+    ModalRoute.of(context).settings.arguments as MainWorkoutArgument;
 
-    callTrainer();
     if (args.data == null) {
       return Center(
-        child: Text('Something Went Wrong Please try again later'),
+        child: Text('Workout already started'),
       );
     } else {
       return Consumer<GymStore>(builder: (context, user, child) {
-        if (user.scheduleTrainer == null || user.scheduleTrainer.data == null) {
+        if (user.currentTrainer == null || user.currentTrainer.data == null || user.myWorkoutSchedule == null || user.myWorkoutSchedule.data == null) {
           return Center(
             child: CupertinoActivityIndicator(),
           );
         } else {
           if (args == null) {
-            return Center(child: Text('Something went Wrong'));
+            return Center(child: Text('Something went wrong please try again later!'));
           } else {
             //call workout :d
-            controlWorkout(args);
-
+            //controlWorkout(args);
             return Scaffold(
               floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: FloatingActionButton.extended(
+              FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: exTimerHelper.isSameTime(user.workoutDate) ? FloatingActionButton.extended(
                 heroTag: 'startFlag',
                 onPressed: () {
-                  validateOnPress(args.workoutType);
+                  print('cehck data date --  ${user.workoutDate}');
+                  if(user.workoutDate == Helper.formatDate2(
+                      DateTime.now().toIso8601String())){
+                    if(user.attendanceDetails != null &&
+                        user.attendanceDetails.data != null){
+                      validateOnPress(args.workoutType);
+                    }else{
+                      showSnack(message: 'Please mark your attendance first.');
+                      NavigationService.navigateTo(
+                          Routes.mainAttendance);
+                    }
+                  }else{
+                    showSnack(message: 'Only present day workout can be started.');
+                  }
+
+                  //TODO uncomment code change Here
+                  // validateOnPress(args.workoutType);
                 },
                 label: Text(
-                  globalTimerIsOn() ? 'End Workout' : 'Start Workout',
+                  globalTimerIsOn() ? 'End Workout' :allWorkoutCompleted()?'Completed': 'Start Workout',
                   style: TextStyle(fontSize: 16),
                 ),
                 icon: globalTimerIsOn()
                     ? Icon(Icons.pause_circle_filled)
                     : Icon(Icons.play_circle_fill),
-              ),
+              ):null,
               body: DefaultTabController(
                   length: 0,
                   child: NestedScrollView(
@@ -235,20 +247,20 @@ class _MainWorkoutState extends State<MainWorkout> {
                                               height: 8,
                                             ),
                                             Text(
-                                                '${user.scheduleTrainer.data.name ?? 'No Name'}'),
+                                                '${user.currentTrainer.data.name ?? 'No Name'}'),
                                             SizedBox(
                                               height: 2,
                                             ),
                                             Text(
-                                                '${user.scheduleTrainer.data.description ?? ''}'),
+                                                '${user.currentTrainer.data.description ?? ''}'),
                                             SizedBox(
                                               height: 4,
                                             ),
                                             RatingBar(
                                               initialRating: double.parse(user
-                                                      .scheduleTrainer
-                                                      .data
-                                                      .rating ??
+                                                  .currentTrainer
+                                                  .data
+                                                  .rating ??
                                                   '0.0'),
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
@@ -277,12 +289,12 @@ class _MainWorkoutState extends State<MainWorkout> {
                                             ),
                                           ],
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                         ),
                                         leading: CircleAvatar(
                                           radius: 30,
                                           backgroundImage: NetworkImage(
-                                              '${user.scheduleTrainer.data.trainerProfile}' ??
+                                              '${user.currentTrainer.data.trainerProfile}' ??
                                                   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
                                           backgroundColor: Colors.transparent,
                                           child: Align(
@@ -300,27 +312,27 @@ class _MainWorkoutState extends State<MainWorkout> {
                                             ),
                                           ),
                                         ),
-                                        trailing: globalTimerIsOn()
+                                        trailing: globalTimerIsOn() && exTimerHelper.isSameTime(user.workoutDate)
                                             ? StreamBuilder<int>(
-                                                stream:
-                                                    _stopWatchTimer.secondTime,
-                                                initialData: _stopWatchTimer
-                                                    .secondTime.value,
-                                                builder: (context, snap) {
-                                                  int value = snap.data;
-                                                  exTimerHelper.setTimeInLocal(
-                                                      counter: value,
-                                                      isEx: false);
-                                                  return  Text(
-                                                    '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                        FontWeight.w600),
-                                                  );
-                                                },
-                                              )
+                                          stream:
+                                          _stopWatchTimer.secondTime,
+                                          initialData: _stopWatchTimer
+                                              .secondTime.value,
+                                          builder: (context, snap) {
+                                            int value = snap.data;
+                                            exTimerHelper.setTimeInLocal(
+                                                counter: value,
+                                                isEx: false);
+                                            return  Text(
+                                              '${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 30,
+                                                  fontWeight:
+                                                  FontWeight.w600),
+                                            );
+                                          },
+                                        )
                                             : SizedBox(),
                                       ),
                                       padding: EdgeInsets.only(
@@ -332,20 +344,20 @@ class _MainWorkoutState extends State<MainWorkout> {
                         ];
                       },
                       body: user.myWorkoutSchedule == null ||
-                              user.myWorkoutSchedule.data == null ||
-                              user.myWorkoutSchedule.data.length == 0
+                          user.myWorkoutSchedule.data == null ||
+                          user.myWorkoutSchedule.data.length == 0
                           ? Center(child: Text("no Workout available"))
                           : ListView.builder(
-                              itemCount: user.myWorkoutSchedule.data.length,
-                              padding: EdgeInsets.only(bottom: 80),
-                              itemBuilder: (context, index) {
-                                WorkoutScheduleData item =
-                                    user.myWorkoutSchedule.data[index];
-                                print('check list item image -- ${item.image}');
+                          itemCount: user.myWorkoutSchedule.data.length,
+                          padding: EdgeInsets.only(bottom: 80),
+                          itemBuilder: (context, index) {
+                            WorkoutScheduleData item =
+                            user.myWorkoutSchedule.data[index];
+                            print('check list item image -- ${item.image}');
 
-                                return itermCard(item: item, index: index);
-                                // return WorkoutListItems(item);
-                              }))),
+                            return itermCard(item: item, index: index);
+                            // return WorkoutListItems(item);
+                          }))),
             );
           }
         }
@@ -369,14 +381,18 @@ class _MainWorkoutState extends State<MainWorkout> {
       child: InkWell(
         onTap: () {
           //TODO code changed here if condition should be on true condition ;D
-          if (globalTimerIsOn()) {
-            if(!isCompleted){
-              navigateToNext(item: item, index: index);
-            }else{
-              showSnack(message: 'Workout Already Completed');
+          if(exTimerHelper.isSameTime(user.workoutDate)){
+            if (globalTimerIsOn()) {
+              if(!isCompleted){
+                navigateToNext(item: item, index: index);
+              }else{
+                showSnack(message: 'Workout Already Completed');
+              }
+            } else {
+              showSnack(message: 'Please Start Workout First');
             }
-          } else {
-            showSnack(message: 'Please Start Workout First');
+          }else{
+            showSnack(message: 'Only present day workout can be started.');
           }
         },
         child: Stack(
@@ -433,15 +449,15 @@ class _MainWorkoutState extends State<MainWorkout> {
             ),
             exTimerHelper.getInProgressItemUid(itemUid: item.category)
                 ? Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: AppConstants.bgColor,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8))),
-                        padding: EdgeInsets.all(8),
-                        child: Text('In Progress')),
-                  )
+              alignment: Alignment.topRight,
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: AppConstants.bgColor,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8))),
+                  padding: EdgeInsets.all(8),
+                  child: Text('In Progress')),
+            )
                 : Container()
           ],
         ),

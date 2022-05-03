@@ -150,6 +150,7 @@ class RestDatasource {
       url,
       headers: mapHeader,
     );
+    print('attendence response $response');
     AttendanceDetails res;
     if (response != null) res = AttendanceDetails.fromJson(response);
     return Future.value(res);
@@ -808,28 +809,6 @@ class RestDatasource {
     return complete;
   }
 
-  //TODO Cehck This method Later :D
-  Future<GymTypes> getDiscoverNows(
-      {String type, String lat, String lng}) async {
-    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
-    String token = locator<AppPrefs>().token.getValue();
-    Map<String, String> mapHeader = Map();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    print("get Gym types by id 4");
-    return _netUtil
-        .get(BASE_URL + Api.getGymTypes(type, lat, lng), headers: mapHeader)
-        .then((dynamic res) {
-      print("response getDiscoverNow : " + res.toString());
-      GymTypes model = res != null && res['status']
-          ? GymTypes.fromJson(res)
-          : GymTypes(
-              data: [],
-            );
-      return model;
-    });
-  }
-
   Future<GymTypes> getDiscoverNow({String type, String lat, String lng}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
@@ -838,6 +817,7 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
     print('checking type of gym : $type');
     String finalUrl = Api.getNearByGym(lat, lng, type);
+    print('complete url --- $finalUrl');
     return _netUtil
         .get(BASE_URL + Api.getNearByGym(lat, lng, type), headers: mapHeader)
         .then((dynamic res) {
