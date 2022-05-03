@@ -43,11 +43,11 @@ class _VideoTileState extends State<VideoTile> {
     MeetingStore _meetingStore = context.read<MeetingStore>();
 
     bool mutePermission =
-        _meetingStore.localPeer?.role.permissions.mute ?? false;
+        _meetingStore.localPeer?.role?.permissions?.mute ?? false;
     bool unMutePermission =
-        _meetingStore.localPeer?.role.permissions.unMute ?? false;
+        _meetingStore.localPeer?.role?.permissions?.unMute ?? false;
     bool removePeerPermission =
-        _meetingStore.localPeer?.role.permissions.removeOthers ?? false;
+        _meetingStore.localPeer?.role?.permissions?.removeOthers ?? false;
 
     return VisibilityDetector(
       onVisibilityChanged: (VisibilityInfo info) {
