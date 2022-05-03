@@ -58,6 +58,17 @@ class ExerciseTimerHelper {
     }
   }
 
+  String getLiveClassDuration(){
+    int prefDate = locator<AppPrefs>().liveClassTimerDate.getValue();
+    var localDate = DateTime.fromMillisecondsSinceEpoch(prefDate);
+    var nowDtae = DateTime.now();
+    var differentInSecond =  nowDtae.difference(localDate).inSeconds;
+    String hour= convertHour(differentInSecond);
+    String min= convertMin(differentInSecond);
+    String sec= convertSec(differentInSecond);
+    return '$hour:$min:$sec';
+  }
+
   ExShareModel getCurrentExFromLocalList({String itemUid}) {
     var list = getExList();
     //getting current item by uid

@@ -17,16 +17,16 @@ import 'package:wtf/100ms/preview/preview_store.dart';
 import 'package:wtf/model/100ms_model.dart';
 
 class PreviewPage extends StatefulWidget {
-  final MsModel model;
-  const PreviewPage(
-      {Key key, @required this.model})
-      : super(key: key);
+  final String token;
+
+  const PreviewPage({Key key, @required this.token}) : super(key: key);
 
   @override
   _PreviewPageState createState() => _PreviewPageState();
 }
 
 class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -34,22 +34,22 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
     initPreview();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   void initPreview() async {
     context.read<PreviewStore>().addPreviewListener();
-    bool ans = await context
-        .read<PreviewStore>()
-        .startPreview(model: widget.model);
-    print('checking token --- ${widget.model.token}');
+    bool ans =
+        await context.read<PreviewStore>().startPreview(token: widget.token);
     if (ans == false) {
       UtilityComponents.showSnackBarWithString("Unable to preview", context);
       Navigator.of(context).pop();
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +57,15 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
     final double itemHeight = size.height;
     final double itemWidth = size.width;
     return Consumer<PreviewStore>(
-      builder: (context, store, child) {
-        return ConnectivityAppWrapper(
-          app: ConnectivityWidgetWrapper(
+        builder: (context, store, child) {
+      return ConnectivityAppWrapper(
+        app: WillPopScope(
+          onWillPop: () async {
+           store.removePreviewListener();
+           store.stopCapturing();
+            return true;
+          },
+          child: ConnectivityWidgetWrapper(
             offlineWidget: OfflineWidget(),
             disableInteraction: true,
             child: Scaffold(
@@ -67,39 +73,39 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                 children: [
                   (store.previewTrack.isEmpty)
                       ? Align(
-                      alignment: Alignment.center,
-                      child: CupertinoActivityIndicator(radius: 50))
+                          alignment: Alignment.center,
+                          child: CupertinoActivityIndicator(radius: 50))
                       : Container(
-                    height: itemHeight,
-                    width: itemWidth,
-                    child: (store.isVideoOn)
-                        ? HMSVideoView(
-                      scaleType: ScaleType.SCALE_ASPECT_FILL,
-                      track: store.previewTrack[0],
-                      setMirror: true,
-                      matchParent: false,
-                    )
-                        : Container(
-                      height: itemHeight,
-                      width: itemWidth,
-                      child: Center(
-                          child: CircleAvatar(
-                              backgroundColor: Utilities.colors[
-                              store.peer.name
-                                  .toLowerCase()
-                                  .codeUnitAt(0) %
-                                  Utilities.colors.length],
-                              radius: 36,
-                              child: Text(
-                                Utilities.getAvatarTitle(
-                                    store.peer.name),
-                                style: TextStyle(
-                                    fontSize: 36, color: Colors.white),
-                              ))),
-                    ),
-                  ),
-                  if (store.networkQuality != null &&
-                      store.networkQuality != -1)
+                          height: itemHeight,
+                          width: itemWidth,
+                          child: (store.isVideoOn)
+                              ? HMSVideoView(
+                                  scaleType: ScaleType.SCALE_ASPECT_FILL,
+                                  track: store.previewTrack[0],
+                                  setMirror: true,
+                                  matchParent: false,
+                                )
+                              : Container(
+                                  height: itemHeight,
+                                  width: itemWidth,
+                                  child: Center(
+                                      child: CircleAvatar(
+                                          backgroundColor: Utilities.colors[store
+                                                  .peer.name
+                                                  .toLowerCase()
+                                                  .codeUnitAt(0) %
+                                              Utilities.colors.length],
+                                          radius: 36,
+                                          child: Text(
+                                            Utilities.getAvatarTitle(
+                                                store.peer.name),
+                                            style: TextStyle(
+                                                fontSize: 36,
+                                                color: Colors.white),
+                                          ))),
+                                ),
+                        ),
+                  if (store.networkQuality != null && store.networkQuality != -1)
                     Padding(
                       padding: const EdgeInsets.only(top: 40, left: 20),
                       child: Align(
@@ -136,50 +142,53 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                                     onPressed: () {
                                       showModalBottomSheet<void>(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
                                         ),
                                         context: context,
                                         builder: (BuildContext context) {
                                           return Container(
                                               height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
+                                                      .size
+                                                      .height /
                                                   2,
                                               padding: EdgeInsets.only(top: 15),
                                               child: ListView.separated(
                                                   itemBuilder: (context, index) {
                                                     HMSPeer peer =
-                                                    store.peers[index];
+                                                        store.peers[index];
                                                     return Container(
                                                       padding: EdgeInsets.all(15),
-                                                      margin: EdgeInsets.symmetric(
-                                                          horizontal: 10),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 10),
                                                       decoration: BoxDecoration(
                                                           color: Color.fromARGB(
                                                               174, 0, 0, 0),
                                                           borderRadius:
-                                                          BorderRadius.circular(
-                                                              8)),
+                                                              BorderRadius
+                                                                  .circular(8)),
                                                       child: Row(
                                                         mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
                                                           Text(
                                                             peer.name,
                                                             style: TextStyle(
                                                                 fontWeight:
-                                                                FontWeight.bold,
+                                                                    FontWeight
+                                                                        .bold,
                                                                 color:
-                                                                Colors.white),
+                                                                    Colors.white),
                                                           ),
                                                           Text(peer.role.name,
                                                               style: TextStyle(
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  color:
-                                                                  Colors.white))
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white))
                                                         ],
                                                       ),
                                                     );
@@ -188,8 +197,7 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                                                       (context, index) {
                                                     return Divider();
                                                   },
-                                                  itemCount:
-                                                  store.peers.length));
+                                                  itemCount: store.peers.length));
                                         },
                                       );
                                     },
@@ -197,9 +205,10 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                                         height: 35,
                                         width: 35,
                                         decoration: BoxDecoration(
-                                            color:
-                                            Colors.transparent.withOpacity(0.2),
-                                            borderRadius: BorderRadius.circular(5)),
+                                            color: Colors.transparent
+                                                .withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         child: Icon(
                                           Icons.person,
                                           size: 24,
@@ -214,82 +223,79 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           (store.peer != null &&
-                              store.peer.role.publishSettings.allowed
-                                  .contains("video"))
+                                  store.peer.role.publishSettings.allowed
+                                      .contains("video"))
                               ? GestureDetector(
-                            onTap: store.previewTrack.isEmpty
-                                ? null
-                                : () async {
-                              store.switchVideo(
-                                  isOn: store.isVideoOn);
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor:
-                              Colors.transparent.withOpacity(0.2),
-                              child: Icon(
-                                  store.isVideoOn
-                                      ? Icons.videocam
-                                      : Icons.videocam_off,
-                                  color: Colors.blue),
-                            ),
-                          )
+                                  onTap: store.previewTrack.isEmpty
+                                      ? null
+                                      : () async {
+                                          store.switchVideo(
+                                              isOn: store.isVideoOn);
+                                        },
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor:
+                                        Colors.transparent.withOpacity(0.2),
+                                    child: Icon(
+                                        store.isVideoOn
+                                            ? Icons.videocam
+                                            : Icons.videocam_off,
+                                        color: Colors.blue),
+                                  ),
+                                )
                               : Container(),
-
                           store.peer != null
                               ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.blue),
-                            onPressed: () {
-                              context
-                                  .read<PreviewStore>()
-                                  .removePreviewListener();
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          ListenableProvider.value(
-                                            value: MeetingStore(),
-                                            child: MeetingPage(
-                                              roomId: widget.model.data.id,
-                                              flow: MeetingFlow.join,
-                                              user: widget.model.data.user,
-                                              isAudioOn:
-                                              store.isAudioOn,
-                                              localPeerNetworkQuality:
-                                              store
-                                                  .networkQuality,
-                                            ),
-                                          )));
-                            },
-                            child: Text(
-                              'Join Now',
-                              style: TextStyle(height: 1, fontSize: 18),
-                            ),
-                          ): Container(),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue),
+                                  onPressed: () {
+                                    context
+                                        .read<PreviewStore>()
+                                        .removePreviewListener();
+
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                ListenableProvider.value(
+                                                  value: MeetingStore(),
+                                                  child: MeetingPage(
+                                                    token: widget.token,
+                                                    isAudioOn: store.isAudioOn,
+                                                    localPeerNetworkQuality:
+                                                        store.networkQuality,
+                                                  ),
+                                                )));
+                                  },
+                                  child: Text(
+                                    'Join Now',
+                                    style: TextStyle(height: 1, fontSize: 18),
+                                  ),
+                                )
+                              : Container(),
                           (store.peer != null &&
-                              context
-                                  .read<PreviewStore>()
-                                  .peer
-                                  .role
-                                  .publishSettings
-                                  .allowed
-                                  .contains("audio"))
+                                  context
+                                      .read<PreviewStore>()
+                                      .peer
+                                      .role
+                                      .publishSettings
+                                      .allowed
+                                      .contains("audio"))
                               ? GestureDetector(
-                            onTap: () async {
-                              store.switchAudio();
-                            },
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundColor:
-                              Colors.transparent.withOpacity(0.2),
-                              child: Icon(
-                                (store.isAudioOn)
-                                    ? Icons.mic
-                                    : Icons.mic_off,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          )
+                                  onTap: () async {
+                                    store.switchAudio();
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor:
+                                        Colors.transparent.withOpacity(0.2),
+                                    child: Icon(
+                                      (store.isAudioOn)
+                                          ? Icons.mic
+                                          : Icons.mic_off,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                )
                               : Container(),
                         ],
                       ),
@@ -299,8 +305,8 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
               ),
             ),
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }

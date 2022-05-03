@@ -1,6 +1,5 @@
 //Package imports
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -9,7 +8,9 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:wtf/100ms/meeting/hms_sdk_interactor.dart';
 import 'package:wtf/100ms/meeting/peer_track_node.dart';
 import 'package:wtf/100ms/manager/HmsSdkManager.dart';
-import 'package:wtf/100ms/service/room_service.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/main.dart';
+import 'package:wtf/model/100ms_model.dart';
 
 class MeetingStore extends ChangeNotifier
     implements HMSUpdateListener, HMSActionResultListener {
@@ -31,7 +32,7 @@ class MeetingStore extends ChangeNotifier
 
   String streamUrl = "";
 
-  bool isHLSLink = false;
+  // bool isHLSLink = false;
 
   HMSRoleChangeRequest roleChangeRequest;
 
@@ -97,21 +98,17 @@ class MeetingStore extends ChangeNotifier
     // removeLogsListener();
   }
 
-  Future<bool> join(String user, String roomUrl) async {
-    List<String> token =
-        await RoomService().getToken(user: user, room: roomUrl);
-    if (token == null) return false;
-    HMSConfig config = HMSConfig(
-        authToken: token[0],
-        userName: user,
-        endPoint: token[1] == "true" ? "" : "https://qa-init.100ms.live/init",
-        captureNetworkQualityInPreview: true);
+  Future<bool> join({@required String token}) async {
+    print('Check Meeting toekn here --- ${token}');
+    String myName = locator<AppPrefs>().userName.getValue()??'Unknown';
+    HMSConfig config = HMSConfig(authToken: token,
+        userName: myName);
 
     HmsSdkManager.hmsSdkInteractor?.join(config: config);
     return true;
   }
 
-  void leave() async {
+  void  leave() async {
     if (isScreenShareOn) {
       isScreenShareOn = false;
       _hmssdkInteractor.stopScreenShare();
@@ -220,7 +217,7 @@ class MeetingStore extends ChangeNotifier
   void onRoleUpdated(int index, HMSPeer peer) {
     peers[index] = peer;
   }
-
+  
   void updateRoleChangeRequest(HMSRoleChangeRequest roleChangeRequest) {
     this.roleChangeRequest = roleChangeRequest;
   }
@@ -247,14 +244,15 @@ class MeetingStore extends ChangeNotifier
 
   @override
   void onJoin({@required HMSRoom room}) async {
+    print('Chck peer track length --- started');
     isMeetingStarted = true;
     hmsRoom = room;
-    if (room.hmshlsStreamingState?.running ?? false) {
-      hasHlsStarted = true;
-      streamUrl = room.hmshlsStreamingState?.variants[0]?.hlsStreamUrl ?? "";
-    } else {
-      hasHlsStarted = false;
-    }
+    // if (room.hmshlsStreamingState?.running ?? false) {
+    //   hasHlsStarted = true;
+    //   streamUrl = room.hmshlsStreamingState?.variants[0]?.hlsStreamUrl ?? "";
+    // } else {
+    //   hasHlsStarted = false;
+    // }
     if (room.hmsBrowserRecordingState?.running == true ||
         room.hmsServerRecordingState?.running == true ||
         room.hmsRtmpStreamingState?.running == true ||
@@ -274,7 +272,7 @@ class MeetingStore extends ChangeNotifier
               networkQuality: localPeerNetworkQuality));
         localPeer = each;
         addPeer(localPeer);
-        if (localPeer.role.name.contains("hls-") == true) isHLSLink = true;
+        //if (localPeer.role.name.contains("hls-") == true) isHLSLink = true;
 
         if (each.videoTrack != null) {
           if (each.videoTrack.kind == HMSTrackKind.kHMSTrackKindVideo) {
@@ -289,6 +287,7 @@ class MeetingStore extends ChangeNotifier
         break;
       }
     }
+    print('Chck peer track length --- ${peerTracks.length}');
     roles = await getRoles();
     notifyListeners();
   }
@@ -503,13 +502,13 @@ class MeetingStore extends ChangeNotifier
       case HMSPeerUpdate.roleUpdated:
         if (peer.isLocal) localPeer = peer;
         if (peer.role.name.contains("hls-")) {
-          isHLSLink = peer.isLocal;
+          //isHLSLink = peer.isLocal;
           peerTracks.removeWhere(
               (leftPeer) => leftPeer.uid == peer.peerId + "mainVideo");
         } else {
-          if (peer.isLocal) {
-            isHLSLink = false;
-          }
+          // if (peer.isLocal) {
+          //   isHLSLink = false;
+          // }
           int index = peerTracks.indexWhere(
               (element) => element.uid == peer.peerId + "mainVideo");
           if (index == -1)
@@ -897,7 +896,6 @@ class MeetingStore extends ChangeNotifier
       Map<String, dynamic> arguments,
       @required HMSException hmsException}) {
     this.hmsException = hmsException;
-    FirebaseCrashlytics.instance.log(hmsException.toString());
     switch (methodType) {
       case HMSActionResultListenerMethod.leave:
         // TODO: Handle this case.

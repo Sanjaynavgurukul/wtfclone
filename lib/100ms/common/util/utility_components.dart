@@ -1,4 +1,5 @@
 //Package imports
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clickable_list_wheel_view/clickable_list_wheel_widget.dart';
@@ -8,6 +9,11 @@ import 'package:hmssdk_flutter/hmssdk_flutter.dart';
 import 'package:wtf/100ms/common/ui/organisms/role_change_request_dialog.dart';
 import 'package:wtf/100ms/common/ui/organisms/track_change_request_dialog.dart';
 import 'package:wtf/100ms/meeting/meeting_store.dart';
+import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/routes.dart';
+import 'package:wtf/main.dart';
+import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 
 class UtilityComponents {
   static void showSnackBarWithString(event, context) {
@@ -22,33 +28,77 @@ class UtilityComponents {
 
   static Future<dynamic> onBackPressed(BuildContext context) {
     MeetingStore _meetingStore = context.read<MeetingStore>();
-    return showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(
-          'Leave Room?',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-        ),
-        actions: [
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-              ),
-              onPressed: () => {
-                    _meetingStore.leave(),
-                    Navigator.popUntil(context, (route) => route.isFirst)
+    GymStore _trainerStore = context.read<GymStore>();
+    return  showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text('Alert'),
+            content: Text('Do you really want to end this class?'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () async{
+                    String time = exTimerHelper.getLiveClassDuration();
+                    await _trainerStore.completeLiveSession(context: context,eDuration: time).then((value){
+                      if(value){
+                        locator<AppPrefs>().liveClassTimerDate.setValue(0);
+                        _meetingStore.leave();
+                        Navigator.pushNamedAndRemoveUntil(context, Routes.exerciseDone, (route) => route.isFirst);
+
+                      }else{
+                        _meetingStore.leave();
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                      }
+                    });
                   },
-              child: Text('Yes', style: TextStyle(fontSize: 24))),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(
-              'Cancel',
-              style: TextStyle(fontSize: 24),
-            ),
-          ),
-        ],
-      ),
-    );
+                  child: Text('Yes',style: TextStyle(color: Colors.grey),)),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); //close Dialog
+                  },
+                  child: Text('Cancel',style: TextStyle(color: Colors.white),)),
+
+            ],
+          );
+        });
+
+    // return showDialog(
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: Text(
+    //       'Leave Room?',
+    //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+    //     ),
+    //     actions: [
+    //       ElevatedButton(
+    //           style: ElevatedButton.styleFrom(
+    //             primary: Colors.red,
+    //           ),
+    //           onPressed: () async{
+    //             String time = exTimerHelper.getLiveClassDuration();
+    //             await _trainerStore.completeLiveSession(context: context,eDuration: time).then((value){
+    //               if(value){
+    //                 locator<AppPrefs>().liveClassTimerDate.setValue(0);
+    //                 _meetingStore.leave();
+    //                 Navigator.pushNamedAndRemoveUntil(context, Routes.exerciseDone, (route) => route.isFirst);
+    //
+    //               }else{
+    //                 _meetingStore.leave();
+    //                 Navigator.popUntil(context, (route) => route.isFirst);
+    //               }
+    //             });
+    //           },
+    //           child: Text('Yes', style: TextStyle(fontSize: 24))),
+    //       ElevatedButton(
+    //         onPressed: () => Navigator.pop(context, false),
+    //         child: Text(
+    //           'Cancel',
+    //           style: TextStyle(fontSize: 24),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   static void showRoleChangeDialog(HMSRoleChangeRequest event, context) async {

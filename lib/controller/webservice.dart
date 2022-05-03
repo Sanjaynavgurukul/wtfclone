@@ -1814,7 +1814,7 @@ class RestDatasource {
     // String url = BASE_URL + Api.getAddOnsGymsSlots(date: date);
     // print('url: $url');
     var res = await _netUtil.post(BASE_URL+'live/room',headers: mapHeader,
-        body: {"name": "$name", "description": "$description","role":"guest"});
+        body: {"name": "$name", "description": "$description","role":"host"});
     print("response of Get 100ms details : " + res.toString());
     MsModel model;
     if (res != null && res["status"]) model = MsModel.fromJson(res);

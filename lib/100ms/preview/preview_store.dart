@@ -1,13 +1,11 @@
 //Package imports
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hmssdk_flutter/hmssdk_flutter.dart';
-import 'package:wtf/100ms/manager/HmsSdkManager.dart';
-import 'package:wtf/100ms/service/room_service.dart';
-import 'package:wtf/model/100ms_model.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/main.dart';
 
 class PreviewStore extends ChangeNotifier
-    implements HMSPreviewListener, HMSLogListener {
+    implements HMSPreviewListener, HMSLogListener{
   List<HMSVideoTrack> previewTrack = [];
 
   PreviewStore();
@@ -29,10 +27,21 @@ class PreviewStore extends ChangeNotifier
 
   int networkQuality;
 
+  HMSSDK hmsSDK =  new HMSSDK();
+  
   @override
   void onError({@required HMSException error}) {
     updateError(error);
   }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   print('Inside Dispose method called ---');
+  //   switchVideo();
+  //   // hmsSDK.leave(hmsActionResultListener: this);
+  //   super.dispose();
+  // }
 
   @override
   void onPreview({@required HMSRoom room, @required List<HMSTrack> localTracks}) {
@@ -57,20 +66,10 @@ class PreviewStore extends ChangeNotifier
         videoTracks.add(track as HMSVideoTrack);
       }
     }
-    //
+
     print('100ms cross checking check local tracks length 2 --- ${videoTracks.length}');
     this.previewTrack = videoTracks;
     notifyListeners();
-  }
-
-  Future<bool> startPreview(
-      {MsModel model}) async {
-    print('check meeting token ----${model.token}');
-    HMSConfig config = HMSConfig(authToken: model.token,
-        userName: 'Sanjay',captureNetworkQualityInPreview: true);
-
-    HmsSdkManager.hmsSdkInteractor?.preview(config: config);
-    return true;
   }
 
   @override
@@ -121,48 +120,50 @@ class PreviewStore extends ChangeNotifier
     notifyListeners();
   }
 
+  @override
+  void onLogMessage({@required hmsLogList}) {
+    print(' On Ctreash Meeting ---= ${hmsLogList.toString()}');
+  }
+
+  void updateError(HMSException error) {
+    this.error = error;
+  }
+
+  Future<bool> startPreview(
+      {String token}) async {
+    String myName = locator<AppPrefs>().userName.getValue()??'Unknown';
+    HMSConfig config = HMSConfig(authToken: token,
+        userName: myName??"Unknown",captureNetworkQualityInPreview: true);
+    hmsSDK.build();
+    hmsSDK.preview(config: config);
+    return true;
+  }
+
   void addPreviewListener() {
-    HmsSdkManager.hmsSdkInteractor?.addPreviewListener(this);
+    hmsSDK.addPreviewListener(listener: this);
   }
 
   void removePreviewListener() {
-    HmsSdkManager.hmsSdkInteractor?.removePreviewListener(this);
+    hmsSDK.removePreviewListener(listener: this);
   }
 
   void stopCapturing() {
-    HmsSdkManager.hmsSdkInteractor?.stopCapturing();
+    hmsSDK.stopCapturing();
   }
 
   void startCapturing() {
-    HmsSdkManager.hmsSdkInteractor?.startCapturing();
+    hmsSDK.startCapturing();
   }
 
   void switchVideo({bool isOn = false}) {
-    HmsSdkManager.hmsSdkInteractor?.switchVideo(isOn: isOn);
+    hmsSDK.switchVideo(isOn: isOn);
     isVideoOn = !isVideoOn;
     notifyListeners();
   }
 
   void switchAudio({bool isOn = false}) {
-    HmsSdkManager.hmsSdkInteractor?.switchAudio(isOn: isOn);
+    hmsSDK.switchAudio(isOn: isOn);
     isAudioOn = !isAudioOn;
     notifyListeners();
-  }
-
-  void addLogsListener(HMSLogListener hmsLogListener) {
-    HmsSdkManager.hmsSdkInteractor?.addLogsListener(hmsLogListener);
-  }
-
-  void removeLogsListener(HMSLogListener hmsLogListener) {
-    HmsSdkManager.hmsSdkInteractor?.removeLogsListener(hmsLogListener);
-  }
-
-  @override
-  void onLogMessage({@required hmsLogList}) {
-    FirebaseCrashlytics.instance.log(hmsLogList.toString());
-  }
-
-  void updateError(HMSException error) {
-    this.error = error;
   }
 }

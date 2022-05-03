@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +12,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:wtf/100ms/preview/preview_page.dart';
+import 'package:wtf/100ms/preview/preview_store.dart';
 import 'package:wtf/controller/bases.dart';
 import 'package:wtf/controller/user_store.dart';
 import 'package:wtf/controller/webservice.dart';
@@ -413,6 +417,7 @@ class GymStore extends ChangeNotifier {
     };
     Map<String, dynamic> res =
         await RestDatasource().joinLiveSession(body: body);
+    print('check token hgere --- ${res.toString()}');
     Navigator.pop(context);
     if (res != null && res['status']) {
       locator<AppPrefs>()
@@ -424,6 +429,19 @@ class GymStore extends ChangeNotifier {
       locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
       log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
       //TODO check jisi meet
+      String token = res['token']??'';
+      bool permission = await getPermissions();
+      if(permission){
+        if(token != null && token.isNotEmpty){
+          navigateTo100MsPreview(context:context,token:res['token']);
+        }else{
+          FlashHelper.errorBar(context, message: 'No Token Found! ');
+        }
+      }else{
+        FlashHelper.errorBar(context, message: 'Please Provide all required permission!');
+      }
+
+
       // await showDialog(
       //   context: context,
       //   builder: (context) => JitsiMeeting(
@@ -444,7 +462,49 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> completeLiveSession(
+  Future<bool> getPermissions() async {
+    if (Platform.isIOS) return true;
+    await Permission.camera.request();
+    await Permission.microphone.request();
+
+    while ((await Permission.camera.isDenied)) {
+      await Permission.camera.request();
+    }
+    while ((await Permission.microphone.isDenied)) {
+      await Permission.microphone.request();
+    }
+    return true;
+  }
+
+  void navigateTo100MsPreview({@required BuildContext context,@required String token}){
+    if(token.isEmpty || token==null){
+      FlashHelper.errorBar(context, message: 'No Token Found!');
+    }else{
+      locator<AppPrefs>().liveClassTimerDate.setValue(DateTime.now().millisecondsSinceEpoch);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider<PreviewStore>(
+            create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
+            child: PreviewPage(
+                token:token
+            ),
+          ),
+        ),
+      );
+
+      // Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (_) => ListenableProvider.value(
+      //       value: new PreviewStore(),
+      //       child: PreviewPage(
+      //           token:token
+      //       ),
+      //     )));
+    }
+
+  }
+
+  Future<bool> completeLiveSession(
       {BuildContext context, String eDuration}) async {
     // showDialog(
     //   context: context,
@@ -465,7 +525,9 @@ class GymStore extends ChangeNotifier {
     log('mesg-->> ${res}');
     if (res != null && res['status']) {
       // changeNavigationTab(index: 2);
-      getLiveWorkoutCalculation(context: context);
+      return getLiveWorkoutCalculation(context: context);
+    }else{
+      return false;
     }
   }
 
@@ -1610,7 +1672,7 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getLiveWorkoutCalculation({BuildContext context}) async {
+  Future<bool> getLiveWorkoutCalculation({BuildContext context}) async {
     showDialog(
       context: NavigationService.navigatorKey.currentContext,
       builder: (context) => ProcessingDialog(
@@ -1629,7 +1691,10 @@ class GymStore extends ChangeNotifier {
       completedWorkout = res;
       notifyListeners();
       init(context: NavigationService.navigatorKey.currentContext);
-      NavigationService.navigateTo(Routes.exerciseDone);
+      // NavigationService.navigateTo(Routes.exerciseDone);
+      return true;
+    }else{
+      return false;
     }
   }
 

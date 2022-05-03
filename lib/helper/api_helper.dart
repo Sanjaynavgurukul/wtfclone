@@ -11,7 +11,8 @@ import 'AppPrefs.dart';
 import 'api_constants.dart';
 
 class APIHelper {
-  static const String BASE_URL = 'https://devapi.wtfup.me/';
+  // static const String BASE_URL = 'https://devapi.wtfup.me/';
+  static const String BASE_URL = 'http://192.168.29.115:3000/';
   // static const String BASE_URL = 'https://api.wtfup.me/';
   // static const String DEV_BASE_URL =c 'https://devapi.wtfup.me/';
   // static const String BASE_URL = 'http://13.232.102.139:9000/';

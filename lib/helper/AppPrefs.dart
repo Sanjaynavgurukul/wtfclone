@@ -110,6 +110,8 @@ class AppPrefs {
             preferences.getInt(PrefsConstants.exerciseSet, defaultValue: 1),
         startExTimer =
             preferences.getInt(PrefsConstants.startExTimer, defaultValue: 0),
+        liveClassTimerDate =
+            preferences.getInt(PrefsConstants.liveClassTimerDate, defaultValue: 0),
         address = preferences.getString(PrefsConstants.address,
             defaultValue: 'Noida Sector 8');
 
@@ -157,6 +159,7 @@ class AppPrefs {
   final Preference<bool> exercisePause;
   final Preference<int> exerciseSet;
   final Preference<int> startExTimer;
+  final Preference<int> liveClassTimerDate;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -278,4 +281,5 @@ class PrefsConstants {
   static const String exercisePause = 'exercisePause';
   static const String inProgressEx = 'inProgressEx';
   static const String startExTimer = 'startExTimer';
+  static const String liveClassTimerDate = 'liveClassTimerDate';
 }

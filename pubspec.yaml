@@ -19,7 +19,7 @@ environment:
   sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
-
+  platform: ^3.1.0
   animated_text_kit: ^4.2.1
   back_button_interceptor: ^5.0.1
   cached_network_image: ^3.1.0
