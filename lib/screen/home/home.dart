@@ -990,6 +990,7 @@ class TodayScheduleItem extends StatelessWidget {
                                     roomId: data.roomId,
                                     context: context,
                                     addonId: data.addonId,
+                                trainerId: data.trainer_id
                                   );
                               break;
                             case 'completed':
@@ -1045,6 +1046,7 @@ class TodayScheduleItem extends StatelessWidget {
                                     roomId: data.roomId,
                                     context: context,
                                     addonId: data.addonId,
+                                  trainerId: data.trainer_id
                                   );
                               break;
                             case 'completed':

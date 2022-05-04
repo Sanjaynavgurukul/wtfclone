@@ -544,6 +544,7 @@ class RestDatasource {
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
+    print('check live class body -- $body');
     var res = await _netUtil.post(
       APIHelper.joinLiveSession,
       headers: mapHeader,
@@ -686,7 +687,6 @@ class RestDatasource {
   }
 
   Future<MySchedule> getMySchedule({date}) async {
-    // print(locator<AppPrefs>().token.getValue());
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
@@ -697,8 +697,10 @@ class RestDatasource {
           locator<AppPrefs>().memberId.getValue(),
           date,
         );
+    print('cehck schedule base url -- $url');
     var res = await _netUtil.get(url, headers: mapHeader);
-    print('resp my schedule: $res');
+
+    print('resp my schedule: ${res.toString}');
     return res != null && res['status']
         ? MySchedule.fromJson(res)
         : MySchedule(

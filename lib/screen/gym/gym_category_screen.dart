@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -14,7 +13,6 @@ import 'package:wtf/helper/colors.dart';
 import 'package:wtf/model/gym_cat_model.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
-import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 import 'arguments/gym_cat_argument.dart';

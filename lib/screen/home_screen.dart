@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_tawk/flutter_tawk.dart';
 import 'package:provider/provider.dart';
 import 'package:rolling_nav_bar/indexed.dart';
 import 'package:rolling_nav_bar/rolling_nav_bar.dart';
-import 'package:wtf/controller/explore_controller_presenter.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
-import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';
 
@@ -23,13 +23,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen>, WidgetsBindingObserver {
-  //Local Variables :D
-  int pageIndex = 0;
-  ExplorePresenter _presenter;
-  GymModel _gymModel;
+
   bool isLoaded = false;
   GymStore store;
-
 
   List<Widget> get badgeWidgets => indexed(badges)
       .map((Indexed indexed) => indexed.value != null
@@ -54,45 +50,6 @@ class _HomeScreenState extends State<HomeScreen>
   ];
 
   var badges = <int>[null, null, null, null];
-
-  var iconText = <Widget>[
-    Text(
-      'Dashboards',
-      style: TextStyle(
-        color: AppConstants.white,
-        fontSize: 10.0,
-        fontWeight: FontWeight.w200,
-        // letterSpace: 1.5,
-      ),
-    ),
-    Text(
-      'Explore',
-      style: TextStyle(
-        color: AppConstants.white,
-        fontSize: 10.0,
-        fontWeight: FontWeight.w200,
-        // letterSpace: 1.5,
-      ),
-    ),
-    Text(
-      'My WTF',
-      style: TextStyle(
-        color: AppConstants.white,
-        fontSize: 10.0,
-        fontWeight: FontWeight.w200,
-        // letterSpace: 1.5,
-      ),
-    ),
-    Text(
-      'Coins',
-      style: TextStyle(
-        color: AppConstants.white,
-        fontSize: 10.0,
-        fontWeight: FontWeight.w200,
-        // letterSpace: 1.5,
-      ),
-    ),
-  ];
 
   var indicatorColors = <Color>[
     AppConstants.primaryColor,
@@ -121,10 +78,7 @@ class _HomeScreenState extends State<HomeScreen>
     CoinScreen(),
   ];
 
-
-  void openHelpChat(){
-
-  }
+  void openHelpChat() {}
 
   @override
   void initState() {
@@ -167,63 +121,51 @@ class _HomeScreenState extends State<HomeScreen>
             bottomNavigationBar: BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                    activeIcon:new SvgPicture.asset(
-                        'assets/svg/nav_bar/dashboard.svg',
-
-                        semanticsLabel: 'Dashboard Icon',
+                    activeIcon: new SvgPicture.asset(
+                      'assets/svg/nav_bar/dashboard.svg',
+                      semanticsLabel: 'Dashboard Icon',
                       color: AppConstants.boxBorderColor,
                     ),
-                    icon: SvgPicture.asset(
-                        'assets/svg/nav_bar/dashboard.svg',
-
-                        semanticsLabel: 'Dashboard Icon'
-                    ), label: 'Dashboard'),
+                    icon: SvgPicture.asset('assets/svg/nav_bar/dashboard.svg',
+                        semanticsLabel: 'Dashboard Icon'),
+                    label: 'Dashboard'),
                 BottomNavigationBarItem(
-                    activeIcon:new SvgPicture.asset(
+                    activeIcon: new SvgPicture.asset(
                       'assets/svg/nav_bar/explore.svg',
-
                       semanticsLabel: 'Explore Icon',
                       color: AppConstants.boxBorderColor,
                     ),
-                    icon: SvgPicture.asset(
-                        'assets/svg/nav_bar/explore.svg',
-
-                        semanticsLabel: 'Explore icon'
-                    ), label: 'Explore'),
+                    icon: SvgPicture.asset('assets/svg/nav_bar/explore.svg',
+                        semanticsLabel: 'Explore icon'),
+                    label: 'Explore'),
                 BottomNavigationBarItem(
-                    activeIcon:new SvgPicture.asset(
+                    activeIcon: new SvgPicture.asset(
                       'assets/svg/nav_bar/wtf.svg',
-
                       semanticsLabel: 'wtf icon',
                       color: AppConstants.boxBorderColor,
                     ),
-                    icon: SvgPicture.asset(
-                        'assets/svg/nav_bar/wtf.svg',
-
-                        semanticsLabel: 'wtf icon'
-                    ), label: 'My WTF'),
+                    icon: SvgPicture.asset('assets/svg/nav_bar/wtf.svg',
+                        semanticsLabel: 'wtf icon'),
+                    label: 'My WTF'),
                 BottomNavigationBarItem(
-                    activeIcon:new SvgPicture.asset(
+                    activeIcon: new SvgPicture.asset(
                       'assets/svg/nav_bar/coin.svg',
-
                       semanticsLabel: 'coins icon',
                       color: AppConstants.boxBorderColor,
                     ),
-                    icon: SvgPicture.asset(
-                        'assets/svg/nav_bar/coin.svg',
-
-                        semanticsLabel: 'coin icon'
-                    ), label: 'Coins'),
+                    icon: SvgPicture.asset('assets/svg/nav_bar/coin.svg',
+                        semanticsLabel: 'coin icon'),
+                    label: 'Coins'),
               ],
               currentIndex: store.currentIndex,
               fixedColor: Colors.white,
               backgroundColor: Color(0xff1A1A1A),
               selectedLabelStyle: TextStyle(color: Colors.white),
               unselectedIconTheme:
-              IconThemeData(color: AppConstants.white.withOpacity(0.3)),
+                  IconThemeData(color: AppConstants.white.withOpacity(0.3)),
               unselectedItemColor: Colors.grey,
               unselectedLabelStyle: TextStyle(color: Colors.green),
-              onTap: (index){
+              onTap: (index) {
                 setState(() {
                   switch (index) {
                     case 0:
@@ -258,10 +200,9 @@ class _HomeScreenState extends State<HomeScreen>
                       //     );
                       break;
                   }
-
-                  setState(() {
-                    store.currentIndex = index;
-                  });
+                    setState(() {
+                      store.currentIndex = index;
+                    });
                   // _pageController.animateToPage(index,
                   //     duration: Duration(milliseconds: 300), curve: Curves.ease);
                 });
@@ -292,85 +233,6 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget oldBottomBar(){
-    return SizedBox(
-      height: 56.0,
-      width: MediaQuery.of(context).size.width,
-      child: Material(
-        elevation: 12.0,
-        child: RollingNavBar.iconData(
-          activeBadgeColors: <Color>[
-            Colors.black,
-          ],
-          activeIndex: store.currentIndex,
-          animationCurve: Curves.linear,
-          animationType: AnimationType.spinOutIn,
-          baseAnimationSpeed: 250,
-          badges: badgeWidgets,
-          iconData: iconData,
-          iconColors: <Color>[Colors.white],
-          iconText: iconText,
-          indicatorColors: [
-            AppConstants.primaryColor
-//                Color(locator<AppPrefs>().selectedPrimaryColor2.getValue()),
-//                Color(locator<AppPrefs>().selectedPrimaryColor.getValue()),
-//                AppConstants.white
-          ],
-          iconSize: 24,
-          indicatorRadius: scaledHeight(context, 25),
-          onAnimate: _onAnimate,
-          onTap: (index) => setState(() {
-            switch (index) {
-              case 0:
-                context.read<GymStore>().getBanner(context: context);
-                context.read<GymStore>().getAllEvents(context: context);
-                break;
-              case 1:
-                context
-                    .read<GymStore>()
-                    .getActiveSubscriptions(context: context);
-                context
-                    .read<GymStore>()
-                    .getMemberSubscriptions(context: context);
-                context.read<GymStore>().getTerms();
-                context.read<GymStore>().getBanner(context: context);
-                context.read<GymStore>().getAllGyms(context: context);
-                context.read<GymStore>().getAllEvents(context: context);
-                break;
-              case 2:
-                break;
-              case 3:
-                context
-                    .read<GymStore>()
-                    .getWTFCoinBalance(context: context);
-                context.read<GymStore>().getCoinHistory(context: context);
-                context
-                    .read<GymStore>()
-                    .getRedeemHistory(context: context);
-                // context.read<GymStore>().getNotifications(
-                //       context: context,
-                //       type: 'new',
-                //     );
-                break;
-            }
-
-            setState(() {
-              store.currentIndex = index;
-            });
-            // _pageController.animateToPage(index,
-            //     duration: Duration(milliseconds: 300), curve: Curves.ease);
-          }),
-          indicatorCornerRadius: 8.0,
-          indicatorSides: 6,
-          activeIconColors: [AppConstants.white],
-          navBarDecoration: BoxDecoration(
-            color: AppConstants.cardBg1.withOpacity(0.01),
           ),
         ),
       ),

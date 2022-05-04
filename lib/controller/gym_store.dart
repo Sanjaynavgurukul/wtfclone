@@ -400,6 +400,7 @@ class GymStore extends ChangeNotifier {
     String roomId,
     String addonId,
     String addonName,
+    String trainerId
   }) async {
     showDialog(
       context: context,
@@ -408,7 +409,7 @@ class GymStore extends ChangeNotifier {
       ),
     );
     var body = {
-      "trainer_id": currentTrainer.data.userId,
+      "trainer_id": trainerId,
       "addon_id": addonId,
       "liveclass_id": liveClassId,
       "user_id": locator<AppPrefs>().memberId.getValue(),

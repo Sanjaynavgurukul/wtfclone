@@ -162,6 +162,7 @@ class MyScheduleAddonData {
     this.roomId,
     this.liveClassId,
     this.roomStatus,
+    this.trainer_id
   });
 
   String uid;
@@ -195,6 +196,7 @@ class MyScheduleAddonData {
   var completedSession;
   String planName;
   String eventName;
+  String trainer_id;
 
   factory MyScheduleAddonData.fromJson(Map<String, dynamic> json) {
     String img =
@@ -238,6 +240,7 @@ class MyScheduleAddonData {
         workoutStatus: json['workout_status'] ?? false,
         roomId: json['room_id'] ?? '',
         liveClassId: json['liveclass_id'] ?? '',
+        trainer_id: json['trainer_id'],
         roomStatus: json['room_status'] ?? 'scheduled');
   }
 
@@ -254,6 +257,7 @@ class MyScheduleAddonData {
         "gym_uid": gymUid,
         "gym_address1": gymAddress1,
         "gym_type": gymType,
+        "trainer_id": trainer_id,
         "event_type": eventType,
         "gym_address2": gymAddress2,
         "gym_city": gymCity,

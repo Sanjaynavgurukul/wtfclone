@@ -58,7 +58,6 @@ class _DietScheduleState extends State<DietSchedule> {
     if (store.dietItem != null &&
         store.dietItem.data != null &&
         store.dietItem.data.first.day != null) {
-
       store.dietItem.data.first.day.breakfast.map((e) {
         if (e.consumptionStatus ?? false) {
           consumed += 1;
@@ -106,6 +105,39 @@ class _DietScheduleState extends State<DietSchedule> {
     store = context.watch<GymStore>();
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: store.dietItem != null && isConValid()
+            ? Padding(
+          padding: EdgeInsets.only(left: 12,right: 12,bottom: 12),
+              child: Container(
+                  child: TextButton(
+                    onPressed: () {
+                      store.collectDietRewards(
+                        context: context,
+                        date: date,
+                      );
+                    },
+                    child: Container(
+                      height: 54,
+                      width: MediaQuery.of(context).size.width * .95,
+                      decoration: BoxDecoration(
+                        color: AppConstants.bgColor,
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Claim WTF Coins",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            )
+            : Padding(padding: EdgeInsets.only(left: 12,right: 12,bottom: 12),child: CollecReward()),
         appBar: AppBar(
           backgroundColor: AppColors.BACK_GROUND_BG,
           elevation: 1.0,
@@ -158,6 +190,7 @@ class _DietScheduleState extends State<DietSchedule> {
                           store.dietItem.data.isNotEmpty &&
                           store.dietItem.data.first.day != null
                       ? ListView(
+                        padding: EdgeInsets.only(bottom: 70),
                           shrinkWrap: true,
                           children: [
                             store.dietItem.data.first.day.breakfast.isNotEmpty
@@ -170,18 +203,16 @@ class _DietScheduleState extends State<DietSchedule> {
                                     day: day,
                                   )
                                 : Container(),
-
                             store.dietItem.data.first.day.mmSnack.isNotEmpty
                                 ? Nutritioncard(
-                              nutrionType: store.dietItem.data.first.day
-                                  .mmSnack.first.category,
-                              breakfast:
-                              store.dietItem.data.first.day.mmSnack,
-                              date: date,
-                              day: day,
-                            )
+                                    nutrionType: store.dietItem.data.first.day
+                                        .mmSnack.first.category,
+                                    breakfast:
+                                        store.dietItem.data.first.day.mmSnack,
+                                    date: date,
+                                    day: day,
+                                  )
                                 : Container(),
-
                             store.dietItem.data.first.day.lunch.isNotEmpty
                                 ? Nutritioncard(
                                     nutrionType: store.dietItem.data.first.day
@@ -228,36 +259,6 @@ class _DietScheduleState extends State<DietSchedule> {
                       child: Loading(),
                     ),
             ),
-            store.dietItem != null && isConValid()
-                ? Container(
-                    child: TextButton(
-                      onPressed: () {
-                        store.collectDietRewards(
-                          context: context,
-                          date: date,
-                        );
-                      },
-                      child: Container(
-                        height: 54,
-                        width: MediaQuery.of(context).size.width * .95,
-                        decoration: BoxDecoration(
-                          color: AppConstants.bgColor,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Claim WTF Coins",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : CollecReward(),
           ],
         ),
       ),

@@ -432,6 +432,7 @@ class ScheduleListItems extends StatelessWidget {
                                   roomId: e.roomId,
                                   context: context,
                                   addonId: e.addonId,
+                                trainerId: e.trainer_id
                                 );
                             break;
                           case 'completed':
