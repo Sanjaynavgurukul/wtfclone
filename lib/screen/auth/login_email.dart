@@ -226,12 +226,16 @@ class _LoginEmailState extends State<LoginEmail> {
 
                                 if (res['memDetail']) {
                                   locator<AppPrefs>().memberAdded.setValue(true);
-                                  NavigationService.navigateToReplacement(
-                                      Routes.homePage);
+                                  Navigator.of(context)
+                                      .pushNamedAndRemoveUntil(Routes.homePage, (Route<dynamic> route) => false);
+                                  // NavigationService.navigateToReplacement(
+                                  //     Routes.homePage);
                                 } else {
                                   locator<AppPrefs>().memberAdded.setValue(false);
-                                  NavigationService.navigateToReplacement(
-                                      Routes.userDetail);
+                                  Navigator.of(context)
+                                      .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
+                                  // NavigationService.navigateToReplacement(
+                                  //     Routes.userDetail);
                                 }
                               } else {
                                 FlashHelper.errorBar(context,

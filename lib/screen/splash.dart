@@ -207,7 +207,7 @@ class SplashWidget extends StatelessWidget {
                         NavigationService.navigateToReplacement(
                             Routes.homePage);
                       } else {
-                        NavigationService.navigateToReplacement(
+                        NavigationService.pushName(
                             Routes.register);
                       }
                     },
@@ -226,6 +226,7 @@ class SplashWidget extends StatelessWidget {
                       size: 35,
                       color: Colors.white,
                     ),
+                    resettable:true,
                     sliderButtonIconSize: 48.0,
                     submittedIcon: Image.asset(Logos.WTF_DARK),
                     sliderRotate: true,
@@ -251,7 +252,7 @@ class SplashWidget extends StatelessWidget {
                           text: "Sign In",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              NavigationService.navigateToReplacement(
+                              NavigationService.pushName(
                                   Routes.login);
                             })
                     ],

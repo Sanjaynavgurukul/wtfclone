@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:wtf/helper/colors.dart';
 
 class Loading extends StatefulWidget {
@@ -11,12 +12,13 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SpinKitHourGlass(
-        color: AppColors.TEXT_DARK,
-        size: 80.0,
-        controller: AnimationController(
-            vsync: this, duration: const Duration(seconds: 1)),
-      ),
+      child: Lottie.asset('assets/lottie/loaderjson.json',width: 150),
+      // child:Looti SpinKitHourGlass(
+      //   color: AppColors.TEXT_DARK,
+      //   size: 80.0,
+      //   controller: AnimationController(
+      //       vsync: this, duration: const Duration(seconds: 1)),
+      // ),
       // child: Image.asset(
       //   Gif.loader,
       //   width: 80.0,

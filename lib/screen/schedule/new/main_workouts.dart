@@ -20,6 +20,7 @@ import 'package:wtf/screen/schedule/arguments/ex_details_argument.dart';
 import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
 import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/widget/gradient_image_widget.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 class MainWorkout extends StatefulWidget {
   static const routeName = '/mainWorkout';
@@ -185,7 +186,7 @@ class _MainWorkoutState extends State<MainWorkout> {
       return Consumer<GymStore>(builder: (context, user, child) {
         if (user.currentTrainer == null || user.currentTrainer.data == null || user.myWorkoutSchedule == null || user.myWorkoutSchedule.data == null) {
           return Center(
-            child: CupertinoActivityIndicator(),
+            child: Loading()
           );
         } else {
           if (args == null) {

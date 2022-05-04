@@ -15,6 +15,7 @@ import 'package:wtf/model/gym_cat_model.dart';
 import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/widget/Shimmer/widgets/rectangle.dart';
+import 'package:wtf/widget/progress_loader.dart';
 
 import 'arguments/gym_cat_argument.dart';
 
@@ -67,7 +68,7 @@ class _GymCategoryScreenState extends State<GymCategoryScreen> {
       return Consumer<GymStore>(builder: (context, user, snapshot) {
         if (user.selectedGymTypes == null || user.selectedGymTypes.data == null) {
           return Center(
-            child: CupertinoActivityIndicator(),
+            child: Loading()
           );
         }else{
           //This is data

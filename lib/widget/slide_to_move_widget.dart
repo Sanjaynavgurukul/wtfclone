@@ -61,6 +61,7 @@ class SlideActionWidget extends StatefulWidget {
 
   /// If true the widget will be reversed
   final bool reversed;
+  final bool resettable;
 
   /// the alignment of the widget once it's submitted
   final Alignment alignment;
@@ -72,6 +73,7 @@ class SlideActionWidget extends StatefulWidget {
     this.sliderButtonIconPadding = 16,
     this.sliderButtonYOffset = 0,
     this.sliderRotate = true,
+    this.resettable = false,
     this.height = 70,
     this.outerColor,
     this.borderRadius = 52,
@@ -334,6 +336,7 @@ class SlideActionWidgetState extends State<SlideActionWidget>
                                       await _checkAnimation();
 
                                       widget.onSubmit();
+                                      resettable();
                                     }
                                   },
                                   child: OutlineGradientButton(
@@ -423,6 +426,7 @@ class SlideActionWidgetState extends State<SlideActionWidget>
 
   /// Call this method to revert the animations
   Future reset() async {
+    print('ressetable called reset called--- ');
     await _checkAnimationController.reverse().orCancel;
 
     submitted = false;
@@ -569,6 +573,19 @@ class SlideActionWidgetState extends State<SlideActionWidget>
       _maxDx =
           _containerWidth - (sliderWidth / 2) - 40 - widget.sliderButtonYOffset;
     });
+  }
+
+
+  void resettable(){
+    print('ressetable called---');
+    if(widget.resettable){
+      print('ressetable called--- $resettable');
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          reset();
+        });
+
+      });}
   }
 
   @override
