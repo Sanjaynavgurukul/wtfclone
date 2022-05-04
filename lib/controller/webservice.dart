@@ -11,7 +11,6 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/api_constants.dart';
 import 'package:wtf/helper/api_helper.dart';
 import 'package:wtf/helper/network_utils.dart';
-import 'package:wtf/model/100ms_model.dart';
 import 'package:wtf/model/ActiveSubscriptions.dart';
 import 'package:wtf/model/AllSessions.dart';
 import 'package:wtf/model/AttendanceDetails.dart';
@@ -1781,23 +1780,5 @@ class RestDatasource {
             );
       return model;
     });
-  }
-
-  Future<MsModel> get100msData(
-      {@required String name, @required String description}) async {
-    String token = locator<AppPrefs>().token.getValue();
-    // print("get Gym Slot details 3");
-    Map<String, String> mapHeader = Map();
-    mapHeader["Authorization"] = "Bearer " + token;
-    mapHeader["Content-Type"] = "application/json";
-    // print("get Gym Slot details 4");
-    // String url = BASE_URL + Api.getAddOnsGymsSlots(date: date);
-    // print('url: $url');
-    var res = await _netUtil.post(BASE_URL+'live/room',headers: mapHeader,
-        body: {"name": "$name", "description": "$description","role":"host"});
-    print("response of Get 100ms details : " + res.toString());
-    MsModel model;
-    if (res != null && res["status"]) model = MsModel.fromJson(res);
-    return Future.value(model);
   }
 }

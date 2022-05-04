@@ -414,6 +414,7 @@ class GymStore extends ChangeNotifier {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "date": Helper.formatDate2(DateTime.now().toIso8601String()),
     };
+    print('check trainer body === ${body.toString()}');
     Map<String, dynamic> res =
         await RestDatasource().joinLiveSession(body: body);
     print('check token hgere --- ${res.toString()}');
@@ -439,23 +440,6 @@ class GymStore extends ChangeNotifier {
       }else{
         FlashHelper.errorBar(context, message: 'Please Provide all required permission!');
       }
-
-
-      // await showDialog(
-      //   context: context,
-      //   builder: (context) => JitsiMeeting(
-      //     meetingRoomId: roomId,
-      //     meetingSubject: addonName,
-      //   ),
-      // );
-      // Navigator.of(context).push(
-      //   CupertinoPageRoute(
-      //     builder: (context) => JitsiMeeting(
-      //       meetingRoomId: roomId,
-      //       meetingSubject: addonName,
-      //     ),
-      //   ),
-      // );
     } else {
       FlashHelper.errorBar(context, message: res['message']);
     }
@@ -492,13 +476,6 @@ class GymStore extends ChangeNotifier {
         ),
       );
 
-      // Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (_) => ListenableProvider.value(
-      //       value: new PreviewStore(),
-      //       child: PreviewPage(
-      //           token:token
-      //       ),
-      //     )));
     }
 
   }
