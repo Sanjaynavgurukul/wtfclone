@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   var iconText = <Widget>[
     Text(
-      'Dashboard',
+      'Dashboards',
       style: TextStyle(
         color: AppConstants.white,
         fontSize: 10.0,
@@ -120,6 +120,11 @@ class _HomeScreenState extends State<HomeScreen>
     MyWtf(),
     CoinScreen(),
   ];
+
+
+  void openHelpChat(){
+
+  }
 
   @override
   void initState() {
