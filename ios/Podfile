@@ -1,10 +1,7 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '11.0'
-<<<<<<< HEAD
-=======
 
-pod 'razorpay-pod', '1.1.17'
->>>>>>> 6138d6a17c6a47bae8a524b84c2331c34def0624
+#pod 'razorpay-pod', '1.1.17'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
