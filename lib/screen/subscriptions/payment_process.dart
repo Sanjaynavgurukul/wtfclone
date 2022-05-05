@@ -349,45 +349,50 @@ class _PaymentProcessState extends State<PaymentProcess> {
           openCheckout(args);
         });
       }
-      return Scaffold(
-          body: Container(
-        child: StreamBuilder(
-          stream: uiStream,
-          initialData: getStatusModel(PaymentStatus.PROGRESS),
-          builder: (BuildContext context,
-              AsyncSnapshot<PaymentStatusModel> snapshot) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 200,
-                ),
-                // SpinKitRipple(
-                //   color: Colors.white,
-                //   size: 80.0,
-                // ),
-                lottieImage(
-                    name: snapshot.data.animationName,
-                    width: 100,
-                    repeat:
-                        snapshot.data.animationName == 'failed' ? false : true),
-                ListTile(
-                  title: Text(
-                    '${snapshot.data.heading}',
-                    textAlign: TextAlign.center,
+      return WillPopScope(
+        onWillPop: ()async{
+          return false;
+        },
+        child: Scaffold(
+            body: Container(
+          child: StreamBuilder(
+            stream: uiStream,
+            initialData: getStatusModel(PaymentStatus.PROGRESS),
+            builder: (BuildContext context,
+                AsyncSnapshot<PaymentStatusModel> snapshot) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 200,
                   ),
-                  subtitle: Text(
-                    '${snapshot.data.subHeading}',
-                    textAlign: TextAlign.center,
+                  // SpinKitRipple(
+                  //   color: Colors.white,
+                  //   size: 80.0,
+                  // ),
+                  lottieImage(
+                      name: snapshot.data.animationName,
+                      width: 100,
+                      repeat:
+                          snapshot.data.animationName == 'failed' ? false : true),
+                  ListTile(
+                    title: Text(
+                      '${snapshot.data.heading}',
+                      textAlign: TextAlign.center,
+                    ),
+                    subtitle: Text(
+                      '${snapshot.data.subHeading}',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                // ElevatedButton(onPressed: openCheckout, child: Text('Open')),
-              ],
-            );
-          },
-        ),
-      ));
+                  // ElevatedButton(onPressed: openCheckout, child: Text('Open')),
+                ],
+              );
+            },
+          ),
+        )),
+      );
     }
   }
 

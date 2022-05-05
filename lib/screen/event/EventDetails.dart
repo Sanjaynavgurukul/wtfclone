@@ -16,6 +16,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/main.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/gym/arguments/gym_detail_argument.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
@@ -31,257 +32,254 @@ class EventDetails extends StatefulWidget {
 class _EventDetailsState extends State<EventDetails> {
   GymStore gymStore;
 
+  //
   @override
   Widget build(BuildContext context) {
     gymStore = context.watch<GymStore>();
-    return Scaffold(
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      bottomNavigationBar: Container(
-        height: 122.0,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.white.withOpacity(0.1),
-              spreadRadius: 1.0,
-            ),
-          ],
-        ),
-        child: EventButton(),
-      ),
-      body: SafeArea(
-        child: Consumer<GymStore>(
-          builder: (context, gymStore, child) =>
-          gymStore.selectedEventData ==
-              null
-              ? LoadingWithBackground()
-              : gymStore.selectedEventData != null
-              ? Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (gymStore.selectedEventData.image != null &&
-                      gymStore.selectedEventData.image.isNotEmpty)
-                    AutoImageSlider(
-                      mainContainerHeight:
-                      MediaQuery
-                          .of(context)
-                          .size
-                          .height / 2.3,
-                      childContainerHeight:
-                      MediaQuery
-                          .of(context)
-                          .size
-                          .height / 2.28,
-                      items: [gymStore.selectedEventData.image],
-                      dotSize: 8.0,
-                      activeMarkerColor: Colors.red,
-                      inActiveMarkerColor:
-                      Colors.white.withOpacity(0.4),
-                      markerType: PositionMarkerType.dots,
-                      positionedMarker: true,
-                      showDelete: false,
-                      showBorderDots: true,
-                      autoScroll: false,
-                    )
-                  else
-                    Container(
-                      height:
-                      MediaQuery
-                          .of(context)
-                          .size
-                          .height / 2.3,
-                      color: Colors.white.withOpacity(0.1),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 15,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          gymStore.selectedEventData.mode ==
-                              'challenge'
-                              ? "Challenge"
-                              : "Events",
-                          // 'WTF Team Core',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+    return Consumer<GymStore>(
+        builder: (context, gymStore, child) {
+          if (gymStore.selectedEventData ==
+              null) {
+            return LoadingWithBackground();
+          } else {
+            if (gymStore.selectedEventData != null) {
+              return Scaffold(
+                extendBodyBehindAppBar: true,
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                bottomNavigationBar: Container(
+                  height: 122.0,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.1),
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: EventButton(),
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (gymStore.selectedEventData.image != null &&
+                          gymStore.selectedEventData.image.isNotEmpty)
+                        AutoImageSlider(
+                          padding: 0,
+                          mainContainerHeight:
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .height / 2.3,
+                          childContainerHeight:
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .height / 2.28,
+                          items: [gymStore.selectedEventData.image],
+                          dotSize: 8.0,
+                          activeMarkerColor: Colors.red,
+                          inActiveMarkerColor:
+                          Colors.white.withOpacity(0.4),
+                          markerType: PositionMarkerType.dots,
+                          positionedMarker: true,
+                          showDelete: false,
+                          showBorderDots: true,
+                          autoScroll: false,
+                        )
+                      else
+                        Container(
+                          height:
+                          MediaQuery
+                              .of(context)
+                              .size
+                              .height / 2.3,
+                          color: Colors.white.withOpacity(0.1),
                         ),
-                        UIHelper.verticalSpace(6.0),
-                        Text(
-                          gymStore.selectedEventData.name ?? '',
-                          // 'WTF Team Core',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w900,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 15,
                         ),
-                        UIHelper.verticalSpace(6.0),
-                        InkWell(
-                          onTap: () {
-                            context.read<GymStore>().getGymDetails(
-                              context: context,
-                              gymId: gymStore
-                                  .selectedEventData.gymId,
-                            );
-                            NavigationService.pushName(Routes.buyMemberShipPage,
-                                argument: GymDetailArgument(
-                                    gym: gymStore.selectedGymDetail.data,
-                                    gymId: gymStore.selectedEventData.gymId));
-
-                            // Navigator.of(context).push(
-                            //   CupertinoPageRoute(
-                            //     builder: (_) =>
-                            //         BuyMemberShipPage(
-                            //           gymId: gymStore
-                            //               .selectedEventData.gymId,
-                            //         ),
-                            //   ),
-                            // );
-                          },
-                          child: Text(
-                            'By ${gymStore.selectedEventData.gymName}',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                        UIHelper.verticalSpace(20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SvgPicture.asset(
-                              'assets/svg/calendar.svg',
-                              color: Colors.white.withOpacity(0.7),
-                              height: 24.0,
+                            ListTile(
+                              title: Text(gymStore.selectedEventData.mode ==
+                                  'challenge'
+                                  ? "Challenge"
+                                  : "Events", style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.normal,
+                              )),
+                              subtitle: Text(
+                                gymStore.selectedEventData.name ?? '',
+                                style: TextStyle(
+                                  color: AppConstants.bgColor,
+                                  fontSize: 26.0,
+                                  fontWeight: FontWeight.w600,
+                                ),),
+                              contentPadding: EdgeInsets.all(0),
+                              dense: true,
                             ),
-                            UIHelper.horizontalSpace(12.0),
-                            Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.start,
+
+                            InkWell(
+                              onTap: () {
+                                context.read<GymStore>().getGymDetails(
+                                  context: context,
+                                  gymId: gymStore
+                                      .selectedEventData.gymId,
+                                );
+                                NavigationService.pushName(
+                                    Routes.buyMemberShipPage,
+                                    argument: GymDetailArgument(
+                                        gym: gymStore.selectedGymDetail
+                                            .data,
+                                        gymId: gymStore.selectedEventData
+                                            .gymId));
+                              },
+                              child: Text(
+                                'By ${gymStore.selectedEventData
+                                    .gymName}',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            UIHelper.verticalSpace(20.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  Helper.stringWeekDay(gymStore
-                                      .selectedEventData.date
-                                      .toString()) ??
-                                      '',
-                                  // 'WTF Team Core',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                                SvgPicture.asset(
+                                  'assets/svg/calendar.svg',
+                                  color: Colors.white.withOpacity(0.7),
+                                  height: 24.0,
                                 ),
-                                UIHelper.verticalSpace(6.0),
-                                Text(
-                                  ' ${gymStore.selectedEventData
-                                      .timeFrom} to ${gymStore.selectedEventData
-                                      .timeTo}',
-                                  style: TextStyle(
-                                    color:
-                                    Colors.white.withOpacity(0.6),
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        UIHelper.verticalSpace(12.0),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color:
-                                    Colors.white.withOpacity(0.7),
-                                    size: 20.0,
-                                  ),
-                                  UIHelper.horizontalSpace(12.0),
-                                  Flexible(
-                                    child: Text(
-                                      '${gymStore.selectedEventData
-                                          .gymAddress1 ?? ''}, ${gymStore
-                                          .selectedEventData.gymAddress2}' ??
+                                UIHelper.horizontalSpace(12.0),
+                                Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Helper.stringWeekDay(gymStore
+                                          .selectedEventData.date
+                                          .toString()) ??
                                           '',
-                                      textAlign: TextAlign.start,
+                                      // 'WTF Team Core',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    UIHelper.verticalSpace(6.0),
+                                    Text(
+                                      ' ${gymStore.selectedEventData
+                                          .timeFrom} to ${gymStore
+                                          .selectedEventData
+                                          .timeTo}',
+                                      style: TextStyle(
+                                        color:
+                                        Colors.white.withOpacity(0.6),
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            GetDirectionButton(
-                              lat: double.tryParse(
-                                gymStore.selectedEventData.gymLat,
-                              ),
-                              lng: double.tryParse(
-                                gymStore.selectedEventData.gymLong,
-                              ),
+                            UIHelper.verticalSpace(12.0),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color:
+                                        Colors.white.withOpacity(0.7),
+                                        size: 20.0,
+                                      ),
+                                      UIHelper.horizontalSpace(12.0),
+                                      Flexible(
+                                        child: Text(
+                                          '${gymStore.selectedEventData
+                                              .gymAddress1 ??
+                                              ''}, ${gymStore
+                                              .selectedEventData
+                                              .gymAddress2}' ??
+                                              '',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GetDirectionButton(
+                                  lat: double.tryParse(
+                                    gymStore.selectedEventData.gymLat,
+                                  ),
+                                  lng: double.tryParse(
+                                    gymStore.selectedEventData.gymLong,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            UIHelper.verticalSpace(30.0),
+                            Html(
+                              data: gymStore
+                                  .selectedEventData.description ??
+                                  '',
+                              // padding: EdgeInsets.all(8.0),
+                              // customRender: (node, children) {
+                              //   if (node is dom.Element) {
+                              //     switch (node.localName) {
+                              //       case "custom_tag": // using this, you can handle custom tags in your HTML
+                              //         return Column(children: children);
+                              //     }
+                              //   }
+                              // },
+                            ),
+                            SizedBox(
+                              height: 14.0,
                             ),
                           ],
                         ),
-                        UIHelper.verticalSpace(30.0),
-                        Html(
-                          data: gymStore
-                              .selectedEventData.description ??
-                              '',
-                          // padding: EdgeInsets.all(8.0),
-                          // customRender: (node, children) {
-                          //   if (node is dom.Element) {
-                          //     switch (node.localName) {
-                          //       case "custom_tag": // using this, you can handle custom tags in your HTML
-                          //         return Column(children: children);
-                          //     }
-                          //   }
-                          // },
-                        ),
-                        SizedBox(
-                          height: 14.0,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          )
-              : Center(
-            child: Text(
-              'Event Details not available.',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+                ),
+              );
+            } else {
+              return Material(
+                child: Center(
+                    child: Text(
+                      'Event Details not available.',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.0,
+                      ),
+                    )),
+              );
+            }
+          }
+        });
   }
 
   @override
@@ -358,13 +356,8 @@ class _EventButtonState extends State<EventButton> {
                   store?.selectedEventData?.validFrom) ?? ''}'),
           CustomButton(
             height: 48.0,
-            onTap: () {
-              log('time;;; ${-DateTime
-                  .now()
-                  .difference(DateTime.parse(store.selectedEventData.validFrom))
-                  .inSeconds}');
-            },
-            bgColor: Colors.white,
+            onTap: null,
+            bgColor: Colors.white.withOpacity(0.1),
             textColor: Colors.red,
             radius: 12.0,
             text: 'Coming Soon!!',
@@ -394,7 +387,7 @@ class _EventButtonState extends State<EventButton> {
                       .isEven ? DateTime
                       .now()
                       .difference(DateTime.parse(store.selectedEventData.date))
-                      .inHours < 24 ? '1 Day left' : '${-DateTime
+                      .inHours < 24 ? '1 Day left' : '${DateTime
                       .now()
                       .difference(DateTime.parse(store.selectedEventData.date))
                       .inDays + 1 % 24} Days left' : '${DateTime
@@ -498,6 +491,38 @@ class _EventButtonState extends State<EventButton> {
                   ? "Book now for Rs. ${store.selectedEventData.price}"
                   : 'Book now',
               onTap: () async {
+                var body={
+                  "gym_id":store.selectedEventData.gymId,
+                  "user_id":locator<AppPrefs>()
+                      .memberId
+                      .getValue(),
+                  "type": 'event',
+                  "price":"0",
+                  "tax_percentage":"0",
+                  "tax_amount":"0",
+                  "slot_id":"",
+                  "addon":"",
+                  "event_id":"",
+                  "remark":"Goal Focus Program",
+                  "start_date":"30-04-2022",
+                  "expire_date":"01-05-2022",
+                  "trx_id":"pay_free",
+                  "trx_status":"done",
+                  "order_status":"done",
+                  "event_id":"",
+                  "order_id":"N/A",//if 0 pay free else order id
+                  "isWhatsapp":true,
+                  "is_goal":0,//always zero in event
+
+
+                  "coupon":"",//
+                  "plan_id":"",//
+                  "session_id":"",//
+                  "payment":[
+                  ],
+                  "is_partial":0
+                };
+
                 if (int.tryParse(
                     store.selectedEventData.price) >
                     0) {
@@ -509,30 +534,7 @@ class _EventButtonState extends State<EventButton> {
                   NavigationService.navigateTo(
                       Routes.bookingSummaryEvent);
                 } else {
-                  var body = {
-                    "gym_id": store.selectedEventData.gymId,
-                    "user_id": locator<AppPrefs>()
-                        .memberId
-                        .getValue(),
-                    "price": '0',
-                    "type": 'event',
-                    "tax_percentage": "18",
-                    "tax_amount": '0',
-                    "slot_id": '',
-                    "addon": '',
-                    'event_id': store.selectedEventData.uid,
-                    'remark': store.selectedEventData.uid,
-                    "start_date": Helper.stringForDatetime3(
-                        store.selectedEventData.date)
-                        .trim(),
-                    "expire_date":
-                    Helper.stringForDatetime3(store
-                        .selectedEventData.date)
-                        .trim(),
-                    'trx_id': 'pay_free',
-                    'trx_status': 'done',
-                    'order_status': 'done',
-                  };
+
                   bool isDone = await store.addSubscription(
                       context: context, body: body);
                   if (isDone) {
@@ -545,7 +547,6 @@ class _EventButtonState extends State<EventButton> {
                     );
                   }
                 }
-                // NavigationService.navigateTo(Routes.scheduleSlotPage);
               },
             )
                 : Container(
