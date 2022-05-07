@@ -79,11 +79,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => HomePage()),
-      //     );
+      //   onPressed: () async{
+      //     await store.getPermissions();
+      //     store.navigateTo100MsPreview(context: context, token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjIzYzA5NDI0NGFlMDRiNTFjYjA2NTdmIiwicm9vbV9pZCI6IjYyNzRmYzM5ZmY2ODhjMDM3YTM4YjE1ZCIsInVzZXJfaWQiOiJjbmRzem10biIsInJvbGUiOiJndWVzdCIsImp0aSI6ImMyM2M0YWE3LTY1YjAtNDdkNS04NjA1LTc2YTBmNzhjY2EwOCIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NTE5MjcwNDh9.y9-F5tsIVD-e27zM9y5Cve_Z4dMIMIaNmNDT2wLTVnw');
       //   },
       //   child: Icon(Icons.add),
       // ),

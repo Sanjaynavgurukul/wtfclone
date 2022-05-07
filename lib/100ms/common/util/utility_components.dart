@@ -26,41 +26,60 @@ class UtilityComponents {
     ));
   }
 
-  static Future<dynamic> onBackPressed(BuildContext context) {
+  static Future<dynamic> onBackPressed({BuildContext context,bool warningDialog = true}) async {
     MeetingStore _meetingStore = context.read<MeetingStore>();
     GymStore _trainerStore = context.read<GymStore>();
-    return  showDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text('Alert'),
-            content: Text('Do you really want to end this class?'),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () async{
-                    String time = exTimerHelper.getLiveClassDuration();
-                    await _trainerStore.completeLiveSession(context: context,eDuration: time).then((value){
-                      if(value){
-                        locator<AppPrefs>().liveClassTimerDate.setValue(0);
-                        _meetingStore.leave();
-                        Navigator.pushNamedAndRemoveUntil(context, Routes.exerciseDone, (route) => route.isFirst);
+    if(!warningDialog){
+      print('else condition called ---');
+      String time = exTimerHelper.getLiveClassDuration();
+      await _trainerStore.completeLiveSession(context: context,eDuration: time).then((value){
+        if(value){
+          print('else condition called --- trainer added');
+          locator<AppPrefs>().liveClassTimerDate.setValue(0);
+          _meetingStore.leave();
+          Navigator.pushNamedAndRemoveUntil(context, Routes.exerciseDone, (route) => route.isFirst);
+        }else{
+          print('else condition called --- trainer added something went wrong');
+          locator<AppPrefs>().liveClassTimerDate.setValue(0);
+          _meetingStore.leave();
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
+      });
+    }else{
+      return  showDialog(
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('Alert'),
+              content: Text('Do you really want to end this class?'),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () async{
+                      String time = exTimerHelper.getLiveClassDuration();
+                      await _trainerStore.completeLiveSession(context: context,eDuration: time).then((value){
+                        if(value){
+                          locator<AppPrefs>().liveClassTimerDate.setValue(0);
+                          _meetingStore.leave();
+                          Navigator.pushNamedAndRemoveUntil(context, Routes.exerciseDone, (route) => route.isFirst);
 
-                      }else{
-                        _meetingStore.leave();
-                        Navigator.popUntil(context, (route) => route.isFirst);
-                      }
-                    });
-                  },
-                  child: Text('Yes',style: TextStyle(color: Colors.grey),)),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); //close Dialog
-                  },
-                  child: Text('Cancel',style: TextStyle(color: Colors.white),)),
+                        }else{
+                          locator<AppPrefs>().liveClassTimerDate.setValue(0);
+                          _meetingStore.leave();
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        }
+                      });
+                    },
+                    child: Text('Yes',style: TextStyle(color: Colors.grey),)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); //close Dialog
+                    },
+                    child: Text('Cancel',style: TextStyle(color: Colors.white),)),
 
-            ],
-          );
-        });
+              ],
+            );
+          });
+    }
 
     // return showDialog(
     //   context: context,

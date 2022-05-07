@@ -261,6 +261,7 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                                                   child: MeetingPage(
                                                     token: widget.token,
                                                     isAudioOn: store.isAudioOn,
+                                                    isVideoOn: store.isVideoOn,
                                                     localPeerNetworkQuality:
                                                         store.networkQuality,
                                                   ),

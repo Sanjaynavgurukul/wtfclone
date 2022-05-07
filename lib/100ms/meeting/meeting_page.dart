@@ -22,6 +22,7 @@ import 'meeting_participants_list.dart';
 
 class MeetingPage extends StatefulWidget {
   final bool isAudioOn;
+  final bool isVideoOn;
   final String token;
   final int localPeerNetworkQuality;
 
@@ -29,6 +30,7 @@ class MeetingPage extends StatefulWidget {
       {Key key,
       @required this.token,
       @required this.isAudioOn,
+      @required this.isVideoOn,
       this.localPeerNetworkQuality})
       : super(key: key);
 
@@ -49,6 +51,7 @@ class _MeetingPageState extends State<MeetingPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initMeeting();
+    checkVideoState();
     checkAudioState();
     setNetworkQuality();
   }
@@ -64,6 +67,10 @@ class _MeetingPageState extends State<MeetingPage>
 
   void checkAudioState() async {
     if (!widget.isAudioOn) context.read<MeetingStore>().switchAudio();
+  }
+
+  void checkVideoState(){
+    if (!widget.isVideoOn) context.read<MeetingStore>().switchAudio();
   }
 
   void setNetworkQuality() async {
@@ -215,8 +222,9 @@ class _MeetingPageState extends State<MeetingPage>
     return ConnectivityAppWrapper(
         app: WillPopScope(
       onWillPop: () async {
-
-        bool ans = await UtilityComponents.onBackPressed(context) ?? false;
+        bool ans = await UtilityComponents.onBackPressed(
+                context: context, warningDialog: true) ??
+            false;
         return ans;
       },
       child: ConnectivityWidgetWrapper(
@@ -229,9 +237,10 @@ class _MeetingPageState extends State<MeetingPage>
               //This Condition hit when room ended :D
               if (data.item2) {
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  UtilityComponents.onBackPressed(
+                      context: context, warningDialog: false);
                   UtilityComponents.showSnackBarWithString(
-                      context.read<MeetingStore>().description, context);
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                      'Class Ended', context);
                 });
               }
               //This Condition hit when room not ended
@@ -284,69 +293,67 @@ class _MeetingPageState extends State<MeetingPage>
                         children: [
                           Container(
                             height: MediaQuery.of(context).size.height * 0.78,
-                            child: Selector<
-                                    MeetingStore,
-                                    Tuple3<List<PeerTrackNode>, int,
-                                        int>>(
+                            child: Selector<MeetingStore,
+                                    Tuple3<List<PeerTrackNode>, int, int>>(
                                 selector: (_, meetingStore) => Tuple3(
                                     meetingStore.peerTracks,
                                     meetingStore.peerTracks.length,
                                     meetingStore.screenShareCount),
                                 builder: (_, data, __) {
                                   return data.item2 == 0
-                                          ? Center(
-                                              child: Text(
-                                                  'Waiting for others to join!'))
-                                          : PageView(
-                                              physics: PageScrollPhysics(),
-                                              scrollDirection: Axis.horizontal,
-                                              children: gridVideoView(
-                                                  peerTracks: data.item1,
-                                                  audioViewOn: audioViewOn,
-                                                  itemCount: data.item2,
-                                                  screenShareOn: data.item3,
-                                                  size: size));
-                                      // : Selector<MeetingStore, bool>(
-                                      //     selector: (_, meetingStore) =>
-                                      //         meetingStore.hasHlsStarted,
-                                      //     builder: (_, hasHlsStarted, __) {
-                                      //       return hasHlsStarted
-                                      //           ? Center(
-                                      //               child: Container(
-                                      //                 child: HLSViewer(
-                                      //                     streamUrl: context
-                                      //                         .read<
-                                      //                             MeetingStore>()
-                                      //                         .streamUrl),
-                                      //               ),
-                                      //             )
-                                      //           : Center(
-                                      //               child: Column(
-                                      //                 mainAxisAlignment:
-                                      //                     MainAxisAlignment
-                                      //                         .center,
-                                      //                 crossAxisAlignment:
-                                      //                     CrossAxisAlignment
-                                      //                         .center,
-                                      //                 children: [
-                                      //                   Padding(
-                                      //                     padding:
-                                      //                         const EdgeInsets
-                                      //                                 .only(
-                                      //                             bottom: 8.0),
-                                      //                     child: Text(
-                                      //                       "Waiting for HLS to start...",
-                                      //                       style: TextStyle(
-                                      //                           fontSize: 20),
-                                      //                     ),
-                                      //                   ),
-                                      //                   CircularProgressIndicator(
-                                      //                     strokeWidth: 1,
-                                      //                   )
-                                      //                 ],
-                                      //               ),
-                                      //             );
-                                      //     });
+                                      ? Center(
+                                          child: Text(
+                                              'Waiting for others to join!'))
+                                      : PageView(
+                                          physics: PageScrollPhysics(),
+                                          scrollDirection: Axis.horizontal,
+                                          children: gridVideoView(
+                                              peerTracks: data.item1,
+                                              audioViewOn: audioViewOn,
+                                              itemCount: data.item2,
+                                              screenShareOn: data.item3,
+                                              size: size));
+                                  // : Selector<MeetingStore, bool>(
+                                  //     selector: (_, meetingStore) =>
+                                  //         meetingStore.hasHlsStarted,
+                                  //     builder: (_, hasHlsStarted, __) {
+                                  //       return hasHlsStarted
+                                  //           ? Center(
+                                  //               child: Container(
+                                  //                 child: HLSViewer(
+                                  //                     streamUrl: context
+                                  //                         .read<
+                                  //                             MeetingStore>()
+                                  //                         .streamUrl),
+                                  //               ),
+                                  //             )
+                                  //           : Center(
+                                  //               child: Column(
+                                  //                 mainAxisAlignment:
+                                  //                     MainAxisAlignment
+                                  //                         .center,
+                                  //                 crossAxisAlignment:
+                                  //                     CrossAxisAlignment
+                                  //                         .center,
+                                  //                 children: [
+                                  //                   Padding(
+                                  //                     padding:
+                                  //                         const EdgeInsets
+                                  //                                 .only(
+                                  //                             bottom: 8.0),
+                                  //                     child: Text(
+                                  //                       "Waiting for HLS to start...",
+                                  //                       style: TextStyle(
+                                  //                           fontSize: 20),
+                                  //                     ),
+                                  //                   ),
+                                  //                   CircularProgressIndicator(
+                                  //                     strokeWidth: 1,
+                                  //                   )
+                                  //                 ],
+                                  //               ),
+                                  //             );
+                                  //     });
                                 }),
                           ),
                           Align(
@@ -404,53 +411,60 @@ class _MeetingPageState extends State<MeetingPage>
                                                       // color: Colors.grey.shade900
                                                     )),
                                               ),
-                                            Selector<MeetingStore, bool>(
-                                              selector: (_, meetingStore) =>
-                                              meetingStore.isVideoOn,
-                                              builder: (_, isVideoOn, __) {
-                                                return GestureDetector(
-                                                  onTap:() async {
-                                                    // store.switchVideo(
-                                                    //     isOn: store.isVideoOn);
-                                                    context.read<MeetingStore>().switchVideo();
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius: 25,
-                                                    backgroundColor:
-                                                    Colors.transparent.withOpacity(0.2),
-                                                    child: Icon(
-                                                        isVideoOn
-                                                            ? Icons.videocam
-                                                            : Icons.videocam_off,
-                                                        color: Colors.blue),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            Selector<MeetingStore, bool>(
-                                              selector: (_, meetingStore) =>
-                                              meetingStore.isMicOn,
-                                              builder: (_, isMicOn, __) {
-                                                return GestureDetector(
-                                                  onTap:() async {
-                                                    // store.switchVideo(
-                                                    //     isOn: store.isVideoOn);
-                                                    context.read<MeetingStore>().switchAudio();
-                                                  },
-                                                  child: CircleAvatar(
-                                                    radius: 25,
-                                                    backgroundColor:
-                                                    Colors.transparent.withOpacity(0.2),
-                                                    child: Icon(
-                                                        isMicOn
-                                                            ? Icons.mic
-                                                            : Icons.mic_off,
-                                                        color: Colors.blue),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            Container(
+                                              Selector<MeetingStore, bool>(
+                                                selector: (_, meetingStore) =>
+                                                    meetingStore.isVideoOn,
+                                                builder: (_, isVideoOn, __) {
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      // store.switchVideo(
+                                                      //     isOn: store.isVideoOn);
+                                                      context
+                                                          .read<MeetingStore>()
+                                                          .switchVideo();
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: 25,
+                                                      backgroundColor: Colors
+                                                          .transparent
+                                                          .withOpacity(0.2),
+                                                      child: Icon(
+                                                          isVideoOn
+                                                              ? Icons.videocam
+                                                              : Icons
+                                                                  .videocam_off,
+                                                          color: Colors.blue),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              Selector<MeetingStore, bool>(
+                                                selector: (_, meetingStore) =>
+                                                    meetingStore.isMicOn,
+                                                builder: (_, isMicOn, __) {
+                                                  return GestureDetector(
+                                                    onTap: () async {
+                                                      // store.switchVideo(
+                                                      //     isOn: store.isVideoOn);
+                                                      context
+                                                          .read<MeetingStore>()
+                                                          .switchAudio();
+                                                    },
+                                                    child: CircleAvatar(
+                                                      radius: 25,
+                                                      backgroundColor: Colors
+                                                          .transparent
+                                                          .withOpacity(0.2),
+                                                      child: Icon(
+                                                          isMicOn
+                                                              ? Icons.mic
+                                                              : Icons.mic_off,
+                                                          color: Colors.blue),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              Container(
                                                 padding: EdgeInsets.all(8),
                                                 child: IconButton(
                                                     color: Colors.white,
@@ -459,7 +473,9 @@ class _MeetingPageState extends State<MeetingPage>
                                                     onPressed: () async {
                                                       await UtilityComponents
                                                           .onBackPressed(
-                                                              context);
+                                                              context: context,
+                                                              warningDialog:
+                                                                  true);
                                                     },
                                                     icon: CircleAvatar(
                                                       backgroundColor:
@@ -638,7 +654,7 @@ class _MeetingPageState extends State<MeetingPage>
                                 iconSize: 24,
                                 onPressed: () async {
                                   await UtilityComponents.onBackPressed(
-                                      context);
+                                      context: context, warningDialog: true);
                                 },
                                 icon: CircleAvatar(
                                   backgroundColor: Colors.red,

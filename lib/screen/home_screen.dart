@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_tawk/flutter_tawk.dart';
 import 'package:provider/provider.dart';
 import 'package:rolling_nav_bar/indexed.dart';
 import 'package:rolling_nav_bar/rolling_nav_bar.dart';
-import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';

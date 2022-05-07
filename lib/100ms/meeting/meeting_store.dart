@@ -451,8 +451,7 @@ class MeetingStore extends ChangeNotifier
   }
 
   @override
-  void onRemovedFromRoom(
-      {@required HMSPeerRemovedFromPeer hmsPeerRemovedFromPeer}) {
+  void onRemovedFromRoom({@required HMSPeerRemovedFromPeer hmsPeerRemovedFromPeer}) {
     description = "Removed by ${hmsPeerRemovedFromPeer.peerWhoRemoved?.name}";
     peerTracks.clear();
     isRoomEnded = true;
