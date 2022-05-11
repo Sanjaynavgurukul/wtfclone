@@ -1,4 +1,5 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/material.dart';
 
 class DynamicLinkService {
   Future handleDynamicLinks() async {
@@ -43,6 +44,14 @@ class DynamicLinkService {
       //       .dynamicLinkReferredByCode
       //       .setValue(deepLink.queryParameters['referralCode']!);
       // }
+    }
+  }
+
+  void handleRoute({@required String routeName,@required Map<String,dynamic> param})async{
+    print('Check Dynamic Link Param : ${param.toString()}');
+    switch(routeName){
+      default:
+        
     }
   }
 
