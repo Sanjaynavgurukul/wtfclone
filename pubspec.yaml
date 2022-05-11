@@ -129,6 +129,7 @@ dependencies:
   geocoding: ^2.0.1
   flutter_mobx: ^2.0.5
   flutter_html: ^2.2.1
+  flutter_facebook_sdk: ^1.0.0
 
 
 dev_dependencies:
