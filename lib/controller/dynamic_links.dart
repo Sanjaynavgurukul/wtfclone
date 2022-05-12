@@ -10,6 +10,7 @@ import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/screen/gym/arguments/gym_plan_argument.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
 import 'package:wtf/screen/nutrition/nutrition_screen.dart';
+import 'package:wtf/screen/schedule/new/date_workout_list.dart';
 
 import '../main.dart';
 
@@ -80,6 +81,9 @@ class DynamicLinkService {
           break;
         case NutritionScreen.routeName:
           NavigationService.pushName(Routes.nutritionScreen);
+          break;
+        case DateWorkoutList.routeName:
+          NavigationService.pushName(Routes.dateWorkoutList);
           break;
         default:
           showToast(message: "Invalid Link Please try again later!");

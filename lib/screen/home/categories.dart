@@ -51,13 +51,6 @@ class _CategoriesState extends State<Categories> {
   navigation(int index, BuildContext context) {
     switch (index) {
       case 0:
-        // store.changeNavigationTab(index: 2);
-        // store.changeNavigationTab(index: 3);
-        // NavigationService.navigateTo(Routes.mySchedule);
-        context.read<GymStore>().getDiscoverNow(
-              context: context,
-              type: 'gym',
-            );
         NavigationService.navigateTo(Routes.discoverScreen);
         break;
       case 1:
@@ -68,20 +61,6 @@ class _CategoriesState extends State<Categories> {
       case 2:
         print('checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');
         NavigationService.navigateTo(Routes.nutritionScreen);
-        // showDialog(
-        //   context: context,
-        //   builder: (context) {
-        //     return Dialog(
-        //       insetPadding: EdgeInsets.zero,
-        //       elevation: 0.0,
-        //       backgroundColor: Colors.transparent,
-        //       child: Container(
-        //         height: 250.0,
-        //         child: Image.asset('assets/images/coming_soon.png'),
-        //       ),
-        //     );
-        //   },
-        // );
         break;
       case 3:
         context.read<GymStore>().getActiveSubscriptions(context: context);
@@ -93,13 +72,6 @@ class _CategoriesState extends State<Categories> {
       case 5:
         NavigationService.navigateTo(Routes.poweredPages);
         break;
-      // Navigator.pushNamed(context, Routes.mySubscription);
-      // break;
-
-      // case 5:
-      //   context.read<GymStore>().getMemberSubscriptions(context: context);
-      //   Navigator.pushNamed(context, Routes.mySubscription);
-      //   break;
       default:
         break;
     }
