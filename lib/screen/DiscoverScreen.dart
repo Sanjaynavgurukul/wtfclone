@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
@@ -49,6 +50,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   void onRefreshPage({String type = 'gym'}) {
     user.selectedGymTypes = null;
     this.callMethod = true;
+    print('check lat and lngss --- onrefresh --  ${locator<AppPrefs>().lat.getValue()} -- ${locator<AppPrefs>().lng.getValue()}');
     user.getDiscoverNow(context: context, type: type);
   }
 
@@ -185,8 +187,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             print('Checking selected new location ----');
                             if (result != null) {
                               print('User has choose new location -----');
-                              user.tempLat = result.latLng.latitude;
-                              user.tempLng = result.latLng.longitude;
+                              locator<AppPrefs>().lat.setValue(result.latLng.latitude.toString());
+                              locator<AppPrefs>().lng.setValue(result.latLng.longitude.toString());
+                              print('check lat and lngss --- onchange --  ${locator<AppPrefs>().lat.getValue()} -- ${locator<AppPrefs>().lng.getValue()}');
                               onRefreshPage(type: 'gym');
                             } else {
                               print('Same as previous location ----');

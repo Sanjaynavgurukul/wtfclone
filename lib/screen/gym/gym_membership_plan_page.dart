@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:measured_size/measured_size.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
@@ -165,6 +167,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   }
   Widget prizeItem(
       {bool recomended = false, PlanColor color, GymPlanData data, int index}) {
+    Size _size = Size.zero;
     return InkWell(
       onTap: () {
         onPressBook(index);
@@ -250,7 +253,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -305,6 +308,7 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
     //   ),
     // );
   }
+
 
   Widget oldUi() {
     return Scaffold(
@@ -576,4 +580,43 @@ class PlanColor {
       ];
 }
 
+
+class WidgetSize extends StatefulWidget {
+  final Widget child;
+  final Function onChange;
+
+  const WidgetSize({
+    Key key,
+    @required this.onChange,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  _WidgetSizeState createState() => _WidgetSizeState();
+}
+
+class _WidgetSizeState extends State<WidgetSize> {
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+
+  var widgetKey = GlobalKey();
+  var oldSize;
+
+  void postFrameCallback(_) {
+    var context = widgetKey.currentContext;
+    if (context == null) return;
+
+    var newSize = context.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    widget.onChange(newSize);
+  }
+}
 

@@ -820,7 +820,7 @@ class RestDatasource {
     String finalUrl = Api.getNearByGym(lat, lng, type);
     print('complete url --- $finalUrl');
     return _netUtil
-        .get(BASE_URL + Api.getNearByGym(lat, lng, type), headers: mapHeader)
+        .get(BASE_URL + finalUrl, headers: mapHeader)
         .then((dynamic res) {
       print("response get nearBy Gym : " + res.toString());
       GymTypes model = res != null && res['status']
