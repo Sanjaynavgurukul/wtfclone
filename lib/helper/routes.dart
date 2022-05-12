@@ -41,6 +41,7 @@ import 'package:wtf/screen/force_update/force_update_screen.dart';
 import 'package:wtf/screen/gym/gym_cat.dart';
 import 'package:wtf/screen/gym/gym_category_screen.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
+import 'package:wtf/screen/gym/gym_not_found.dart';
 import 'package:wtf/screen/gym/membership_page.dart';
 import 'package:wtf/screen/home/home.dart';
 import 'package:wtf/screen/home/notifications/notifications.dart';
@@ -92,7 +93,7 @@ class Routes {
   static const String searchScreen = '/searchPage';
   static const String buyMemberShipPage = '/buyMemberShipPage';
   static const String bookingSummaryEvent = '/bookingSummaryEvent';
-  static const String membershipPlanPage = '/membershipPlanPage';
+  static const String gymMembershipPlanPage = GymMembershipPlanPage.routeName;
   static const String allLiveAddons = '/allLiveAddons';
   static const String allAddons = '/allAddons';
   static const String scheduleSlotPage = '/scheduleSlotPage';
@@ -151,6 +152,7 @@ class Routes {
   static const String dateWorkoutList = DateWorkoutList.routeName;
   static const String workoutDetails = WorkoutDetails.routeName;
   static const String exStartScreen = ExStartScreen.routeName;
+  static const String gymNotFound = GymNotFound.routeName;
 }
 
 class RouteGenerator {
@@ -164,6 +166,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.gymNotFound:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: GymNotFound(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => GymNotFound(), settings: settings);
       case Routes.exStartScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
@@ -433,7 +443,7 @@ class RouteGenerator {
             : CupertinoPageRoute(
                 builder: (context) => BookingSummaryEvents(),
                 settings: settings);
-      case Routes.membershipPlanPage:
+      case Routes.gymMembershipPlanPage:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
                 widget: GymMembershipPlanPage(),

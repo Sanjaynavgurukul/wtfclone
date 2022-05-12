@@ -45,7 +45,7 @@ class ActiveSubscriptionScreen extends StatelessWidget {
                     context: context,
                   );
                   NavigationService.navigateTo(
-                    Routes.membershipPlanPage,
+                    Routes.gymMembershipPlanPage,
                   );
                 },
                 child: Text(

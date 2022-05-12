@@ -108,7 +108,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                             );
 
                             NavigationService.navigateTo(
-                              Routes.membershipPlanPage,
+                              Routes.gymMembershipPlanPage,
                             );
                           } else {
                             String selection = await showDialog<String>(
@@ -133,7 +133,7 @@ class _BuyMemberShipPageState extends State<BuyMemberShipPage> {
                                 context: context,
                               );
                               NavigationService.navigateTo(
-                                Routes.membershipPlanPage,
+                                Routes.gymMembershipPlanPage,
                               );
                             }
                           }
@@ -2925,7 +2925,7 @@ class RenewMembership extends StatelessWidget {
         );
         gymStore.setRenew(true);
         NavigationService.navigateTo(
-          Routes.membershipPlanPage,
+          Routes.gymMembershipPlanPage,
         );
       },
       child: Container(

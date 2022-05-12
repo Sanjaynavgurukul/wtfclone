@@ -39,7 +39,7 @@ class GymDetailsModel {
     print('json in model--- $json');
     return GymDetailsModel(
       status: json["status"],
-      data: GymModelData.fromJson(json["data"]),
+      data: json["status"] ? GymModelData.fromJson(json["data"]):null,
 
       // addon: List<Addon>.from(json["addon"].map((x) => Addon.fromJson(x))),
       // offer: List<dynamic>.from(json["offer"].map((x) => x)),

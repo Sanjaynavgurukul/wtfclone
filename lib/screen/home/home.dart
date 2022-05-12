@@ -1697,7 +1697,7 @@ class RenewCardItem extends StatelessWidget {
                       gymId: data.gymId,
                     );
                     NavigationService.navigateTo(
-                      Routes.membershipPlanPage,
+                      Routes.gymMembershipPlanPage,
                     );
                   },
                   textSize: 12.0,

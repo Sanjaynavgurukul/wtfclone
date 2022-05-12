@@ -10,6 +10,7 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/gym_plan_model.dart';
+import 'package:wtf/screen/gym/arguments/gym_plan_argument.dart';
 import 'package:wtf/screen/gym/arguments/plan_page_argument.dart';
 import 'package:wtf/widget/auto_image_slider.dart';
 import 'package:wtf/widget/custom_button.dart';
@@ -18,12 +19,14 @@ import 'package:wtf/widget/progress_loader.dart';
 import '../subscriptions/buy_subscription_screen.dart';
 
 class GymMembershipPlanPage extends StatefulWidget {
+  static const routeName = '/gymMembershipPlanPage';
   @override
   _GymMembershipPlanPageState createState() => _GymMembershipPlanPageState();
 }
 
 class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
   GymStore store;
+  bool callMethod = true;
 
   PageController controller;
   int currentIndex = 0;
@@ -38,9 +41,72 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
     super.initState();
   }
 
+  void callData({String gymId}) {
+    print('called -----');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (callMethod) {
+        this.callMethod = false;
+        store.getGymByID(context: context, gymId: gymId);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     store = context.read<GymStore>();
+    final GymPlanArgument args =
+    ModalRoute.of(context).settings.arguments as GymPlanArgument;
+    if(args != null && args.isDynamicLink){
+      callData(gymId:args.data['gym_id']);
+      return Scaffold(
+        body: Consumer<GymStore>(
+            builder: (context, store, child){
+             if(store.selectedGymDetail == null){
+               print('checking hero -- selectedGymDetail null');
+               return Loading();
+             }else{
+               print('checking hero -- selectedGymDetail not null');
+               if(store.selectedGymDetail.status && store.selectedGymDetail.data != null){
+                 print('checking hero -- selectedGymDetail data not null');
+                 return mainView(fromDynamicLink: true);
+               }else{
+                 print('checking hero -- selectedGymDetail data null');
+                 return Center(
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                      Text('Gym Not Found!',style:TextStyle(fontSize: 16)),
+                       SizedBox(height: 20,),
+                       InkWell(
+                         onTap: (){
+                           Navigator.pop(context);
+                         },
+                         child: Container(
+                           padding: EdgeInsets.all(12),
+                           decoration: BoxDecoration(
+                             border: Border.all(width: 1,color: AppConstants.bgColor)
+                           ),
+                           child: Text('Back To Home',style:TextStyle(fontSize: 16)),
+                         ),
+                       )
+                     ],
+                   ),
+                 );
+               }
+             }
+            }
+        )
+      );
+    }else{
+      return mainView();
+    }
+
+
+  }
+
+  Widget mainView({bool fromDynamicLink = false}){
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.BACK_GROUND_BG,
@@ -48,48 +114,55 @@ class _GymMembershipPlanPageState extends State<GymMembershipPlanPage> {
         title: Text('Choose Your Plan'),
       ),
       body: Consumer<GymStore>(
-        builder: (context, store, child){
-          return store.selectedGymPlans != null
-              ? store.selectedGymPlans.data != null &&
-              store.selectedGymPlans.data.isNotEmpty
-              ? Container(
-            child: ListView(
-              children: [
-                ListTile(
-                    title: Text(
-                        'One Membership for all your fitness need')),
-                ListView.builder(
-                    itemCount: store.selectedGymPlans.data.length,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        left: 32, right: 32, top: 18, bottom: 54),
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      GymPlanData data =
-                      store.selectedGymPlans.data[index];
-                      bool r = data.is_recomended == 1;
-                      PlanColor color =
-                      PlanColor.getColorList()[index];
-                      return prizeItem(
-                          recomended: r,
-                          color: color,
-                          data: data,
-                          index: index);
-                    })
-              ],
-            ),
-          )
-              : Center(
-            child: Text(
-              'No Plans found',
-            ),
-          )
-              : Loading();
-        }
+          builder: (context, store, child){
+            if(fromDynamicLink){
+              store.getGymPlans(
+                gymId:
+                store.selectedGymDetail.data.userId,
+                context: context,
+              );
+            }
+
+            return store.selectedGymPlans != null
+                ? store.selectedGymPlans.data != null &&
+                store.selectedGymPlans.data.isNotEmpty
+                ? Container(
+              child: ListView(
+                children: [
+                  ListTile(
+                      title: Text(
+                          'One Membership for all your fitness need')),
+                  ListView.builder(
+                      itemCount: store.selectedGymPlans.data.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          left: 32, right: 32, top: 18, bottom: 54),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        GymPlanData data =
+                        store.selectedGymPlans.data[index];
+                        bool r = data.is_recomended == 1;
+                        PlanColor color =
+                        PlanColor.getColorList()[index];
+                        return prizeItem(
+                            recomended: r,
+                            color: color,
+                            data: data,
+                            index: index);
+                      })
+                ],
+              ),
+            )
+                : Center(
+              child: Text(
+                'No Plans found',
+              ),
+            )
+                : Loading();
+          }
       ),
     );
   }
-
   Widget prizeItem(
       {bool recomended = false, PlanColor color, GymPlanData data, int index}) {
     return InkWell(
@@ -502,3 +575,5 @@ class PlanColor {
         PlanColor(leftColor: Color(0xff438373), rightColor: Color(0xff3E74B4)),
       ];
 }
+
+

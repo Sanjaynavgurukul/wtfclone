@@ -569,7 +569,7 @@ class _ScheduleSlotScreenState extends State<ScheduleSlotScreen>
                         LocalValue.SLOT_ID =
                             _gymSlotModel.data[_selectedSlotIndex].uid;
                         print("Slot id is ${LocalValue.SLOT_ID}");
-                        NavigationService.navigateTo(Routes.membershipPlanPage);
+                        NavigationService.navigateTo(Routes.gymMembershipPlanPage);
                       }),
 
                       // Buy memberShip button

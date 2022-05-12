@@ -1938,12 +1938,14 @@ class GymStore extends ChangeNotifier {
     // 'long': currentPosition.longitude,
     GymDetailsModel res = await RestDatasource().getGymById(
         gymID: gymId, lng: getLat().toString(), lat: getLng().toString());
+
+    loading = false;
     if (res != null) {
       selectedGymDetail = res;
-      //TODO check plan :D
-      // getAllGymOffers(gymId: gymId, context: context);
+      print('Not null checked --- $res');
       notifyListeners();
     } else {
+      print('Not null checked null --- $res');
       selectedGymDetail = GymDetailsModel(
         status: false,
       );

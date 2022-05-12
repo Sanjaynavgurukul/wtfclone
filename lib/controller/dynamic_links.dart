@@ -1,5 +1,15 @@
+import 'dart:convert';
+
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
+import 'package:wtf/screen/gym/arguments/gym_plan_argument.dart';
+import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
+
+import '../main.dart';
 
 class DynamicLinkService {
   Future handleDynamicLinks() async {
@@ -26,7 +36,13 @@ class DynamicLinkService {
     if (data != null) deepLink = data.link;
     if (deepLink != null) {
       print('_handleDeepLink | deeplink: $deepLink');
-      print('params: ${data.link.queryParameters}');
+      print('params checking --- : ${data.link.queryParameters}');
+      String value = data.link.queryParameters['json'];
+      Map<String, dynamic> v = json.decode(value);
+
+      print('params checking --- : ${v}');
+      handleRoute(param: v);
+      print('params checking --- : ${data.link.queryParameters}');
       // params: {referredBy: 5fd6a6dc3437070009aa9eb9, referralCode: ABVOVXFPMGIQ}
       // params: {postId: 60360627f8431700086bee5b, screen: view-post}
       // if (deepLink.queryParameters.containsKey('postId')) {
@@ -47,12 +63,48 @@ class DynamicLinkService {
     }
   }
 
-  void handleRoute({@required String routeName,@required Map<String,dynamic> param})async{
-    print('Check Dynamic Link Param : ${param.toString()}');
-    switch(routeName){
-      default:
-        
+  void handleRoute({@required Map<String, dynamic> param}) async {
+    if (!validateValidLink(userId: param["userId"])) {
+      showToast(message: "Invalid Link Please try again later!");
+    } else {
+      print('Check Dynamic Link Param : ${param.toString()}');
+      switch ('/gymMembershipPlanPage') {
+        case GymMembershipPlanPage.routeName:
+          NavigationService.pushName(Routes.gymMembershipPlanPage,
+              argument: GymPlanArgument(isDynamicLink: true, data: param));
+          break;
+        default:
+          showToast(message: "Invalid Link Please try again later!");
+          break;
+      }
     }
+  }
+
+  bool validateValidLink({@required String userId}){
+    String memberId = locator<AppPrefs>().memberId.getValue();
+    if(userId == null || userId.isEmpty){
+      showToast(message: "Invalid Link Please try again later!");
+      return false;
+    }else{
+      if(userId == memberId){
+        return true;
+      }else{
+        showToast(message: "Invalid Link Please try again later!");
+        return false;
+      }
+    }
+  }
+
+
+  void showToast({@required String message}){
+    Fluttertoast.showToast(
+        msg: message??"Something went wrong please try again later!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+        fontSize: 16.0);
   }
 
   Future<String> createFirstPostLink(String title) async {

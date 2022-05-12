@@ -65,7 +65,7 @@ class _SubmissionDetailState extends State<SubmissionDetail> {
                     context: context,
                   );
                   NavigationService.navigateTo(
-                    Routes.membershipPlanPage,
+                    Routes.gymMembershipPlanPage,
                   );
                 },
                 child: Text(
