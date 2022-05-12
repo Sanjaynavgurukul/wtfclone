@@ -12,7 +12,7 @@ import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/model/diet_item.dart';
-import 'package:wtf/screen/nutrition/diet_schedule.dart';
+import 'package:wtf/screen/nutrition/nutrition_screen.dart';
 import 'package:wtf/widget/custom_button.dart';
 import 'package:wtf/widget/progress_loader.dart';
 

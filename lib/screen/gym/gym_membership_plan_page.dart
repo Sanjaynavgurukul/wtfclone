@@ -21,7 +21,7 @@ import 'package:wtf/widget/progress_loader.dart';
 import '../subscriptions/buy_subscription_screen.dart';
 
 class GymMembershipPlanPage extends StatefulWidget {
-  static const routeName = '/gymMembershipPlanPage';
+  static const String routeName = '/gymMembershipPlanPage';
   @override
   _GymMembershipPlanPageState createState() => _GymMembershipPlanPageState();
 }

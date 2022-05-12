@@ -58,7 +58,7 @@ class _CategoriesState extends State<Categories> {
               context: context,
               type: 'gym',
             );
-        NavigationService.navigateTo(Routes.discoverNow);
+        NavigationService.navigateTo(Routes.discoverScreen);
         break;
       case 1:
         context.read<GymStore>().getActiveSubscriptions(context: context);
@@ -67,7 +67,7 @@ class _CategoriesState extends State<Categories> {
         break;
       case 2:
         print('checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');
-        NavigationService.navigateTo(Routes.myDietSchedule);
+        NavigationService.navigateTo(Routes.nutritionScreen);
         // showDialog(
         //   context: context,
         //   builder: (context) {

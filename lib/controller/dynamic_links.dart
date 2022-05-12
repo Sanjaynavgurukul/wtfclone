@@ -6,8 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/screen/gym/arguments/gym_plan_argument.dart';
 import 'package:wtf/screen/gym/gym_membership_plan_page.dart';
+import 'package:wtf/screen/nutrition/nutrition_screen.dart';
 
 import '../main.dart';
 
@@ -68,10 +70,16 @@ class DynamicLinkService {
       showToast(message: "Invalid Link Please try again later!");
     } else {
       print('Check Dynamic Link Param : ${param.toString()}');
-      switch ('/gymMembershipPlanPage') {
+      switch (param["routeName"]) {
         case GymMembershipPlanPage.routeName:
           NavigationService.pushName(Routes.gymMembershipPlanPage,
               argument: GymPlanArgument(isDynamicLink: true, data: param));
+          break;
+        case DiscoverScreen.routeName:
+          NavigationService.pushName(Routes.discoverScreen);
+          break;
+        case NutritionScreen.routeName:
+          NavigationService.pushName(Routes.nutritionScreen);
           break;
         default:
           showToast(message: "Invalid Link Please try again later!");

@@ -22,6 +22,7 @@ import 'package:wtf/widget/gym_list_search_adapter.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class DiscoverScreen extends StatefulWidget {
+  static const String routeName = '/discoverScreen';
   @override
   _DiscoverScreenState createState() => _DiscoverScreenState();
 }

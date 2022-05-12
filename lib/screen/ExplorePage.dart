@@ -312,12 +312,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             image1: 'assets/images/gym_bg.png',
                             image2: 'assets/svg/you_get/gyms.svg',
                             onClick: () {
-                              context.read<GymStore>().getDiscoverNow(
-                                    context: context,
-                                    type: 'gym',
-                                  );
-
-                              NavigationService.navigateTo(Routes.discoverNow);
+                              NavigationService.navigateTo(Routes.discoverScreen);
                             }),
                       ),
                       Expanded(
@@ -326,12 +321,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             image1: 'assets/images/studio_bg.png',
                             image2: 'assets/svg/you_get/studios.svg',
                             onClick: () {
-                              context.read<GymStore>().getDiscoverNow(
-                                    context: context,
-                                    type: 'studio',
-                                  );
-
-                              NavigationService.navigateTo(Routes.discoverNow);
+                              NavigationService.navigateTo(Routes.discoverScreen);
                             }),
                       )
                     ],

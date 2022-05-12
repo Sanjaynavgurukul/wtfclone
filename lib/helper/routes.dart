@@ -49,7 +49,7 @@ import 'package:wtf/screen/home_screen.dart';
 import 'package:wtf/screen/loader.dart';
 import 'package:wtf/screen/my_wtf.dart';
 import 'package:wtf/screen/nutrition/congrats_screen.dart';
-import 'package:wtf/screen/nutrition/diet_schedule.dart';
+import 'package:wtf/screen/nutrition/nutrition_screen.dart';
 import 'package:wtf/screen/schedule/MainWorkoutScreen.dart';
 import 'package:wtf/screen/schedule/exercise/exercise.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
@@ -88,10 +88,10 @@ class Routes {
   static const String eventDetails = '/eventDetails';
   static const String eventSubmissions = '/eventSubmissions';
   static const String submissionDetail = '/submissionDetail';
-  static const String discoverNow = '/discoverNow';
+  static const String discoverScreen = DiscoverScreen.routeName;//DiscoverScreen
   static const String discover = '/discover';
   static const String searchScreen = '/searchPage';
-  static const String buyMemberShipPage = '/buyMemberShipPage';
+  static const String buyMemberShipPage = BuyMemberShipPage.routeName;
   static const String bookingSummaryEvent = '/bookingSummaryEvent';
   static const String gymMembershipPlanPage = GymMembershipPlanPage.routeName;
   static const String allLiveAddons = '/allLiveAddons';
@@ -130,7 +130,7 @@ class Routes {
   static const String dashboard = '/dashboard';
   static const String bodyFatCal = '/bodyFatCal';
   static const String bodyFatCalResult = '/bodyFatCalResult';
-  static const String myDietSchedule = '/myDietSchedule';
+  static const String nutritionScreen = NutritionScreen.routeName;
   static const String mainWorkoutScreen = '/workoutMainScreen';
   static const String ptIntro = '/ptIntro';
   static const String updateFitnessProfile = '/updateFitnessProfile';
@@ -362,7 +362,7 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => SearchScreen(), settings: settings);
-      case Routes.discoverNow:
+      case Routes.discoverScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
                 widget: DiscoverScreen(),
@@ -394,14 +394,14 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => MyTransaction(), settings: settings);
-      case Routes.myDietSchedule:
+      case Routes.nutritionScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
-                widget: DietSchedule(),
+                widget: NutritionScreen(),
                 settings: settings,
               )
             : CupertinoPageRoute(
-                builder: (context) => DietSchedule(), settings: settings);
+                builder: (context) => NutritionScreen(), settings: settings);
       case Routes.profile:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

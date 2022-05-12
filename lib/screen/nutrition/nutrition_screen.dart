@@ -15,12 +15,13 @@ import 'package:wtf/model/diet_item.dart';
 import 'package:wtf/widget/nutrition_card.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
-class DietSchedule extends StatefulWidget {
+class NutritionScreen extends StatefulWidget {
+  static const String routeName = '/nutritionScreen';
   @override
-  _DietScheduleState createState() => _DietScheduleState();
+  _NutritionScreenState createState() => _NutritionScreenState();
 }
 
-class _DietScheduleState extends State<DietSchedule> {
+class _NutritionScreenState extends State<NutritionScreen> {
   UserStore userStore;
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime selectedValue = DateTime.now();
