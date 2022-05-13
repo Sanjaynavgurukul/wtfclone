@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:wtf/model/GymOffers.dart';
 import 'package:wtf/model/addons_cat_model.dart';
 import 'package:wtf/model/gym_details_model.dart';
 
@@ -158,6 +159,7 @@ class GymModelData {
   String third_payment;
   String third_payment_amount;
   CatAddonsSlotsModel addons;
+  OfferData offer;
 
 
   GymModelData({
@@ -207,7 +209,8 @@ class GymModelData {
     this.second_payment_amount,
     this.third_payment,
     this.third_payment_amount,
-    this.addons
+    this.addons,
+    this.offer,
   });
 
   factory GymModelData.fromJson(Map<String, dynamic> json) =>
@@ -246,7 +249,7 @@ class GymModelData {
               ? List<Benfit>.from(
               json["benefits"].map((x) => Benfit.fromJson(x)))
               : [],
-
+          //offer: getOffer(json['offer']),
           //New Variables :D
           distance: json["distance"].toString(),
           distance_text: json["distance_text"],
@@ -268,10 +271,24 @@ class GymModelData {
           second_payment_amount: json["second_payment_amount"],
           third_payment: json["third_payment"],
           third_payment_amount: json["third_payment_amount"],
+          addons: json['addons'] == null ? null : getAddonsList(json['addons']),
+          offer: getOffer(json['offer'])
 
-          addons: json['addons'] == null ? null : getAddonsList(json['addons'])
       );
 
+  static OfferData getOffer(List<dynamic> data){
+   if(data != null && data.length != 0){
+     print('check data heereeee --- ${data.length}');
+     print('check type --- ${data.runtimeType}');
+     return List<OfferData>.from(
+         data.map((x) => OfferData.fromJson(x)))[0];
+   }else{
+     print('check data heereeee --- null');
+     return null;
+   }
+   //  List<dynamic> x2 = jsonDecode(data);
+   //  print('check data hereee --  ${x2[0]}');
+  }
   Map<String, dynamic> toJson() =>
       {
         "uid": uid,
@@ -318,6 +335,7 @@ class GymModelData {
         "second_payment_amount": second_payment_amount,
         "third_payment": third_payment,
         "third_payment_amount": third_payment_amount,
+        "offer": offer,
       };
 
   static CatAddonsSlotsModel getAddonsList(List<dynamic> value){

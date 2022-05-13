@@ -39,17 +39,17 @@ class GymOffers {
 
 class OfferData {
   OfferData(
-      {this.uid,
-      this.gymId,
-      this.name,
-      this.code,
-      this.validity,
-      this.mode,
-      this.type,
-      this.value,
-      this.status,
-      this.dateAdded,
-      this.lastUpdated,
+      {this.uid,//
+      this.gymId,//
+      this.name,//
+      this.code,//
+      this.validity,//
+      this.mode,//
+      this.type,//
+      this.value,//
+      this.status,//
+      this.dateAdded,//
+      this.lastUpdated,//
       this.gym_name,
       this.is_public,
       this.is_trigger,
@@ -93,7 +93,7 @@ class OfferData {
         offer_type: json["offer_type"],
         type_id: json["type_id"],
         is_public: int.parse(json["is_public"].toString() ?? '0'),
-        gym_name: json["gym_name"],
+        gym_name: json["gym_name"] == null ? '':json["gym_name"],
         type_name: json["type_name"],
       );
 

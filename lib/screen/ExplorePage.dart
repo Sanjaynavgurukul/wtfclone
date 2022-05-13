@@ -754,22 +754,22 @@ class LiveCard extends StatelessWidget {
                             // ),
                             // UIHelper.verticalSpace(4.0),
                             Text(
-                              data.gymName ?? '',
+                              data.name ?? '',
                               style: GoogleFonts.montserrat(
                                 color: AppConstants.white.withOpacity(0.9),
-                                fontSize: 14.0,
+                                fontSize: 20.0,
                                 fontWeight: FontWeight.normal,
                               ),
-                            ),
-                            UIHelper.verticalSpace(4.0),
+                            ),SizedBox(height: 4,),
                             Text(
-                              data.name ?? '',
-                              style: TextStyle(
-                                color: AppConstants.white.withOpacity(0.8),
+                              data.gymName ?? '',
+                              style: GoogleFonts.montserrat(
+                                color: AppConstants.white.withOpacity(0.5),
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.normal,
                               ),
                             ),
+
                             Text(
                               '',
                               style: TextStyle(

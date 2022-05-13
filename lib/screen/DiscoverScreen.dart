@@ -437,6 +437,16 @@ class GymCard extends StatelessWidget {
     return (int.parse(value) / 30).round().toString();
   }
 
+  bool showOffer(GymModelData item){
+    if(item.offer != null){
+      print('is front 1');
+      return true;
+    }else{
+      print('is front 0');
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -635,14 +645,17 @@ class GymCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  recommended_list
+                  showOffer(item)
                       ? Align(
                           alignment: Alignment.topLeft,
                           child: Container(
                             margin: EdgeInsets.only(left: 16),
                             padding: EdgeInsets.all(12),
-                            color: Color(0xffBF6D6D),
-                            child: Text('40%\nOFF',
+                            decoration: BoxDecoration(
+                              color: Color(0xffBF6D6D),
+                              borderRadius:BorderRadius.only(bottomLeft: Radius.circular(4),bottomRight: Radius.circular(4))
+                            ),
+                            child: Text(item.offer.name??'',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
