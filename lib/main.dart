@@ -56,7 +56,7 @@ Future<void> main() async {
           soundSource: 'resource://raw/res_morph_power_rangers',
           ledColor: Colors.white,
         )
-      ],
+      ]
     );
     // SharedPref.pref = await SharedPreferences.getInstance();
     

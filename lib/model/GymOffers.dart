@@ -78,23 +78,23 @@ class OfferData {
   dynamic lastUpdated;
 
   factory OfferData.fromJson(Map<String, dynamic> json) => OfferData(
-        uid: json["uid"],
-        gymId: json["gym_id"],
+        uid: json["uid"],//
+        gymId: json["gym_id"],//
         name: json["name"],
-        code: json["code"],
-        validity: json["validity"],
-        mode: json["mode"],
-        type: json["type"],
-        value: json["value"],
-        status: json["status"],
-        dateAdded: json["date_added"],
-        lastUpdated: json["last_updated"],
-        is_trigger: json["is_trigger"],
-        offer_type: json["offer_type"],
-        type_id: json["type_id"],
-        is_public: int.parse(json["is_public"].toString() ?? '0'),
+        code: json["code"] == null ? '':json["code"],
+        validity: json["validity"] == null ? '':json["validity"],//
+        mode: json["mode"] == null ? '':json["mode"],
+        type: json["type"] == null ? '':json["type"],
+        value: json["value"] == null ? '':json["value"],//
+        status: json["status"] == null ? '':json["status"],
+        dateAdded: json["date_added"] == null ? '':json["date_added"],
+        lastUpdated: json["last_updated"] == null ? '':json["last_updated"],//
+        is_trigger: json["is_trigger"] == null ? 0:json["is_trigger"],
+        offer_type: json["offer_type"] == null ? '':json["offer_type"],
+        type_id: json["type_id"] == null ? '':json["type_id"],//
+        is_public: json["is_public"] == null ? 0:int.parse(json["is_public"].toString() ?? '0'),//
         gym_name: json["gym_name"] == null ? '':json["gym_name"],
-        type_name: json["type_name"],
+        type_name: json["type_name"] == null ? '':json["type_name"],
       );
 
   Map<String, dynamic> toJson() => {
