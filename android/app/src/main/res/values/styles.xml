@@ -16,6 +16,5 @@
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
        <string name="app_name">wtf</string>
-   <string name="facebook_app_id">1622183691462183</string>
-<string name="fb_login_protocol_scheme">fb1622183691462183</string>
+<!--  z-->
 </resources>
