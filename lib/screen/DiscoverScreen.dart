@@ -655,7 +655,7 @@ class GymCard extends StatelessWidget {
                               color: Color(0xffBF6D6D),
                               borderRadius:BorderRadius.only(bottomLeft: Radius.circular(4),bottomRight: Radius.circular(4))
                             ),
-                            child: Text(item.offer.name??'',
+                            child: Text(item.offer.value != null ?'${item.offer.value}${item.offer.type.toLowerCase() == 'percentage'?'% OFF':'\u{20B9} OFF'}':'',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.white,
