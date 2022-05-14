@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:wtf/100ms/dynamic_link_screen/hms_dynamic_link_screen.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/screen/addon/BookSession.dart';
 import 'package:wtf/screen/addon/BookingSuccess.dart';
@@ -153,6 +154,7 @@ class Routes {
   static const String workoutDetails = WorkoutDetails.routeName;
   static const String exStartScreen = ExStartScreen.routeName;
   static const String gymNotFound = GymNotFound.routeName;
+  static const String hmsDynamicLinkScreen = HmsDynamicLinkScreen.routeName;
 }
 
 class RouteGenerator {
@@ -166,6 +168,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.hmsDynamicLinkScreen:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: HmsDynamicLinkScreen(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => HmsDynamicLinkScreen(), settings: settings);
       case Routes.gymNotFound:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

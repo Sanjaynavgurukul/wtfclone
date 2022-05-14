@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:wtf/100ms/dynamic_link_screen/hms_dynamic_link_screen.dart';
 import 'package:wtf/100ms/preview/preview_page.dart';
 import 'package:wtf/100ms/preview/preview_store.dart';
 import 'package:wtf/controller/bases.dart';
@@ -389,20 +390,24 @@ class GymStore extends ChangeNotifier {
     // context.read<UserStore>().getMemberById(context: context);
   }
 
-  Future<void> joinLiveSession({
-    BuildContext context,
+  Future<CheckHmsStatus> joinLiveSession({BuildContext context,
     String liveClassId,
     String roomId,
     String addonId,
     String addonName,
-    String trainerId
-  }) async {
-    showDialog(
-      context: context,
-      builder: (context) => ProcessingDialog(
-        message: 'Please wait...',
-      ),
-    );
+    String trainerId,bool isDynamicLink = false})async{
+
+    //Display Progress Dialog When not navigate from dynamic link ;D
+    if(!isDynamicLink){
+      showDialog(
+        context: context,
+        builder: (context) => ProcessingDialog(
+          message: 'Please wait...',
+        ),
+      );
+    }
+
+    //Map Data for get token from DB
     var body = {
       "trainer_id": trainerId,
       "addon_id": addonId,
@@ -410,12 +415,17 @@ class GymStore extends ChangeNotifier {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "date": Helper.formatDate2(DateTime.now().toIso8601String()),
     };
-    print('check trainer body === ${body.toString()}');
+
+    //calling api to get token from FB
     Map<String, dynamic> res =
-        await RestDatasource().joinLiveSession(body: body);
-    print('check token hgere --- ${res.toString()}');
-    Navigator.pop(context);
+    await RestDatasource().joinLiveSession(body: body);
+
+    //After Fetch Token Pop the dialog if open
+    if(!isDynamicLink) Navigator.pop(context);
+
+    //check permission and token validity here
     if (res != null && res['status']) {
+      //Set Some Value into share pref ;D
       locator<AppPrefs>()
           .liveClassParticipantId
           .setValue(res['liveclass_participant_id']);
@@ -423,21 +433,30 @@ class GymStore extends ChangeNotifier {
           .livePtVerificationId
           .setValue(res['pt_verification_id']);
       locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
-      log('savedd--->>> ${locator<AppPrefs>().livePtVerificationId.getValue()}   ------ ${locator<AppPrefs>().liveClassParticipantId.getValue()}');
-      //TODO check jisi meet
+
+      //This is token fetched from DB
       String token = res['token']??'';
+
+      //Check Permission Here [Video,audio]:D
       bool permission = await getPermissions();
+
+      //Check Permission Condition weather permission allowed or not :D
       if(permission){
         if(token != null && token.isNotEmpty){
-          navigateTo100MsPreview(context:context,token:res['token']);
+          Future.delayed(Duration(seconds: isDynamicLink?2:0), () {
+            navigateTo100MsPreview(context:context,token:res['token'],isDynamicLink: isDynamicLink);
+          });
         }else{
           FlashHelper.errorBar(context, message: 'No Token Found! ');
+          return CheckHmsStatus.TOKEN_NOT_FOUND;
         }
       }else{
         FlashHelper.errorBar(context, message: 'Please Provide all required permission!');
+        return CheckHmsStatus.NO_PERMISSION;
       }
     } else {
       FlashHelper.errorBar(context, message: res['message']);
+      return CheckHmsStatus.INVALID_CLASS;
     }
   }
 
@@ -455,22 +474,36 @@ class GymStore extends ChangeNotifier {
     return true;
   }
 
-  void navigateTo100MsPreview({@required BuildContext context,@required String token}){
+  void navigateTo100MsPreview({@required BuildContext context,@required String token,bool isDynamicLink = false}){
     if(token.isEmpty || token==null){
       FlashHelper.errorBar(context, message: 'No Token Found!');
     }else{
       locator<AppPrefs>().liveClassTimerDate.setValue(DateTime.now().millisecondsSinceEpoch);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ChangeNotifierProvider<PreviewStore>(
-            create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
-            child: PreviewPage(
-                token:token
+      if(isDynamicLink){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider<PreviewStore>(
+              create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
+              child: PreviewPage(
+                  token:token
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }else{
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider<PreviewStore>(
+              create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
+              child: PreviewPage(
+                  token:token
+              ),
+            ),
+          ),
+        );
+      }
 
     }
 

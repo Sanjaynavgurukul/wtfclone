@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wtf/100ms/argument/hms_dynamic_argument.dart';
+import 'package:wtf/100ms/dynamic_link_screen/hms_dynamic_link_screen.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
@@ -84,6 +86,9 @@ class DynamicLinkService {
           break;
         case DateWorkoutList.routeName:
           NavigationService.pushName(Routes.dateWorkoutList);
+          break;
+        case HmsDynamicLinkScreen.routeName:
+          NavigationService.pushName(Routes.hmsDynamicLinkScreen,argument: HmsDynamicArgument(data: param));
           break;
         default:
           showToast(message: "Invalid Link Please try again later!");

@@ -53,7 +53,7 @@ Future<void> main() async {
           channelDescription: 'WTF Notifications',
           defaultColor: AppConstants.primaryColor,
           playSound: true,
-          soundSource: 'resource://raw/res_morph_power_rangers',
+          soundSource: 'assets/video/notification.mp3',
           ledColor: Colors.white,
         )
       ]
