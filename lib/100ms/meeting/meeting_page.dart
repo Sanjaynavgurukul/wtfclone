@@ -51,26 +51,16 @@ class _MeetingPageState extends State<MeetingPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initMeeting();
-    checkVideoState();
-    checkAudioState();
     setNetworkQuality();
   }
 
   void initMeeting() async {
-    bool ans = await context.read<MeetingStore>().join(token: widget.token);
+    bool ans = await context.read<MeetingStore>().join(token: widget.token,mute: widget.isAudioOn,isVideo: widget.isVideoOn);
     if (!ans) {
       UtilityComponents.showSnackBarWithString("Unable to Join", context);
       Navigator.of(context).pop();
     }
     context.read<MeetingStore>().addUpdateListener();
-  }
-
-  void checkAudioState() async {
-    if (!widget.isAudioOn) context.read<MeetingStore>().switchAudio();
-  }
-
-  void checkVideoState(){
-    if (!widget.isVideoOn) context.read<MeetingStore>().switchAudio();
   }
 
   void setNetworkQuality() async {

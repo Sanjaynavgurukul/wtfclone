@@ -98,13 +98,17 @@ class MeetingStore extends ChangeNotifier
     // removeLogsListener();
   }
 
-  Future<bool> join({@required String token}) async {
-    print('Check Meeting toekn here --- ${token}');
+  Future<bool> join({@required String token,bool mute = true,bool isVideo = true}) async {
+    print('Check Meeting toekn here --- ${token} audio : $mute vide $isVideo');
     String myName = locator<AppPrefs>().userName.getValue()??'Unknown';
     HMSConfig config = HMSConfig(authToken: token,
-        userName: myName);
-
+        userName: myName
+    );
+    this.isMicOn = mute;
+    this.isVideoOn = isVideo;
     HmsSdkManager.hmsSdkInteractor?.join(config: config);
+    await _hmssdkInteractor.switchAudio(isOn: mute);
+    await _hmssdkInteractor.switchVideo(isOn: isVideo);
     return true;
   }
 
@@ -117,12 +121,14 @@ class MeetingStore extends ChangeNotifier
   }
 
   Future<void> switchAudio() async {
+    print('check audio and video state store in--- ${isMicOn}');
     await _hmssdkInteractor.switchAudio(isOn: isMicOn);
     isMicOn = !isMicOn;
     notifyListeners();
   }
 
   Future<void> switchVideo() async {
+    print('check audio and video state store in--- ${isVideoOn}');
     await _hmssdkInteractor.switchVideo(isOn: isVideoOn);
     isVideoOn = !isVideoOn;
     notifyListeners();
