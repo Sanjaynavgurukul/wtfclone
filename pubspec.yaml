@@ -103,7 +103,6 @@ dependencies:
   package_info_plus: ^1.4.0
   expansion_tile_card: ^2.0.0
   expandable_page_view: ^1.0.13
-  path_provider: ^2.0.9
   syncfusion_flutter_sliders: ^19.4.56
   sliding_sheet: ^0.5.2
   #Firebase Crys
@@ -132,6 +131,7 @@ dependencies:
   flutter_facebook_sdk: ^1.0.0
   avatar_glow: ^2.0.2
   measured_size: ^1.0.0
+  path_provider: ^2.0.10
 
 
 dev_dependencies:

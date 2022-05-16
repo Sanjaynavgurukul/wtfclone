@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,43 +14,21 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		F0676CFB99EDC25826E62CB8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91AD1FFD119797B49BA90EC /* Pods_Runner.framework */; };
+		9BEE7B9C94F80C242ADA7BFC /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7166C4C7E0C0605C5A1757BD /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		73CA8A3627823DEF00365A99 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		422F646586735198CCD0CEAF /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		48F619350E77022D0C4874F4 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		7166C4C7E0C0605C5A1757BD /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7393C944274A364D00E63796 /* RunnerProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerProfile.entitlements; sourceTree = "<group>"; };
 		7393C947274A3B9B00E63796 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		73AF3513274A509A0033BDF3 /* RunnerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
 		73AF3514274A50A00033BDF3 /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
-		73CA8A412782402E00365A99 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
-		73CA8A422782402E00365A99 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
-		73CA8A442782402E00365A99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73BDD8C4276BDC2800269D19 /* razorpay_flutter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = razorpay_flutter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -61,10 +39,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9DBE1A0AB7905E07E7AADA9 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
-		B30D78598307D30A663A33E7 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		C79064917573D5AD9839DE49 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		C91AD1FFD119797B49BA90EC /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F405EF9B645B6845515D0D39 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,31 +47,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0676CFB99EDC25826E62CB8 /* Pods_Runner.framework in Frameworks */,
+				9BEE7B9C94F80C242ADA7BFC /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5D130C69BFCEF8CC2830AD63 /* Pods */ = {
+		6F010A070E9B98273D9B4331 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A9DBE1A0AB7905E07E7AADA9 /* Pods-Runner.debug.xcconfig */,
-				B30D78598307D30A663A33E7 /* Pods-Runner.release.xcconfig */,
-				C79064917573D5AD9839DE49 /* Pods-Runner.profile.xcconfig */,
+				48F619350E77022D0C4874F4 /* Pods-Runner.debug.xcconfig */,
+				F405EF9B645B6845515D0D39 /* Pods-Runner.release.xcconfig */,
+				422F646586735198CCD0CEAF /* Pods-Runner.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		73CA8A402782402E00365A99 /* ImageNotification */ = {
+		88E8B993B67432BB4E6F81F9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				73CA8A412782402E00365A99 /* NotificationService.h */,
-				73CA8A422782402E00365A99 /* NotificationService.m */,
-				73CA8A442782402E00365A99 /* Info.plist */,
+				73BDD8C4276BDC2800269D19 /* razorpay_flutter.framework */,
+				7166C4C7E0C0605C5A1757BD /* Pods_Runner.framework */,
 			);
-			path = ImageNotification;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -115,10 +89,9 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				73CA8A402782402E00365A99 /* ImageNotification */,
 				97C146EF1CF9000F007C117D /* Products */,
-				5D130C69BFCEF8CC2830AD63 /* Pods */,
-				9E94BA8001E2B2972F93B742 /* Frameworks */,
+				6F010A070E9B98273D9B4331 /* Pods */,
+				88E8B993B67432BB4E6F81F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,14 +122,6 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
-		9E94BA8001E2B2972F93B742 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C91AD1FFD119797B49BA90EC /* Pods_Runner.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -164,16 +129,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
-				8E97DAF990D1B917F553FE1B /* [CP] Check Pods Manifest.lock */,
+				313E614AC028107F2E91D3A0 /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				73CA8A3627823DEF00365A99 /* Embed App Extensions */,
-				AABCB76AC1FF69B50CEDC55E /* [CP] Embed Pods Frameworks */,
-				A17EFCCF6531E5A63F9D6E39 /* [CP] Copy Pods Resources */,
+				8761A19300D18D3A4605B872 /* [CP] Embed Pods Frameworks */,
+				B72D1CDB4C4F7ACC8DEA1F55 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -190,7 +153,6 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1330;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -201,7 +163,7 @@
 				};
 			};
 			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
-			compatibilityVersion = "Xcode 13.0";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -234,21 +196,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Thin Binary";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
-		};
-		8E97DAF990D1B917F553FE1B /* [CP] Check Pods Manifest.lock */ = {
+		313E614AC028107F2E91D3A0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -270,39 +218,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9740EEB61CF901F6004384FC /* Run Script */ = {
+		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
+			name = "Thin Binary";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
-		A17EFCCF6531E5A63F9D6E39 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AABCB76AC1FF69B50CEDC55E /* [CP] Embed Pods Frameworks */ = {
+		8761A19300D18D3A4605B872 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -317,6 +247,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9740EEB61CF901F6004384FC /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		B72D1CDB4C4F7ACC8DEA1F55 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -356,7 +317,6 @@
 		249021D3217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -409,183 +369,21 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
-				CURRENT_PROJECT_VERSION = 5.9;
+				CURRENT_PROJECT_VERSION = 6.0;
 				DEVELOPMENT_TEAM = Z9H2CCFYN4;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/GoogleMaps/Base/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleMaps/Maps/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
-					"\"${PODS_ROOT}/JitsiMeetSDK/Frameworks\"",
-					"\"${PODS_ROOT}/razorpay-pod/Pod\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK\"",
-					"$(SRCROOT)/**",
-				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/GoogleMaps/Base/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleMaps/Maps/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
-					"\"${PODS_ROOT}/JitsiMeetSDK/Frameworks\"",
-					"\"${PODS_ROOT}/razorpay-pod/Pod\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK\"",
-					"$(SRCROOT)/**",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController/DKImagePickerController.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery/DKPhotoGallery.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations/FirebaseInstallations.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging/FirebaseMessaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner/MTBBarcodeScanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif/SwiftyGif.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast/Toast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications/awesome_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image/flutter_native_image.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding/geocoding.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple/geolocator_apple.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter/google_maps_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in/google_sign_in.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker/image_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet/jitsi_meet.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location/location.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher/maps_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill/otp_autofill.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info/package_info.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider/path_provider.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner/qr_code_scanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter/razorpay_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences/shared_preferences.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite/sqflite.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher/url_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player/video_player.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock/wakelock.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
-				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.7;
+				MARKETING_VERSION = 5.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.wtf.member;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/sanjayjana/Developer/projcets/wtf/wtf-flutter-member-app/ios/Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -594,7 +392,6 @@
 		97C147031CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -652,7 +449,6 @@
 		97C147041CF9000F007C117D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -707,184 +503,21 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
-				CURRENT_PROJECT_VERSION = 5.9;
+				CURRENT_PROJECT_VERSION = 6.0;
 				DEVELOPMENT_TEAM = Z9H2CCFYN4;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/GoogleMaps/Base/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleMaps/Maps/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
-					"\"${PODS_ROOT}/JitsiMeetSDK/Frameworks\"",
-					"\"${PODS_ROOT}/razorpay-pod/Pod\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK\"",
-					"$(SRCROOT)/**",
-				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(SRCROOT)$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/GoogleMaps/Base/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleMaps/Maps/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
-					"\"${PODS_ROOT}/JitsiMeetSDK/Frameworks\"",
-					"\"${PODS_ROOT}/razorpay-pod/Pod\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK\"",
-					"$(SRCROOT)/**",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController/DKImagePickerController.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery/DKPhotoGallery.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations/FirebaseInstallations.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging/FirebaseMessaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner/MTBBarcodeScanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif/SwiftyGif.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast/Toast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications/awesome_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image/flutter_native_image.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding/geocoding.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple/geolocator_apple.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter/google_maps_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in/google_sign_in.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker/image_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet/jitsi_meet.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location/location.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher/maps_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill/otp_autofill.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info/package_info.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider/path_provider.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner/qr_code_scanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter/razorpay_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences/shared_preferences.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite/sqflite.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher/url_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player/video_player.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock/wakelock.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"$(inherited)",
-					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
-				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.7;
+				MARKETING_VERSION = 5.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.wtf.member;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/sanjayjana/Developer/projcets/wtf/wtf-flutter-member-app/ios/Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -895,129 +528,21 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
 			buildSettings = {
-				ALLOW_TARGET_PLATFORM_SPECIALIZATION = NO;
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerRelease.entitlements;
-				CURRENT_PROJECT_VERSION = 5.9;
+				CURRENT_PROJECT_VERSION = 6.0;
 				DEVELOPMENT_TEAM = Z9H2CCFYN4;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/GoogleMaps/Base/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleMaps/Maps/Frameworks\"",
-					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
-					"\"${PODS_ROOT}/JitsiMeetSDK/Frameworks\"",
-					"\"${PODS_ROOT}/razorpay-pod/Pod\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiMeetSDK\"",
-					"$(SRCROOT)/**",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController/DKImagePickerController.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKPhotoGallery/DKPhotoGallery.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations/FirebaseInstallations.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging/FirebaseMessaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/MTBBarcodeScanner/MTBBarcodeScanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/SwiftyGif/SwiftyGif.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/Toast/Toast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/awesome_notifications/awesome_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/file_picker/file_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_native_image/flutter_native_image.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geocoding/geocoding.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/geolocator_apple/geolocator_apple.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_maps_flutter/google_maps_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/google_sign_in/google_sign_in.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker/image_picker.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/jitsi_meet/jitsi_meet.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/location/location.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/maps_launcher/maps_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/otp_autofill/otp_autofill.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/package_info/package_info.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/path_provider/path_provider.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/qr_code_scanner/qr_code_scanner.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/razorpay_flutter/razorpay_flutter.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/shared_preferences/shared_preferences.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/sqflite/sqflite.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/url_launcher/url_launcher.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player/video_player.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock/wakelock.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview/webview_flutter_wkwebview.framework/Headers\"",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
-					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
-				);
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.7;
+				MARKETING_VERSION = 5.2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.wtf.member;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/sanjayjana/Developer/projcets/wtf/wtf-flutter-member-app/ios/Runner/Runner-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

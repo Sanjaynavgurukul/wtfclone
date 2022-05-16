@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSLocalNetworkUsageDescription</key>
-    <string>WTF Trainer App wants to use your local network for video conference</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>WTF</string>
+	<string>WTF Member</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,9 +28,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.638833786141-hsl80if657vpa7i2jcrpp8ur8v8vc9s9</string>
+				<string>fb434210297840036</string>
 			</array>
 		</dict>
 	</array>
+	<key>FacebookAppID</key>
+	<string>434210297840036</string>
+	<key>FacebookDisplayName</key>
+	<string>WTF Member</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
@@ -46,22 +51,19 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>NSCalendarsUsageDescription</key>
-	<string>WTF user your calendar for showing you your schedules for the current, previous and upcoming schedules.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>WTF Need to access your camera to capture a picture, so that you can update your user profile also WTF needs access to your camera for live training sessions.</string>
+	<string>Need to access your camera to capture a picture, so that you can update your user profile.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location to give you location to give you better experience providing you the list of nearby Fitness Centers and activities happening near you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location to give you location to give you better experience providing you the list of nearby Fitness Centers and activities happening near you.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>WTF needs access to your microphone for live training sessions.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Uses Photo Library so that the user can view and upload his/her Profile Picture.</string>
 	<key>Privacy - Camera Usage Description</key>
 	<string>WTF requires access to your phone’s camera.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
