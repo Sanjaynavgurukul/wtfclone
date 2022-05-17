@@ -51,6 +51,7 @@ import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/partial_payment_model.dart';
 import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
@@ -1780,6 +1781,31 @@ class RestDatasource {
           : GymTypes(
               data: [],
             );
+      return model;
+    });
+  }
+
+  Future<PartialPaymentModel> getPartialPaymentStatus(
+      {@required String subscription_id}) async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    String memberId = locator<AppPrefs>().memberId.getValue();
+
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+
+    String finalUrl = Api.getPartialPaymentStatus(subscription_id: subscription_id,userId:memberId);
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response get partial payment list : " + res.toString());
+      PartialPaymentModel model = res != null && res['status']
+          ? PartialPaymentModel.fromJson(res)
+          : PartialPaymentModel(
+        status: false,
+        data: [],
+      );
       return model;
     });
   }

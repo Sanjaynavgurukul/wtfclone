@@ -56,8 +56,8 @@ class Api {
   static myWorkoutSchedule(
           String date, String addonId, String subscriptionId) =>
       addonId != null
-          ? 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&addon_id=$addonId&subscription_id=$subscriptionId'//addons
-          : 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&subscription_id=$subscriptionId';//Regular MemberShip
+          ? 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&addon_id=$addonId&subscription_id=$subscriptionId' //addons
+          : 'workoutmapping/member?user_id=${locator<AppPrefs>().memberId.getValue()}&date=$date&subscription_id=$subscriptionId'; //Regular MemberShip
 
   static mySchedule(String user, String date) =>
       'subscription/myschedule?user_id=$user&date=$date';
@@ -66,7 +66,8 @@ class Api {
       'dietmapping/member?member_id=${locator<AppPrefs>().memberId.getValue()}&date=$date';
 
   static workoutDetail(String id) => 'workout/getbyid?uid=$id';
-  static const String updateTime = 'workoutmapping/update';//workoutx mapping update api
+  static const String updateTime =
+      'workoutmapping/update'; //workoutx mapping update api
   static const String shiftTrainer = 'shift/add';
   static const String addEventParticipation = 'participation/add';
 
@@ -174,10 +175,16 @@ class Api {
   static String getNearestCatGym({String lat, String lng, String cat_id}) =>
       'gym/nearestgym?lat=$lat&long=$lng&addon_cat=$cat_id';
 
-  static String getGymCat()=>'gymcat?page&uid&status&category_name&limit, price_start&price_end';
+  static String getGymCat() =>
+      'gymcat?page&uid&status&category_name&limit, price_start&price_end';
 
-  static String getCatNearByGym(String lat, String lng,String cat_id) =>
+  static String getCatNearByGym(String lat, String lng, String cat_id) =>
       'gym/nearestgym?lat=$lat&long=$lng&gym_cat=$cat_id';
 
-  static String getAddOnsGymsSlots({@required String date})=>'slot/check/new?date=$date';
+  static String getAddOnsGymsSlots({@required String date}) =>
+      'slot/check/new?date=$date';
+
+  static String getPartialPaymentStatus(
+          {@required String userId, @required String subscription_id}) =>
+      'subscription/paymentstatus?user_id=$userId&subscription_id=$subscription_id';
 }

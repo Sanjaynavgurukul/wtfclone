@@ -62,6 +62,12 @@ class _MyWtfState extends State<MyWtf> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  TextButton(
+                    onPressed: (){
+                      NavigationService.pushName(Routes.partialPayment);
+                    },
+                    child: Text('Partial Payment',style:TextStyle(color: Colors.white)),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 5,

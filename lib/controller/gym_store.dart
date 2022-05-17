@@ -69,6 +69,7 @@ import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
+import 'package:wtf/model/partial_payment_model.dart';
 import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
@@ -255,6 +256,8 @@ class GymStore extends ChangeNotifier {
 
   MySchedule scheduleData;
   // CurrentTrainer scheduleTrainer;
+  //Partial Payment Model
+  PartialPaymentModel partialPaymentModel;
 
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
@@ -3068,6 +3071,20 @@ class GymStore extends ChangeNotifier {
       }
       return uid;
     }
+  }
+
+
+  Future<void> getPartialPaymentStatus({@required String subscription_id}) async {
+    partialPaymentModel = null;
+    notifyListeners();
+    var list = await RestDatasource().getPartialPaymentStatus(subscription_id: subscription_id);
+
+    if (list.data != null || list.data.isNotEmpty) {
+      partialPaymentModel = list;
+    } else {
+      partialPaymentModel = null;
+    }
+    notifyListeners();
   }
 }
 
