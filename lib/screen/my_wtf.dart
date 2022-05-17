@@ -64,7 +64,7 @@ class _MyWtfState extends State<MyWtf> {
                 children: [
                   TextButton(
                     onPressed: (){
-                      NavigationService.pushName(Routes.partialPayment);
+                      NavigationService.pushName(Routes.partialPaymentScreen);
                     },
                     child: Text('Partial Payment',style:TextStyle(color: Colors.white)),
                   ),

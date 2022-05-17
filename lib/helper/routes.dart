@@ -51,7 +51,7 @@ import 'package:wtf/screen/loader.dart';
 import 'package:wtf/screen/my_wtf.dart';
 import 'package:wtf/screen/nutrition/congrats_screen.dart';
 import 'package:wtf/screen/nutrition/nutrition_screen.dart';
-import 'package:wtf/screen/partial_payment/partial_pauyment.dart';
+import 'package:wtf/screen/partial_payment/partial_payment.dart';
 import 'package:wtf/screen/schedule/MainWorkoutScreen.dart';
 import 'package:wtf/screen/schedule/exercise/exercise.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start.dart';
@@ -156,7 +156,7 @@ class Routes {
   static const String exStartScreen = ExStartScreen.routeName;
   static const String gymNotFound = GymNotFound.routeName;
   static const String hmsDynamicLinkScreen = HmsDynamicLinkScreen.routeName;
-  static const String partialPayment = PartialPayment.routeName;
+  static const String partialPaymentScreen = PartialPaymentScreen.routeName;
 }
 
 class RouteGenerator {
@@ -170,14 +170,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
-      case Routes.partialPayment:
+      case Routes.partialPaymentScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
-          widget: PartialPayment(),
+          widget: PartialPaymentScreen(),
           settings: settings,
         )
             : CupertinoPageRoute(
-            builder: (context) => PartialPayment(), settings: settings);
+            builder: (context) => PartialPaymentScreen(), settings: settings);
       case Routes.hmsDynamicLinkScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
