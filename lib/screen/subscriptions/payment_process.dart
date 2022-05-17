@@ -13,8 +13,12 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/VerifyPayment.dart';
+import 'package:wtf/screen/purchase_done/BookingSuccess.dart';
+import 'package:wtf/screen/purchase_done/argument/purchase_done_argument.dart';
 import 'package:wtf/screen/subscriptions/argument/payment_process_argument.dart';
 import 'package:wtf/widget/processing_dialog.dart';
+
+enum PaymentType { PAYMENT_PARTIAL, PAYMENT_REGULAR }
 
 class PaymentProcess extends StatefulWidget {
   const PaymentProcess({Key key}) : super(key: key);
@@ -121,17 +125,20 @@ class _PaymentProcessState extends State<PaymentProcess> {
     print('razor error --- Error Response: $response');
     setUiStream(getStatusModel(PaymentStatus.FAILED));
     var map = _paymentProcessArgument.data;
-
-    map['trx_id'] = '';
-    map['trx_status'] = 'failed';
-    map['order_status'] = 'failed';
-    await store.addSubscription(
-      body: map,
-    );
-    // init(
-    //   context: NavigationService.context,
-    // );
-    navigateFailed();
+    if (_paymentProcessArgument.paymentType == PaymentType.PAYMENT_PARTIAL) {
+      map['payment_id'] = '';
+      map['status'] = 'failed';
+      await store.updatePartialPaymentStatus(body:map);
+      navigateFailed();
+    } else {
+      map['trx_id'] = '';
+      map['trx_status'] = 'failed';
+      map['order_status'] = 'failed';
+      await store.addSubscription(
+        body: map,
+      );
+      navigateFailed();
+    }
     /* Fluttertoast.showToast(
         msg: "ERROR: " + response.code.toString() + " - " + response.message!,
         toastLength: Toast.LENGTH_SHORT); */
@@ -213,39 +220,56 @@ class _PaymentProcessState extends State<PaymentProcess> {
 
     var map = _paymentProcessArgument.data;
     setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER));
-    map['trx_id'] = response.paymentId;
-    map['trx_status'] = paymentFailed ? "failed" : 'done';
-    map['order_status'] = paymentFailed ? "failed" : 'done';
 
-    //Making Subscription :D
-    bool isDone = await store.addSubscription(
-      body: map,
-    );
-
-    if (isDone) {
-      //_nullData();
-      if (map['type'] == 'event') {
-        await store.addEventParticipation(context: context).then((value) {
-          if (value) {
-            setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
-            navigateToEventPurchaseDone();
-          } else {
-            setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
-            navigateFailed();
-          }
-        });
-      } else {
+    //Partial purchase Payment
+    if (_paymentProcessArgument.paymentType == PaymentType.PAYMENT_PARTIAL) {
+      map['payment_id'] = response.paymentId;
+      map['status'] = paymentFailed ? "failed" : 'completed';
+      bool isDone = await store.updatePartialPaymentStatus(body:map);
+      if(isDone){
         setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_SUCCESS));
-        navigateToPurchaseDone();
+        Future.delayed(const Duration(seconds: 3), () {
+          NavigationService.navigateToReplacement(Routes.purchaseDone,argument: PurchaseDoneArgument(purchaseDoneType: PurchaseDoneType.PURCHASE_DONE_PARTIAL));
+        });
+      }else{
+        setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+        navigateFailed();
       }
-      store.init(context: context);
     } else {
-      //TODO failed Purchase Order not in payment :D
-      setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
-      navigateFailed();
-      // FlashHelper.errorBar(paymentContext,
-      //     message:
-      //     'Failed to subscribe, Please contact support for resolution');
+      //Regular Purchase Payment
+      map['trx_id'] = response.paymentId;
+      map['trx_status'] = paymentFailed ? "failed" : 'done';
+      map['order_status'] = paymentFailed ? "failed" : 'done';
+
+      //Making Subscription :D
+      bool isDone = await store.addSubscription(
+        body: map,
+      );
+      if (isDone) {
+        //_nullData();
+        if (map['type'] == 'event') {
+          await store.addEventParticipation(context: context).then((value) {
+            if (value) {
+              setUiStream(getStatusModel(PaymentStatus.EVENT_ORDER_SUCCESS));
+              navigateToEventPurchaseDone();
+            } else {
+              setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+              navigateFailed();
+            }
+          });
+        } else {
+          setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_SUCCESS));
+          navigateToPurchaseDone();
+        }
+        store.init(context: context);
+      } else {
+        //TODO failed Purchase Order not in payment :D
+        setUiStream(getStatusModel(PaymentStatus.MAKING_ORDER_FAILED));
+        navigateFailed();
+        // FlashHelper.errorBar(paymentContext,
+        //     message:
+        //     'Failed to subscribe, Please contact support for resolution');
+      }
     }
   }
 
@@ -350,7 +374,7 @@ class _PaymentProcessState extends State<PaymentProcess> {
         });
       }
       return WillPopScope(
-        onWillPop: ()async{
+        onWillPop: () async {
           return false;
         },
         child: Scaffold(
@@ -374,8 +398,9 @@ class _PaymentProcessState extends State<PaymentProcess> {
                   lottieImage(
                       name: snapshot.data.animationName,
                       width: 100,
-                      repeat:
-                          snapshot.data.animationName == 'failed' ? false : true),
+                      repeat: snapshot.data.animationName == 'failed'
+                          ? false
+                          : true),
                   ListTile(
                     title: Text(
                       '${snapshot.data.heading}',

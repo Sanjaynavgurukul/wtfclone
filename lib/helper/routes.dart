@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wtf/100ms/dynamic_link_screen/hms_dynamic_link_screen.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/screen/addon/BookSession.dart';
-import 'package:wtf/screen/addon/BookingSuccess.dart';
+import 'package:wtf/screen/purchase_done/BookingSuccess.dart';
 import 'package:wtf/screen/addon/Slot/choose_slot_screen.dart';
 import 'package:wtf/screen/addon/Slot/choose_slot_screen_addon.dart';
 import 'package:wtf/screen/addon/addon_cat.dart';
@@ -118,6 +118,7 @@ class Routes {
   static const String exerciseDone = '/exerciseDone';
   static const String purchaseDone = '/purchaseDone';
   static const String eventPurchaseDone = '/eventPurchaseDone';
+  static const String partialPurchaseDone = '/partialPurchaseDone';
   static const String calorieCounter = '/calorieCounter';
   static const String calorieCounterResult = '/calorieCounterResult';
   static const String activeSubscriptionScreen = '/activeSubscriptionScreen';
@@ -618,6 +619,14 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => EventPurchaseDone(), settings: settings);
+      case Routes.partialPurchaseDone:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+                widget: PartialPurchaseDone(),
+                settings: settings,
+              )
+            : CupertinoPageRoute(
+                builder: (context) => PartialPurchaseDone(), settings: settings);
       case Routes.calorieCounter:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

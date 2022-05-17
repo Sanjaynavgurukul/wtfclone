@@ -9,7 +9,13 @@ import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/screen/purchase_done/argument/purchase_done_argument.dart';
 import 'package:wtf/widget/slide_button.dart';
+
+enum PurchaseDoneType{
+  PURCHASE_DONE_PARTIAL,
+  PURCHASE_DONE_REGULAR
+}
 
 class PurchaseDone extends StatefulWidget {
   PurchaseDone({Key key}) : super(key: key);
@@ -22,17 +28,26 @@ class _PurchaseDoneState extends State<PurchaseDone> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Future.delayed(const Duration(milliseconds: 1300), () {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => PurchaseDoneSummary()));
-      });
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final PurchaseDoneArgument args =
+    ModalRoute.of(context).settings.arguments as PurchaseDoneArgument;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Future.delayed(const Duration(milliseconds: 1300), () {
+        if(args != null){
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => PartialPurchaseDone()));
+        }else{
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => PurchaseDoneSummary()));
+        }
+      });
+    });
+
     return new Scaffold(
         backgroundColor: Color(0xff922224),
         appBar: new AppBar(
@@ -1346,6 +1361,7 @@ class EventPurchaseDone extends StatelessWidget {
       ),
     );
   }
+
   stepsItem(string) => Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 8.0,
@@ -1376,3 +1392,157 @@ class EventPurchaseDone extends StatelessWidget {
         ),
       );
 }
+
+class PartialPurchaseDone extends StatelessWidget {
+  const PartialPurchaseDone({Key key}) : super(key: key);
+
+  Widget amountLabel({String label, String value}) {
+    return Row(
+      children: [
+        Text(label ?? '',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+        Spacer(),
+        Text('${value ?? ''}')
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    GymStore gymStore = context.read<GymStore>();
+    return Consumer<GymStore>(
+      builder: (context,store,child){
+      return WillPopScope(
+        onWillPop: () async {
+          Navigator.of(NavigationService.navigatorKey.currentContext)
+              .popUntil((route) => route.settings.name == Routes.homePage);
+          return true;
+        },
+        child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(children: [
+              AppBar(
+                backgroundColor: Color(0xff922224),
+                elevation: 0,
+                title: Text(
+                  'Booking Detail',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Stack(
+                children: <Widget>[
+                  Hero(
+                      tag: 'summaryAnimation',
+                      child: Container(
+                        height: 360,
+                        color: Color(0xff922224),
+                        padding: EdgeInsets.only(bottom: 100),
+                        alignment: Alignment.center,
+                        child: SafeArea(
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SvgPicture.asset('assets/svg/success_bg.svg',
+                                  semanticsLabel: 'Acme Logo'),
+                              Image.asset(
+                                'assets/gif/payment_done.gif',
+                                width: 120,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                  Container(
+                    //color: Colors.white,
+                    padding: EdgeInsets.only(top: 310, left: 16, right: 16),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: Color(0xff292929)),
+                        padding:
+                        EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                        child:Column(
+                          children: [
+                            amountLabel(label: 'Payment Status :', value: 'Success'),
+                            SizedBox(height: 12),
+                            amountLabel(label: 'Payment Date:', value: '${Helper.stringForDatetime2(DateTime.now().toIso8601String())}'),
+                            // SizedBox(height: 12),
+                            // amountLabel(label: 'Date Added:', value: '${Helper.stringForDatetime2(gymStore.selectedSlotData.date.toIso8601String())}'),
+                            SizedBox(height: 12),
+                            amountLabel(label: 'Due Amount' ,value:'${store.selectedPartialPaymentData.amount??''}' ),
+                            SizedBox(height: 12),
+                          ],
+                        )
+                    ),
+                  ),
+                ],
+              ),
+              // Container(
+              //   padding: EdgeInsets.only(left: 16, right: 16),
+              //   margin: EdgeInsets.only(left: 16, right: 16, top: 18),
+              //   child: InkWell(
+              //     onTap: () {
+              //       NavigationService.navigateToReplacement(
+              //           Routes.allcoin);
+              //       Navigator.of(NavigationService.navigatorKey.currentContext)
+              //           .popUntil((route) => route.settings.name == Routes.homePage);
+              //       NavigationService.navigatorKey.currentContext
+              //           .read<GymStore>()
+              //           .init(context: context);
+              //       // NavigationService.navigatorKey.currentContext
+              //       //     .read<GymStore>()
+              //       //     .changeNavigationTab(index: 2);
+              //     },
+              //     borderRadius: BorderRadius.all(Radius.circular(100)),
+              //     child: Container(
+              //         width: double.infinity,
+              //         padding:
+              //         EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+              //         alignment: Alignment.center,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.all(Radius.circular(100)),
+              //             color: AppConstants.boxBorderColor),
+              //         child: Text("Redeem", style: TextStyle(fontSize: 16))),
+              //   ),
+              // ),
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 18),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(NavigationService.navigatorKey.currentContext)
+                        .popUntil((route) => route.settings.name == Routes.homePage);
+                    NavigationService.navigatorKey.currentContext
+                        .read<GymStore>()
+                        .init(context: context);
+                    NavigationService.navigatorKey.currentContext
+                        .read<GymStore>()
+                        .changeNavigationTab(index: 2);
+                  },
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  child: Container(
+                      width: double.infinity,
+                      padding:
+                      EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          border: Border.all(
+                              width: 1, color: AppConstants.boxBorderColor)),
+                      child: Text("Back to home", style: TextStyle(fontSize: 16))),
+                ),
+              )
+            ]),
+          ),
+        ),
+      );
+      },
+    );
+  }
+}
+
+

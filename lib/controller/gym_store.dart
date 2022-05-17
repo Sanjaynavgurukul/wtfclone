@@ -258,6 +258,7 @@ class GymStore extends ChangeNotifier {
   // CurrentTrainer scheduleTrainer;
   //Partial Payment Model
   PartialPaymentModel partialPaymentModel;
+  PartialPaymentData selectedPartialPaymentData;
 
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
@@ -746,6 +747,8 @@ class GymStore extends ChangeNotifier {
       'value': subBody,
       'transaction_type': '',
     };
+
+    print('check amount data inside raxon -- $amount');
 
     //value
     //transaction_type == partial or regular
@@ -3085,6 +3088,10 @@ class GymStore extends ChangeNotifier {
       partialPaymentModel = null;
     }
     notifyListeners();
+  }
+
+  Future<bool> updatePartialPaymentStatus({@required Map<String, dynamic> body})async{
+      return await RestDatasource().updatePartialPayment(body:body);
   }
 }
 

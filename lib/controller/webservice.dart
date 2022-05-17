@@ -948,6 +948,7 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
     print("get generateRazorPayId 4");
+    print('check razor pay body datat --- $body');
     String url = BASE_URL + Api.generateRazorpayId();
     print('url: $url');
     print('body: $body');
@@ -1809,4 +1810,23 @@ class RestDatasource {
       return model;
     });
   }
+
+  Future<bool> updatePartialPayment({@required Map<String,dynamic> body})async{
+    String token = locator<AppPrefs>().token.getValue();
+    print('check partial update payment body --- $body');
+
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+
+    String url = BASE_URL + Api.getUpdatePartialPayment();
+    print('check partial payment update base url : $url');
+    var res =
+        await _netUtil.put(url, headers: mapHeader, body: body);
+
+    print('check partial payment update response --- $res');
+   return true;
+  }
+
+
 }

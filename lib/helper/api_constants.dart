@@ -187,4 +187,6 @@ class Api {
   static String getPartialPaymentStatus(
           {@required String userId, @required String subscription_id}) =>
       'subscription/paymentstatus?user_id=$userId&subscription_id=$subscription_id';
+
+  static String getUpdatePartialPayment()=>'subscription/updatepayment';
 }
