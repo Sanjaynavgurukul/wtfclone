@@ -208,7 +208,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     return 0;
   }
 
-  void processToBuy() async {
+  void processToBuy({bool isCash = false}) async {
     print('method called------');
     Map<String, dynamic> body = {};
     // Default Key Values
@@ -265,30 +265,49 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     print('Starting Razor Pay Library ---- ');
 
     if (totalAmount != 0) {
-      await gymStore
-          .generateRazorPayId(
-              amount: (isPartialPayment()
-                      ? (totalAmount / 2) * 100
-                      : totalAmount * 100)
-                  .toString(),
-              context: context,
-              subBody: body)
-          .then((value) {
-        if (value != null || value.isNotEmpty) {
-          print('order is not null --- $value');
-          NavigationService.pushName(Routes.paymentProcess,
-              argument: PaymentProcessArgument(
-                  orderId: value,
-                  data: body,
-                  price: (isPartialPayment()
-                          ? (totalAmount / 2) * 100
-                          : totalAmount * 100)
-                      .toString()));
+      if(isCash){
+        //100% discount applied :D
+        body['trx_id'] = 'cash';
+        body['trx_status'] = 'done';
+        body['order_status'] = 'done';
+        bool isDone = await gymStore.addSubscription(
+          body: body,
+          context: context,
+          showLoader: true,
+        );
+        if (isDone) {
+          gymStore.init(context: context);
+          //nullData();
+          NavigationService.navigateTo(Routes.purchaseDone);
         } else {
-          FlashHelper.errorBar(context,
-              message: 'Something went wrong with your order!');
+          FlashHelper.errorBar(context, message: 'Please Try again!');
         }
-      });
+      }else{
+        await gymStore
+            .generateRazorPayId(
+            amount: (isPartialPayment()
+                ? (totalAmount / 2) * 100
+                : totalAmount * 100)
+                .toString(),
+            context: context,
+            subBody: body)
+            .then((value) {
+          if (value != null || value.isNotEmpty) {
+            print('order is not null --- $value');
+            NavigationService.pushName(Routes.paymentProcess,
+                argument: PaymentProcessArgument(
+                    orderId: value,
+                    data: body,
+                    price: (isPartialPayment()
+                        ? (totalAmount / 2) * 100
+                        : totalAmount * 100)
+                        .toString()));
+          } else {
+            FlashHelper.errorBar(context,
+                message: 'Something went wrong with your order!');
+          }
+        });
+      }
       // await gymStore.processPayment(
       //   context: context,
       //   body: body,
@@ -368,7 +387,21 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 FlashHelper.errorBar(context, message: validateEmiPayment());
               }
             } else {
-              processToBuy();
+              if(_radioValue == 2){
+                gymStore
+                    .sendOtpToGymOwner(
+                    gymId: gymStore.selectedGymDetail.data.userId)
+                    .then((value) {
+                  if (value) {
+                    showBottomDialog();
+                  } else {
+                    FlashHelper.errorBar(context,
+                        message: 'Something went wrong while sending otp');
+                  }
+                });
+              }else{
+                processToBuy();
+              }
             }
           },
           child: Container(
@@ -475,8 +508,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
               SizedBox(
                 height: 45,
               ),
-              if (gymStore.selectedGymDetail.data.is_partial == 1 &&
-                  totalAmount != 0)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -491,12 +522,14 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                       height: 24,
                     ),
                     Container(
+                      alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Expanded(
                             child: RadioListTile(
                               value: 0,
+                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
                               groupValue: _radioValue,
                               onChanged: (newValue) {
                                 setState(() {
@@ -521,9 +554,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                             ),
                             flex: 1,
                           ),
-                          Expanded(
+                          if (gymStore.selectedGymDetail.data.is_partial == 1 &&
+                              totalAmount != 0) Expanded(
                             child: RadioListTile(
                               value: 1,
+                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
                               groupValue: _radioValue,
                               onChanged: (newValue) {
                                 setState(() {
@@ -537,6 +572,26 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                 });
                               },
                               title: Text('Partial'),
+                            ),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: RadioListTile(
+                              value: 2,
+                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
+                              groupValue: _radioValue,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _radioValue = newValue;
+                                  // gymStore.selectedGymDetail.data
+                                  //     .first_payment = getTodayDate();
+                                  // gymStore.selectedGymDetail.data
+                                  //     .first_payment_amount =
+                                  //     getHalfPaymentAmount(
+                                  //         totalAmount.toString());
+                                });
+                              },
+                              title: Text('Cash'),
                             ),
                             flex: 1,
                           ),
@@ -937,7 +992,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                       Navigator.pop(context);
                                       FlashHelper.successBar(context,
                                           message: 'OTP verified');
-                                      processToBuy();
+                                      processToBuy(isCash:_radioValue == 2);
                                     } else {
                                       setModelState(() {
                                         wrongOtp = true;
@@ -1015,7 +1070,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   }
 
   bool isFullPayment() {
-    return _radioValue == 0;
+    return _radioValue != 1;
   }
 
   bool isPartialPayment() {
