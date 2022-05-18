@@ -32,14 +32,14 @@
 			</array>
 		</dict>
 	</array>
-	<key>FacebookAppID</key>
-	<string>434210297840036</string>
-	<key>FacebookDisplayName</key>
-	<string>WTF Member</string>
-	<key>FacebookAutoLogAppEventsEnabled</key>
-	<true/>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>434210297840036</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookDisplayName</key>
+	<string>WTF Member</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -63,7 +63,6 @@
 	<string>WTF requires access to your phone’s camera.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>

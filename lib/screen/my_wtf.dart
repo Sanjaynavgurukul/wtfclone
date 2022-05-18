@@ -62,12 +62,7 @@ class _MyWtfState extends State<MyWtf> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  TextButton(
-                    onPressed: (){
-                      NavigationService.pushName(Routes.partialPaymentScreen);
-                    },
-                    child: Text('Partial Payment',style:TextStyle(color: Colors.white)),
-                  ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 5,
@@ -164,6 +159,15 @@ class _MyWtfState extends State<MyWtf> {
                     ),
                   ),
                   UIHelper.verticalSpace(30.0),
+                  MyWtfCard(
+                    onTap: () {
+                      NavigationService.navigateTo(Routes.partialPaymentScreen);
+                    },
+                    image: 'schedule',
+                    text: 'Partial Payment',
+                  ),
+                  UIHelper.verticalSpace(20.0),
+
                   MyWtfCard(
                     onTap: () {
                       setState(() {
