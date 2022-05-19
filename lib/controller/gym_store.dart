@@ -482,7 +482,7 @@ class GymStore extends ChangeNotifier {
     if(token.isEmpty || token==null){
       FlashHelper.errorBar(context, message: 'No Token Found!');
     }else{
-      locator<AppPrefs>().liveClassTimerDate.setValue(DateTime.now().millisecondsSinceEpoch);
+
       if(isDynamicLink){
         Navigator.pushReplacement(
           context,

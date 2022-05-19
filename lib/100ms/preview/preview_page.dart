@@ -14,7 +14,10 @@ import 'package:wtf/100ms/enum/meeting_flow.dart';
 import 'package:wtf/100ms/meeting/meeting_page.dart';
 import 'package:wtf/100ms/meeting/meeting_store.dart';
 import 'package:wtf/100ms/preview/preview_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/model/100ms_model.dart';
+
+import '../../main.dart';
 
 class PreviewPage extends StatefulWidget {
   final String token;
@@ -252,7 +255,9 @@ class _PreviewPageState extends State<PreviewPage> with WidgetsBindingObserver {
                                     context
                                         .read<PreviewStore>()
                                         .removePreviewListener();
-
+                                    bool isTimerOn =locator<AppPrefs>().liveClassTimerDate.getValue() != 0;
+                                    if(!isTimerOn)
+                                      locator<AppPrefs>().liveClassTimerDate.setValue(DateTime.now().millisecondsSinceEpoch);
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (_) =>

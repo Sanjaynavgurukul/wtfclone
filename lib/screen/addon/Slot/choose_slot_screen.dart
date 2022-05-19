@@ -97,10 +97,10 @@ class _ChooseSlotScreenState extends State<ChooseSlotScreen> {
                       // New date selected
                       print(
                           'selectedDate: ${Helper.formatDate2(date.toIso8601String())}');
+                      setState(() {
+                        selectedValue = date;
+                      });
                       if (gymStore.selectedTrainer != null) {
-                        setState(() {
-                          selectedValue = date;
-                        });
                         gymStore.getSlotDetails(
                           context: context,
                           date: Helper.formatDate2(
