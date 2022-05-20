@@ -82,7 +82,7 @@ import 'package:wtf/widget/processing_dialog.dart';
 import '../main.dart';
 
 class GymStore extends ChangeNotifier {
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   bool loading = false;
 
@@ -125,14 +125,13 @@ class GymStore extends ChangeNotifier {
   EventsData selectedEventData;
 
   GymTypes selectedGymTypes;
+  GymTypes getExploreGyms;
 
   MySchedule mySchedule;
 
   MySchedule addonMySchedules;
 
   CurrentTrainer currentTrainer;
-
-  GymModel allGyms;
 
   WorkoutScheduleData selectedWorkoutSchedule;
 
@@ -230,9 +229,6 @@ class GymStore extends ChangeNotifier {
   DietConsumed dietConsumed;
 
   String discoverType = '';
-
-  // LocationResult selectedNewLocation;
-  double _tempLat = 0.0, _tempLng = 0.0;
 
   double sessionRating = 0.0;
 
@@ -379,9 +375,7 @@ class GymStore extends ChangeNotifier {
     getStats(context: context);
     getAllEvents(context: context);
     getTerms();
-    getAllGyms(context: context);
     getAllDiet(context: context);
-
     getWTFCoinBalance(context: context);
     getShoppingCategories(context: context);
     getCoinHistory(context: context);
@@ -1001,26 +995,21 @@ class GymStore extends ChangeNotifier {
     });
   }
 
-  Future<void> getAllGyms({
-    BuildContext context,
-  }) async {
-    if (!preambleFromLogin) await determinePosition(context);
-    GymModel res = tempLat != 0.0 && tempLng != 0.0
-        ? await RestDatasource().getGym(
-            lat: tempLat.toString(),
-            lng: tempLng.toString(),
-          )
-        : await RestDatasource().getGym(
-            lat: getLat().toString(),
-            lng: getLng().toString(),
-          );
-    if (res != null) {
-      print('gym data is present');
-      allGyms = res;
-      print('all gym length: ${allGyms.data.length}');
-      notifyListeners();
-    }
-  }
+  // Future<void> getAllGyms({
+  //   BuildContext context,
+  // }) async {
+  //   if (!preambleFromLogin) await determinePosition(context);
+  //   GymModel res = await RestDatasource().getGym(
+  //           lat: getLat().toString(),
+  //           lng: getLng().toString(),
+  //         );
+  //   if (res != null) {
+  //     print('gym data is present');
+  //     allGyms = res;
+  //     print('all gym length: ${allGyms.data.length}');
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<OfferData> getCoupon(String couponCode, String plan_type) async {
     return APIHelper.getCoupon(couponCode, plan_type).then((value) {
@@ -1216,9 +1205,6 @@ class GymStore extends ChangeNotifier {
     bool serviceEnabled;
     LocationPermission permission;
 
-    tempLat = getLat();
-    tempLng = getLng();
-
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -1258,7 +1244,6 @@ class GymStore extends ChangeNotifier {
       if (currentPosition.latitude != null || currentPosition.latitude != 0.0) {
         print('set new lat lng (LAT) -- ${currentPosition.latitude}');
         locator<AppPrefs>().lat.setValue(currentPosition.latitude.toString());
-        tempLat =  currentPosition.latitude;
         print(
             'set new lat lng (LAT pref) -- ${locator<AppPrefs>().lat.getValue()}');
       }
@@ -1267,7 +1252,6 @@ class GymStore extends ChangeNotifier {
           currentPosition.longitude != 0.0) {
         print('set new lat lng (LNG) -- ${currentPosition.longitude}');
         locator<AppPrefs>().lng.setValue(currentPosition.longitude.toString());
-        tempLng =  currentPosition.latitude;
         print(
             'set new lat lng (LNG pref) -- ${locator<AppPrefs>().lng.getValue()}');
       }
@@ -1839,13 +1823,22 @@ class GymStore extends ChangeNotifier {
     loading = true;
     discoverType = type;
     notifyListeners();
-    GymTypes res = tempLat != 0.0 && tempLng != 0.0
-        ? await RestDatasource().getDiscoverNow(
-            type: type, lat: tempLat.toString(), lng: tempLng.toString())
-        : await RestDatasource().getDiscoverNow(
+    GymTypes res = await RestDatasource().getDiscoverNow(
             type: type, lat: getLat().toString(), lng: getLng().toString());
     if (res != null) {
       selectedGymTypes = res;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getExploreGym({BuildContext context, String type}) async {
+    loading = true;
+    discoverType = type;
+    notifyListeners();
+    GymTypes res = await RestDatasource().getDiscoverNow(
+        type: type, lat: getLat().toString(), lng: getLng().toString());
+    if (res != null) {
+      getExploreGyms = res;
       notifyListeners();
     }
   }
@@ -2597,17 +2590,6 @@ class GymStore extends ChangeNotifier {
     await RestDatasource().getLastSeen();
   }
 
-  get tempLng => _tempLng;
-
-  set tempLng(value) {
-    _tempLng = value;
-  }
-
-  double get tempLat => _tempLat;
-
-  set tempLat(double value) {
-    _tempLat = value;
-  }
 
   Future<bool> saveBmr() async {
     print('save bmr called -----');
@@ -2667,7 +2649,7 @@ class GymStore extends ChangeNotifier {
     selectedGymTypes = null;
     notifyListeners();
     var list = await RestDatasource().getCatNearByGymsList(
-        lat: tempLat.toString(), lng: tempLng.toString(), cat_id: cat_id);
+        lat: getLat().toString(), lng: getLng().toString(), cat_id: cat_id);
 
     if (list.data != null || list.data.isNotEmpty) {
       selectedGymTypes = list;
@@ -3093,5 +3075,6 @@ class GymStore extends ChangeNotifier {
   Future<bool> updatePartialPaymentStatus({@required Map<String, dynamic> body})async{
       return await RestDatasource().updatePartialPayment(body:body);
   }
+
 }
 

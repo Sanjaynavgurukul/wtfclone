@@ -42,10 +42,44 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   GymStore store;
+  bool callMethod = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void callData({String type = 'gym'}) {
+    print('called -----');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (callMethod) {
+        this.callMethod = false;
+        store.getExploreGym(context: context, type: type);
+      }
+    });
+  }
+
+  void grantPermission(){
+    bool hasPreamble = locator<AppPrefs>().memberAdded.getValue();
+    bool initialPermissionAsked = locator<AppPrefs>().initialLocationAsked.getValue();
+    print('grantPermission method called');
+    print('grantPermission method called initial permission asked - $initialPermissionAsked');
+    if(!hasPreamble && !initialPermissionAsked){
+      print('grantPermission has not preamble');
+      FocusScope.of(context).unfocus();
+      store.determinePosition(context);
+      locator<AppPrefs>().initialLocationAsked.setValue(true);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
+    grantPermission();
+    callData();
     return SafeArea(
       child: RefreshIndicator(
         onRefresh: () async {
@@ -69,12 +103,12 @@ class _ExplorePageState extends State<ExplorePage> {
                           child: InkWell(
                             onTap: (){
                               FocusScope.of(context).unfocus();
-                              store.determinePosition(context);
+                              //store.determinePosition(context);
                               showSearch(
                                   context: context,
                                   delegate: GymListSearchAdapter(
                                       searchableList:
-                                      store.allGyms.data,
+                                      store.getExploreGyms.data,
                                       onClick: (GymModelData data){
                                     print('gym iD --- from nav ${data.userId}');
                                     NavigationService.pushName(Routes.buyMemberShipPage,argument: GymDetailArgument(gym: data, gymId: data.userId));
@@ -424,15 +458,15 @@ class _ExplorePageState extends State<ExplorePage> {
                     horizontal: 12.0,
                   ),
                   child: Consumer<GymStore>(
-                    builder: (context, store, child) => store.allGyms != null
-                        ? store.allGyms.data != null &&
-                                store.allGyms.data.isNotEmpty
+                    builder: (context, store, child) => store.getExploreGyms != null
+                        ? store.getExploreGyms.data != null &&
+                                store.getExploreGyms.data.isNotEmpty
                             ? ListView.builder(
                                 itemBuilder: (context, index) => GymCard(
-                                  item: store.allGyms.data[index],
+                                  item: store.getExploreGyms.data[index],
                                 ),
                                 shrinkWrap: true,
-                                itemCount: store.allGyms.data.length,
+                                itemCount: store.getExploreGyms.data.length,
                                 primary: false,
                               )
                             : Center(

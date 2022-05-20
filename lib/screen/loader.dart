@@ -56,9 +56,10 @@ class _LoaderPageState extends State<LoaderPage> {
           //   }
           // });
 
-          bool memberAdded = locator<AppPrefs>().memberAdded.getValue();
-          print('member added -- $memberAdded');
-          if(memberAdded){
+          //TODO Preamble Changed :D
+          //bool memberAdded = locator<AppPrefs>().memberAdded.getValue();
+          // print('memberAddedember added -- $memberAdded');
+          // if(memberAdded){
             context.read<GymStore>().getForceUpdate().then((value){
               print('checking from loader --- ${value.wtf_version}');
               if(isAndroid()){
@@ -76,11 +77,12 @@ class _LoaderPageState extends State<LoaderPage> {
                 }
               }
             });
-          }else{
-            NavigationService
-                .navigateToReplacement(
-                Routes.userDetail);
-          }
+          //TODO Preamble Changed :D
+          // }else{
+          //   NavigationService
+          //       .navigateToReplacement(
+          //       Routes.userDetail);
+          // }
         } else {
           NavigationService.navigateToReplacement(Routes.splash);
         }

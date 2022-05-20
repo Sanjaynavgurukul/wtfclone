@@ -49,8 +49,9 @@ class UserStore extends ChangeNotifier {
         locator<AppPrefs>().userName.setValue(res.data.name);
         locator<AppPrefs>().userEmail.setValue(res.data.email);
         locator<AppPrefs>().userData.setValue(res.data);
+        locator<AppPrefs>().memberAdded.setValue(res.data.is_member != 0);
         print('avatar: ${res.data.profile}');
-
+        print('check user data ---  ${res.data.is_member}');
         if (res.data.profile != null) {
           locator<AppPrefs>().avatar.setValue(res.data.profile);
         }

@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 
+import '../../main.dart';
 import 'more_categories/categories_item.dart';
 
 class Categories extends StatefulWidget {
@@ -59,8 +62,14 @@ class _CategoriesState extends State<Categories> {
         NavigationService.pushName(Routes.dateWorkoutList);
         break;
       case 2:
-        print('checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');
-        NavigationService.navigateTo(Routes.nutritionScreen);
+        print(
+            'checking is available --- ${context.read<GymStore>().preambleModel.diet_category_id}');
+        bool hasPreamble = locator<AppPrefs>().memberAdded.getValue();
+        if (hasPreamble) {
+          NavigationService.navigateTo(Routes.nutritionScreen);
+        } else {
+          preambleWarningDialog();
+        }
         break;
       case 3:
         context.read<GymStore>().getActiveSubscriptions(context: context);
@@ -75,6 +84,44 @@ class _CategoriesState extends State<Categories> {
       default:
         break;
     }
+  }
+
+  void preambleWarningDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+              title: Column(
+                children: <Widget>[
+                  Text("Nutrition Warning"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Image.asset('assets/images/nutrition_2.png'),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ],
+              ),
+              content: new Text("An iOS-style alert dialog." +
+                  "An alert dialog informs the user about situations that require acknowledgement."
+                      " An alert dialog has an optional title, optional content, and an optional list of actions."),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text("Fill preamble"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.read<GymStore>().preambleFromLogin = false;
+                    NavigationService.navigateTo(Routes.userDetail);
+                  },
+                ),
+              ],
+            ));
   }
 
   @override
@@ -126,26 +173,30 @@ class _CategoriesState extends State<Categories> {
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                   onTap: onClick,
                   child: Container(
-                      margin:
-                          EdgeInsets.all(data['name'] == "Meditation" ? 14 :data['name'] == 'Fitness Activity'?12: 0),
+                      margin: EdgeInsets.all(data['name'] == "Meditation"
+                          ? 14
+                          : data['name'] == 'Fitness Activity'
+                              ? 12
+                              : 0),
                       child: Image.asset(data['img'])),
                 ),
-                if(data['name'] == "Meditation")Container(
-                  width: 76,
-                  height: 76,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      color: AppConstants.bgColor.withOpacity(0.5)),
-                  child: Text(
-                    'Coming\nSoon',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                )
+                if (data['name'] == "Meditation")
+                  Container(
+                    width: 76,
+                    height: 76,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        color: AppConstants.bgColor.withOpacity(0.5)),
+                    child: Text(
+                      'Coming\nSoon',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
               ],
             ),
           ),

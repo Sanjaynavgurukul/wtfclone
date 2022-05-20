@@ -86,6 +86,8 @@ class AppPrefs {
             defaultValue: 'en'),
         memberAdded = preferences.getBool(PrefsConstants.updateMemberData,
             defaultValue: false),
+        initialLocationAsked = preferences.getBool(PrefsConstants.initialLocationAsked,
+            defaultValue: false),
         memberId =
             preferences.getString(PrefsConstants.userId, defaultValue: ''),
         type1 = preferences.getString(PrefsConstants.type1, defaultValue: ''),
@@ -160,6 +162,7 @@ class AppPrefs {
   final Preference<int> exerciseSet;
   final Preference<int> startExTimer;
   final Preference<int> liveClassTimerDate;
+  final Preference<bool> initialLocationAsked;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -265,6 +268,7 @@ class PrefsConstants {
   static const String lat = 'lat';
   static const String lng = 'lng';
   static const String address = 'currentAddress';
+  static const String initialLocationAsked = 'initialLocationAsked';
 
   //Global Timer :D
   static const String globalTimer = 'globalTimer';

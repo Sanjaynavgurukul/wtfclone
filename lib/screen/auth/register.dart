@@ -579,8 +579,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                             Future.delayed(
                                                 Duration(seconds: 1),
                                                 () {
+                                                  //TODo Preamble Changed Here :D
                                                   Navigator.of(context)
-                                                      .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
+                                                      .pushNamedAndRemoveUntil(Routes.homePage, (Route<dynamic> route) => false);
+
+                                                  // Navigator.of(context)
+                                                  //     .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
                                                 });
                                           } else {
                                             _scaffoldKey.currentState
@@ -615,7 +619,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                             Future.delayed(
                                               Duration(seconds: 1),
                                               () => Navigator.of(context)
-                                                  .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false),
+                                                  .pushNamedAndRemoveUntil(Routes.homePage, (Route<dynamic> route) => false),
+                                                  //TODO Preamble changed Here :D
+                                                  //Navigator.of(context)
+                                                  //.pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false),
                                             );
                                           }
                                         } else {

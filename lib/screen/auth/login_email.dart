@@ -232,8 +232,11 @@ class _LoginEmailState extends State<LoginEmail> {
                                   //     Routes.homePage);
                                 } else {
                                   locator<AppPrefs>().memberAdded.setValue(false);
+                                  //TODO Preamble changed here :D
                                   Navigator.of(context)
-                                      .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
+                                      .pushNamedAndRemoveUntil(Routes.homePage, (Route<dynamic> route) => false);
+                                  // Navigator.of(context)
+                                  //     .pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false);
                                   // NavigationService.navigateToReplacement(
                                   //     Routes.userDetail);
                                 }

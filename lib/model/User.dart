@@ -38,6 +38,7 @@ class UserData {
     this.lastLogin,
     this.lastIp,
     this.status,
+    this.is_member,
   });
 
   String uid;
@@ -52,6 +53,7 @@ class UserData {
   String lastLogin;
   String lastIp;
   String status;
+  int is_member;
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         uid: json["uid"],
@@ -66,6 +68,7 @@ class UserData {
         lastLogin: json["last_login"],
         lastIp: json["last_ip"],
         status: json["status"],
+        is_member: json.containsKey('is_member') && json["is_member"] != null ?json["is_member"]:0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,5 +84,6 @@ class UserData {
         "last_login": lastLogin,
         "last_ip": lastIp,
         "status": status,
+        "is_member": is_member,
       };
 }

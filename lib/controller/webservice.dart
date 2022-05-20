@@ -71,30 +71,30 @@ class RestDatasource {
 
   //get Gym Details
   ///@Gaurav
-  Future<GymModel> getGym({String lat, String lng}) async {
-    String token = locator<AppPrefs>().token.getValue();
-    Map<String, String> mapHeader = Map();
-    print('Curent lat and long --- ' + lat + " " + lng);
-    mapHeader["Authorization"] = "Bearer " + token;
-    String url = BASE_URL + Api.getNearByGym(lat, lng, '');
-    // String url = BASE_URL + Api.getGyms(lat, lng);
-    log('URL: $url');
-    return _netUtil
-        .get(
-      url,
-      headers: mapHeader,
-    )
-        .then((dynamic res) {
-      print("response getGym : " + res.toString());
-      GymModel model = res != null
-          ? GymModel.fromJson(res)
-          : GymModel(
-              data: [],
-              status: false,
-            );
-      return model;
-    });
-  }
+  // Future<GymModel> getGym({String lat, String lng}) async {
+  //   String token = locator<AppPrefs>().token.getValue();
+  //   Map<String, String> mapHeader = Map();
+  //   print('Curent lat and long --- ' + lat + " " + lng);
+  //   mapHeader["Authorization"] = "Bearer " + token;
+  //   String url = BASE_URL + Api.getNearByGym(lat, lng, '');
+  //   // String url = BASE_URL + Api.getGyms(lat, lng);
+  //   log('URL: $url');
+  //   return _netUtil
+  //       .get(
+  //     url,
+  //     headers: mapHeader,
+  //   )
+  //       .then((dynamic res) {
+  //     print("response getGym : " + res.toString());
+  //     GymModel model = res != null
+  //         ? GymModel.fromJson(res)
+  //         : GymModel(
+  //             data: [],
+  //             status: false,
+  //           );
+  //     return model;
+  //   });
+  // }
 
   Future<NewTrainersModel> getNewTrainers({gymId}) async {
     print("shift trainer"); //

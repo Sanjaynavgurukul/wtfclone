@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen>
                           .getMemberSubscriptions(context: context);
                       context.read<GymStore>().getTerms();
                       context.read<GymStore>().getBanner(context: context);
-                      context.read<GymStore>().getAllGyms(context: context);
+                      context.read<GymStore>().getDiscoverNow(context: context,type: 'gym');
                       context.read<GymStore>().getAllEvents(context: context);
                       break;
                     case 2:

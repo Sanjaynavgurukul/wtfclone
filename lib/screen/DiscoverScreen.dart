@@ -94,7 +94,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         child: InkWell(
                           onTap: (){
                             FocusScope.of(context).unfocus();
-                            user.determinePosition(context);
+                            //user.determinePosition(context);
                             showSearch(
                                 context: context,
                                 delegate: GymListSearchAdapter(
@@ -391,8 +391,8 @@ class _SearchBarState extends State<SearchBar> {
                   print('check condition latlng');
                   if (result != null) {
                     print('check condition latlng not null');
-                    store.tempLat = result.latLng.latitude;
-                    store.tempLng = result.latLng.longitude;
+                    locator<AppPrefs>().lat.setValue(result.latLng.latitude.toString());
+                    locator<AppPrefs>().lng.setValue(result.latLng.longitude.toString());
                     widget.onClickLocation();
                     // store.setNewLocation(
                     //   result: result,

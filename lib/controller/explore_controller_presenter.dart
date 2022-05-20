@@ -37,19 +37,6 @@ class ExplorePresenter {
   //   );
   // }
 
-  getGym() async {
-    print("get Gym 1");
-    api.getGym().then(
-      (GymModel model) {
-        if (model != null && model.status) {
-          _view.onGetGymSuccess(model);
-        } else {
-          _view.onGetGymError(model?.message ?? '');
-        }
-      },
-    );
-  }
-
   getGymDetails(String gymId) async {
     print("get Gym Details 1");
     api.getGymDetails(gymId).then(
