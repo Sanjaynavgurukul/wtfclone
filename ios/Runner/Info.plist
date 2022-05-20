@@ -53,10 +53,14 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Need to access your camera to capture a picture, so that you can update your user profile.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>WTF App wants to use your local network</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location to give you location to give you better experience providing you the list of nearby Fitness Centers and activities happening near you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location to give you location to give you better experience providing you the list of nearby Fitness Centers and activities happening near you.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>WTF wants to use your microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Uses Photo Library so that the user can view and upload his/her Profile Picture.</string>
 	<key>Privacy - Camera Usage Description</key>
