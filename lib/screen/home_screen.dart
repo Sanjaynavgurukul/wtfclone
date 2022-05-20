@@ -4,13 +4,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rolling_nav_bar/indexed.dart';
 import 'package:rolling_nav_bar/rolling_nav_bar.dart';
+import 'package:wtf/100ms/common/util/utility_components.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/screen/ExplorePage.dart';
 import 'package:wtf/screen/my_wtf.dart';
 
+import '../main.dart';
 import 'coin/coin_screen.dart';
 import 'home/home.dart';
 
@@ -21,9 +26,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin<HomeScreen>, WidgetsBindingObserver {
-
   bool isLoaded = false;
   GymStore store;
+  bool showPreambleBar = true;
 
   List<Widget> get badgeWidgets => indexed(badges)
       .map((Indexed indexed) => indexed.value != null
@@ -93,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.dispose();
   }
 
+  bool hasPreamble()=>locator<AppPrefs>().memberAdded.getValue();
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -116,97 +122,138 @@ class _HomeScreenState extends State<HomeScreen>
           },
           child: Scaffold(
             backgroundColor: AppColors.BACK_GROUND_BG,
-            bottomNavigationBar: BottomNavigationBar(
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    activeIcon: new SvgPicture.asset(
-                      'assets/svg/nav_bar/dashboard.svg',
-                      semanticsLabel: 'Dashboard Icon',
-                      color: AppConstants.boxBorderColor,
-                    ),
-                    icon: SvgPicture.asset('assets/svg/nav_bar/dashboard.svg',
-                        semanticsLabel: 'Dashboard Icon'),
-                    label: 'Dashboard'),
-                BottomNavigationBarItem(
-                    activeIcon: new SvgPicture.asset(
-                      'assets/svg/nav_bar/explore.svg',
-                      semanticsLabel: 'Explore Icon',
-                      color: AppConstants.boxBorderColor,
-                    ),
-                    icon: SvgPicture.asset('assets/svg/nav_bar/explore.svg',
-                        semanticsLabel: 'Explore icon'),
-                    label: 'Explore'),
-                BottomNavigationBarItem(
-                    activeIcon: new SvgPicture.asset(
-                      'assets/svg/nav_bar/wtf.svg',
-                      semanticsLabel: 'wtf icon',
-                      color: AppConstants.boxBorderColor,
-                    ),
-                    icon: SvgPicture.asset('assets/svg/nav_bar/wtf.svg',
-                        semanticsLabel: 'wtf icon'),
-                    label: 'My WTF'),
-                BottomNavigationBarItem(
-                    activeIcon: new SvgPicture.asset(
-                      'assets/svg/nav_bar/coin.svg',
-                      semanticsLabel: 'coins icon',
-                      color: AppConstants.boxBorderColor,
-                    ),
-                    icon: SvgPicture.asset('assets/svg/nav_bar/coin.svg',
-                        semanticsLabel: 'coin icon'),
-                    label: 'Coins'),
-              ],
-              currentIndex: store.currentIndex,
-              fixedColor: Colors.white,
-              backgroundColor: Color(0xff1A1A1A),
-              selectedLabelStyle: TextStyle(color: Colors.white),
-              unselectedIconTheme:
-                  IconThemeData(color: AppConstants.white.withOpacity(0.3)),
-              unselectedItemColor: Colors.grey,
-              unselectedLabelStyle: TextStyle(color: Colors.green),
-              onTap: (index) {
-                setState(() {
-                  switch (index) {
-                    case 0:
-                      context.read<GymStore>().getBanner(context: context);
-                      context.read<GymStore>().getAllEvents(context: context);
-                      break;
-                    case 1:
-                      context
-                          .read<GymStore>()
-                          .getActiveSubscriptions(context: context);
-                      context
-                          .read<GymStore>()
-                          .getMemberSubscriptions(context: context);
-                      context.read<GymStore>().getTerms();
-                      context.read<GymStore>().getBanner(context: context);
-                      context.read<GymStore>().getDiscoverNow(context: context,type: 'gym');
-                      context.read<GymStore>().getAllEvents(context: context);
-                      break;
-                    case 2:
-                      break;
-                    case 3:
-                      context
-                          .read<GymStore>()
-                          .getWTFCoinBalance(context: context);
-                      context.read<GymStore>().getCoinHistory(context: context);
-                      context
-                          .read<GymStore>()
-                          .getRedeemHistory(context: context);
-                      // context.read<GymStore>().getNotifications(
-                      //       context: context,
-                      //       type: 'new',
-                      //     );
-                      break;
-                  }
+            bottomNavigationBar: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                !hasPreamble() && showPreambleBar
+                    ? ListTile(
+                        onTap: () {
+                         if(hasPreamble()){
+                           UtilityComponents.showSnackBarWithString('Already preamble Filled', context);
+                         }else{
+                             NavigationService.navigateTo(Routes.userDetail);
+                         }
+                        },
+                        dense: true,
+                        tileColor: AppConstants.walletYellow,
+                        title: Text(
+                            'Please fill preamble for better WTF experience'),
+                        trailing: IconButton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                showPreambleBar = false;
+                              },
+                            );
+                          },
+                          icon: Icon(Icons.close,color: Colors.white.withOpacity(0.5),size: 18,),
+                        ),
+                      )
+                    : SizedBox(
+                        height: 0,
+                      ),
+                BottomNavigationBar(
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                        activeIcon: new SvgPicture.asset(
+                          'assets/svg/nav_bar/dashboard.svg',
+                          semanticsLabel: 'Dashboard Icon',
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        icon: SvgPicture.asset(
+                            'assets/svg/nav_bar/dashboard.svg',
+                            semanticsLabel: 'Dashboard Icon'),
+                        label: 'Dashboard'),
+                    BottomNavigationBarItem(
+                        activeIcon: new SvgPicture.asset(
+                          'assets/svg/nav_bar/explore.svg',
+                          semanticsLabel: 'Explore Icon',
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        icon: SvgPicture.asset('assets/svg/nav_bar/explore.svg',
+                            semanticsLabel: 'Explore icon'),
+                        label: 'Explore'),
+                    BottomNavigationBarItem(
+                        activeIcon: new SvgPicture.asset(
+                          'assets/svg/nav_bar/wtf.svg',
+                          semanticsLabel: 'wtf icon',
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        icon: SvgPicture.asset('assets/svg/nav_bar/wtf.svg',
+                            semanticsLabel: 'wtf icon'),
+                        label: 'My WTF'),
+                    BottomNavigationBarItem(
+                        activeIcon: new SvgPicture.asset(
+                          'assets/svg/nav_bar/coin.svg',
+                          semanticsLabel: 'coins icon',
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        icon: SvgPicture.asset('assets/svg/nav_bar/coin.svg',
+                            semanticsLabel: 'coin icon'),
+                        label: 'Coins'),
+                  ],
+                  currentIndex: store.currentIndex,
+                  fixedColor: Colors.white,
+                  backgroundColor: Color(0xff1A1A1A),
+                  selectedLabelStyle: TextStyle(color: Colors.white),
+                  unselectedIconTheme:
+                      IconThemeData(color: AppConstants.white.withOpacity(0.3)),
+                  unselectedItemColor: Colors.grey,
+                  unselectedLabelStyle: TextStyle(color: Colors.green),
+                  onTap: (index) {
                     setState(() {
-                      store.currentIndex = index;
+                      switch (index) {
+                        case 0:
+                          context.read<GymStore>().getBanner(context: context);
+                          context
+                              .read<GymStore>()
+                              .getAllEvents(context: context);
+                          break;
+                        case 1:
+                          context
+                              .read<GymStore>()
+                              .getActiveSubscriptions(context: context);
+                          context
+                              .read<GymStore>()
+                              .getMemberSubscriptions(context: context);
+                          context.read<GymStore>().getTerms();
+                          context.read<GymStore>().getBanner(context: context);
+                          context
+                              .read<GymStore>()
+                              .getDiscoverNow(context: context, type: 'gym');
+                          context
+                              .read<GymStore>()
+                              .getAllEvents(context: context);
+                          break;
+                        case 2:
+                          break;
+                        case 3:
+                          context
+                              .read<GymStore>()
+                              .getWTFCoinBalance(context: context);
+                          context
+                              .read<GymStore>()
+                              .getCoinHistory(context: context);
+                          context
+                              .read<GymStore>()
+                              .getRedeemHistory(context: context);
+                          // context.read<GymStore>().getNotifications(
+                          //       context: context,
+                          //       type: 'new',
+                          //     );
+                          break;
+                      }
+                      setState(() {
+                        store.currentIndex = index;
+                      });
+                      // _pageController.animateToPage(index,
+                      //     duration: Duration(milliseconds: 300), curve: Curves.ease);
                     });
-                  // _pageController.animateToPage(index,
-                  //     duration: Duration(milliseconds: 300), curve: Curves.ease);
-                });
-              },
-              enableFeedback: true,
-              type: BottomNavigationBarType.fixed,
+                  },
+                  enableFeedback: true,
+                  type: BottomNavigationBarType.fixed,
+                )
+              ],
             ),
             body: Column(
               children: [

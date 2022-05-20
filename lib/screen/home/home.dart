@@ -74,8 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     GymStore store = Provider.of<GymStore>(context);
-    checkVersionCode();
-
+    //checkVersionCode();
     return Scaffold(
       backgroundColor: AppColors.BACK_GROUND_BG,
       // floatingActionButton: FloatingActionButton(
