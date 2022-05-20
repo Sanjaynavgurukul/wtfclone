@@ -92,7 +92,6 @@ class _CategoriesState extends State<Categories> {
         builder: (BuildContext context) => CupertinoAlertDialog(
               title: Column(
                 children: <Widget>[
-                  Text("Nutrition Warning"),
                   SizedBox(
                     height: 8,
                   ),
@@ -102,9 +101,7 @@ class _CategoriesState extends State<Categories> {
                   ),
                 ],
               ),
-              content: new Text("An iOS-style alert dialog." +
-                  "An alert dialog informs the user about situations that require acknowledgement."
-                      " An alert dialog has an optional title, optional content, and an optional list of actions."),
+              content: new Text("In order to give you the appropriate nutrition support , please provide your details by clicking here"),
               actions: <Widget>[
                 CupertinoDialogAction(
                   child: Text("Cancel"),
@@ -113,7 +110,7 @@ class _CategoriesState extends State<Categories> {
                   },
                 ),
                 CupertinoDialogAction(
-                  child: Text("Fill preamble"),
+                  child: Text("Open"),
                   onPressed: () {
                     Navigator.pop(context);
                     context.read<GymStore>().preambleFromLogin = false;

@@ -126,29 +126,41 @@ class _HomeScreenState extends State<HomeScreen>
               mainAxisSize: MainAxisSize.min,
               children: [
                 !hasPreamble() && showPreambleBar
-                    ? ListTile(
-                        onTap: () {
-                         if(hasPreamble()){
-                           UtilityComponents.showSnackBarWithString('Already preamble Filled', context);
-                         }else{
-                             NavigationService.navigateTo(Routes.userDetail);
-                         }
-                        },
-                        dense: true,
-                        tileColor: AppConstants.walletYellow,
-                        title: Text(
-                            'Please fill preamble for better WTF experience'),
-                        trailing: IconButton(
-                          onPressed: () {
-                            setState(
-                              () {
-                                showPreambleBar = false;
-                              },
-                            );
-                          },
-                          icon: Icon(Icons.close,color: Colors.white.withOpacity(0.5),size: 18,),
+                    ? Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xff490000),
+                            Color(0xffBA1406),
+                          ],
                         ),
-                      )
+                      ),
+                      child: ListTile(
+                          onTap: () {
+                           if(hasPreamble()){
+                             UtilityComponents.showSnackBarWithString('Already preamble Filled', context);
+                           }else{
+                               NavigationService.navigateTo(Routes.userDetail);
+                           }
+                          },
+                          dense: true,
+                        tileColor: Colors.transparent,
+                          title: Text(
+                              'Click Here and Please fil your Fitness Details for the better experience'),
+                          trailing: IconButton(
+                            onPressed: () {
+                              setState(
+                                () {
+                                  showPreambleBar = false;
+                                },
+                              );
+                            },
+                            icon: Icon(Icons.close,color: Colors.white.withOpacity(0.5),size: 18,),
+                          ),
+                        ),
+                    )
                     : SizedBox(
                         height: 0,
                       ),
