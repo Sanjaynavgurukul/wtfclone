@@ -121,6 +121,7 @@ class GymModelData {
   String state;
   String country;
   int is_partial;
+  int is_cash=1;
   String pin;
   String latitude = '';
   String longitude = '';
@@ -186,6 +187,7 @@ class GymModelData {
     this.userId,
     this.benefits,
     this.is_partial,
+    this.is_cash,
     this.gallery,
     //New Variables :D
     this.distance,
@@ -229,6 +231,10 @@ class GymModelData {
           // is_partial: int.parse(json["is_partial"].toString()??'0'),
           is_partial: json["is_partial"] != null ? int.parse(
               json["is_partial"].toString() ?? '0') : 0,
+
+          is_cash: json.containsKey('"is_cash"') && json["is_cash"] != null ? int.parse(
+              json["is_cash"].toString() ?? '1') : 1,
+
           cover_image: json["cover_image"],
           latitude: json["latitude"],
           longitude: json["longitude"],

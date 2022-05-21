@@ -13,6 +13,7 @@ import 'package:wtf/helper/common_function.dart';
 import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/global.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/preamble_helper.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
@@ -265,7 +266,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
     print('Starting Razor Pay Library ---- ');
 
     if (totalAmount != 0) {
-      if(isCash){
+      if (isCash) {
         //100% discount applied :D
         body['trx_id'] = 'cash';
         body['trx_status'] = 'done';
@@ -282,15 +283,15 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         } else {
           FlashHelper.errorBar(context, message: 'Please Try again!');
         }
-      }else{
+      } else {
         await gymStore
             .generateRazorPayId(
-            amount: (isPartialPayment()
-                ? (totalAmount / 2) * 100
-                : totalAmount * 100)
-                .toString(),
-            context: context,
-            subBody: body)
+                amount: (isPartialPayment()
+                        ? (totalAmount / 2) * 100
+                        : totalAmount * 100)
+                    .toString(),
+                context: context,
+                subBody: body)
             .then((value) {
           if (value != null || value.isNotEmpty) {
             print('order is not null --- $value');
@@ -299,8 +300,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                     orderId: value,
                     data: body,
                     price: (isPartialPayment()
-                        ? (totalAmount / 2) * 100
-                        : totalAmount * 100)
+                            ? (totalAmount / 2) * 100
+                            : totalAmount * 100)
                         .toString()));
           } else {
             FlashHelper.errorBar(context,
@@ -308,11 +309,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
           }
         });
       }
-      // await gymStore.processPayment(
-      //   context: context,
-      //   body: body,
-      //   price: (isPartialPayment() ? (totalAmount/2)*100:totalAmount * 100).toString(),
-      // );
     } else {
       //100% discount applied :D
       body['trx_id'] = 'discount_applied';
@@ -336,472 +332,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   void nullData() {
     //gymStore.selectedGymDetail = null;
     gymStore.selectedGymPlan = null;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    gymStore = context.watch<GymStore>();
-    final PlanPageArgument args =
-        ModalRoute.of(context).settings.arguments as PlanPageArgument;
-    if (args.planColor != null)
-      _planColor = args.planColor;
-    else
-      _planColor = PlanColor.getColorList()[0];
-
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      appBar: AppBar(
-        backgroundColor: AppConstants.bgColor,
-        leading: BackButton(
-          color: Colors.white,
-        ),
-        title: Text(
-          "Booking summary",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
-        constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
-        child: InkWell(
-          onTap: () async {
-            if (!isFullPayment()) {
-              if (validateEmiPayment() == null) {
-                gymStore
-                    .sendOtpToGymOwner(
-                        gymId: gymStore.selectedGymDetail.data.userId)
-                    .then((value) {
-                  if (value) {
-                    showBottomDialog();
-                  } else {
-                    FlashHelper.errorBar(context,
-                        message: 'Something went wrong while sending otp');
-                  }
-                });
-              } else {
-                FlashHelper.errorBar(context, message: validateEmiPayment());
-              }
-            } else {
-              if(_radioValue == 2){
-                gymStore
-                    .sendOtpToGymOwner(
-                    gymId: gymStore.selectedGymDetail.data.userId)
-                    .then((value) {
-                  if (value) {
-                    showBottomDialog();
-                  } else {
-                    FlashHelper.errorBar(context,
-                        message: 'Something went wrong while sending otp');
-                  }
-                });
-              }else{
-                processToBuy();
-              }
-            }
-          },
-          child: Container(
-              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xff490000),
-                      Color(0xffBA1406),
-                    ],
-                  )),
-              alignment: Alignment.center,
-              child: Text('Proceed')),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    color: Color(0xff292929)),
-                child: Column(
-                  children: [
-                    detailsSection(
-                        heading: 'Booked at',
-                        value: gymStore.selectedGymDetail.data.gymName ?? ''),
-                    detailsSection(heading: 'Workout', value: 'Gym Membership'),
-                    detailsSection(
-                        heading: 'Plan',
-                        value: gymStore.selectedGymPlan.plan_name ?? ''),
-                    detailsSection(
-                        heading: 'Subscription Start date',
-                        value: Helper.stringForDatetime2(
-                            gymStore.selectedStartingDate.toIso8601String())),
-                    detailsSection(
-                        heading: 'Subscription End date',
-                        value: Helper.stringForDatetime2(
-                            gymStore.selectedStartingDate
-                                .add(
-                                  Duration(
-                                    days: int.tryParse(
-                                      gymStore.selectedGymPlan.duration,
-                                    ),
-                                  ),
-                                )
-                                .toIso8601String())),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 45,
-              ),
-              if (totalAmount > 0)
-                Container(
-                    padding:
-                        EdgeInsets.only(right: 19, left: 18, bottom: 8, top: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        color: Color(0xff292929),
-                        border: Border.all(width: 1, color: Colors.white)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            cursorColor: Colors.white,
-                            controller: couponCodeController,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                            onFieldSubmitted: (val) {
-                              applyCoupon();
-                            },
-                            onChanged: (String val) {
-                              setState(() {});
-                            },
-                            decoration: InputDecoration(
-                                hintText: 'Enter Coupon Code',
-                                hintStyle: TextStyle(
-                                    color: Color(0xffC4C4C4),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w300),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.all(0)),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        // we need add button at last friends row
-                        suffix(couponCodeController.text)
-                      ],
-                    )),
-              SizedBox(
-                height: 45,
-              ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Payment Mode",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Expanded(
-                            child: RadioListTile(
-                              value: 0,
-                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
-                              groupValue: _radioValue,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _radioValue = newValue;
-                                  gymStore.selectedGymDetail.data
-                                      .first_payment = null;
-                                  gymStore.selectedGymDetail.data
-                                      .first_payment_amount = null;
-
-                                  gymStore.selectedGymDetail.data
-                                      .second_payment = null;
-                                  gymStore.selectedGymDetail.data
-                                      .second_payment_amount = null;
-
-                                  gymStore.selectedGymDetail.data
-                                      .third_payment = null;
-                                  gymStore.selectedGymDetail.data
-                                      .third_payment_amount = null;
-                                });
-                              },
-                              title: Text('Full Payment'),
-                            ),
-                            flex: 1,
-                          ),
-                          if (gymStore.selectedGymDetail.data.is_partial == 1 &&
-                              totalAmount != 0) Expanded(
-                            child: RadioListTile(
-                              value: 1,
-                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
-                              groupValue: _radioValue,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _radioValue = newValue;
-                                  gymStore.selectedGymDetail.data
-                                      .first_payment = getTodayDate();
-                                  gymStore.selectedGymDetail.data
-                                          .first_payment_amount =
-                                      getHalfPaymentAmount(
-                                          totalAmount.toString());
-                                });
-                              },
-                              title: Text('Partial'),
-                            ),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: RadioListTile(
-                              value: 2,
-                              contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0,top: 0),
-                              groupValue: _radioValue,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _radioValue = newValue;
-                                  // gymStore.selectedGymDetail.data
-                                  //     .first_payment = getTodayDate();
-                                  // gymStore.selectedGymDetail.data
-                                  //     .first_payment_amount =
-                                  //     getHalfPaymentAmount(
-                                  //         totalAmount.toString());
-                                });
-                              },
-                              title: Text('Cash'),
-                            ),
-                            flex: 1,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    if (!isFullPayment())
-                      Container(
-                        padding: EdgeInsets.only(
-                            left: 20, right: 20, top: 20, bottom: 35),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            color: AppConstants.bgColor),
-                        child: Column(
-                          children: [
-                            Text(
-                                'Pay \u{20B9}${getHalfPaymentAmount(totalAmount.toString())} now and choose EMI date for your next payment',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w400)),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  color: Color(0xffAF4949).withOpacity(0.5)),
-                              child: ListTile(
-                                enabled: false,
-                                title: Text('Select First EMI',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400)),
-                                subtitle: gymStore.selectedGymDetail.data
-                                                .first_payment !=
-                                            null &&
-                                        gymStore.selectedGymDetail.data
-                                                .first_payment_amount !=
-                                            null
-                                    ? Text(getEmiLabel(0))
-                                    : null,
-                                trailing: Icon(Icons.date_range),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  color: Color(0xffAF4949)),
-                              child: ListTile(
-                                onTap: () {
-                                  _selectEmiDate().then((value) {
-                                    if (value != null) {
-                                      gymStore.selectedGymDetail.data
-                                          .second_payment = value;
-                                      gymStore.selectedGymDetail.data
-                                              .second_payment_amount =
-                                          getHalfPaymentAmount(gymStore
-                                              .selectedGymDetail
-                                              .data
-                                              .first_payment_amount);
-                                      setState(() {});
-                                    }
-                                  });
-                                },
-                                title: Text('Select Second EMI date',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400)),
-                                subtitle: gymStore.selectedGymDetail.data
-                                                .second_payment !=
-                                            null &&
-                                        gymStore.selectedGymDetail.data
-                                                .second_payment_amount !=
-                                            null
-                                    ? Text(getEmiLabel(1))
-                                    : null,
-                                trailing: Icon(Icons.date_range),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  color: isEnableThirdEmi()
-                                      ? Color(0xffAF4949)
-                                      : Color(0xffAF4949).withOpacity(0.5)),
-                              child: ListTile(
-                                enabled: isEnableThirdEmi(),
-                                onTap: () {
-                                  _selectThirdEmiDate().then((value) {
-                                    if (value != null) {
-                                      gymStore.selectedGymDetail.data
-                                          .third_payment = value;
-                                      gymStore.selectedGymDetail.data
-                                              .third_payment_amount =
-                                          getHalfPaymentAmount(gymStore
-                                              .selectedGymDetail
-                                              .data
-                                              .first_payment_amount);
-                                      setState(() {});
-                                    }
-                                  });
-                                },
-                                title: Text('Select Third EMI date',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400)),
-                                subtitle: gymStore.selectedGymDetail.data
-                                                .third_payment !=
-                                            null &&
-                                        gymStore.selectedGymDetail.data
-                                                .third_payment_amount !=
-                                            null
-                                    ? Text(getEmiLabel(2))
-                                    : null,
-                                trailing: Icon(Icons.date_range),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    if (!isFullPayment())
-                      SizedBox(
-                        height: 45,
-                      ),
-                  ],
-                ),
-              Text(
-                "Payment Details",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              Container(
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    gradient: LinearGradient(
-                        begin: FractionalOffset.topLeft,
-                        end: FractionalOffset.bottomRight,
-                        colors: [_planColor.leftColor, _planColor.rightColor])),
-                child: Column(
-                  children: [
-                    amountLabel(
-                        label: 'Plan Price',
-                        value: gymStore.selectedGymPlan.plan_price ?? ''),
-                    SizedBox(height: 6),
-                    if (gymStore.chosenOffer != null)
-                      amountLabel(
-                          label: "Discount",
-                          value: discountAmount != null
-                              ? discountAmount.toString()
-                              : ''),
-                    if (gymStore.chosenOffer != null) SizedBox(height: 6),
-                    InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('CGST 9%'),
-                                  Text('SGST 9%'),
-                                  Text(
-                                      'Tax acknowledgement will be emailed to you after subscription.'),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        child: amountLabel(
-                            label: 'GST(0%)',
-                            value: tax != null ? tax.toString() : '')),
-                    Divider(
-                      thickness: 1,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 6),
-                    amountLabel(
-                        label: 'Total Amount',
-                        value:
-                            totalAmount != null ? totalAmount.toString() : ''),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 45,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Future<String> _selectEmiDate() async {
@@ -867,6 +397,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
   Future<bool> showBottomDialog() {
     final _formKey = GlobalKey<FormState>();
     final _otpController = TextEditingController();
+    bool otpResent = false;
     bool wrongOtp = false;
     String otpMessage = 'Wrong OTP';
     bool loading = false;
@@ -963,6 +494,27 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                           onChanged: (value) {},
                         ),
                       ),
+                      otpResent ? SizedBox(): Container(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap:() {
+                                  gymStore
+                                      .sendOtpToGymOwner(
+                                          gymId: gymStore
+                                              .selectedGymDetail.data.userId)
+                                      .then((value) {
+                                    FlashHelper.informationBar(context,
+                                        message: 'OTP Re-sent');
+                                    otpResent = true;
+                                    setModelState(() {});
+                                  });
+                                },
+                          child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: Text('Resend OTP',
+                                  style: TextStyle(color: Colors.black))),
+                        ),
+                      ),
                       if (wrongOtp) SizedBox(height: 8),
                       if (wrongOtp)
                         Align(
@@ -992,7 +544,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                                       Navigator.pop(context);
                                       FlashHelper.successBar(context,
                                           message: 'OTP verified');
-                                      processToBuy(isCash:_radioValue == 2);
+                                      processToBuy(isCash: _radioValue == 2);
                                     } else {
                                       setModelState(() {
                                         wrongOtp = true;
@@ -1105,544 +657,6 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
                 fontStyle: FontStyle.normal)));
   }
 
-  Widget oldUi() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      appBar: AppBar(
-        backgroundColor: AppConstants.primaryColor,
-        leading: BackButton(
-          color: Colors.white,
-        ),
-        title: Text(
-          "Booking summary",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      // bottomNavigationBar: Container(
-      //   child: SlideButton(
-      //     text: "Proceed to buy",
-      //     onTap: (){
-      //       print('Button pressed in slide----');
-      //       // print('method called------some');
-      //       // processToBuy();
-      //     },
-      //   ),
-      // ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-          child: SingleChildScrollView(
-            controller: _controller,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Booked at:",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        SizedBox(
-                          width: 15.0,
-                        ),
-                        Flexible(
-                          child: Text(
-                            gymStore.selectedGymDetail.data.gymName,
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Divider(
-                      thickness: 0.7,
-                      color: Colors.white38,
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Workout:",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "Gym Membership",
-                          style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Divider(
-                      thickness: 0.7,
-                      color: Colors.white38,
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Plan:",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          gymStore.selectedGymPlan.plan_name ?? '',
-                          style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Divider(
-                      thickness: 0.7,
-                      color: Colors.white38,
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Subscription Start Date:",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          Helper.stringForDatetime2(
-                              gymStore.selectedStartingDate.toIso8601String()),
-                          style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Divider(
-                      thickness: 0.7,
-                      color: Colors.white38,
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Subscription End Date:",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "${Helper.stringForDatetime2(gymStore.selectedStartingDate.add(
-                                Duration(
-                                  days: int.tryParse(
-                                    gymStore.selectedGymPlan.duration,
-                                  ),
-                                ),
-                              ).toIso8601String())}",
-                          style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Divider(
-                      thickness: 0.7,
-                      color: Colors.white38,
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                UIHelper.verticalSpace(6.0),
-                if (totalAmount > 0)
-                  Container(
-                      padding: EdgeInsets.only(left: 6, right: 6),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: AppConstants.primaryColor, width: 2)),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              cursorColor: Colors.white,
-                              controller: couponCodeController,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                              onFieldSubmitted: (val) {
-                                applyCoupon();
-                              },
-                              onChanged: (String val) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                hintText: "ENTER YOUR COUPON CODE",
-                                hintStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                ),
-                                border: InputBorder.none,
-                                //gymStore.chosenOffer
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          // we need add button at last friends row
-                          suffix(couponCodeController.text)
-                        ],
-                      )),
-                SizedBox(
-                  height: 12,
-                ),
-                if (gymStore.selectedGymPlan.plan_price != '0')
-                  //TODO cehck Here :D
-                  OfferSection(
-                    gymId: gymStore.selectedGymDetail.data.userId,
-                    plan_id: gymStore.selectedGymPlan.plan_uid,
-                    onApplied: () {
-                      setState(() {
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((timeStamp) {
-                          calculateFinalPrice();
-                        });
-                      });
-                    },
-                  ),
-                if (gymStore.selectedGymPlan.plan_price != '0')
-                  Consumer<GymStore>(
-                    builder: (context, store, child) =>
-                        store.chosenOffer != null
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0,
-                                  vertical: 12.0,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 18.0,
-                                    ),
-                                    UIHelper.horizontalSpace(8.0),
-                                    Text(
-                                      'Coupon Code Applied',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                padding: const EdgeInsets.all(10.0),
-                              ),
-                  ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Payment Details",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Plan Price",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      '₹ ${gymStore.selectedGymPlan.plan_price}',
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                if (gymStore.chosenOffer != null)
-                  SizedBox(
-                    height: 6,
-                  ),
-                if (gymStore.chosenOffer != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Discount",
-                        style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        '- ₹ ${discountAmount ?? ''}',
-                        // "RS. 499",
-                        style: TextStyle(
-                            fontSize: 15,
-                            // fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                SizedBox(
-                  height: 6,
-                ),
-                if (gymStore.chosenOffer != null)
-                  Divider(
-                    // height: 0.0,
-                    color: Colors.white38,
-                    thickness: 0.4,
-                  ),
-                SizedBox(
-                  height: 6,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('CGST 9%'),
-                                Text('SGST 9%'),
-                                Text(
-                                    'Tax acknowledgement will be emailed to you after subscription.'),
-                              ],
-                            ),
-                          ),
-                        );
-                        // FlashHelper.informationBar(context,
-                        //     message:
-                        //         );
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            "GST (${gymStore.selectedGymPlan.tax_percentage} %)",
-                            style: TextStyle(
-                              fontSize: 15,
-                              // fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          UIHelper.horizontalSpace(6.0),
-                          Icon(
-                            Icons.info_outline,
-                            size: 16.0,
-                          )
-                        ],
-                      ),
-                    ),
-                    Text(
-                      '₹ $tax',
-                      // (int.parse(widget.selectedGymPlanModel.price) +
-                      //         (int.parse(widget
-                      //                 .selectedGymPlanModel.taxPercentage
-                      //                 .split("%")
-                      //                 .first
-                      //                 .toString()) *
-                      //             100))
-                      // .toString(),
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Total amount",
-                      style: TextStyle(
-                        fontSize: 15,
-                        // fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      '₹ ${totalAmount ?? ''}',
-                      // (int.parse(widget.selectedGymPlanModel.price) +
-                      //         (int.parse(widget
-                      //                 .selectedGymPlanModel.taxPercentage
-                      //                 .split("%")
-                      //                 .first
-                      //                 .toString()) *
-                      //             100))
-                      // .toString(),
-                      // "RS. 499",
-                      style: TextStyle(
-                          fontSize: 15,
-                          // fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Divider(
-                  // height: 0.0,
-                  color: Colors.white38,
-                  thickness: 0.4,
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Row(
-                  children: [
-                    // Checkbox(value: true, onChanged: (val) {}),
-                    Theme(
-                        data: ThemeData(
-                            unselectedWidgetColor: Colors.white,
-                            accentColor: Colors.white,
-                            backgroundColor: Colors.transparent),
-                        child: Checkbox(
-                            value: _isChecked,
-                            tristate: false,
-                            checkColor: Colors.black,
-                            // side: BorderSide(color: Colors.white),
-                            onChanged: (bool value) {
-                              setState(() {
-                                _isChecked = value;
-                              });
-                            })),
-                    Expanded(
-                      child: Text(
-                        'Don\'t send me updates, invoice via Whatsapp',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   void onGetGymDetailsSuccess(GymDetailsModel model) {
     // TODO: implement onGetGymDetailsSuccess
@@ -1723,6 +737,503 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen>
         dialogBackgroundColor: Colors.white, //white
       ),
       child: child,
+    );
+  }
+
+  void pay(){
+    if (!isFullPayment()) {
+      if (validateEmiPayment() == null) {
+        gymStore
+            .sendOtpToGymOwner(
+            gymId: gymStore.selectedGymDetail.data.userId)
+            .then((value) {
+          if (value) {
+            showBottomDialog();
+          } else {
+            FlashHelper.errorBar(context,
+                message: 'Something went wrong while sending otp');
+          }
+        });
+      } else {
+        FlashHelper.errorBar(context, message: validateEmiPayment());
+      }
+    } else {
+      if (_radioValue == 2) {
+        gymStore
+            .sendOtpToGymOwner(
+            gymId: gymStore.selectedGymDetail.data.userId)
+            .then((value) {
+          if (value) {
+            showBottomDialog();
+          } else {
+            FlashHelper.errorBar(context,
+                message: 'Something went wrong while sending otp');
+          }
+        });
+      } else {
+        processToBuy();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    gymStore = context.watch<GymStore>();
+    final PlanPageArgument args =
+        ModalRoute.of(context).settings.arguments as PlanPageArgument;
+    if (args.planColor != null)
+      _planColor = args.planColor;
+    else
+      _planColor = PlanColor.getColorList()[0];
+
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      appBar: AppBar(
+        backgroundColor: AppConstants.bgColor,
+        leading: BackButton(
+          color: Colors.white,
+        ),
+        title: Text(
+          "Booking summary",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 6, bottom: 6),
+        constraints: BoxConstraints(minHeight: 54, maxHeight: 60),
+        child: InkWell(
+          onTap: () async {
+           if(PreambleHelper.hasPreamble()){
+             pay();
+           }else{
+             PreambleHelper.showPreambleWarningDialog(context: context,fromPayment: true).then((value){
+               if(value){
+                 gymStore.preambleFromPayment = true;
+                 context.read<GymStore>().preambleFromLogin = false;
+                 NavigationService.pushName(Routes.userDetail).then((value){
+                   if(value){
+                     gymStore.preambleFromPayment = false;
+                     pay();
+                   }else{
+                     FlashHelper.errorBar(context,
+                         message: 'Something went wrong with user details');
+                   }
+                 });
+               }else{
+                 FlashHelper.errorBar(context,
+                     message: 'Please Fill user details to processed');
+               }
+             });
+           }
+          },
+          child: Container(
+              padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xff490000),
+                      Color(0xffBA1406),
+                    ],
+                  )),
+              alignment: Alignment.center,
+              child: Text('Proceed')),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    color: Color(0xff292929)),
+                child: Column(
+                  children: [
+                    detailsSection(
+                        heading: 'Booked at',
+                        value: gymStore.selectedGymDetail.data.gymName ?? ''),
+                    detailsSection(heading: 'Workout', value: 'Gym Membership'),
+                    detailsSection(
+                        heading: 'Plan',
+                        value: gymStore.selectedGymPlan.plan_name ?? ''),
+                    detailsSection(
+                        heading: 'Subscription Start date',
+                        value: Helper.stringForDatetime2(
+                            gymStore.selectedStartingDate.toIso8601String())),
+                    detailsSection(
+                        heading: 'Subscription End date',
+                        value: Helper.stringForDatetime2(
+                            gymStore.selectedStartingDate
+                                .add(
+                                  Duration(
+                                    days: int.tryParse(
+                                      gymStore.selectedGymPlan.duration,
+                                    ),
+                                  ),
+                                )
+                                .toIso8601String())),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+              if (totalAmount > 0)
+                Container(
+                    padding:
+                        EdgeInsets.only(right: 19, left: 18, bottom: 8, top: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: Color(0xff292929),
+                        border: Border.all(width: 1, color: Colors.white)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            cursorColor: Colors.white,
+                            controller: couponCodeController,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                            onFieldSubmitted: (val) {
+                              applyCoupon();
+                            },
+                            onChanged: (String val) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                                hintText: 'Enter Coupon Code',
+                                hintStyle: TextStyle(
+                                    color: Color(0xffC4C4C4),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w300),
+                                border: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                contentPadding: EdgeInsets.all(0)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        // we need add button at last friends row
+                        suffix(couponCodeController.text)
+                      ],
+                    )),
+              SizedBox(
+                height: 45,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Payment Mode",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            value: 0,
+                            contentPadding: EdgeInsets.only(
+                                left: 0, right: 0, bottom: 0, top: 0),
+                            groupValue: _radioValue,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _radioValue = newValue;
+                                gymStore.selectedGymDetail.data.first_payment =
+                                    null;
+                                gymStore.selectedGymDetail.data
+                                    .first_payment_amount = null;
+
+                                gymStore.selectedGymDetail.data.second_payment =
+                                    null;
+                                gymStore.selectedGymDetail.data
+                                    .second_payment_amount = null;
+
+                                gymStore.selectedGymDetail.data.third_payment =
+                                    null;
+                                gymStore.selectedGymDetail.data
+                                    .third_payment_amount = null;
+                              });
+                            },
+                            title: Text('Full Payment'),
+                          ),
+                          flex: 1,
+                        ),
+                        if (gymStore.selectedGymDetail.data.is_partial == 1 &&
+                            totalAmount != 0)
+                          Expanded(
+                            child: RadioListTile(
+                              value: 1,
+                              contentPadding: EdgeInsets.only(
+                                  left: 0, right: 0, bottom: 0, top: 0),
+                              groupValue: _radioValue,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _radioValue = newValue;
+                                  gymStore.selectedGymDetail.data
+                                      .first_payment = getTodayDate();
+                                  gymStore.selectedGymDetail.data
+                                          .first_payment_amount =
+                                      getHalfPaymentAmount(
+                                          totalAmount.toString());
+                                });
+                              },
+                              title: Text('Partial'),
+                            ),
+                            flex: 1,
+                          ),
+                        if (gymStore.selectedGymDetail.data.is_cash == 1 &&
+                            totalAmount != 0)
+                          Expanded(
+                            child: RadioListTile(
+                              value: 2,
+                              contentPadding: EdgeInsets.only(
+                                  left: 0, right: 0, bottom: 0, top: 0),
+                              groupValue: _radioValue,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _radioValue = newValue;
+                                  // gymStore.selectedGymDetail.data
+                                  //     .first_payment = getTodayDate();
+                                  // gymStore.selectedGymDetail.data
+                                  //     .first_payment_amount =
+                                  //     getHalfPaymentAmount(
+                                  //         totalAmount.toString());
+                                });
+                              },
+                              title: Text('Cash'),
+                            ),
+                            flex: 1,
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  if (!isFullPayment())
+                    Container(
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 20, bottom: 35),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          color: AppConstants.bgColor),
+                      child: Column(
+                        children: [
+                          Text(
+                              'Pay \u{20B9}${getHalfPaymentAmount(totalAmount.toString())} now and choose EMI date for your next payment',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400)),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                color: Color(0xffAF4949).withOpacity(0.5)),
+                            child: ListTile(
+                              enabled: false,
+                              title: Text('Select First EMI',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400)),
+                              subtitle: gymStore.selectedGymDetail.data
+                                              .first_payment !=
+                                          null &&
+                                      gymStore.selectedGymDetail.data
+                                              .first_payment_amount !=
+                                          null
+                                  ? Text(getEmiLabel(0))
+                                  : null,
+                              trailing: Icon(Icons.date_range),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                color: Color(0xffAF4949)),
+                            child: ListTile(
+                              onTap: () {
+                                _selectEmiDate().then((value) {
+                                  if (value != null) {
+                                    gymStore.selectedGymDetail.data
+                                        .second_payment = value;
+                                    gymStore.selectedGymDetail.data
+                                            .second_payment_amount =
+                                        getHalfPaymentAmount(gymStore
+                                            .selectedGymDetail
+                                            .data
+                                            .first_payment_amount);
+                                    setState(() {});
+                                  }
+                                });
+                              },
+                              title: Text('Select Second EMI date',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400)),
+                              subtitle: gymStore.selectedGymDetail.data
+                                              .second_payment !=
+                                          null &&
+                                      gymStore.selectedGymDetail.data
+                                              .second_payment_amount !=
+                                          null
+                                  ? Text(getEmiLabel(1))
+                                  : null,
+                              trailing: Icon(Icons.date_range),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                color: isEnableThirdEmi()
+                                    ? Color(0xffAF4949)
+                                    : Color(0xffAF4949).withOpacity(0.5)),
+                            child: ListTile(
+                              enabled: isEnableThirdEmi(),
+                              onTap: () {
+                                _selectThirdEmiDate().then((value) {
+                                  if (value != null) {
+                                    gymStore.selectedGymDetail.data
+                                        .third_payment = value;
+                                    gymStore.selectedGymDetail.data
+                                            .third_payment_amount =
+                                        getHalfPaymentAmount(gymStore
+                                            .selectedGymDetail
+                                            .data
+                                            .first_payment_amount);
+                                    setState(() {});
+                                  }
+                                });
+                              },
+                              title: Text('Select Third EMI date',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400)),
+                              subtitle: gymStore.selectedGymDetail.data
+                                              .third_payment !=
+                                          null &&
+                                      gymStore.selectedGymDetail.data
+                                              .third_payment_amount !=
+                                          null
+                                  ? Text(getEmiLabel(2))
+                                  : null,
+                              trailing: Icon(Icons.date_range),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (!isFullPayment())
+                    SizedBox(
+                      height: 45,
+                    ),
+                ],
+              ),
+              Text(
+                "Payment Details",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 35),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    gradient: LinearGradient(
+                        begin: FractionalOffset.topLeft,
+                        end: FractionalOffset.bottomRight,
+                        colors: [_planColor.leftColor, _planColor.rightColor])),
+                child: Column(
+                  children: [
+                    amountLabel(
+                        label: 'Plan Price',
+                        value: gymStore.selectedGymPlan.plan_price ?? ''),
+                    SizedBox(height: 6),
+                    if (gymStore.chosenOffer != null)
+                      amountLabel(
+                          label: "Discount",
+                          value: discountAmount != null
+                              ? discountAmount.toString()
+                              : ''),
+                    if (gymStore.chosenOffer != null) SizedBox(height: 6),
+                    InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('CGST 9%'),
+                                  Text('SGST 9%'),
+                                  Text(
+                                      'Tax acknowledgement will be emailed to you after subscription.'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: amountLabel(
+                            label: 'GST(0%)',
+                            value: tax != null ? tax.toString() : '')),
+                    Divider(
+                      thickness: 1,
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: 6),
+                    amountLabel(
+                        label: 'Total Amount',
+                        value:
+                            totalAmount != null ? totalAmount.toString() : ''),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

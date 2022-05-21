@@ -644,20 +644,24 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         .updateMember(
             context: context,
             data: user.preambleModel,
-            isLogin: locator<AppPrefs>().isLoggedIn.getValue())
+            isLogin: locator<AppPrefs>().memberAdded.getValue())
         .then((value) {
       // Navigator.pop(context);
       if (value) {
        // saveBMR();
-
-        if (user.preambleFromLogin) {
+        if(user.preambleFromPayment){
           locator<AppPrefs>().memberAdded.setValue(true);
-          NavigationService.navigateToReplacement(Routes.homePage);
-        } else {
-          // NavigationService.navigateTo(Routes.bmrCalculatorResult);
-          locator<AppPrefs>().memberAdded.setValue(true);
-          // NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
-          Navigator.pop(context);
+          Navigator.pop(context,true);
+        }else{
+          if (user.preambleFromLogin) {
+            locator<AppPrefs>().memberAdded.setValue(true);
+            NavigationService.navigateToReplacement(Routes.homePage);
+          } else {
+            // NavigationService.navigateTo(Routes.bmrCalculatorResult);
+            locator<AppPrefs>().memberAdded.setValue(true);
+            // NavigationService.navigateToReplacement(Routes.bmrCalculatorResult);
+            Navigator.pop(context);
+          }
         }
       } else {
         displaySnack('Something went wrong please try again later!!');

@@ -99,6 +99,7 @@ class GymStore extends ChangeNotifier {
   PreambleModel preambleModel = new PreambleModel();
 
   bool preambleFromLogin = true;
+  bool preambleFromPayment = true;
 
   GymAddOn allAddonClasses;
 
@@ -2530,7 +2531,7 @@ class GymStore extends ChangeNotifier {
     // };
 
     // print('body: $body');
-    if (isLogin) {
+    if (!isLogin) {
       data.uid = locator<AppPrefs>().memberData.getValue().uid;
       data.user_id = locator<AppPrefs>().memberId.getValue();
       data.name = locator<AppPrefs>().userName.getValue();
@@ -2553,13 +2554,14 @@ class GymStore extends ChangeNotifier {
       //     .long}';
     }
 
-    if (!isLogin) {
+    if (isLogin) {
       data.diet_category_id = null;
       data.uid = preambleModel.uid;
     }
 
+    print('check login status --- $isLogin');
     Map<String, dynamic> body = PreambleModel().toJsonMember(data);
-    bool res = isLogin
+    bool res = !isLogin
         ? await RestDatasource().addMember(body)
         : await RestDatasource().updateMember(body);
 
