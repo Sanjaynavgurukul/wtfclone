@@ -41,13 +41,21 @@ class _PartialPaymentScreenState extends State<PartialPaymentScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
     return Consumer<GymStore>(builder: (context, store, child) {
-      if (store.activeSubscriptions.data.uid == null ||
+      if (store.activeSubscriptions == null || store.activeSubscriptions.data.uid == null ||
           store.activeSubscriptions.data.uid.isEmpty) {
-        return Center(
-          child: Text('You don\'t have any subscription'),
+        return Material(
+          child: Center(
+            child: Text('You don\'t have any subscription'),
+          ),
         );
       } else {
         callData(subscription_id: store.activeSubscriptions.data.uid);
@@ -56,7 +64,7 @@ class _PartialPaymentScreenState extends State<PartialPaymentScreen> {
         } else {
           if (store.partialPaymentModel.data.isEmpty ||
               store.partialPaymentModel.data == null) {
-            return Center(child: Text('No Data Found'));
+            return Material(child: Center(child: Text('No Data Found')));
           } else {
             return Scaffold(
                 appBar: AppBar(
