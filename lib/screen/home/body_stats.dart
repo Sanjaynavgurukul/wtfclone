@@ -8,6 +8,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/preamble_helper.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/model/member_detils.dart';
@@ -176,6 +177,7 @@ class ListItems extends StatelessWidget {
   }
 }
 
+//My Goal Section :D
 class MyGoals extends StatelessWidget {
   final title, index;
 
@@ -205,7 +207,7 @@ class MyGoals extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
+                borderRadius: BorderRadius.circular(16.0),
                   color:Color(0xff2d2d2d)
                 // gradient: LinearGradient(
                 //   begin: FractionalOffset.topCenter,
@@ -333,6 +335,7 @@ class MyGoals extends StatelessWidget {
   }
 }
 
+//Calories burn count section :D
 class MyCalories extends StatelessWidget {
   final title, index;
 
@@ -346,7 +349,12 @@ class MyCalories extends StatelessWidget {
     GymStore store = context.watch<GymStore>();
     return InkWell(
       onTap: () {
-        NavigationService.navigateTo(Routes.calorieCounter);
+        // NavigationService.navigateTo(Routes.calorieCounter);
+        if(PreambleHelper.hasPreamble()){
+          NavigationService.navigateTo(Routes.calorieCounter);
+        }else{
+          PreambleHelper.showPreambleWarningDialog(context: context);
+        }
       },
       child: Card(
         color: Colors.transparent,
@@ -354,7 +362,7 @@ class MyCalories extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6.0),
+                borderRadius: BorderRadius.circular(16.0),
                 color:Color(0xff2d2d2d)
                 // gradient: LinearGradient(
                 //   begin: FractionalOffset.topCenter,
@@ -486,7 +494,11 @@ class MyBmr extends StatelessWidget {
     GymStore store = context.watch<GymStore>();
     return InkWell(
       onTap: () {
-        NavigationService.navigateTo(Routes.bmrCalculator);
+        if(PreambleHelper.hasPreamble()){
+          NavigationService.navigateTo(Routes.bmrCalculator);
+        }else{
+          PreambleHelper.showPreambleWarningDialog(context: context);
+        }
       },
       child: Card(
         color: Colors.transparent,
@@ -592,6 +604,7 @@ class MyBmr extends StatelessWidget {
   }
 }
 
+//How fat am i Section :D
 class MyBodyFat extends StatelessWidget {
   final title, index;
 
@@ -605,7 +618,11 @@ class MyBodyFat extends StatelessWidget {
     GymStore store = context.watch<GymStore>();
     return InkWell(
       onTap: () {
-        NavigationService.navigateTo(Routes.bodyFatCal);
+        if(PreambleHelper.hasPreamble()){
+          NavigationService.navigateTo(Routes.bodyFatCal);
+        }else{
+          PreambleHelper.showPreambleWarningDialog(context: context);
+        }
       },
       child: Card(
         color: Colors.transparent,

@@ -5,6 +5,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/preamble_helper.dart';
 import 'package:wtf/helper/routes.dart';
 
 import '../../main.dart';
@@ -68,7 +69,9 @@ class _CategoriesState extends State<Categories> {
         if (hasPreamble) {
           NavigationService.navigateTo(Routes.nutritionScreen);
         } else {
-          preambleWarningDialog();
+          // preambleWarningDialog();
+          PreambleHelper.showPreambleWarningDialog(
+              context: context);
         }
         break;
       case 3:
@@ -84,41 +87,6 @@ class _CategoriesState extends State<Categories> {
       default:
         break;
     }
-  }
-
-  void preambleWarningDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Image.asset('assets/images/nutrition_2.png'),
-                  SizedBox(
-                    height: 8,
-                  ),
-                ],
-              ),
-              content: new Text("In order to give you the appropriate nutrition support , please provide your details by clicking here"),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  child: Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                CupertinoDialogAction(
-                  child: Text("Open"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.read<GymStore>().preambleFromLogin = false;
-                    NavigationService.navigateTo(Routes.userDetail);
-                  },
-                ),
-              ],
-            ));
   }
 
   @override

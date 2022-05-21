@@ -624,6 +624,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void updatePreambleData() {
+    // updateMember();
     user.updatePreamble(data: user.preambleModel).then((value) {
       if (value) {
         // if(user.preambleFromLogin){
@@ -631,7 +632,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         // }else{
         //   updateMember();
         // }
-        updateMember();
+       updateMember();
       } else {
         displaySnack('Something went wrong while saving BMR!!');
       }
@@ -643,11 +644,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         .updateMember(
             context: context,
             data: user.preambleModel,
-            isLogin: user.preambleFromLogin)
+            isLogin: locator<AppPrefs>().isLoggedIn.getValue())
         .then((value) {
       // Navigator.pop(context);
       if (value) {
-        saveBMR();
+       // saveBMR();
 
         if (user.preambleFromLogin) {
           locator<AppPrefs>().memberAdded.setValue(true);

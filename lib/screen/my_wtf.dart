@@ -9,6 +9,7 @@ import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/preamble_helper.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/helper/strings.dart';
 import 'package:wtf/helper/ui_helpers.dart';
@@ -46,6 +47,7 @@ class _MyWtfState extends State<MyWtf> {
     // },
   ];
   GymStore store;
+
   @override
   Widget build(BuildContext context) {
     store = context.watch<GymStore>();
@@ -62,7 +64,6 @@ class _MyWtfState extends State<MyWtf> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 5,
@@ -167,7 +168,6 @@ class _MyWtfState extends State<MyWtf> {
                     text: 'Partial Payment',
                   ),
                   UIHelper.verticalSpace(20.0),
-
                   MyWtfCard(
                     onTap: () {
                       setState(() {
@@ -224,21 +224,36 @@ class _MyWtfState extends State<MyWtf> {
                     children: [
                       OpenCalButon(
                         onTap: () {
-                          NavigationService.navigateTo(Routes.bodyFatCal);
+                          if (hasPreamble()) {
+                            NavigationService.navigateTo(Routes.bodyFatCal);
+                          } else {
+                            PreambleHelper.showPreambleWarningDialog(
+                                context: context);
+                          }
                         },
                         label: 'Body Fat %',
                         image: 'bodyFat',
                       ),
                       OpenCalButon(
                         onTap: () {
-                          NavigationService.navigateTo(Routes.bmrCalculator);
+                          if (hasPreamble()) {
+                            NavigationService.navigateTo(Routes.bmrCalculator);
+                          } else {
+                            PreambleHelper.showPreambleWarningDialog(
+                                context: context);
+                          }
                         },
                         label: 'Calorie Burnt',
                         image: 'cal',
                       ),
                       OpenCalButon(
                         onTap: () {
-                          NavigationService.navigateTo(Routes.calorieCounter);
+                          if (hasPreamble()) {
+                            NavigationService.navigateTo(Routes.calorieCounter);
+                          } else {
+                            PreambleHelper.showPreambleWarningDialog(
+                                context: context);
+                          }
                         },
                         label: 'Calorie Required',
                         image: 'cal_req',
@@ -256,11 +271,16 @@ class _MyWtfState extends State<MyWtf> {
       ),
     );
   }
+
+  bool hasPreamble() {
+    return locator<AppPrefs>().memberAdded.getValue();
+  }
 }
 
 class MyWtfCard extends StatelessWidget {
   final String text, image;
   final GestureTapCallback onTap;
+
   const MyWtfCard({
     Key key,
     this.text,
@@ -313,6 +333,7 @@ class MyWtfCard extends StatelessWidget {
 
 class MyWtfSubscriptionCard extends StatelessWidget {
   final GestureTapCallback onTap;
+
   const MyWtfSubscriptionCard({
     Key key,
     this.onTap,

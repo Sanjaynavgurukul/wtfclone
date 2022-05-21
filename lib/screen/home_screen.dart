@@ -142,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen>
                            if(hasPreamble()){
                              UtilityComponents.showSnackBarWithString('Already preamble Filled', context);
                            }else{
+
                                NavigationService.navigateTo(Routes.userDetail);
                            }
                           },
