@@ -35,7 +35,7 @@ class _LoaderPageState extends State<LoaderPage> {
       Duration(seconds: 5),
       () {
         // context.read<GymStore>().determinePosition();
-        if (!locator<AppPrefs>().isLoggedIn.getValue()) {
+        if (locator<AppPrefs>().isLoggedIn.getValue()) {
           context.read<GymStore>().init(context: context);
           print('preamble check login init checked');
           // context.read<GymStore>().getForceUpdate().then((value){
