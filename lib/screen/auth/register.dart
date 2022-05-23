@@ -35,8 +35,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailAddress = TextEditingController();
   final name = TextEditingController();
   final mobileNumber = TextEditingController();
-  final password = TextEditingController();
-  final confirmPassword = TextEditingController();
+  // final password = TextEditingController();
+  // final confirmPassword = TextEditingController();
   final referralCodeController = TextEditingController();
   bool isEmailValid = false;
   bool isNameValid = false;
@@ -227,120 +227,122 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: 20),
-                              if (auth.registerMethod == null)
-                                Column(
-                                  children: [
-                                    OutlineTextField(
-                                      hintText: 'Enter Password',
-                                      controller: password,
-                                      maxLines: 1,
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter [password]';
-                                        } else if (value.length < 6) {
-                                          return 'Password should be of at least 6 characters';
-                                        }
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        if (value.isEmpty || value == null) {
-                                          isPassword = false;
-                                        } else {
-                                          isPassword = true;
-                                        }
-                                        setState(() {});
-                                      },
-                                      obscureText: obscureText,
-                                      suffix: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                obscureText = !obscureText;
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                obscureText
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          UIHelper.horizontalSpace(16.0),
-                                          Icon(
-                                            Icons.check,
-                                            color: isPassword
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    OutlineTextField(
-                                      hintText: 'Confirm Password',
-                                      controller: confirmPassword,
-                                      maxLines: 1,
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter [password]';
-                                        } else if (value.length < 6) {
-                                          return 'Password should be of at least 6 characters';
-                                        }
-                                        else if(password.text != value) return 'Password not match';
-                                        return null;
-                                      },
-                                      onChanged: (value) {
-                                        if (value.isEmpty || value == null) {
-                                          isConfirmPassword = false;
-                                        } else {
-                                          isConfirmPassword = true;
-                                        }
-                                        setState(() {});
-                                      },
-                                      obscureText: obscureText,
-                                      suffix: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                obscureText = !obscureText;
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(
-                                                obscureText
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          UIHelper.horizontalSpace(16.0),
-                                          Icon(
-                                            Icons.check,
-                                            color: isPassword
-                                                ? Colors.red
-                                                : Colors.transparent,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                  ],
-                                ),
+                              //TODO password section removed :D
+                              // if (auth.registerMethod == null)
+                              //   Column(
+                              //     children: [
+                              //       OutlineTextField(
+                              //         hintText: 'Enter Password',
+                              //         controller: password,
+                              //         maxLines: 1,
+                              //         keyboardType:
+                              //             TextInputType.visiblePassword,
+                              //         validator: (value) {
+                              //           if (value == null || value.isEmpty) {
+                              //             return 'Please enter [password]';
+                              //           } else if (value.length < 6) {
+                              //             return 'Password should be of at least 6 characters';
+                              //           }
+                              //           return null;
+                              //         },
+                              //         onChanged: (value) {
+                              //           if (value.isEmpty || value == null) {
+                              //             isPassword = false;
+                              //           } else {
+                              //             isPassword = true;
+                              //           }
+                              //           setState(() {});
+                              //         },
+                              //         obscureText: obscureText,
+                              //         suffix: Row(
+                              //           mainAxisSize: MainAxisSize.min,
+                              //           children: [
+                              //             InkWell(
+                              //               onTap: () {
+                              //                 setState(() {
+                              //                   obscureText = !obscureText;
+                              //                 });
+                              //               },
+                              //               child: Padding(
+                              //                 padding:
+                              //                     const EdgeInsets.all(8.0),
+                              //                 child: Icon(
+                              //                   obscureText
+                              //                       ? Icons.visibility
+                              //                       : Icons.visibility_off,
+                              //                   color: Colors.white,
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //             UIHelper.horizontalSpace(16.0),
+                              //             Icon(
+                              //               Icons.check,
+                              //               color: isPassword
+                              //                   ? Colors.red
+                              //                   : Colors.transparent,
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //       SizedBox(height: 20),
+                              //       OutlineTextField(
+                              //         hintText: 'Confirm Password',
+                              //         controller: confirmPassword,
+                              //         maxLines: 1,
+                              //         keyboardType:
+                              //             TextInputType.visiblePassword,
+                              //         validator: (value) {
+                              //           if (value == null || value.isEmpty) {
+                              //             return 'Please enter [password]';
+                              //           } else if (value.length < 6) {
+                              //             return 'Password should be of at least 6 characters';
+                              //           }
+                              //           else if(password.text != value) return 'Password not match';
+                              //           return null;
+                              //         },
+                              //         onChanged: (value) {
+                              //           if (value.isEmpty || value == null) {
+                              //             isConfirmPassword = false;
+                              //           } else {
+                              //             isConfirmPassword = true;
+                              //           }
+                              //           setState(() {});
+                              //         },
+                              //         obscureText: obscureText,
+                              //         suffix: Row(
+                              //           mainAxisSize: MainAxisSize.min,
+                              //           children: [
+                              //             InkWell(
+                              //               onTap: () {
+                              //                 setState(() {
+                              //                   obscureText = !obscureText;
+                              //                 });
+                              //               },
+                              //               child: Padding(
+                              //                 padding:
+                              //                     const EdgeInsets.all(8.0),
+                              //                 child: Icon(
+                              //                   obscureText
+                              //                       ? Icons.visibility
+                              //                       : Icons.visibility_off,
+                              //                   color: Colors.white,
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //             UIHelper.horizontalSpace(16.0),
+                              //             Icon(
+                              //               Icons.check,
+                              //               color: isPassword
+                              //                   ? Colors.red
+                              //                   : Colors.transparent,
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //       SizedBox(height: 20),
+                              //     ],
+                              //   ),
+
                               OutlineTextField(
                                 // inputFormatters: [
                                 //   Global.number,
@@ -595,15 +597,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                           }
                                         });
                                       } else {
-                                        if (password.text ==
-                                            confirmPassword.text) {
+                                        // if (password.text ==
+                                        //     confirmPassword.text) {
                                           dynamic res =
                                               await auth.createAccount(
                                             name.text,
                                             emailAddress.text,
                                             mobileNumber.text,
-                                            controller.text,
-                                            password.text,
+                                            controller.text, mobileNumber.text,
                                             referralCodeController.text,
                                           );
                                           context
@@ -625,13 +626,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   //.pushNamedAndRemoveUntil(Routes.userDetail, (Route<dynamic> route) => false),
                                             );
                                           }
-                                        } else {
-                                          FlashHelper.informationBar(context,
-                                              message: 'Password do not match');
-                                          setState(() {
-                                            isConfirmPassword = false;
-                                          });
-                                        }
+                                        // } else {
+                                        //   FlashHelper.informationBar(context,
+                                        //       message: 'Password do not match');
+                                        //   setState(() {
+                                        //     isConfirmPassword = false;
+                                        //   });
+                                        // }
                                       }
                                     } else {
                                       Response response = await auth.sendOtp(

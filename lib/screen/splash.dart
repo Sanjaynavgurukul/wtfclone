@@ -203,7 +203,7 @@ class SplashWidget extends StatelessWidget {
                   ),
                   child: SlideActionWidget(
                     onSubmit: () {
-                      if (locator<AppPrefs>().isLoggedIn.getValue()) {
+                      if (!locator<AppPrefs>().isLoggedIn.getValue()) {
                         NavigationService.navigateToReplacement(
                             Routes.homePage);
                       } else {

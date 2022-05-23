@@ -255,8 +255,6 @@ class GymModelData {
               ? List<Benfit>.from(
               json["benefits"].map((x) => Benfit.fromJson(x)))
               : [],
-          //offer: getOffer(json['offer']),
-          //New Variables :D
           distance: json["distance"].toString(),
           distance_text: json["distance_text"],
           duration: json["duration"].toString(),
@@ -295,6 +293,8 @@ class GymModelData {
    //  List<dynamic> x2 = jsonDecode(data);
    //  print('check data hereee --  ${x2[0]}');
   }
+
+
   Map<String, dynamic> toJson() =>
       {
         "uid": uid,
