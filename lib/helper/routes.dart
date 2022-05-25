@@ -60,6 +60,7 @@ import 'package:wtf/screen/schedule/new/date_workout_list.dart';
 import 'package:wtf/screen/schedule/new/ex_start_screen.dart';
 import 'package:wtf/screen/schedule/new/main_workouts.dart';
 import 'package:wtf/screen/schedule/new/workout_details.dart';
+import 'package:wtf/screen/schedule/new_ui/schedule_main.dart';
 import 'package:wtf/screen/schedule/workout_complete/workout_complete.dart';
 import 'package:wtf/screen/search_screen.dart';
 import 'package:wtf/screen/side_bar_drawer/my_subscription.dart';
@@ -158,6 +159,7 @@ class Routes {
   static const String gymNotFound = GymNotFound.routeName;
   static const String hmsDynamicLinkScreen = HmsDynamicLinkScreen.routeName;
   static const String partialPaymentScreen = PartialPaymentScreen.routeName;
+  static const String scheduleMain = ScheduleMain.routeName;
 }
 
 class RouteGenerator {
@@ -171,6 +173,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.scheduleMain:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: ScheduleMain(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => ScheduleMain(), settings: settings);
       case Routes.partialPaymentScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
