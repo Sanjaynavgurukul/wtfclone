@@ -194,6 +194,7 @@ class MyGoals extends StatelessWidget {
         // NavigationService.navigateTo(Routes.updateFitnessProfile);
         bool filledPreamble = locator<AppPrefs>().memberAdded.getValue();
         if(filledPreamble){
+          print('check preamble status on button click  code --- true');
           context.read<GymStore>().preambleFromLogin = false;
           context.read<GymStore>().getMemberById();
           NavigationService.navigateTo(Routes.userDetail);

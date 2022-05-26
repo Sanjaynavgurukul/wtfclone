@@ -2532,6 +2532,7 @@ class GymStore extends ChangeNotifier {
 
     // print('body: $body');
     if (!isLogin) {
+      print('member not login true ${data.uid}');
       data.uid = locator<AppPrefs>().memberData.getValue().uid;
       data.user_id = locator<AppPrefs>().memberId.getValue();
       data.name = locator<AppPrefs>().userName.getValue();

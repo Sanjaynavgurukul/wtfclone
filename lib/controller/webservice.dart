@@ -1560,20 +1560,24 @@ class RestDatasource {
     print('adding member : $url');
     try {
       String token = locator<AppPrefs>().token.getValue();
+
       Map<String, String> mapHeader = Map();
       mapHeader["Authorization"] = "Bearer " + token;
       mapHeader["Content-Type"] = "application/json";
+
       var res = await _netUtil.put(
         url,
         body: body,
         headers: mapHeader,
       );
+
       print('response from update member : $res');
       return res['status'];
     } catch (e) {
       print('update member error: $e');
       return false;
     }
+
   }
 
   Future<PreambleModel> getMemberById() async {
@@ -1588,7 +1592,7 @@ class RestDatasource {
       url,
       headers: mapHeader,
     );
-    print('get member  by id  response - : $response');
+    print('get member by id response - : $response');
     PreambleModel res;
     if (response != null && response['status']) {
       print('response not nul called');

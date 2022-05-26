@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/widget/image_stack.dart';
 import 'dart:math' as math;
 
@@ -187,82 +189,87 @@ class _ScheduleMainState extends State<ScheduleMain> {
   }
 
   Widget yourSubscriptionWidget() {
-    return Container(
-      margin: EdgeInsets.only(right: 26),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 11),
-            constraints:
-                BoxConstraints(minHeight: 200, minWidth: 140,maxWidth: 140),
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 12,right: 12,bottom: 12,top: 20),
-                  height: 46,
-                  width: 46,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      color: Colors.green,border: Border.all(color: Colors.white,width: 1)),
-                ),
-                SizedBox(height: 12,),
-                Padding(
-                    padding:EdgeInsets.only(left: 12),child: Text('General Training',style: TextStyle(fontSize: 12),)),
-                SizedBox(height: 12,),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Colors.transparent,
-                            Colors.white
-                          ])
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 12),
-                      child: Text('F 24 3 MONTH',style: TextStyle(fontSize: 12),)),
-                ),SizedBox(height: 2,),
-                Padding(
-                    padding:EdgeInsets.only(left: 12),child: Text('MEMBERSHIP',style: TextStyle(fontSize: 12),)),
-              ],
-            ),
-          ),
-          Positioned(
-            right: -20,
-            top: 20,
-            child: Container(
-              height: 40,
-              width: 40,
+    return InkWell(
+      onTap: (){
+        NavigationService.pushName(Routes.exercisesScreen);
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 26),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 11),
+              constraints:
+                  BoxConstraints(minHeight: 200, minWidth: 140,maxWidth: 140),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  color: AppColors.BACK_GROUND_BG),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 6),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    color: Colors.white),
-                child: Text('View Schedule',
-                    style: TextStyle(color: Colors.black, fontSize: 12)),
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 12,right: 12,bottom: 12,top: 20),
+                    height: 46,
+                    width: 46,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        color: Colors.green,border: Border.all(color: Colors.white,width: 1)),
+                  ),
+                  SizedBox(height: 12,),
+                  Padding(
+                      padding:EdgeInsets.only(left: 12),child: Text('General Training',style: TextStyle(fontSize: 12),)),
+                  SizedBox(height: 12,),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.transparent,
+                              Colors.white
+                            ])
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 12),
+                        child: Text('F 24 3 MONTH',style: TextStyle(fontSize: 12),)),
+                  ),SizedBox(height: 2,),
+                  Padding(
+                      padding:EdgeInsets.only(left: 12),child: Text('MEMBERSHIP',style: TextStyle(fontSize: 12),)),
+                ],
               ),
             ),
-          )
-        ],
+            Positioned(
+              right: -20,
+              top: 20,
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    color: AppColors.BACK_GROUND_BG),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 6),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      color: Colors.white),
+                  child: Text('View Schedule',
+                      style: TextStyle(color: Colors.black, fontSize: 12)),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

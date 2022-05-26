@@ -640,6 +640,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   void updateMember() {
+    print('check data === uid ${user.preambleModel.user_id}  ${user.preambleModel.user_uid}');
     user
         .updateMember(
             context: context,
