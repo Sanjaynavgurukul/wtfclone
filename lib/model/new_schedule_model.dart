@@ -21,34 +21,54 @@ class NewScheduleModel {
 }
 
 class NewScheduleCat {
-  NewScheduleCat({this.name});
+  NewScheduleCat({this.name, this.image});
 
   String name;
+  String image;
 
   factory NewScheduleCat.fromJson(Map<String, dynamic> json) => NewScheduleCat(
         name: json["name"],
+        image: json["image"],
       );
 }
 
 class NewScheduleData {
-  int set_no;
+  String type;
+  String date;
+
   List<NewScheduleDataExercises> exercises;
 
-  NewScheduleData({this.exercises, this.set_no});
+  NewScheduleData({this.exercises, this.date, this.type});
 
   factory NewScheduleData.fromJson(Map<String, dynamic> json) =>
       NewScheduleData(
-        // uid: json["uid"],
-        set_no: json["set_no"],
+        type: json["type"],
+        date: json["date"],
         exercises: json.containsKey('exercises')
-            ? List<NewScheduleData>.from(json["exercises"]
+            ? List<NewScheduleDataExercises>.from(json["exercises"]
                 .map((x) => NewScheduleDataExercises.fromJson(x)))
             : [],
       );
 }
 
 class NewScheduleDataExercises {
-  NewScheduleDataExercises(
+  int set_no;
+  List<NewScheduleDataExercisesData> exercises;
+
+  NewScheduleDataExercises({this.set_no, this.exercises});
+
+  factory NewScheduleDataExercises.fromJson(Map<String, dynamic> json) =>
+      NewScheduleDataExercises(
+        set_no: json["set_no"],
+        exercises: json.containsKey('exercises')
+            ? List<NewScheduleDataExercisesData>.from(json["exercises"]
+                .map((x) => NewScheduleDataExercisesData.fromJson(x)))
+            : [],
+      );
+}
+
+class NewScheduleDataExercisesData {
+  NewScheduleDataExercisesData(
       {this.user_id,
       this.uid,
       this.added_by,
@@ -101,46 +121,50 @@ class NewScheduleDataExercises {
   String video; //null":
   String category_image; //null":
 
-  static String getStringData(String data) {
-    if (data == null || data.isEmpty)
+  static String getStringData(String e) {
+    if (e == null || e.isEmpty)
       return '';
     else
-      return data;
+      return e;
   }
 
-  static int getIntData(String data) {
-    if (data == null || data.isEmpty)
+  static int getIntData(int d) {
+    print('check int data new schedule --- ${d} ${d.runtimeType}');
+    if (d == null)
       return 0;
     else
-      return int.parse(data);
+      return d;
   }
 
-  factory NewScheduleDataExercises.fromJson(Map<String, dynamic> json) =>
-      NewScheduleDataExercises(
-        uid: json["uid"],
-        category_name: getStringData(json["category_name"]),
-        category_id: getStringData(json["category_id"]),
-        workout_id: getStringData(json["workout_id"]),
-        user_id: getStringData(json["user_id"]),
-        description: getStringData(json["description"]),
-        status: getStringData(json["status"]),
-        date_added: getStringData(json["date_added"]),
-        date: getStringData(json["date"]),
-        reps: getStringData(json["reps"]),
-        e_duration: getStringData(json["e_duration"]),
-        e_calories: getStringData(json["e_calories"]),
-        sets: getStringData(json["sets"]),
-        is_pt: getIntData(json["is_pt"].toString()),
-        addon_id: getStringData(json["addon_id"]),
-        added_by: getStringData(json["added_by"]),
-        gym_id: getStringData(json["gym_id"]),
-        t_duration: getStringData(json["t_duration"]),
-        package_id: getStringData(json["package_id"]),
-        ex_seq: getIntData(json["ex_seq"].toString()),
-        day: getStringData(json["day"]),
-        ex_no: getIntData(json["ex_no"].toString()),
-        wo_name: getStringData(json["wo_name"]),
-        video: getStringData(json["video"]),
-        category_image: getStringData(json["category_image"]),
-      );
+  factory NewScheduleDataExercisesData.fromJson(Map<String, dynamic> json) {
+    print('check NewScheduleDataExercises data : ${json}');
+    print('check NewScheduleDataExercises data 2 : ${json["category_image"]}');
+    return NewScheduleDataExercisesData(
+      uid: json["uid"],
+      category_name: getStringData(json["category_name"]),
+      category_id: getStringData(json["category_id"]),
+      workout_id: getStringData(json["workout_id"]),
+      user_id: getStringData(json["user_id"]),
+      description: getStringData(json["description"]),
+      status: getStringData(json["status"]),
+      date_added: getStringData(json["date_added"]),
+      date: getStringData(json["date"]),
+      reps: getStringData(json["reps"]),
+      e_duration: getStringData(json["e_duration"]),
+      e_calories: getStringData(json["e_calories"]),
+      sets: getStringData(json["sets"]),
+      is_pt: getIntData(json["is_pt"]),
+      addon_id: getStringData(json["addon_id"]),
+      added_by: getStringData(json["adde_d_by"]),
+      gym_id: getStringData(json["gym_id"]),
+      t_duration: getStringData(json["t_duration"]),
+      package_id: getStringData(json["package_id"]),
+      ex_seq: getIntData(json["ex_seq"]),
+      day: getStringData(json["day"]),
+      ex_no: getIntData(json["ex_no"]),
+      wo_name: getStringData(json["wo_name"]),
+      video: getStringData(json["video"]),
+      category_image: json["category_image"],
+    );
+  }
 }

@@ -49,6 +49,7 @@ import 'package:wtf/model/gym_slot_model.dart';
 import 'package:wtf/model/member_detils.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/model/new_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/partial_payment_model.dart';
@@ -1833,5 +1834,25 @@ class RestDatasource {
    return true;
   }
 
+  Future<NewScheduleModel> getNewScheduleData() async {
+    // String userId = SharedPref.pref.getString(Preferences.USER_ID);
+    String token = locator<AppPrefs>().token.getValue();
+    String memberId = locator<AppPrefs>().memberId.getValue();
+
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+
+    String finalUrl = Api.getNewScheduleApi();
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response get new schedule : " + res.toString());
+      NewScheduleModel model = res != null && res['status']
+          ? NewScheduleModel.fromJson(res)
+          : null;
+      return model;
+    });
+  }
 
 }

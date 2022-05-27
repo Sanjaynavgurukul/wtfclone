@@ -189,4 +189,6 @@ class Api {
       'subscription/paymentstatus?user_id=$userId&subscription_id=$subscription_id';
 
   static String getUpdatePartialPayment()=>'subscription/updatepayment';
+
+  static String getNewScheduleApi()=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=23-05-2022';
 }

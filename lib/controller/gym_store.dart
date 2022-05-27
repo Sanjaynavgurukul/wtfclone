@@ -67,6 +67,7 @@ import 'package:wtf/model/gym_model.dart';
 import 'package:wtf/model/gym_plan_model.dart';
 import 'package:wtf/model/my_schedule_model.dart';
 import 'package:wtf/model/my_workout_schedule_model.dart';
+import 'package:wtf/model/new_schedule_model.dart';
 import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/partial_payment_model.dart';
@@ -260,6 +261,9 @@ class GymStore extends ChangeNotifier {
   //Workout Variables :D
   MyWorkoutSchedule myWorkoutSchedule;
   String workoutDate = '', workoutAddonId = '', workoutSubscriptionId = '';
+
+  //New Schedule Model
+  NewScheduleModel newScheduleModel;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
@@ -3071,6 +3075,19 @@ class GymStore extends ChangeNotifier {
       partialPaymentModel = list;
     } else {
       partialPaymentModel = null;
+    }
+    notifyListeners();
+  }
+
+  Future<void> getNewScheduleData() async {
+    newScheduleModel = null;
+    notifyListeners();
+    NewScheduleModel data = await RestDatasource().getNewScheduleData();
+
+    if (data != null || data.status) {
+      newScheduleModel = data;
+    } else {
+      newScheduleModel = null;
     }
     notifyListeners();
   }
