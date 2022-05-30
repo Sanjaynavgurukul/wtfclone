@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wtf/100ms/dynamic_link_screen/hms_dynamic_link_screen.dart';
 import 'package:wtf/screen/DiscoverScreen.dart';
 import 'package:wtf/screen/addon/BookSession.dart';
+import 'package:wtf/screen/new_qr/qr_scanner.dart';
 import 'package:wtf/screen/purchase_done/BookingSuccess.dart';
 import 'package:wtf/screen/addon/Slot/choose_slot_screen.dart';
 import 'package:wtf/screen/addon/Slot/choose_slot_screen_addon.dart';
@@ -162,6 +163,7 @@ class Routes {
   static const String partialPaymentScreen = PartialPaymentScreen.routeName;
   static const String scheduleMain = ScheduleMain.routeName;
   static const String exercisesScreen = ExercisesScreen.routeName;
+  static const String qrScanner = QrScanner.routeName;
 }
 
 class RouteGenerator {
@@ -175,6 +177,14 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => PaymentProcess(), settings: settings);
+      case Routes.qrScanner:
+        return Platform.isAndroid
+            ? _FadedTransitionRoute(
+          widget: QrScanner(),
+          settings: settings,
+        )
+            : CupertinoPageRoute(
+            builder: (context) => QrScanner(), settings: settings);
       case Routes.exercisesScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

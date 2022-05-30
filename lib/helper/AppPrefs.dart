@@ -114,8 +114,16 @@ class AppPrefs {
             preferences.getInt(PrefsConstants.startExTimer, defaultValue: 0),
         liveClassTimerDate =
             preferences.getInt(PrefsConstants.liveClassTimerDate, defaultValue: 0),
+
+        //New DPref Data
+        exData =
+        preferences.getString(PrefsConstants.exData, defaultValue: '{}'),
+        newScheduleGlobalTime =
+        preferences.getInt(PrefsConstants.newScheduleGlobalTime, defaultValue: 0),
+
         address = preferences.getString(PrefsConstants.address,
             defaultValue: 'Noida Sector 8');
+
 
   final Preference<bool> isLoggedIn;
   final Preference<bool> isFirstOpen;
@@ -163,6 +171,8 @@ class AppPrefs {
   final Preference<int> startExTimer;
   final Preference<int> liveClassTimerDate;
   final Preference<bool> initialLocationAsked;
+  final Preference<int> newScheduleGlobalTime;
+  final Preference<String> exData;
 
   Future<bool> setBool(String key, bool value) async {
     printBefore(value: value, key: key);
@@ -286,4 +296,7 @@ class PrefsConstants {
   static const String inProgressEx = 'inProgressEx';
   static const String startExTimer = 'startExTimer';
   static const String liveClassTimerDate = 'liveClassTimerDate';
+
+  static const String newScheduleGlobalTime = 'newScheduleGlobalTime';
+  static const String exData = 'exData';
 }

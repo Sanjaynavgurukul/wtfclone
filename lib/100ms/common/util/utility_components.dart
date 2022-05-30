@@ -13,7 +13,7 @@ import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
+import 'package:wtf/screen/schedule/timer_helper/exercise_timer_helper.dart';
 
 class UtilityComponents {
   static void showSnackBarWithString(event, context) {

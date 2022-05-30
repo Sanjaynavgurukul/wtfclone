@@ -17,7 +17,7 @@ import 'package:wtf/screen/schedule/arguments/ex_play_details_argument.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_result.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_start/exercise_start_info.dart';
 import 'package:wtf/screen/schedule/exercise/exercise_video.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
+import 'package:wtf/screen/schedule/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class ExStartScreen extends StatefulWidget {

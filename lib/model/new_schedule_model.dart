@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class NewScheduleModel {
   //Default Constructor D:
   NewScheduleModel({this.status, this.newScheduleCat, this.newScheduleData});
@@ -120,6 +122,11 @@ class NewScheduleDataExercisesData {
   String wo_name; //null": "Incline Bench Press",
   String video; //null":
   String category_image; //null":
+  ///These variables used for local storage only :D
+  int startTime = 0;
+  int endTime = 0;
+  int setsCompleted = 0;
+  bool isCompleted = false;
 
   static String getStringData(String e) {
     if (e == null || e.isEmpty)
@@ -167,4 +174,65 @@ class NewScheduleDataExercisesData {
       category_image: json["category_image"],
     );
   }
+
+  Map<String, dynamic> toJson(NewScheduleDataExercisesData data,
+          {bool isLocalConversion = false}) =>
+      {
+        "uid": data.uid,
+        "category_name": data.category_name,
+        "category_id": data.category_id,
+        "workout_id": data.workout_id,
+        "user_id": data.user_id,
+        "description": data.description,
+        "status": data.status,
+        "date_added": data.date_added,
+        "date": data.date,
+        "reps": data.reps,
+        "e_duration": data.e_duration,
+        "e_calories": data.e_calories,
+        "sets": data.sets,
+        "is_pt": data.is_pt,
+        "addon_id": data.addon_id,
+        "added_by": data.added_by,
+        "gym_id": data.gym_id,
+        "t_duration": data.t_duration,
+        "package_id": data.package_id,
+        "ex_seq": data.ex_seq,
+        "day": data.day,
+        "ex_no": data.ex_no,
+        "wo_name": data.wo_name,
+        "video": data.video,
+        "category_image": data.category_image,
+        if (isLocalConversion) "startTime": data.startTime,
+        if (isLocalConversion) "endTime": data.endTime,
+        if (isLocalConversion) "setsCompleted": data.setsCompleted,
+        if (isLocalConversion) "isCompleted": data.isCompleted,
+      };
+}
+
+
+class ScheduleLocalModel {
+  int startTime = 0;
+  int endTime = 0;
+  int setsCompleted = 0;
+  bool isCompleted = false;
+
+  ScheduleLocalModel(
+      {this.endTime, this.isCompleted, this.setsCompleted, this.startTime});
+
+  factory ScheduleLocalModel.fromJson(Map<String, dynamic> json) {
+    return ScheduleLocalModel(
+      startTime: json["startTime"] ?? 0,
+      endTime: json["endTime"] ?? 0,
+      setsCompleted: json["setsCompleted"] ?? 0,
+      isCompleted: json["isCompleted"] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson(ScheduleLocalModel data) => {
+    "startTime": data.startTime,
+    "endTime": data.endTime,
+    "setsCompleted": data.setsCompleted,
+    "isCompleted": data.isCompleted,
+  };
 }

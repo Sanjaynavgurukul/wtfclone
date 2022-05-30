@@ -74,7 +74,7 @@ import 'package:wtf/model/partial_payment_model.dart';
 import 'package:wtf/model/preamble_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
-import 'package:wtf/screen/schedule/new/timer_helper/exercise_timer_helper.dart';
+import 'package:wtf/screen/schedule/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/screen/stopwatch.dart';
 import 'package:wtf/widget/OtpVerifySheet.dart';
 import 'package:wtf/widget/Shimmer/values/type.dart';
@@ -3094,6 +3094,36 @@ class GymStore extends ChangeNotifier {
 
   Future<bool> updatePartialPaymentStatus({@required Map<String, dynamic> body})async{
       return await RestDatasource().updatePartialPayment(body:body);
+  }
+
+  Future<bool> qrAttendance(
+      {BuildContext context, String mode, String qrCode,}) async {
+
+    Map<String, dynamic> body = {
+      'user_id': locator<AppPrefs>().memberId.getValue(),
+      'mode': mode,
+      'date': '${DateFormat('dd-MM-yyyy').format(DateTime.now())}',
+      'time': '${DateFormat('h:mm a').format(DateTime.now())}',
+      'lat': getLat(),
+      'long': getLng(),
+      "role": 'member',
+      "qr_code": qrCode,
+    };
+
+    var jsonResp =
+    await RestDatasource().markAttendance(body: body, context: context);
+
+    if (jsonResp != null && jsonResp['status']) {
+      getCurrentAttendance(context: context);
+      return true;
+    } else {
+      FlashHelper.errorBar(
+        context,
+        message: jsonResp['message'] ?? '--',
+      );
+      return false;
+    }
+
   }
 
 }

@@ -6,7 +6,11 @@ import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/new_schedule_model.dart';
+import 'package:wtf/screen/new_qr/argument/qr_argument.dart';
+import 'package:wtf/screen/new_qr/qr_scanner.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class ExercisesScreen extends StatefulWidget {
@@ -168,17 +172,27 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     SizedBox(
                       height: 18,
                     ),
-                    Container(
-                      padding: EdgeInsets.all(18),
-                      margin: EdgeInsets.only(left: 16, right: 16),
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                          color: AppConstants.bgColor),
-                      child: Text(
-                        'Start Workout',
-                        style: TextStyle(fontSize: 20),
+                    InkWell(
+                      onTap: () {
+                        //startWorkoutWarning();
+                        NavigationService.pushName(Routes.qrScanner,
+                            argument: QrArgument(
+                                qrNavigation: QRNavigation.NAVIGATE_POP,
+                                qrMode: 'in'));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        margin: EdgeInsets.only(left: 16, right: 16),
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            color: AppConstants.bgColor),
+                        child: Text(
+                          'Start Workout',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -317,12 +331,21 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 
   Widget itemCardXyz({NewScheduleDataExercises item}) {
-    return Column(children: [
-      Text('Set ${item.set_no}'),
-      Column(
-        children: item.exercises.map((e) => itemCard(item: e)).toList(),
-      )
-    ]);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+              padding: EdgeInsets.only(left: 24, right: 20),
+              child: Text('Set ${item.set_no}',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+          Column(
+            children: item.exercises.map((e) => itemCard(item: e)).toList(),
+          )
+        ]);
   }
 
   Widget itemCard({bool selected = false, NewScheduleDataExercisesData item}) {
@@ -359,8 +382,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: 40,
-                    height: 8,
+                    width: 34,
+                    height: 4,
                     decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -374,7 +397,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(100))),
                     child: Text('4/4'),
                     padding:
-                        EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+                        EdgeInsets.only(left: 6, right: 6, top: 1, bottom: 1),
                   ),
                   ListTile(
                     contentPadding:
@@ -400,6 +423,87 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           )
         ],
       ),
+    );
+  }
+
+  void startWorkoutWarning(){
+    showDialog(
+      barrierColor: Colors.black26,
+      context: context,
+      builder: (context) {
+        return Dialog(
+          elevation: 0,
+          backgroundColor: Color(0xffffffff),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 15),
+              Text(
+                "Somrthing",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text("Some Description :D"),
+              SizedBox(height: 20),
+              Divider(
+                height: 1,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: InkWell(
+                  highlightColor: Colors.grey[200],
+                  onTap: () {
+                    //do somethig
+                  },
+                  child: Center(
+                    child: Text(
+                      "Continue",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Divider(
+                height: 1,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: InkWell(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(15.0),
+                  ),
+                  highlightColor: Colors.grey[200],
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Center(
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -132,6 +132,7 @@ dependencies:
   avatar_glow: ^2.0.2
   measured_size: ^1.0.0
   path_provider: ^2.0.10
+  vibration: ^1.7.3
 
 
 dev_dependencies:
