@@ -1855,4 +1855,27 @@ class RestDatasource {
     });
   }
 
+  Future<ScheduleLocalModel> getMyScheduleLogs(){
+    //Authentication data :D
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+
+    //Api Key :D
+    String finalUrl = Api.getMyScheduleLogs();
+
+    //Calling API
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response get new schedule : " + res.toString());
+      ScheduleLocalModel model = res != null && res['status']
+          ? ScheduleLocalModel.fromJson(res)
+          : null;
+      return model;
+    });
+
+  }
+
 }

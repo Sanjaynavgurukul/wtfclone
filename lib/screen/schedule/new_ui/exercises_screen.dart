@@ -29,6 +29,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   ScrollController _scrollController;
   bool isScrolledToTop = true;
   bool callMethod = true;
+  bool scheduleLogCallMethod = true;
   GymStore user;
 
   @override
@@ -44,8 +45,13 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       if (callMethod) {
         this.callMethod = false;
         user.getNewScheduleData();
+        getScheduleLog();
       }
     });
+  }
+
+  void getScheduleLog(){
+    user.getMyScheduleLogs();
   }
 
   void onRefreshPage() {
@@ -175,10 +181,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     InkWell(
                       onTap: () {
                         //startWorkoutWarning();
-                        NavigationService.pushName(Routes.qrScanner,
-                            argument: QrArgument(
-                                qrNavigation: QRNavigation.NAVIGATE_POP,
-                                qrMode: 'in'));
+                        //NavigationService.pushName(Routes.qrScanner,
+                        //     argument: QrArgument(
+                        //         qrNavigation: QRNavigation.NAVIGATE_POP,
+                        //         qrMode: 'in'));
+                        NavigationService.pushName(Routes.exerciseDetailScreen);
                       },
                       child: Container(
                         padding: EdgeInsets.all(12),
@@ -343,85 +350,94 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
               child: Text('Set ${item.set_no}',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
           Column(
-            children: item.exercises.map((e) => itemCard(item: e)).toList(),
+            children: item.exercises.map((e){
+             ScheduleLocalModelData d = ScheduleLocalModelData(isCompleted:true);
+              return itemCard(item: e,data:d);
+            }).toList(),
           )
         ]);
   }
 
-  Widget itemCard({bool selected = false, NewScheduleDataExercisesData item}) {
+  Widget itemCard({bool selected = false, NewScheduleDataExercisesData item,ScheduleLocalModelData data}) {
     print('chech image url --- ${item}');
-    return Container(
-      margin: EdgeInsets.only(left: 16, right: 16, bottom: 18),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          border: Border.all(
-              width: selected ? 1 : 0,
-              color: !selected ? Colors.transparent : Colors.grey),
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: Colors.green,
+    //print('chek data ScheduleLocalModelData : ${data.itemUid}');
+    return InkWell(
+      onTap: (){
+        NavigationService.pushName(Routes.exerciseDetailScreen);
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 16, right: 16, bottom: 18),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            border: Border.all(
+                width: selected ? 1 : 0,
+                color: !selected ? Colors.transparent : Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Colors.green,
+                ),
+                height: 80,
+                child: networkImage(item.category_image, radius: 8),
               ),
-              height: 80,
-              child: networkImage(item.category_image, radius: 8),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              margin: EdgeInsets.only(left: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 34,
-                    height: 4,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
-                    child: Text('4/4'),
-                    padding:
-                        EdgeInsets.only(left: 6, right: 6, top: 1, bottom: 1),
-                  ),
-                  ListTile(
-                    contentPadding:
-                        EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-                    title: Text('Skull Candy'),
-                    trailing: Container(
-                      padding:
-                          EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+            Expanded(
+              flex: 2,
+              child: Container(
+                margin: EdgeInsets.only(left: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 34,
+                      height: 4,
                       decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.all(Radius.circular(100))),
-                      child: Text("Resume"),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [Text('Set : 4'), Text('Reps : 12,14,15,16')],
+                    SizedBox(
+                      height: 6,
                     ),
-                  )
-                ],
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.all(Radius.circular(100))),
+                      child: Text('4/4'),
+                      padding:
+                          EdgeInsets.only(left: 6, right: 6, top: 1, bottom: 1),
+                    ),
+                    ListTile(
+                      contentPadding:
+                          EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
+                      title: Text('Skull Candy'),
+                      trailing: data.isCompleted?SizedBox():Container(
+                        padding:
+                            EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.all(Radius.circular(100))),
+                        child: Text("Resume"),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [Text('Set : 4'), Text('Reps : 12,14,15,16')],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

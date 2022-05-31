@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/main.dart';
 import 'package:wtf/widget/image_stack.dart';
 import 'dart:math' as math;
 
@@ -56,11 +58,11 @@ class _ScheduleMainState extends State<ScheduleMain> {
                 contentPadding: EdgeInsets.only(left: 0, right: 0),
                 title: Text('Hello,',
                     style: TextStyle(color: Colors.grey, fontSize: 18)),
-                subtitle: Text('Chamman Kumar',
+                subtitle: Text('${locator<AppPrefs>().userName.getValue()}',
                     style: TextStyle(color: Colors.white, fontSize: 24)),
                 trailing: ClipOval(
                   child: Image.network(
-                    'https://via.placeholder.com/150',
+                    "${locator<AppPrefs>().avatar.getValue()}" ?? 'https://via.placeholder.com/150',
                     errorBuilder: (BuildContext context, Object exception,
                         StackTrace stackTrace) {
                       return Text('Error');

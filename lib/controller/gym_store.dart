@@ -253,6 +253,7 @@ class GymStore extends ChangeNotifier {
   AddOnSlotDetails addonsCatGymSlots;
 
   MySchedule scheduleData;
+
   // CurrentTrainer scheduleTrainer;
   //Partial Payment Model
   PartialPaymentModel partialPaymentModel;
@@ -264,6 +265,9 @@ class GymStore extends ChangeNotifier {
 
   //New Schedule Model
   NewScheduleModel newScheduleModel;
+
+  //Get My Schedule Logs
+  ScheduleLocalModel scheduleLocalModel;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
@@ -393,15 +397,16 @@ class GymStore extends ChangeNotifier {
     // context.read<UserStore>().getMemberById(context: context);
   }
 
-  Future<CheckHmsStatus> joinLiveSession({BuildContext context,
-    String liveClassId,
-    String roomId,
-    String addonId,
-    String addonName,
-    String trainerId,bool isDynamicLink = false})async{
-
+  Future<CheckHmsStatus> joinLiveSession(
+      {BuildContext context,
+      String liveClassId,
+      String roomId,
+      String addonId,
+      String addonName,
+      String trainerId,
+      bool isDynamicLink = false}) async {
     //Display Progress Dialog When not navigate from dynamic link ;D
-    if(!isDynamicLink){
+    if (!isDynamicLink) {
       showDialog(
         context: context,
         builder: (context) => ProcessingDialog(
@@ -421,10 +426,10 @@ class GymStore extends ChangeNotifier {
 
     //calling api to get token from FB
     Map<String, dynamic> res =
-    await RestDatasource().joinLiveSession(body: body);
+        await RestDatasource().joinLiveSession(body: body);
 
     //After Fetch Token Pop the dialog if open
-    if(!isDynamicLink) Navigator.pop(context);
+    if (!isDynamicLink) Navigator.pop(context);
 
     //check permission and token validity here
     if (res != null && res['status']) {
@@ -438,23 +443,27 @@ class GymStore extends ChangeNotifier {
       locator<AppPrefs>().liveExerciseId.setValue(res['exercise_id']);
 
       //This is token fetched from DB
-      String token = res['token']??'';
+      String token = res['token'] ?? '';
 
       //Check Permission Here [Video,audio]:D
       bool permission = await getPermissions();
 
       //Check Permission Condition weather permission allowed or not :D
-      if(permission){
-        if(token != null && token.isNotEmpty){
-          Future.delayed(Duration(seconds: isDynamicLink?2:0), () {
-            navigateTo100MsPreview(context:context,token:res['token'],isDynamicLink: isDynamicLink);
+      if (permission) {
+        if (token != null && token.isNotEmpty) {
+          Future.delayed(Duration(seconds: isDynamicLink ? 2 : 0), () {
+            navigateTo100MsPreview(
+                context: context,
+                token: res['token'],
+                isDynamicLink: isDynamicLink);
           });
-        }else{
+        } else {
           FlashHelper.errorBar(context, message: 'No Token Found! ');
           return CheckHmsStatus.TOKEN_NOT_FOUND;
         }
-      }else{
-        FlashHelper.errorBar(context, message: 'Please Provide all required permission!');
+      } else {
+        FlashHelper.errorBar(context,
+            message: 'Please Provide all required permission!');
         return CheckHmsStatus.NO_PERMISSION;
       }
     } else {
@@ -477,39 +486,39 @@ class GymStore extends ChangeNotifier {
     return true;
   }
 
-  void navigateTo100MsPreview({@required BuildContext context,@required String token,bool isDynamicLink = false}){
-    if(token.isEmpty || token==null){
+  void navigateTo100MsPreview(
+      {@required BuildContext context,
+      @required String token,
+      bool isDynamicLink = false}) {
+    if (token.isEmpty || token == null) {
       FlashHelper.errorBar(context, message: 'No Token Found!');
-    }else{
-
-      if(isDynamicLink){
+    } else {
+      if (isDynamicLink) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (_) => ChangeNotifierProvider<PreviewStore>(
-              create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
-              child: PreviewPage(
-                  token:token
-              ),
+              create: (_) => PreviewStore()
+                ..removePreviewListener()
+                ..stopCapturing(),
+              child: PreviewPage(token: token),
             ),
           ),
         );
-      }else{
+      } else {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => ChangeNotifierProvider<PreviewStore>(
-              create: (_) => PreviewStore()..removePreviewListener()..stopCapturing(),
-              child: PreviewPage(
-                  token:token
-              ),
+              create: (_) => PreviewStore()
+                ..removePreviewListener()
+                ..stopCapturing(),
+              child: PreviewPage(token: token),
             ),
           ),
         );
       }
-
     }
-
   }
 
   Future<bool> completeLiveSession(
@@ -534,7 +543,7 @@ class GymStore extends ChangeNotifier {
     if (res != null && res['status']) {
       // changeNavigationTab(index: 2);
       return getLiveWorkoutCalculation(context: context);
-    }else{
+    } else {
       return false;
     }
   }
@@ -561,7 +570,7 @@ class GymStore extends ChangeNotifier {
         notifyListeners();
       });
       log('attendance updated2: ${attendanceDetails.toJson()}');
-    }else{
+    } else {
       print('this method is hit ---');
     }
   }
@@ -622,7 +631,8 @@ class GymStore extends ChangeNotifier {
                 id: 10,
                 channelKey: '123456',
                 title: 'Workout Started',
-                body: '${locator<AppPrefs>().selectedMySchedule.getValue()} workouts have been started.',
+                body:
+                    '${locator<AppPrefs>().selectedMySchedule.getValue()} workouts have been started.',
                 // createdLifeCycle: NotificationLifeCycle.Background,
                 // createdSource: NotificationSource.Local,
                 notificationLayout: NotificationLayout.BigPicture,
@@ -1698,7 +1708,7 @@ class GymStore extends ChangeNotifier {
       init(context: NavigationService.navigatorKey.currentContext);
       // NavigationService.navigateTo(Routes.exerciseDone);
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -1829,7 +1839,7 @@ class GymStore extends ChangeNotifier {
     discoverType = type;
     notifyListeners();
     GymTypes res = await RestDatasource().getDiscoverNow(
-            type: type, lat: getLat().toString(), lng: getLng().toString());
+        type: type, lat: getLat().toString(), lng: getLng().toString());
     if (res != null) {
       selectedGymTypes = res;
       notifyListeners();
@@ -2597,7 +2607,6 @@ class GymStore extends ChangeNotifier {
     await RestDatasource().getLastSeen();
   }
 
-
   Future<bool> saveBmr() async {
     print('save bmr called -----');
     Map<String, dynamic> map = PreambleModel().toJsonPreamble(preambleModel);
@@ -2709,7 +2718,8 @@ class GymStore extends ChangeNotifier {
     workoutDate = date;
     workoutAddonId = addonId;
     workoutSubscriptionId = subscriptionId;
-    print('check argument details -- $workoutDate -- $workoutAddonId -- $workoutSubscriptionId');
+    print(
+        'check argument details -- $workoutDate -- $workoutAddonId -- $workoutSubscriptionId');
     notifyListeners();
     MyWorkoutSchedule res = await RestDatasource().getMyWorkoutSchedule(
       date: workoutDate,
@@ -2724,7 +2734,6 @@ class GymStore extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   ///Check Here
   Future<void> getWorkoutCalculations({BuildContext context}) async {
@@ -2790,8 +2799,7 @@ class GymStore extends ChangeNotifier {
           ),
         );
 
-        getMySchedules(
-            date: workoutDate);
+        getMySchedules(date: workoutDate);
         //TODO Feed Page Details like e-duration and total cal
         WorkoutComplete res = await RestDatasource().getWorkoutCalculation(
           context: context,
@@ -2847,15 +2855,15 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-
   //New Methods Here
   Future<bool> updateScheduleExercise(
       {@required String itemUid, @required String exTime}) async {
-    String timerTaken = '${exTimerHelper.convertHour(int.parse(exTime))}:${exTimerHelper.convertMin(int.parse(exTime))}:${exTimerHelper.convertSec(int.parse(exTime))}';
+    String timerTaken =
+        '${exTimerHelper.convertHour(int.parse(exTime))}:${exTimerHelper.convertMin(int.parse(exTime))}:${exTimerHelper.convertSec(int.parse(exTime))}';
     print('Workout Data Check --- itemUID : $itemUid exTime : $timerTaken');
 
     bool isUpdated =
-    await RestDatasource().updateTime(id: itemUid, time: timerTaken);
+        await RestDatasource().updateTime(id: itemUid, time: timerTaken);
     if (isUpdated) {
       print('Workout Data Check --- updated into database');
       notifyListeners();
@@ -2867,8 +2875,8 @@ class GymStore extends ChangeNotifier {
   }
 
   //Control Notification :D
-  void workoutNotification({@required bool start,@required String header}){
-    if(start){
+  void workoutNotification({@required bool start, @required String header}) {
+    if (start) {
       AwesomeNotifications().isNotificationAllowed().then((isAllowed) async {
         if (!isAllowed) {
           // Insert here your friendly dialog box before call the request method
@@ -2880,8 +2888,7 @@ class GymStore extends ChangeNotifier {
               id: 10,
               channelKey: '123456',
               title: 'Workout Started',
-              body:
-              '$header workouts have been started.',
+              body: '$header workouts have been started.',
               // createdLifeCycle: NotificationLifeCycle.Background,
               // createdSource: NotificationSource.Local,
               notificationLayout: NotificationLayout.BigPicture,
@@ -2901,7 +2908,7 @@ class GymStore extends ChangeNotifier {
           );
         }
       });
-    }else{
+    } else {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         AwesomeNotifications().cancel(10);
       });
@@ -2910,7 +2917,6 @@ class GymStore extends ChangeNotifier {
 
   Future<String> workoutVerification(
       {BuildContext context, Map<String, dynamic> body}) async {
-
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
@@ -2936,7 +2942,7 @@ class GymStore extends ChangeNotifier {
   }
 
   //Verify All Completed Workout :D
-  Future<String> verifyCompletedWorkout({BuildContext context})async{
+  Future<String> verifyCompletedWorkout({BuildContext context}) async {
     showDialog(
       context: context,
       builder: (context) => ProcessingDialog(
@@ -2969,10 +2975,10 @@ class GymStore extends ChangeNotifier {
 
     Navigator.pop(context);
     //check WorkoutVerification is Done or not
-    if(uid == null || uid.isEmpty){
+    if (uid == null || uid.isEmpty) {
       print('Workout Verified checking --- not verified');
       return null;
-    }else{
+    } else {
       print('Workout Verified checking --- verified $uid');
       workoutMappingId = await RestDatasource().getWorkoutVerification(
         date: workoutDate,
@@ -3065,11 +3071,12 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-
-  Future<void> getPartialPaymentStatus({@required String subscription_id}) async {
+  Future<void> getPartialPaymentStatus(
+      {@required String subscription_id}) async {
     partialPaymentModel = null;
     notifyListeners();
-    var list = await RestDatasource().getPartialPaymentStatus(subscription_id: subscription_id);
+    var list = await RestDatasource()
+        .getPartialPaymentStatus(subscription_id: subscription_id);
 
     if (list.data != null || list.data.isNotEmpty) {
       partialPaymentModel = list;
@@ -3092,13 +3099,24 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> updatePartialPaymentStatus({@required Map<String, dynamic> body})async{
-      return await RestDatasource().updatePartialPayment(body:body);
+  ScheduleLocalModelData getSingleLocalScheduleModel(
+      {@required String scheduleUID}) {
+    ScheduleLocalModelData contain = scheduleLocalModel.exercises.firstWhere(
+        (product) => product.itemUid == scheduleUID,
+        orElse: () => null);
+    return contain;
   }
 
-  Future<bool> qrAttendance(
-      {BuildContext context, String mode, String qrCode,}) async {
+  Future<bool> updatePartialPaymentStatus(
+      {@required Map<String, dynamic> body}) async {
+    return await RestDatasource().updatePartialPayment(body: body);
+  }
 
+  Future<bool> qrAttendance({
+    BuildContext context,
+    String mode,
+    String qrCode,
+  }) async {
     Map<String, dynamic> body = {
       'user_id': locator<AppPrefs>().memberId.getValue(),
       'mode': mode,
@@ -3111,7 +3129,7 @@ class GymStore extends ChangeNotifier {
     };
 
     var jsonResp =
-    await RestDatasource().markAttendance(body: body, context: context);
+        await RestDatasource().markAttendance(body: body, context: context);
 
     if (jsonResp != null && jsonResp['status']) {
       getCurrentAttendance(context: context);
@@ -3123,8 +3141,18 @@ class GymStore extends ChangeNotifier {
       );
       return false;
     }
-
   }
 
-}
+  Future<void> getMyScheduleLogs() async {
+    scheduleLocalModel = null;
+    notifyListeners();
+    ScheduleLocalModel data = await RestDatasource().getMyScheduleLogs();
 
+    if (data != null || data.status) {
+      scheduleLocalModel = data;
+    } else {
+      scheduleLocalModel = null;
+    }
+    notifyListeners();
+  }
+}

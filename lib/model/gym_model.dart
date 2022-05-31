@@ -121,7 +121,7 @@ class GymModelData {
   String state;
   String country;
   int is_partial;
-  int is_cash=1;
+  int is_cash = 1;
   String pin;
   String latitude = '';
   String longitude = '';
