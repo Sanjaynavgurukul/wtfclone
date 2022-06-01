@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/new_schedule_model.dart';
+import 'package:wtf/screen/new_qr/argument/qr_argument.dart';
+import 'package:wtf/screen/new_qr/qr_scanner.dart';
 import 'package:wtf/screen/schedule/new_ui/argument/ex_detail_argument.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
@@ -77,7 +81,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     };
     user.getMyScheduleLogs(callKey: 'is_get',body: data);
   }
-
 
   void onRefreshPage() {
     this.callMethod = true;
@@ -204,14 +207,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                       height: 18,
                     ),
                     InkWell(
-                      onTap: () {
-                        //startWorkoutWarning();
-                        //NavigationService.pushName(Routes.qrScanner,
-                        //     argument: QrArgument(
-                        //         qrNavigation: QRNavigation.NAVIGATE_POP,
-                        //         qrMode: 'in'));
-                        NavigationService.pushName(Routes.exerciseDetailScreen);
-                      },
+                      onTap: () =>takeActionOnStartWorkoutButton(),
                       child: Container(
                         padding: EdgeInsets.all(12),
                         margin: EdgeInsets.only(left: 16, right: 16),
@@ -472,8 +468,23 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     );
   }
 
-  void startWorkoutWarning() {
-    showDialog(
+  void takeActionOnStartWorkoutButton()async{
+    if(user.attendanceDetails != null &&
+        user.attendanceDetails.data != null){
+      log('exerciseScreen attendance already marked on start workout button clicked :D----');
+    }else{
+      log('exerciseScreen attendance not marked on start workout button clicked :( ----');
+      bool status = await startWorkoutWarning();
+      if(status){
+        navigateToQrScanner();
+      }else{
+        log('exerciseScreen user denied take further action :(');
+      }
+    }
+  }
+
+  Future<bool> startWorkoutWarning({String heading='Some heading',String message = 'Some description here please'}) {
+    return showDialog(
       barrierColor: Colors.black26,
       context: context,
       builder: (context) {
@@ -488,14 +499,15 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             children: [
               SizedBox(height: 15),
               Text(
-                "Somrthing",
+                "$heading",
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black
                 ),
               ),
               SizedBox(height: 15),
-              Text("Some Description :D"),
+              Text("$message",style:TextStyle(color: Colors.black)),
               SizedBox(height: 20),
               Divider(
                 height: 1,
@@ -506,7 +518,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                 child: InkWell(
                   highlightColor: Colors.grey[200],
                   onTap: () {
-                    //do somethig
+                    Navigator.of(context).pop(true);
                   },
                   child: Center(
                     child: Text(
@@ -533,7 +545,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   ),
                   highlightColor: Colors.grey[200],
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(false);
                   },
                   child: Center(
                     child: Text(
@@ -541,6 +553,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.normal,
+                        color: Colors.grey
                       ),
                     ),
                   ),
@@ -561,5 +574,21 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           color: Colors.green,
           borderRadius: BorderRadius.all(Radius.circular(100))),
     );
+  }
+
+  void takeNavigationAction(){
+    if(user.attendanceDetails != null &&
+        user.attendanceDetails.data != null){
+      log('exerciseScreen attendance already marked ----');
+
+    }else{
+      log('exerciseScreen attendance not marked opening qr code ----');
+      navigateToQrScanner();
+    }
+
+  }
+
+  void navigateToQrScanner(){
+    NavigationService.pushName(Routes.qrScanner,argument: QrArgument(qrNavigation: QRNavigation.NAVIGATE_POP));
   }
 }
