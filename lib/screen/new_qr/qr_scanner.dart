@@ -81,6 +81,7 @@ class _QrScannerState extends State<QrScanner> {
                       },
                       icon: FutureBuilder(
                         future: controller?.getFlashStatus(),
+                        initialData: false,
                         builder: (context, snapshot) {
                           return snapshot.data
                               ? Icon(
@@ -104,6 +105,7 @@ class _QrScannerState extends State<QrScanner> {
                       },
                       child: FutureBuilder(
                         future: controller?.getCameraInfo(),
+                      initialData: CameraFacing.back,
                         builder: (context, snapshot) {
                           if (snapshot.data != null) {
                             return describeEnum(snapshot.data).toLowerCase() ==

@@ -1865,23 +1865,6 @@ class RestDatasource {
     String finalUrl = Api.getMyScheduleLogs(callTag);
     print('check my schedule log final API url --- $finalUrl');
 
-    //   var res = await _netUtil.post(
-  //     BASE_URL + finalUrl,
-  //     body: body,
-  //     headers: mapHeader,
-  //   );
-  //
-  //   print("response send otp : " + res.toString());
-  //   if (res != null)
-  //     return true;
-  //   else
-  //     return false;
-  // } catch (e) {
-  // print('add member error: $e');
-  // return false;
-  // }
-  //
-
     //Calling API
     return _netUtil
         .post(BASE_URL + finalUrl, headers: mapHeader,body: body)

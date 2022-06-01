@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:wtf/helper/app_constants.dart';
-import 'package:wtf/helper/ui_helpers.dart';
+import 'package:wtf/helper/colors.dart';
 import 'package:wtf/screen/schedule/new/ex_start_screen.dart';
 import 'package:wtf/screen/schedule/new_ui/argument/ex_detail_argument.dart';
 import 'package:wtf/widget/progress_loader.dart';
@@ -113,6 +114,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            ///Exercise name :D
                             Expanded(
                               flex: 1,
                               child: Container(
@@ -125,41 +127,72 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                 )),
                               ),
                             ),
+                            ///Exercise other details
                             Expanded(
                               flex: 1,
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 40,
+                                    height: 30,
+                                    width:double.infinity,
+                                    alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      gradient: RadialGradient(
-                                        colors: [
-                                          Colors.white,
-                                          const Color(0xFF02BB9F)
-                                        ],
-                                        // stops: [0.9, 0.4]
-                                      ),
-                                    ),
+                                      gradient: LinearGradient(colors: <Color>[
+                                        AppColors.BACK_GROUND_BG,
+                                        Colors.grey,
+                                        AppColors.BACK_GROUND_BG,
+                                      ]),
+                                    ),child:Text('Sets ${args.localData.setCompleted}/${args.mainData.sets}',style:TextStyle(fontSize: 20,fontWeight:FontWeight.bold))
                                   ),
+                                  SizedBox(height:12),
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey,
-                                            ),
-                                          )),
+                                        flex: 1,
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                            minHeight: 60
+                                          ),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                                end:Alignment.topCenter,
+                                                begin:Alignment.bottomCenter,
+                                                colors: <Color>[
+                                                  AppColors.BACK_GROUND_BG,
+                                                  Colors.blue,
+                                                  AppColors.BACK_GROUND_BG,
+                                                ]),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text('${args.mainData.reps}',style:TextStyle(fontSize: 20)),
+                                              SizedBox(height: 4,),
+                                              Text('Reps',style:TextStyle(fontSize: 20)),
+                                            ],
+                                          )
+                                        ),
+                                      ),
+                                      SizedBox(width: 8,),
                                       Expanded(
                                         flex: 1,
                                         child: Container(
-                                          height: 40,
+                                          constraints: BoxConstraints(
+                                              minHeight: 60
+                                          ),
+                                          alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                            color: Colors.grey,
+                                            gradient: LinearGradient(
+                                                end:Alignment.topCenter,
+                                                begin:Alignment.bottomCenter,
+                                                colors: <Color>[
+                                              AppColors.BACK_GROUND_BG,
+                                              Colors.blue,
+                                              AppColors.BACK_GROUND_BG,
+                                            ]),
                                           ),
                                         ),
                                       )

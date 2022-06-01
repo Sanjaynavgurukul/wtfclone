@@ -251,11 +251,11 @@ class ScheduleLocalModelData {
   int setCompleted = 0;
 
   ScheduleLocalModelData(
-      {this.startTime,
-      this.isCompleted,
-      this.endTime,
+      {this.startTime = 0,
+      this.isCompleted = false,
+      this.endTime = 0,
       this.itemUid,
-      this.setCompleted});
+      this.setCompleted = 0});
 
   factory ScheduleLocalModelData.fromJson(Map<String, dynamic> json) {
     return ScheduleLocalModelData(
