@@ -1855,24 +1855,41 @@ class RestDatasource {
     });
   }
 
-  Future<ScheduleLocalModel> getMyScheduleLogs(){
+  Future<ScheduleLocalModel> getMyScheduleLogs({@required String callTag,@required Map<String,dynamic> body})async{
     //Authentication data :D
     String token = locator<AppPrefs>().token.getValue();
     Map<String, String> mapHeader = Map();
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
-
     //Api Key :D
-    String finalUrl = Api.getMyScheduleLogs();
+    String finalUrl = Api.getMyScheduleLogs(callTag);
+    print('check my schedule log final API url --- $finalUrl');
+
+    //   var res = await _netUtil.post(
+  //     BASE_URL + finalUrl,
+  //     body: body,
+  //     headers: mapHeader,
+  //   );
+  //
+  //   print("response send otp : " + res.toString());
+  //   if (res != null)
+  //     return true;
+  //   else
+  //     return false;
+  // } catch (e) {
+  // print('add member error: $e');
+  // return false;
+  // }
+  //
 
     //Calling API
     return _netUtil
-        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .post(BASE_URL + finalUrl, headers: mapHeader,body: body)
         .then((dynamic res) {
-      print("response get new schedule : " + res.toString());
+      print("response from my schedule logs --- " + res.toString());
       ScheduleLocalModel model = res != null && res['status']
           ? ScheduleLocalModel.fromJson(res)
-          : null;
+          : new ScheduleLocalModel();
       return model;
     });
 

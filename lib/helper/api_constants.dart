@@ -191,5 +191,5 @@ class Api {
   static String getUpdatePartialPayment()=>'subscription/updatepayment';
 
   static String getNewScheduleApi()=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=23-05-2022';
-  static String getMyScheduleLogs()=>'workoutmapping/logs?is_update&is_get';
+  static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';
 }

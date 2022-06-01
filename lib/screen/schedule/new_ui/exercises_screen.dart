@@ -1,16 +1,18 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
+import 'package:wtf/main.dart';
 import 'package:wtf/model/new_schedule_model.dart';
-import 'package:wtf/screen/new_qr/argument/qr_argument.dart';
-import 'package:wtf/screen/new_qr/qr_scanner.dart';
+import 'package:wtf/screen/schedule/new_ui/argument/ex_detail_argument.dart';
 import 'package:wtf/widget/progress_loader.dart';
 
 class ExercisesScreen extends StatefulWidget {
@@ -45,14 +47,37 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       if (callMethod) {
         this.callMethod = false;
         user.getNewScheduleData();
-        getScheduleLog();
+        getLogData();
       }
     });
   }
 
-  void getScheduleLog(){
-    user.getMyScheduleLogs();
+  String getFormatDate(){
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('dd-MM-YYYY');
+    final String formatted = formatter.format(now);
+    return formatted;
   }
+
+  void logOnStartExercise() {
+    Map<String, dynamic> data = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "date": "${getFormatDate()}",
+      "exercises": "",
+      "is_started": "1",
+      'global_time':"${DateTime.now().millisecondsSinceEpoch}",
+    };
+    user.getMyScheduleLogs(callKey: 'is_started',body: data);
+  }
+
+  void getLogData(){
+    Map<String, dynamic> data = {
+      "user_id": locator<AppPrefs>().memberId.getValue(),
+      "date": "${getFormatDate()}",
+    };
+    user.getMyScheduleLogs(callKey: 'is_get',body: data);
+  }
+
 
   void onRefreshPage() {
     this.callMethod = true;
@@ -350,20 +375,25 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
               child: Text('Set ${item.set_no}',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
           Column(
-            children: item.exercises.map((e){
-             ScheduleLocalModelData d = ScheduleLocalModelData(isCompleted:true);
-              return itemCard(item: e,data:d);
+            children: item.exercises.map((e) {
+              ScheduleLocalModelData d =
+                  ScheduleLocalModelData(isCompleted: true);
+              return itemCard(item: e, data: d);
             }).toList(),
           )
         ]);
   }
 
-  Widget itemCard({bool selected = false, NewScheduleDataExercisesData item,ScheduleLocalModelData data}) {
+  Widget itemCard(
+      {bool selected = false,
+      NewScheduleDataExercisesData item,
+      ScheduleLocalModelData data}) {
     print('chech image url --- ${item}');
     //print('chek data ScheduleLocalModelData : ${data.itemUid}');
     return InkWell(
-      onTap: (){
-        NavigationService.pushName(Routes.exerciseDetailScreen);
+      onTap: () {
+        NavigationService.pushName(Routes.exerciseDetailScreen,
+            argument: ExerciseDetailArgument(mainData: item));
       },
       child: Container(
         margin: EdgeInsets.only(left: 16, right: 16, bottom: 18),
@@ -396,13 +426,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 34,
-                      height: 4,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.all(Radius.circular(100))),
-                    ),
+                    getPercentageView(),
                     SizedBox(
                       height: 6,
                     ),
@@ -417,19 +441,25 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     ListTile(
                       contentPadding:
                           EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-                      title: Text('Skull Candy'),
-                      trailing: data.isCompleted?SizedBox():Container(
-                        padding:
-                            EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                        decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.all(Radius.circular(100))),
-                        child: Text("Resume"),
-                      ),
+                      title: Text('${item.wo_name}'),
+                      trailing: data.isCompleted
+                          ? SizedBox()
+                          : Container(
+                              padding: EdgeInsets.only(
+                                  left: 8, right: 8, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100))),
+                              child: Text("Resume"),
+                            ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [Text('Set : 4'), Text('Reps : 12,14,15,16')],
+                        children: [
+                          Text('Set : ${item.sets}'),
+                          Text('Reps : ${item.reps}')
+                        ],
                       ),
                     )
                   ],
@@ -442,7 +472,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     );
   }
 
-  void startWorkoutWarning(){
+  void startWorkoutWarning() {
     showDialog(
       barrierColor: Colors.black26,
       context: context,
@@ -520,6 +550,16 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget getPercentageView() {
+    return Container(
+      width: 34,
+      height: 4,
+      decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.all(Radius.circular(100))),
     );
   }
 }

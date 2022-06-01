@@ -3099,14 +3099,6 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  ScheduleLocalModelData getSingleLocalScheduleModel(
-      {@required String scheduleUID}) {
-    ScheduleLocalModelData contain = scheduleLocalModel.exercises.firstWhere(
-        (product) => product.itemUid == scheduleUID,
-        orElse: () => null);
-    return contain;
-  }
-
   Future<bool> updatePartialPaymentStatus(
       {@required Map<String, dynamic> body}) async {
     return await RestDatasource().updatePartialPayment(body: body);
@@ -3143,10 +3135,10 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getMyScheduleLogs() async {
+  Future<void> getMyScheduleLogs({String callKey,Map<String,dynamic> body}) async {
     scheduleLocalModel = null;
     notifyListeners();
-    ScheduleLocalModel data = await RestDatasource().getMyScheduleLogs();
+    ScheduleLocalModel data = await RestDatasource().getMyScheduleLogs(callTag:callKey,body:body);
 
     if (data != null || data.status) {
       scheduleLocalModel = data;

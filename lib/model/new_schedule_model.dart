@@ -211,31 +211,30 @@ class ScheduleLocalModel {
   String uid;
   String user_id;
   String date;
-  String is_started;
+  int is_started;
   int startTime;
-  List<ScheduleLocalModelData> exercises;
+  // List<ScheduleLocalModelData> exercises;
 
   ScheduleLocalModel(
       {this.uid,
-      this.startTime,
-      this.date,
-      this.status,
+      this.startTime = 0,
+      this.date = '0',
+      this.status = false,
       this.user_id,
-      this.exercises,
-      this.is_started});
+      this.is_started = 0});
 
   factory ScheduleLocalModel.fromJson(Map<String, dynamic> json) {
     return ScheduleLocalModel(
-      uid: json["uid"] ?? 0,
-      status: json["status"] ?? 0,
-      user_id: json["user_id"] ?? 0,
-      date: json["date"] ?? 0,
+      uid: json["uid"],
+      status: json["status"] ?? false,
+      user_id: json["user_id"] ?? '',
+      date: json["date"] ?? '',
       is_started: json["is_started"] ?? 0,
       startTime: json["startTime"] ?? 0,
-      exercises: json.containsKey('exercises')
-          ? List<ScheduleLocalModelData>.from(
-              json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
-          : [],
+      // exercises: json.containsKey('exercises')
+      //     ? List<ScheduleLocalModelData>.from(
+      //         json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
+      //     : [],
     );
   }
 
