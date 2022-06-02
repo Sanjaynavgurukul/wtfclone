@@ -160,7 +160,7 @@ class ExerciseTimerHelper {
   //New Methods :D
 
   ///This method is for calculate total time different between two date and return in seconds
-  int getTimeDiff({int time = 0}) {
+  int getTimeDiff({int time = 0,bool wantInSec = false}) {
     if (time == 0 || time == null) {
       print('check diff sec null');
       return 0;
@@ -170,7 +170,11 @@ class ExerciseTimerHelper {
 
       int sec = date1.difference(date2).inSeconds;
       print('check diff sec $sec');
-      return sec * 1000;
+      if(wantInSec){
+        return sec;
+      }else{
+        return sec * 1000;
+      }
     }
   }
 

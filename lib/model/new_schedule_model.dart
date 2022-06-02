@@ -213,7 +213,7 @@ class ScheduleLocalModel {
   int is_started = 0;
   int global_time = 0;
 
-  // List<ScheduleLocalModelData> exercises;
+  List<ScheduleLocalModelData> exercises;
 
   ScheduleLocalModel(
       {this.uid,
@@ -221,18 +221,25 @@ class ScheduleLocalModel {
       this.status = false,
       this.user_id,
       this.global_time = 0,
+      this.exercises,
       this.is_started = 0});
 
   factory ScheduleLocalModel.fromJson(Map<String, dynamic> json) {
     print('check response data --- $json');
     return ScheduleLocalModel(
-        uid: json["uid"],
-        status: json["status"] ?? false,
-        user_id: json["user_id"] ?? '',
-        date: json["date"] ?? '',
-        is_started: json["is_started"] == null ? 0 : json["is_started"],
-        global_time: json['global_time'] == null ? 0 : int.parse(json['global_time']??'0')
-        );
+      uid: json["uid"],
+      status: json["status"] ?? false,
+      user_id: json["user_id"] ?? '',
+      date: json["date"] ?? '',
+      is_started: json["is_started"] == null ? 0 : json["is_started"],
+      global_time: json['global_time'] == null
+          ? 0
+          : int.parse(json['global_time'] ?? '0'),
+      exercises: json.containsKey('exercises') && json["exercises"] != null
+          ? List<ScheduleLocalModelData>.from(
+              json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
+          : [],
+    );
   }
 
   Map<String, dynamic> toJson(ScheduleLocalModel data) => {
@@ -247,7 +254,7 @@ class ScheduleLocalModelExercisesData {
 
   factory ScheduleLocalModelExercisesData.fromJson(Map<String, dynamic> json) {
     return ScheduleLocalModelExercisesData(
-      exercises: json.containsKey('exercises')
+      exercises: json.containsKey('exercises') && json["exercises"] != null
           ? List<ScheduleLocalModelData>.from(
               json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
           : [],
@@ -261,21 +268,27 @@ class ScheduleLocalModelData {
   bool isCompleted = false;
   String itemUid;
   int setCompleted = 0;
+  bool isPause = true;
+  int seconds = 0;
 
   ScheduleLocalModelData(
       {this.startTime = 0,
       this.isCompleted = false,
       this.endTime = 0,
       this.itemUid,
+      this.seconds = 0,
+        this.isPause = true,
       this.setCompleted = 0});
 
   factory ScheduleLocalModelData.fromJson(Map<String, dynamic> json) {
     return ScheduleLocalModelData(
-      startTime: json["startTime"] ?? 0,
-      endTime: json["endTime"] ?? 0,
-      isCompleted: json["isCompleted"] ?? false,
-      itemUid: json["itemUid"] ?? '',
-      setCompleted: json["setCompleted"] ?? 0,
+      startTime: json["startTime"] == null ? 0 : json["startTime"],
+      endTime: json["endTime"] == null ? 0 : json["endTime"],
+      isCompleted: json["isCompleted"] == null ? false : json["isCompleted"],
+      itemUid: json["itemUid"] == null ? '' : json["itemUid"],
+      setCompleted: json["setCompleted"] == null ? 0 : json["setCompleted"],
+      isPause: json["isPause"] == null ? true : json["isPause"],
+      seconds: json["seconds"] == null ? 0 : json["seconds"],
     );
   }
 
@@ -285,5 +298,7 @@ class ScheduleLocalModelData {
         "isCompleted": data.isCompleted,
         "itemUid": data.itemUid,
         "setCompleted": data.setCompleted,
+        "isPause": data.isPause,
+        "seconds": data.seconds,
       };
 }

@@ -3137,8 +3137,8 @@ class GymStore extends ChangeNotifier {
   }
 
   Future<ScheduleLocalModel> getMyScheduleLogs({String callKey,Map<String,dynamic> body}) async {
-    scheduleLocalModel = null;
-    notifyListeners();
+    //scheduleLocalModel = null;
+    //notifyListeners();
     ScheduleLocalModel data = await RestDatasource().getMyScheduleLogs(callTag:callKey,body:body);
 
     if (data != null) {

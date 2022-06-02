@@ -494,26 +494,24 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           Column(
             children: item.exercises.map((e) {
               ScheduleLocalModelData d = getSingleDataByUid();
-              return itemCard(item: e, data: d);
+              return itemCard(item: e);
             }).toList(),
           )
         ]);
   }
 
   Widget itemCard(
-      {bool selected = false,
-      NewScheduleDataExercisesData item,
-      ScheduleLocalModelData data}) {
-    print('chech image url --- ${item}');
+      {NewScheduleDataExercisesData item}) {
+  ScheduleLocalModelData v = getSingleChild(itemUid:item.uid);
     return InkWell(
-      onTap: () => takeItemNavigationAction(item: item, data: data),
+      onTap: () => takeItemNavigationAction(item: item, data: v),
       child: Container(
         margin: EdgeInsets.only(left: 16, right: 16, bottom: 18),
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
             border: Border.all(
-                width: selected ? 1 : 0,
-                color: !selected ? Colors.transparent : Colors.grey),
+                width: v.setCompleted !=0 ? 1 : 0,
+                color: v.setCompleted==0 ? Colors.transparent : Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(8))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,7 +544,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                       decoration: BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(100))),
-                      child: Text('${data.setCompleted}/${item.sets}'),
+                      child: Text('${v.setCompleted}/${item.sets}'),
                       padding:
                           EdgeInsets.only(left: 6, right: 6, top: 1, bottom: 1),
                     ),
@@ -554,7 +552,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                       contentPadding:
                           EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
                       title: Text('${item.wo_name}'),
-                      trailing: data.isCompleted
+                      trailing: v.setCompleted == 0
                           ? SizedBox()
                           : Container(
                               padding: EdgeInsets.only(
@@ -744,6 +742,15 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         print('check timer data --- null');
       }
     });
+  }
+
+  ScheduleLocalModelData getSingleChild({@required String itemUid}){
+    if(user.scheduleLocalModel != null && user.scheduleLocalModel.exercises != null && user.scheduleLocalModel.exercises .isNotEmpty){
+      ScheduleLocalModelData findItem= user.scheduleLocalModel.exercises.firstWhere((item) => item.itemUid == itemUid);
+      return findItem;
+    }else{
+      return new ScheduleLocalModelData();
+    }
   }
 
 }
