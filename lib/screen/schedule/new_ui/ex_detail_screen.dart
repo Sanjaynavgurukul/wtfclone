@@ -5,8 +5,13 @@ import 'package:provider/src/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
+import 'package:wtf/db/db_provider.dart';
+import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/navigation.dart';
+import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/new_schedule_model.dart';
 import 'package:wtf/screen/schedule/new/ex_start_screen.dart';
 import 'package:wtf/screen/schedule/new_ui/argument/ex_detail_argument.dart';
@@ -461,11 +466,17 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 
   void updateLogs(Map<String, dynamic> data) {
-    user.getMyScheduleLogs(callKey: 'is_update', body: data);
+    Map<String,dynamic> map = {
+      "user_id":locator<AppPrefs>().memberId.getValue(),
+      "date":Helper.formatDate2(DateTime.now().toIso8601String()),
+      "exercise":data
+    };
+    user.getMyScheduleLogs(callKey: 'is_update', body: map);
   }
 
   void navToRestPage() {
     print('Rest Time _______________________');
+    NavigationService.pushName(Routes.restScreen);
   }
 
   List<String> convertStringToIntList({@required String reps}) {
