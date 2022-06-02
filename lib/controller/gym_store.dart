@@ -3144,12 +3144,13 @@ class GymStore extends ChangeNotifier {
     if (data != null) {
       print('check data in store not null');
       scheduleLocalModel = data;
+      notifyListeners();
       return data;
     } else {
       print('check data in store  null');
       scheduleLocalModel = null;
+      notifyListeners();
       return null;
     }
-    notifyListeners();
   }
 }

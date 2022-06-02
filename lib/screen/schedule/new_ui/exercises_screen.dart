@@ -105,9 +105,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   String getFormatDate() {
     final DateTime now = DateTime.now();
-    final DateFormat formatter = DateFormat('dd-MM-YYYY');
-    final String formatted = formatter.format(now);
-    return formatted;
+    String value = Helper.formatDate2(now.toIso8601String());
+    return value;
   }
 
   @override
@@ -727,7 +726,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       "is_started": 1,
       'global_time': "${DateTime.now().millisecondsSinceEpoch}",
     };
-    user.getMyScheduleLogs(callKey: 'is_started', body: data);
+    user.getMyScheduleLogs(callKey: 'is_started', body: data).then((value) => getLogData());
   }
 
   void getLogData() {
