@@ -127,7 +127,6 @@ class NewScheduleDataExercisesData {
   bool hasLogs = false;
   ScheduleLocalModelData logData;
 
-
   static String getStringData(String e) {
     if (e == null || e.isEmpty)
       return '';
@@ -211,36 +210,49 @@ class ScheduleLocalModel {
   String uid;
   String user_id;
   String date;
-  int is_started;
-  int startTime;
+  int is_started = 0;
+  int global_time = 0;
+
   // List<ScheduleLocalModelData> exercises;
 
   ScheduleLocalModel(
       {this.uid,
-      this.startTime = 0,
       this.date = '0',
       this.status = false,
       this.user_id,
+      this.global_time = 0,
       this.is_started = 0});
 
   factory ScheduleLocalModel.fromJson(Map<String, dynamic> json) {
+    print('check response data --- $json');
     return ScheduleLocalModel(
-      uid: json["uid"],
-      status: json["status"] ?? false,
-      user_id: json["user_id"] ?? '',
-      date: json["date"] ?? '',
-      is_started: json["is_started"] ?? 0,
-      startTime: json["startTime"] ?? 0,
-      // exercises: json.containsKey('exercises')
-      //     ? List<ScheduleLocalModelData>.from(
-      //         json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
-      //     : [],
-    );
+        uid: json["uid"],
+        status: json["status"] ?? false,
+        user_id: json["user_id"] ?? '',
+        date: json["date"] ?? '',
+        is_started: json["is_started"] == null ? 0 : json["is_started"],
+        global_time: json['global_time'] == null ? 0 : int.parse(json['global_time']??'0')
+        );
   }
 
   Map<String, dynamic> toJson(ScheduleLocalModel data) => {
         // "startTime": data.startTime,
       };
+}
+
+class ScheduleLocalModelExercisesData {
+  List<ScheduleLocalModelData> exercises;
+
+  ScheduleLocalModelExercisesData({this.exercises});
+
+  factory ScheduleLocalModelExercisesData.fromJson(Map<String, dynamic> json) {
+    return ScheduleLocalModelExercisesData(
+      exercises: json.containsKey('exercises')
+          ? List<ScheduleLocalModelData>.from(
+              json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
+          : [],
+    );
+  }
 }
 
 class ScheduleLocalModelData {

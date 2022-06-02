@@ -1834,7 +1834,7 @@ class RestDatasource {
    return true;
   }
 
-  Future<NewScheduleModel> getNewScheduleData() async {
+  Future<NewScheduleModel> getNewScheduleData({String date}) async {
     // String userId = SharedPref.pref.getString(Preferences.USER_ID);
     String token = locator<AppPrefs>().token.getValue();
     String memberId = locator<AppPrefs>().memberId.getValue();
@@ -1843,14 +1843,14 @@ class RestDatasource {
     mapHeader["Authorization"] = "Bearer " + token;
     mapHeader["Content-Type"] = "application/json";
 
-    String finalUrl = Api.getNewScheduleApi();
+    String finalUrl = Api.getNewScheduleApi(user_id: memberId,date: date);
     return _netUtil
         .get(BASE_URL + finalUrl, headers: mapHeader)
         .then((dynamic res) {
       print("response get new schedule : " + res.toString());
       NewScheduleModel model = res != null && res['status']
           ? NewScheduleModel.fromJson(res)
-          : null;
+          : NewScheduleModel.fromJson({'status' : false,'data':[],'categories':[]});
       return model;
     });
   }
@@ -1863,17 +1863,21 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
     //Api Key :D
     String finalUrl = Api.getMyScheduleLogs(callTag);
-    print('check my schedule log final API url --- $finalUrl');
+    print('check my schedule log final API url --- $finalUrl  $body');
 
     //Calling API
     return _netUtil
         .post(BASE_URL + finalUrl, headers: mapHeader,body: body)
         .then((dynamic res) {
       print("response from my schedule logs --- " + res.toString());
-      ScheduleLocalModel model = res != null && res['status']
-          ? ScheduleLocalModel.fromJson(res)
-          : new ScheduleLocalModel();
-      return model;
+
+      if(res != null && res['status']){
+        print('data chck on response ---  true ${res['data']}');
+        return ScheduleLocalModel.fromJson(res['data'][0]);
+      }else{
+        print('data chck on response ---  false');
+        return null;
+      }
     });
 
   }

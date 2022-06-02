@@ -90,7 +90,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
             ],
           ),
         ),
-        body: args == null
+        body:args == null
             ? Center(
                 child: Loading(),
               )
@@ -142,7 +142,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                         Colors.grey,
                                         AppColors.BACK_GROUND_BG,
                                       ]),
-                                    ),child:Text('Sets ${args.localData.setCompleted}/${args.mainData.sets}',style:TextStyle(fontSize: 20,fontWeight:FontWeight.bold))
+                                    ),child:Text('Sets ${args.localData.setCompleted}/${convertStringToIntList(reps: args.mainData.reps).length}',style:TextStyle(fontSize: 20,fontWeight:FontWeight.bold))
                                   ),
                                   SizedBox(height:12),
                                   Row(
@@ -169,7 +169,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                           ),
                                           child: Column(
                                             children: [
-                                              Text('${args.mainData.reps}',style:TextStyle(fontSize: 20)),
+                                              Text('${convertStringToIntList(reps:args.mainData.reps)[args.localData.setCompleted]}',style:TextStyle(fontSize: 20)),
                                               SizedBox(height: 4,),
                                               Text('Reps',style:TextStyle(fontSize: 20)),
                                             ],
@@ -217,5 +217,25 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                       ],
                     ),
                   ));
+  }
+
+  bool hasCommaInReps({@required String reps}){
+    if(reps.isEmpty ||reps == null) return false;
+    else{
+      return reps.contains(',');
+    }
+  }
+
+  List<String> convertStringToIntList({@required String reps}){
+    bool hasComma =  hasCommaInReps(reps: reps);
+
+    if(hasComma){
+      List<String> dataList = reps.split(',');
+      dataList.remove('');
+      return dataList;
+    }else{
+      if(reps.isEmpty ||reps == null) return [];
+      else return [reps];
+    }
   }
 }

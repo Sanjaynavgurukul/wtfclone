@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
+import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/widget/image_stack.dart';
 import 'dart:math' as math;
+
+import 'package:wtf/widget/progress_loader.dart';
 
 class ScheduleMain extends StatefulWidget {
   static const String routeName = '/scheduleMain';
@@ -17,6 +23,8 @@ class ScheduleMain extends StatefulWidget {
 }
 
 class _ScheduleMainState extends State<ScheduleMain> {
+  GymStore user;
+  bool callMethod = true;
   double recommendedCircleHeight = 90.00;
   List<String> imagePath = [
     'https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg',
@@ -31,106 +39,151 @@ class _ScheduleMainState extends State<ScheduleMain> {
   ];
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    user = context.watch<GymStore>();
+  }
+
+  void callData() {
+    print('called -----');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (callMethod) {
+        this.callMethod = false;
+        user.getMySchedules(
+          date: Helper.formatDate2(DateTime.now().toIso8601String()),
+        );
+        print('final date checking called method --- ${user.workoutDate}');
+      }
+    });
+  }
+
+  void onRefreshPage() {
+    user.mySchedule = null;
+    this.callMethod = true;
+    callData();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //Calling initial Data :D
+    callData();
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.BACK_GROUND_BG,
-        elevation: 0,
-        title: Text('My Schedule'),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
+        appBar: AppBar(
+          backgroundColor: AppColors.BACK_GROUND_BG,
+          elevation: 0,
+          title: Text('My Schedule'),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, right: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.only(left: 0, right: 0),
-                title: Text('Hello,',
-                    style: TextStyle(color: Colors.grey, fontSize: 18)),
-                subtitle: Text('${locator<AppPrefs>().userName.getValue()}',
-                    style: TextStyle(color: Colors.white, fontSize: 24)),
-                trailing: ClipOval(
-                  child: Image.network(
-                    "${locator<AppPrefs>().avatar.getValue()}" ?? 'https://via.placeholder.com/150',
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace stackTrace) {
-                      return Text('Error');
-                    },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes
-                              : null,
-                        ),
-                      );
-                    },
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              labelWidget(label: 'Recommended Program'),
-              SizedBox(
-                height: 18,
-              ),
-              Wrap(
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                runSpacing: 0.0,
-                spacing: 12.0,
-                // gap between lines
-                children: <Widget>[
-                  recommendedWidget(label: "Goal Focus", imageUrl: ''),
-                  recommendedWidget(label: "Addons", imageUrl: ''),
-                  recommendedWidget(label: "Personal Training", imageUrl: ''),
-                ],
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              labelWidget(label: 'Current Trainer'),
-              SizedBox(
-                height: 18,
-              ),
-              labelWidget(label: 'Your Subscription'),
-              SizedBox(
-                height: 30,
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    yourSubscriptionWidget(),
-                    yourSubscriptionWidget(),
-                    yourSubscriptionWidget(),
-                    yourSubscriptionWidget(),
-                    yourSubscriptionWidget(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+        body: Container(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: Consumer<GymStore>(
+              builder: (context, store, child) => store.mySchedule != null
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 0, right: 0),
+                            title: Text('Hello,',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 18)),
+                            subtitle: Text(
+                                '${locator<AppPrefs>().userName.getValue()}',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 24)),
+                            trailing: ClipOval(
+                              child: Image.network(
+                                "${locator<AppPrefs>().avatar.getValue()}" ??
+                                    'https://via.placeholder.com/150',
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace stackTrace) {
+                                  return Text('Error');
+                                },
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value: loadingProgress
+                                                  .expectedTotalBytes !=
+                                              null
+                                          ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes
+                                          : null,
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          labelWidget(label: 'Recommended Program'),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          Wrap(
+                            alignment: WrapAlignment.start,
+                            runAlignment: WrapAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            runSpacing: 0.0,
+                            spacing: 12.0,
+                            // gap between lines
+                            children: <Widget>[
+                              recommendedWidget(
+                                  label: "Goal Focus", imageUrl: ''),
+                              recommendedWidget(label: "Addons", imageUrl: ''),
+                              recommendedWidget(
+                                  label: "Personal Training", imageUrl: ''),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          labelWidget(label: 'Current Trainer'),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          if(store.mySchedule.data != null && store.mySchedule.data.allData.isNotEmpty) labelWidget(label: 'Your Subscription'),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          //if(store.mySchedule.data != null && store.mySchedule.data.allData.isNotEmpty)
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  yourSubscriptionWidget(),
+                                  yourSubscriptionWidget(),
+                                  yourSubscriptionWidget(),
+                                  yourSubscriptionWidget(),
+                                  yourSubscriptionWidget(),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.topCenter,
+                      child: Loading(),
+                    ),
+            )));
   }
 
   Widget recommendedWidget(
@@ -183,7 +236,9 @@ class _ScheduleMainState extends State<ScheduleMain> {
         ));
   }
 
-  Widget labelWidget({@required String label,}) {
+  Widget labelWidget({
+    @required String label,
+  }) {
     return Text(
       '$label',
       style: TextStyle(fontSize: 16),
@@ -192,7 +247,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
 
   Widget yourSubscriptionWidget() {
     return InkWell(
-      onTap: (){
+      onTap: () {
         NavigationService.pushName(Routes.exercisesScreen);
       },
       child: Container(
@@ -203,7 +258,7 @@ class _ScheduleMainState extends State<ScheduleMain> {
             Container(
               margin: EdgeInsets.only(bottom: 11),
               constraints:
-                  BoxConstraints(minHeight: 200, minWidth: 140,maxWidth: 140),
+                  BoxConstraints(minHeight: 200, minWidth: 140, maxWidth: 140),
               decoration: BoxDecoration(
                   color: Colors.grey,
                   borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -213,34 +268,50 @@ class _ScheduleMainState extends State<ScheduleMain> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 12,right: 12,bottom: 12,top: 20),
+                    margin: EdgeInsets.only(
+                        left: 12, right: 12, bottom: 12, top: 20),
                     height: 46,
                     width: 46,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(100)),
-                        color: Colors.green,border: Border.all(color: Colors.white,width: 1)),
+                        color: Colors.green,
+                        border: Border.all(color: Colors.white, width: 1)),
                   ),
-                  SizedBox(height: 12,),
+                  SizedBox(
+                    height: 12,
+                  ),
                   Padding(
-                      padding:EdgeInsets.only(left: 12),child: Text('General Training',style: TextStyle(fontSize: 12),)),
-                  SizedBox(height: 12,),
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text(
+                        'General Training',
+                        style: TextStyle(fontSize: 12),
+                      )),
+                  SizedBox(
+                    height: 12,
+                  ),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            colors: [
-                              Colors.transparent,
-                              Colors.white
-                            ])
-                    ),
+                            colors: [Colors.transparent, Colors.white])),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 12),
-                        child: Text('F 24 3 MONTH',style: TextStyle(fontSize: 12),)),
-                  ),SizedBox(height: 2,),
+                        padding: EdgeInsets.only(left: 12),
+                        child: Text(
+                          'F 24 3 MONTH',
+                          style: TextStyle(fontSize: 12),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
                   Padding(
-                      padding:EdgeInsets.only(left: 12),child: Text('MEMBERSHIP',style: TextStyle(fontSize: 12),)),
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text(
+                        'MEMBERSHIP',
+                        style: TextStyle(fontSize: 12),
+                      )),
                 ],
               ),
             ),
@@ -261,7 +332,8 @@ class _ScheduleMainState extends State<ScheduleMain> {
               bottom: 0,
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 6),
+                  padding:
+                      EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 6),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(100)),
                       color: Colors.white),

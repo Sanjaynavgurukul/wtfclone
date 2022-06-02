@@ -183,13 +183,12 @@ class Api {
 
   static String getAddOnsGymsSlots({@required String date}) =>
       'slot/check/new?date=$date';
-
   static String getPartialPaymentStatus(
           {@required String userId, @required String subscription_id}) =>
       'subscription/paymentstatus?user_id=$userId&subscription_id=$subscription_id';
 
   static String getUpdatePartialPayment()=>'subscription/updatepayment';
 
-  static String getNewScheduleApi()=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=23-05-2022';
-  static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';
+  static String getNewScheduleApi({String user_id,String date})=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=$date';
+  static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';//23-05-2022
 }

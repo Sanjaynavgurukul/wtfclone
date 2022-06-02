@@ -6,15 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
+import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
 import 'package:wtf/model/new_schedule_model.dart';
+import 'package:wtf/screen/common_widgets/common_banner.dart';
 import 'package:wtf/screen/new_qr/argument/qr_argument.dart';
 import 'package:wtf/screen/new_qr/qr_scanner.dart';
 import 'package:wtf/screen/schedule/new_ui/argument/ex_detail_argument.dart';
@@ -40,25 +43,45 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   bool scheduleLogCallMethod = true;
   GymStore user;
   StopWatchTimer _stopWatchTimer;
+  DateTime _selectedDate = DateTime.now();
+
+  final dataStream = BehaviorSubject<String>();
+
+  final timerStream = BehaviorSubject<int>();
+
+  Function(String) get setSetsCount => dataStream.sink.add;
+
+  Stream<String> get getSetsCount => dataStream.stream;
+
+  Function(int) get setTimerStream => timerStream.sink.add;
+
+  Stream<int> get getTimerStream => timerStream.stream;
+
+  @override
+  void dispose() async {
+    super.dispose();
+    _scrollController.dispose();
+    dataStream.close();
+    timerStream.close();
+    if (_stopWatchTimer != null) await _stopWatchTimer.dispose();
+  }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     user = context.watch<GymStore>();
+    // var date =
+    // Helper.formatDate2(DateTime.now().toIso8601String());
+    // if(user.workoutDate.isEmpty || user.workoutDate == null){
+    //   user.workoutDate = date;
+    // }
   }
 
-  @override
-  void dispose() async {
-    super.dispose();
-    _scrollController.dispose();
-    await _stopWatchTimer.dispose();
-  }
-
-  void startTimer() {
+  void startTimer({int time}) {
     _stopWatchTimer = StopWatchTimer(
       presetMillisecond:
-          exTimerHelper.getTimeDiff(time: user.scheduleLocalModel.startTime),
+          exTimerHelper.getTimeDiff(time: time),
       mode: StopWatchMode.countUp,
     );
 
@@ -69,7 +92,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
   }
 
-  void callData() {
+  void callData(String date) {
     print('called -----');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (callMethod) {
@@ -85,11 +108,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final DateFormat formatter = DateFormat('dd-MM-YYYY');
     final String formatted = formatter.format(now);
     return formatted;
-  }
-
-  void onRefreshPage() {
-    this.callMethod = true;
-    user.getNewScheduleData();
   }
 
   @override
@@ -122,8 +140,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 
   Widget getTimerWidget() {
-    bool timeStarted = user.scheduleLocalModel.is_started == 1;
-    print('Is Started or not $timeStarted');
+    int d = user.scheduleLocalModel == null || user.scheduleLocalModel.is_started == null? 0:user.scheduleLocalModel.is_started;
+    bool timeStarted = d == 1??false;
+    //print('Is Started or not $timeStarted');
     return !timeStarted
         ? SizedBox(height: 0)
         : Container(
@@ -137,7 +156,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     bottomLeft: Radius.circular(100))),
             child: StreamBuilder<int>(
               stream: _stopWatchTimer.secondTime,
-              initialData: _stopWatchTimer.secondTime.value,
+              initialData: 0,
               builder: (context, snap) {
                 int value = snap.data;
                 exTimerHelper.setTimeInLocal(counter: value, isEx: false);
@@ -153,135 +172,218 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           );
   }
 
+  String getTodayDate() {
+    return Helper.formatDate2(DateTime.now().toIso8601String());
+  }
+
   @override
   Widget build(BuildContext context) {
-    //Calling data
-    callData();
-
     return Consumer<GymStore>(builder: (context, user, snapshot) {
-      if (user.newScheduleModel == null)
-        return Material(
-          child: Center(
-            child: Loading(),
-          ),
-        );
-      else {
-        return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              elevation: isScrolledToTop ? 0 : 4,
-              backgroundColor: isScrolledToTop
-                  ? Colors.transparent
-                  : AppColors.BACK_GROUND_BG,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios),
-              ),
-              title: Text('Exercise'),
+      return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            elevation: isScrolledToTop ? 0 : 4,
+            backgroundColor:
+                isScrolledToTop ? Colors.transparent : AppColors.BACK_GROUND_BG,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back_ios),
             ),
-            body: Container(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                padding: EdgeInsets.only(bottom: 80),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: 300,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                  Colors.grey,
-                                  Colors.transparent,
-                                ])),
-                          ),
-                          Positioned(
-                            right: 0,
-                            child: SafeArea(
-                              child: getTimerWidget(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    DatePicker(
-                      DateTime.now(),
-                      initialSelectedDate: DateTime.now(),
-                      selectionColor: Colors.white,
-                      selectedTextColor: Colors.black,
-                      onDateChange: (date) {
-                        // New date selected
-                        setState(() {});
-                      },
-                    ),
-                    SizedBox(
-                      height: 18,
-                    ),
-                    InkWell(
-                      onTap: () => takeActionOnStartWorkoutButton(),
-                      child: Container(
-                        padding: EdgeInsets.all(12),
-                        margin: EdgeInsets.only(left: 16, right: 16),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                            color: AppConstants.bgColor),
-                        child: Text(
-                          'Start Workout',
-                          style: TextStyle(fontSize: 16),
+            title: Text('Exercise'),
+          ),
+          body: Container(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              padding: EdgeInsets.only(bottom: 80),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 300,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                Colors.grey,
+                                Colors.transparent,
+                              ])),
+                          child: CommonBanner(bannerType: 'explore',height: 300,fraction: 1,),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 26,
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        child: Text(
-                          'Today\'s Schedule',
-                          style: TextStyle(fontSize: 18),
-                        )),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    user.newScheduleModel.newScheduleCat == null ||
-                            user.newScheduleModel.newScheduleCat.isEmpty
-                        ? Container()
-                        : Container(
-                            padding: EdgeInsets.only(left: 16),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.only(right: 16),
-                              child: Row(
-                                children: user.newScheduleModel.newScheduleCat
-                                    .map((e) => scheduleExerciseItem(e))
-                                    .toList(),
-                              ),
+                        Positioned(
+                          right: 0,
+                          child: SafeArea(
+                            child:  StreamBuilder(
+                              stream: timerStream,
+                              initialData: 0,
+                              builder:
+                                  (BuildContext context, AsyncSnapshot<int> snapshot) {
+                                if(snapshot.data != 0){
+                                  print('check global date timer ${user.scheduleLocalModel.global_time}');
+                                  startTimer(time:user.scheduleLocalModel.global_time);
+                                 return getTimerWidget();
+                                }else{
+                                  return SizedBox(height:0);
+                                }
+
+                              },
                             ),
                           ),
-                    Container(
-                      child: Column(
-                        children: user.newScheduleModel.newScheduleData
-                            .map((e) => itemA(e))
-                            .toList(),
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  DatePicker(
+                    DateTime.now(),
+                    initialSelectedDate: DateTime.now(),
+                    selectionColor: Colors.white,
+                    selectedTextColor: Colors.black,
+                    onDateChange: (dates) {
+                      // New date selected
+                      // setState(() {
+                      //   _selectedDate = dates;
+                      // });
+                      // //_selectedDate = dates;
+                      // var date =
+                      // Helper.formatDate2(_selectedDate.toIso8601String());
+                      // user.workoutDate = date;
+                      //onRefreshPage();
+                      this.callMethod = true;
+                      String date = Helper.formatDate2(dates.toIso8601String());
+                      dataStream.add(date);
+                    },
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  StreamBuilder(
+                    stream: dataStream,
+                    initialData: getTodayDate(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      user.workoutDate = snapshot.data;
+                      //Calling data
+                      callData(snapshot.data);
+
+                      print(
+                          'check stream datya --- ${snapshot.data} ${user.workoutDate}');
+                      if (user.newScheduleModel == null) {
+                        return Center(
+                          child: Loading(),
+                        );
+                      } else {
+                        if (user.newScheduleModel.status == false) {
+                          return Center(
+                            child: Text('No Data Found'),
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              ///this is start workout button :D
+                              user.newScheduleModel.status != false
+                                  ? InkWell(
+                                      onTap: () =>
+                                          takeActionOnStartWorkoutButton(),
+                                      child: Container(
+                                        padding: EdgeInsets.all(12),
+                                        margin: EdgeInsets.only(
+                                            left: 16, right: 16),
+                                        alignment: Alignment.center,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(100)),
+                                            color: AppConstants.bgColor),
+                                        child: Text(
+                                          'Start Workout',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 0,
+                                    ),
+                              SizedBox(
+                                height: 26,
+                              ),
+                              if (user.newScheduleModel.newScheduleCat !=
+                                      null &&
+                                  user.newScheduleModel.newScheduleCat
+                                      .isNotEmpty)
+                                Container(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 16, right: 16),
+                                          child: Text(
+                                            'Today\'s Schedule',
+                                            style: TextStyle(fontSize: 18),
+                                          )),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(left: 16),
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          padding: EdgeInsets.only(right: 16),
+                                          child: Row(
+                                            children: user
+                                                .newScheduleModel.newScheduleCat
+                                                .map((e) =>
+                                                    scheduleExerciseItem(e))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else
+                                Container(
+                                  child: Text('No Exercise Found'),
+                                ),
+
+                              if (user.newScheduleModel.newScheduleData
+                                      .isNotEmpty &&
+                                  user.newScheduleModel.newScheduleData !=
+                                      null &&
+                                  user.newScheduleModel != null)
+                                Container(
+                                  child: Column(
+                                    children: user
+                                        .newScheduleModel.newScheduleData
+                                        .map((e) => itemA(e))
+                                        .toList(),
+                                  ),
+                                )
+                              else
+                                Container(
+                                  child: Text('No Exercise Found'),
+                                ),
+                            ],
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ],
               ),
-            ));
-      }
+            ),
+          ));
     });
   }
 
@@ -600,7 +702,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     if (user.attendanceDetails != null && user.attendanceDetails.data != null) {
       log('exerciseScreen attendance already marked ----');
       NavigationService.pushName(Routes.exerciseDetailScreen,
-          argument: ExerciseDetailArgument(mainData: item,localData: data));
+          argument: ExerciseDetailArgument(mainData: item, localData: data));
     } else {
       log('exerciseScreen attendance not marked opening qr code ----');
       navigateToQrScanner();
@@ -609,10 +711,15 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   void navigateToQrScanner() {
     NavigationService.pushName(Routes.qrScanner,
-        argument: QrArgument(qrNavigation: QRNavigation.NAVIGATE_POP));
+        argument: QrArgument(qrNavigation: QRNavigation.NAVIGATE_POP)).then((value){
+          if(user.attendanceDetails != null && user.attendanceDetails.data != null){
+            logOnStartExercise();
+          }
+    });
   }
 
   void logOnStartExercise() {
+    log('exerciseScreen logOnStartExercise method called ---');
     Map<String, dynamic> data = {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "date": "${getFormatDate()}",
@@ -628,6 +735,16 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       "user_id": locator<AppPrefs>().memberId.getValue(),
       "date": "${getFormatDate()}",
     };
-    user.getMyScheduleLogs(callKey: 'is_get', body: data);
+    user.getMyScheduleLogs(callKey: 'is_get', body: data).then((value) {
+      print('check timer data --- called');
+      //Control Timer Widget
+      if(value != null){
+        print('check timer data --- ${user.scheduleLocalModel.is_started}');
+        timerStream.add(user.scheduleLocalModel.is_started);
+      }else{
+        print('check timer data --- null');
+      }
+    });
   }
+
 }

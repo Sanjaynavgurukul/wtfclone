@@ -162,11 +162,15 @@ class ExerciseTimerHelper {
   ///This method is for calculate total time different between two date and return in seconds
   int getTimeDiff({int time = 0}) {
     if (time == 0 || time == null) {
+      print('check diff sec null');
       return 0;
     } else {
       DateTime date1 = DateTime.now();
       DateTime date2 = DateTime.fromMillisecondsSinceEpoch(time);
-      return date1.difference(date2).inSeconds;
+
+      int sec = date1.difference(date2).inSeconds;
+      print('check diff sec $sec');
+      return sec * 1000;
     }
   }
 

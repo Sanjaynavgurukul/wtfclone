@@ -3089,7 +3089,8 @@ class GymStore extends ChangeNotifier {
   Future<void> getNewScheduleData() async {
     newScheduleModel = null;
     notifyListeners();
-    NewScheduleModel data = await RestDatasource().getNewScheduleData();
+    print('check workout date --- $workoutDate');
+    NewScheduleModel data = await RestDatasource().getNewScheduleData(date: workoutDate);
 
     if (data != null || data.status) {
       newScheduleModel = data;
@@ -3135,15 +3136,19 @@ class GymStore extends ChangeNotifier {
     }
   }
 
-  Future<void> getMyScheduleLogs({String callKey,Map<String,dynamic> body}) async {
+  Future<ScheduleLocalModel> getMyScheduleLogs({String callKey,Map<String,dynamic> body}) async {
     scheduleLocalModel = null;
     notifyListeners();
     ScheduleLocalModel data = await RestDatasource().getMyScheduleLogs(callTag:callKey,body:body);
 
-    if (data != null || data.status) {
+    if (data != null) {
+      print('check data in store not null');
       scheduleLocalModel = data;
+      return data;
     } else {
+      print('check data in store  null');
       scheduleLocalModel = null;
+      return null;
     }
     notifyListeners();
   }
