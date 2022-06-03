@@ -247,20 +247,6 @@ class ScheduleLocalModel {
       };
 }
 
-class ScheduleLocalModelExercisesData {
-  List<ScheduleLocalModelData> exercises;
-
-  ScheduleLocalModelExercisesData({this.exercises});
-
-  factory ScheduleLocalModelExercisesData.fromJson(Map<String, dynamic> json) {
-    return ScheduleLocalModelExercisesData(
-      exercises: json.containsKey('exercises') && json["exercises"] != null
-          ? List<ScheduleLocalModelData>.from(
-              json["exercises"].map((x) => ScheduleLocalModelData.fromJson(x)))
-          : [],
-    );
-  }
-}
 
 class ScheduleLocalModelData {
   int startTime = 0;

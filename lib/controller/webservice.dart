@@ -54,6 +54,7 @@ import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/partial_payment_model.dart';
 import 'package:wtf/model/preamble_model.dart';
+import 'package:wtf/model/recomended_program_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 
@@ -1879,7 +1880,34 @@ class RestDatasource {
         return null;
       }
     });
-
   }
+
+  Future<RecommendedProgramModel> getRecommendedProgram(){
+    //Authentication data :D
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+
+    //Api Key :D
+    String finalUrl = Api.getRecommendedProgram();
+    print('getRecommendedProgram api key --- $finalUrl');
+
+    //Calling API
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response from my getRecommendedProgram logs --- " + res.toString());
+
+      if(res != null && res['status']){
+        print('data chck on response ---  true ${res['data']}');
+        return RecommendedProgramModel.fromJson(res);
+      }else{
+        print('data chck on response ---  false');
+        return null;
+      }
+    });
+  }
+
 
 }

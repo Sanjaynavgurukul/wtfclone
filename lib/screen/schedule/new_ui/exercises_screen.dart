@@ -244,6 +244,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     initialSelectedDate: DateTime.now(),
                     selectionColor: Colors.white,
                     selectedTextColor: Colors.black,
+                    deactivatedColor: Colors.white,
                     onDateChange: (dates) {
                       // New date selected
                       // setState(() {
@@ -699,7 +700,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     if (user.attendanceDetails != null && user.attendanceDetails.data != null) {
       log('exerciseScreen attendance already marked ----');
       NavigationService.pushName(Routes.exerciseDetailScreen,
-          argument: ExerciseDetailArgument(mainData: item, localData: data));
+          argument: ExerciseDetailArgument(mainData: item, localData: data,localUid:user.scheduleLocalModel.uid));
     } else {
       log('exerciseScreen attendance not marked opening qr code ----');
       navigateToQrScanner();

@@ -30,6 +30,7 @@ class ExerciseDetailScreen extends StatefulWidget {
 class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   NewScheduleDataExercisesData data;
   ScheduleLocalModelData localData;
+  String localUid = '';
   GymStore user;
   StopWatchTimer _stopWatchTimer;
   bool isFreshPage = true;
@@ -93,6 +94,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
 
     data = args.mainData;
     localData = args.localData;
+    localUid = args.localUid;
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -467,6 +469,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
 
   void updateLogs(Map<String, dynamic> data) {
     Map<String,dynamic> map = {
+      'uid': localUid,
       "user_id":locator<AppPrefs>().memberId.getValue(),
       "date":Helper.formatDate2(DateTime.now().toIso8601String()),
       "exercise":data

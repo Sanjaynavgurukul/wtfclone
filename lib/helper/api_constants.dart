@@ -190,5 +190,6 @@ class Api {
   static String getUpdatePartialPayment()=>'subscription/updatepayment';
 
   static String getNewScheduleApi({String user_id,String date})=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=$date';
-  static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';//23-05-2022
+  static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';
+  static String getRecommendedProgram()=>'plan/recomended/programs';
 }

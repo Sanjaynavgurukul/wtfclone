@@ -72,6 +72,7 @@ import 'package:wtf/model/new_trainers_model.dart';
 import 'package:wtf/model/offers.dart';
 import 'package:wtf/model/partial_payment_model.dart';
 import 'package:wtf/model/preamble_model.dart';
+import 'package:wtf/model/recomended_program_model.dart';
 import 'package:wtf/model/redeem_history.dart';
 import 'package:wtf/model/shopping_categories.dart';
 import 'package:wtf/screen/schedule/timer_helper/exercise_timer_helper.dart';
@@ -268,6 +269,9 @@ class GymStore extends ChangeNotifier {
 
   //Get My Schedule Logs
   ScheduleLocalModel scheduleLocalModel;
+
+  //Recommended Program Model
+  RecommendedProgramModel recommendedProgramModel;
 
   //TODO this is temporary variables this will change each timer when you come to my schedule :D
 
@@ -3152,5 +3156,19 @@ class GymStore extends ChangeNotifier {
       notifyListeners();
       return null;
     }
+  }
+
+  Future<void> getRecommendedProgram()async{
+    RecommendedProgramModel data = await RestDatasource().getRecommendedProgram();
+
+    if (data != null) {
+      print('check data in store not null');
+      recommendedProgramModel = data;
+    } else {
+      print('check data in store  null');
+      recommendedProgramModel = null;
+    }
+
+    notifyListeners();
   }
 }
