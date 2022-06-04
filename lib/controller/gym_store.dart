@@ -234,6 +234,7 @@ class GymStore extends ChangeNotifier {
   double sessionRating = 0.0;
 
   double trainerRating = 0.0;
+  String feedbackComment = '';
 
   String workoutMappingId = '';
 
@@ -290,6 +291,11 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setComment({String comment})async{
+    feedbackComment = comment;
+    notifyListeners();
+  }
+
   Future<void> setOffer({BuildContext context, OfferData data}) async {
     if (data != null) {
       var isValid = await RestDatasource().checkOffer(offerId: data.uid);
@@ -313,8 +319,6 @@ class GymStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool getIsSubscribed(String gymId) {}
-
   Future<void> applyCoupon({BuildContext context, OfferData data}) async {
     await setOffer(context: context, data: data);
     notifyListeners();
@@ -330,6 +334,7 @@ class GymStore extends ChangeNotifier {
     Map<String, dynamic> body = {
       'session_rating': sessionRating.toInt(),
       'trainer_rating': trainerRating.toInt(),
+      'comment': feedbackComment??'',
       'workout_mapping_id': workoutMappingId,
       'trainer_id': currentTrainer.data.userId,
       'type': 'workout_feedback',

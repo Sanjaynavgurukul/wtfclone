@@ -79,7 +79,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppColors.BACK_GROUND_BG,
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
-          NavigationService.pushName(Routes.scheduleMain);
+          // NavigationService.pushName(Routes.scheduleMain);
+          NavigationService.pushName(Routes.exerciseDone);
         },
         child: Icon(Icons.add),
       ),
