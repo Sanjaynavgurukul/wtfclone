@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:wtf/100ms/common/util/utility_components.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
@@ -43,7 +44,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   bool scheduleLogCallMethod = true;
   GymStore user;
   StopWatchTimer _stopWatchTimer;
-  DateTime _selectedDate = DateTime.now();
 
   final dataStream = BehaviorSubject<String>();
 
@@ -177,6 +177,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String tD = Helper.formatDate2(DateTime.now().toIso8601String());
     return Consumer<GymStore>(builder: (context, user, snapshot) {
       return Scaffold(
           extendBodyBehindAppBar: true,
@@ -214,7 +215,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                                 Colors.grey,
                                 Colors.transparent,
                               ])),
-                          child: CommonBanner(bannerType: 'explore',height: 300,fraction: 1,),
+                          child: CommonBanner(bannerType: 'PM_banner',height: 300,fraction: 1,),
                         ),
                         Positioned(
                           right: 0,
@@ -287,27 +288,33 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                           return Column(
                             children: [
                               ///this is start workout button :D
-                              user.newScheduleModel.status != false
-                                  ? InkWell(
-                                      onTap: () =>
-                                          takeActionOnStartWorkoutButton(),
-                                      child: Container(
-                                        padding: EdgeInsets.all(12),
-                                        margin: EdgeInsets.only(
-                                            left: 16, right: 16),
-                                        alignment: Alignment.center,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(100)),
-                                            color: AppConstants.bgColor),
-                                        child: Text(
-                                          'Start Workout',
-                                          style: TextStyle(fontSize: 16),
+                              user.newScheduleModel.status != false && tD == user.workoutDate
+                                  ? StreamBuilder(
+                                stream: timerStream,
+                                initialData: 0,
+                                builder:
+                                    (BuildContext context, AsyncSnapshot<int> snapshot) {
+                                     return InkWell(
+                                        onTap: () =>
+                                            takeActionOnStartWorkoutButton(),
+                                        child: Container(
+                                          padding: EdgeInsets.all(12),
+                                          margin: EdgeInsets.only(
+                                              left: 16, right: 16),
+                                          alignment: Alignment.center,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(100)),
+                                              color: AppConstants.bgColor),
+                                          child: Text(
+                                            timerStream.value != null && snapshot.data == 1 ? 'Stop Workout':'Start Workout',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : SizedBox(
+                                      );
+                                },
+                              ): SizedBox(
                                       height: 0,
                                     ),
                               SizedBox(
@@ -699,8 +706,14 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       {NewScheduleDataExercisesData item, ScheduleLocalModelData data}) {
     if (user.attendanceDetails != null && user.attendanceDetails.data != null) {
       log('exerciseScreen attendance already marked ----');
-      NavigationService.pushName(Routes.exerciseDetailScreen,
-          argument: ExerciseDetailArgument(mainData: item, localData: data,localUid:user.scheduleLocalModel.uid));
+      if(timerStream.value != null && timerStream.value == 1){
+        //TODO check index var :@
+        NavigationService.pushName(Routes.exerciseDetailScreen,
+            argument: ExerciseDetailArgument(mainData: item, localData: data,localUid:user.scheduleLocalModel.uid));
+      }else{
+        UtilityComponents.showSnackBarWithString('Please Start Workout First!', context);
+        log('Please Start Workout First!');
+      }
     } else {
       log('exerciseScreen attendance not marked opening qr code ----');
       navigateToQrScanner();
@@ -739,6 +752,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       if(value != null){
         print('check timer data --- ${user.scheduleLocalModel.is_started}');
         timerStream.add(user.scheduleLocalModel.is_started);
+        
       }else{
         print('check timer data --- null');
       }
@@ -755,3 +769,4 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 
 }
+//PM_banner

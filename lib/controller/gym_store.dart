@@ -1182,6 +1182,7 @@ class GymStore extends ChangeNotifier {
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
   ///
+
   Future<bool> openPermissionWarningDialog(BuildContext context) {
     // set up the button
     Widget okButton = TextButton(

@@ -16,6 +16,10 @@ class ExerciseTimerHelper {
     String hour = ((time / (60 * 60)) % 60).floor().toString().padLeft(2, '0');
     return hour;
   }
+  String convertDay(int time) {
+    String hour = ((time / (60 * 60 * 24)) % 60).floor().toString().padLeft(2, '0');
+    return hour;
+  }
 
   String convertMin(int time) {
     String min = ((time / 60) % 60).floor().toString().padLeft(2, '0');
