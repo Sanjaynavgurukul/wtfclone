@@ -617,7 +617,7 @@ class GymStore extends ChangeNotifier {
   //     return false;
   //   }
   // }
-
+  
   Future<void> manageGlobalTimer({
     BuildContext context,
     String mode,

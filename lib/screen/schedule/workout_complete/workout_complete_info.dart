@@ -16,7 +16,7 @@ class WorkoutCompleteInfo extends StatelessWidget {
           Column(
             children: [
               Text(
-                context.read<GymStore>().completedWorkout.data.eDuration ??
+                //context.read<GymStore>().completedWorkout.data.eDuration ??
                     'N/A',
                 style: TextStyle(fontSize: 36, color: Colors.white),
               ),
@@ -36,7 +36,7 @@ class WorkoutCompleteInfo extends StatelessWidget {
           Column(
             children: [
               Text(
-                '${context.read<GymStore>().completedWorkout.data.totalCaloriesBurn}' ??
+                //'${context.read<GymStore>().completedWorkout.data.totalCaloriesBurn}' ??
                     '',
                 style: TextStyle(fontSize: 36, color: Colors.white),
               ),

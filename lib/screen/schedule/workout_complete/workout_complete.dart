@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:wtf/controller/gym_store.dart';
 import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/ui_helpers.dart';
 import 'package:wtf/screen/schedule/workout_complete/rate_session.dart';
 import 'package:wtf/screen/schedule/workout_complete/success_image.dart';
 import 'package:wtf/screen/schedule/workout_complete/workout_complete_buttons.dart';
+import 'package:wtf/screen/schedule/workout_complete/workout_complete_info.dart';
 import '../../../main.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -67,29 +69,42 @@ class _WorkoutCompleteState extends State<WorkoutComplete> {
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                cardUI(title: '02:30:00', subtitle: 'Total Duration'),
+                cardUI(title: '${store.completedWorkout == null || store.completedWorkout.data == null ? '0':store.completedWorkout.data.eDuration ??
+                    '0'}', subtitle: 'Total Duration'),
                 SizedBox(width: 14),
-                cardUI(title: '800 Kcal', subtitle: 'Tentative Calorie\nBurnt')
+                cardUI(title: '${store.completedWorkout == null || store.completedWorkout.data == null ? '0':store.completedWorkout.data.totalCaloriesBurn ?? '0'} Kcal', subtitle: 'Tentative Calorie\nBurnt')
               ],
             ),
+            //WorkoutCompleteInfo(),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 48,
-        margin: EdgeInsets.only(left: 16, right: 16, bottom: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(90),
-          color: Color(0xffBB0000),
-        ),
-        child: Center(
-          child: Text(
-            'Continue',
-            style: GoogleFonts.openSans(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+      bottomNavigationBar: InkWell(
+        onTap:(){
+          if (store.sessionRating > 0.0 && store.trainerRating > 0.0) {
+            store.submitRating(context: context);
+          } else {
+            FlashHelper.informationBar(context,
+                message: 'Please give rating first');
+          }
+        },
+        child: Container(
+          height: 48,
+          margin: EdgeInsets.only(left: 16, right: 16, bottom: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(90),
+            color: Color(0xffBB0000),
+          ),
+          child: Center(
+            child: Text(
+              'Continue',
+              style: GoogleFonts.openSans(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),
