@@ -96,7 +96,7 @@ class Schedule extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, Routes.mainAttendance);
+                  Navigator.pushNamed(context, Routes.qrScanner);
                 },
                 child: Text(
                   'Unlock\nSession',

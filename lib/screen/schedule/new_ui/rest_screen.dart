@@ -29,7 +29,6 @@ class _RestScreenState extends State<RestScreen> {
     });
   }
 
-
   @override
   void dispose() async {
     super.dispose();

@@ -999,15 +999,16 @@ class TodayScheduleItem extends StatelessWidget {
                               break;
                           }
                         } else {
-                          context.read<GymStore>().setSelectedSchedule(
-                                context: context,
-                                val: data,
-                              );
+                          //TODO new Schedule Removed here :D
+                          // context.read<GymStore>().setSelectedSchedule(
+                          //       context: context,
+                          //       val: data,
+                          //     );
                           //TODO check here checkin
                           context
                               .read<GymStore>()
                               .getCurrentAttendance(context: context);
-                          NavigationService.navigateTo(Routes.mainAttendance);
+                          NavigationService.navigateTo(Routes.qrScanner);
                         }
                       },
                       child: Container(
@@ -1055,7 +1056,8 @@ class TodayScheduleItem extends StatelessWidget {
                               break;
                           }
                         } else {
-                          NavigationService.navigateTo(Routes.dateWorkoutList);
+                          //TODO check new schedule Here
+                          NavigationService.navigateTo(Routes.scheduleMain);
                         }
                       },
                       child: Container(

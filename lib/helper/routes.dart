@@ -133,7 +133,8 @@ class Routes {
   static const String shiftTrainer = '/shiftTrainer';
   static const String buySession = '/buySession';
   static const String bmrCalculator = '/bmrCalculator';
-  static const String mainAttendance = '/mainAttendance';
+  //TODO check new schedule Here
+  // static const String mainAttendance = '/mainAttendance';
   static const String scanAttendance = '/scanAttendance';
   static const String dashboard = '/dashboard';
   static const String bodyFatCal = '/bodyFatCal';
@@ -156,8 +157,9 @@ class Routes {
   static const String addonsCat = AddonsCat.routeName;
   static const String gymCat = GymCat.routeName;
   static const String paymentProcess = PaymentProcess.routeName;
-  static const String mainWorkout = MainWorkout.routeName;
-  static const String dateWorkoutList = DateWorkoutList.routeName;
+  //TODO check new schedule Here
+  // static const String mainWorkout = MainWorkout.routeName;
+  // static const String dateWorkoutList = DateWorkoutList.routeName;
   static const String workoutDetails = WorkoutDetails.routeName;
   static const String exStartScreen = ExStartScreen.routeName;
   static const String gymNotFound = GymNotFound.routeName;
@@ -261,22 +263,23 @@ class RouteGenerator {
         )
             : CupertinoPageRoute(
             builder: (context) => WorkoutDetails(), settings: settings);
-      case Routes.dateWorkoutList:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-          widget: DateWorkoutList(),
-          settings: settings,
-        )
-            : CupertinoPageRoute(
-            builder: (context) => DateWorkoutList(), settings: settings);
-      case Routes.mainWorkout:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-          widget: MainWorkout(),
-          settings: settings,
-        )
-            : CupertinoPageRoute(
-            builder: (context) => MainWorkout(), settings: settings);
+    //TODO check new schedule Here
+      // case Routes.dateWorkoutList:
+      //   return Platform.isAndroid
+      //       ? _FadedTransitionRoute(
+      //     widget: DateWorkoutList(),
+      //     settings: settings,
+      //   )
+      //       : CupertinoPageRoute(
+      //       builder: (context) => DateWorkoutList(), settings: settings);
+      // case Routes.mainWorkout:
+      //   return Platform.isAndroid
+      //       ? _FadedTransitionRoute(
+      //     widget: MainWorkout(),
+      //     settings: settings,
+      //   )
+      //       : CupertinoPageRoute(
+      //       builder: (context) => MainWorkout(), settings: settings);
       case Routes.changeDietScreen:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
@@ -621,14 +624,15 @@ class RouteGenerator {
       //         )
       //       : CupertinoPageRoute(
       //           builder: (context) => MyScheduleScreen(), settings: settings);
-      case Routes.mainWorkoutScreen:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-                widget: MainWorkoutScreen(),
-                settings: settings,
-              )
-            : CupertinoPageRoute(
-                builder: (context) => MainWorkoutScreen(), settings: settings);
+    //TODO check new schedule Here
+      // case Routes.mainWorkoutScreen:
+      //   return Platform.isAndroid
+      //       ? _FadedTransitionRoute(
+      //           widget: MainWorkoutScreen(),
+      //           settings: settings,
+      //         )
+      //       : CupertinoPageRoute(
+      //           builder: (context) => MainWorkoutScreen(), settings: settings);
       case Routes.exercise:
         return Platform.isAndroid
             ? _FadedTransitionRoute(
@@ -769,22 +773,23 @@ class RouteGenerator {
               )
             : CupertinoPageRoute(
                 builder: (context) => BMRCalculator(), settings: settings);
-      case Routes.mainAttendance:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-                widget: Attendance(),
-                settings: settings,
-              )
-            : CupertinoPageRoute(
-                builder: (context) => Attendance(), settings: settings);
-      case Routes.scanAttendance:
-        return Platform.isAndroid
-            ? _FadedTransitionRoute(
-                widget: QRScanner(),
-                settings: settings,
-              )
-            : CupertinoPageRoute(
-                builder: (context) => QRScanner(), settings: settings);
+    //TODO check new schedule Here
+    //   case Routes.mainAttendance:
+    //     return Platform.isAndroid
+    //         ? _FadedTransitionRoute(
+    //       widget: Attendance(),
+    //       settings: settings,
+    //     )
+    //         : CupertinoPageRoute(
+    //         builder: (context) => Attendance(), settings: settings);
+      // case Routes.scanAttendance:
+      //   return Platform.isAndroid
+      //       ? _FadedTransitionRoute(
+      //           widget: QRScanner(),
+      //           settings: settings,
+      //         )
+      //       : CupertinoPageRoute(
+      //           builder: (context) => QRScanner(), settings: settings);
       case Routes.dashboard:
         return Platform.isAndroid
             ? _FadedTransitionRoute(

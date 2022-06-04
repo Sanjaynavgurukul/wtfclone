@@ -60,7 +60,7 @@ class _CategoriesState extends State<Categories> {
       case 1:
         context.read<GymStore>().getActiveSubscriptions(context: context);
         // NavigationService.navigateTo(Routes.mySchedule);
-        NavigationService.pushName(Routes.dateWorkoutList);
+        NavigationService.pushName(Routes.scheduleMain);
         break;
       case 2:
         print(

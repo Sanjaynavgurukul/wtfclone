@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
@@ -9,10 +11,14 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/main.dart';
+import 'package:wtf/model/current_trainer.dart';
 import 'package:wtf/model/my_schedule_model.dart';
+import 'package:wtf/screen/schedule/arguments/main_workout_argument.dart';
+import 'package:wtf/screen/schedule/new_ui/argument/main_schedule_screen_argument.dart';
 import 'package:wtf/screen/schedule/timer_helper/exercise_timer_helper.dart';
 import 'package:wtf/widget/image_stack.dart';
 import 'dart:math' as math;
@@ -159,7 +165,6 @@ class _ScheduleMainState extends State<ScheduleMain> {
       style: TextStyle(fontSize: 16),
     );
   }
-
 }
 
 class ScheduleItem extends StatefulWidget {
@@ -281,7 +286,62 @@ class _ScheduleItemState extends State<ScheduleItem> {
 
     return InkWell(
       onTap: () {
-        NavigationService.pushName(Routes.exercisesScreen);
+        context.read<GymStore>().selectedSchedule = item;
+        switch (item.type) {
+          case 'addon':
+            context.read<GymStore>().getMyWorkoutSchedules(
+                date: Helper.formatDate2(DateTime.now().toIso8601String()),
+                subscriptionId: item.uid,
+                addonId: item.addonId);
+            // NavigationService.navigateTo(Routes.mainWorkoutScreen);
+            // NavigationService.pushName(Routes.mainWorkout,
+            //     argument:
+            //         MainWorkoutArgument(data: item, workoutType: 'addon'));
+            break;
+          case 'event':
+            context
+                .read<GymStore>()
+                .getEventById(context: context, eventId: item.eventId);
+            // locator<AppPrefs>().selectedMySchedule.setValue(name);
+            // locator<AppPrefs>()
+            //     .selectedMyScheduleName
+            //     .setValue(e.eventName);
+            NavigationService.navigateTo(Routes.eventDetails);
+            break;
+          case 'is_live':
+            switch (item.roomStatus) {
+              case 'scheduled':
+                FlashHelper.informationBar(
+                  context,
+                  message: 'Trainer has not started the live session yet',
+                );
+                break;
+              case 'started':
+                context.read<GymStore>().joinLiveSession(
+                    addonName: item.addonName,
+                    liveClassId: item.liveClassId,
+                    roomId: item.roomId,
+                    context: context,
+                    addonId: item.addonId,
+                    trainerId: item.trainer_id);
+                break;
+              case 'completed':
+                FlashHelper.informationBar(
+                  context,
+                  message: 'Trainer has ended the live session',
+                );
+                break;
+              default:
+                break;
+            }
+            break;
+          default:
+            NavigationService.pushName(Routes.exercisesScreen,
+                argument: MainScheduleScreenArgument(type: item.type));
+            break;
+          //this is regular ex :D
+
+        }
       },
       child: Container(
         margin: EdgeInsets.only(right: 26),
@@ -293,8 +353,15 @@ class _ScheduleItemState extends State<ScheduleItem> {
               constraints:
                   BoxConstraints(minHeight: 200, minWidth: 140, maxWidth: 140),
               decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: LinearGradient(
+                      colors: [
+                        theme.firstColor??Colors.black,
+                        theme.secondColor??Colors.grey,
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      tileMode: TileMode.repeated)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,6 +376,8 @@ class _ScheduleItemState extends State<ScheduleItem> {
                         borderRadius: BorderRadius.all(Radius.circular(100)),
                         color: Colors.green,
                         border: Border.all(color: Colors.white, width: 1)),
+                    child: SvgPicture.asset('${theme.iconUrl}',
+                        semanticsLabel: '${theme.iconUrl}'),
                   ),
                   SizedBox(
                     height: 12,
@@ -348,36 +417,36 @@ class _ScheduleItemState extends State<ScheduleItem> {
                   SizedBox(
                     height: 2,
                   ),
-                  if (time != 0)
-                    StreamBuilder<int>(
-                      stream: _stopWatchTimer.secondTime,
-                      initialData: 0,
-                      builder: (context, snap) {
-                        int value = snap.data;
-                        if (value == 0) {
-                          return Container();
-                        } else {
-                          print('check time hhhhh - $value');
-                          DateTime now = DateTime.now();
-                          DateTime dif =
-                              DateTime.now().add(Duration(seconds: value));
-                          Duration difference = dif.difference(now);
-                          int days = difference.inDays;
-                          int hours = difference.inHours % 24;
-                          int minutes = (difference.inMinutes % 60);
-                          int seconds = difference.inSeconds % 60;
-
-                          return Text(
-                            // '${exTimerHelper.convertDay(value)}:${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
-                            '$days:$hours:$minutes:$seconds',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600),
-                          );
-                        }
-                      },
-                    ),
+                  // if (time != 0)
+                  //   StreamBuilder<int>(
+                  //     stream: _stopWatchTimer.secondTime,
+                  //     initialData: 0,
+                  //     builder: (context, snap) {
+                  //       int value = snap.data;
+                  //       if (value == 0) {
+                  //         return Container();
+                  //       } else {
+                  //         print('check time hhhhh - $value');
+                  //         DateTime now = DateTime.now();
+                  //         DateTime dif =
+                  //             DateTime.now().add(Duration(seconds: value));
+                  //         Duration difference = dif.difference(now);
+                  //         int days = difference.inDays;
+                  //         int hours = difference.inHours % 24;
+                  //         int minutes = (difference.inMinutes % 60);
+                  //         int seconds = difference.inSeconds % 60;
+                  //
+                  //         return Text(
+                  //           // '${exTimerHelper.convertDay(value)}:${exTimerHelper.convertHour(value)}:${exTimerHelper.convertMin(value)}:${exTimerHelper.convertSec(value)}',
+                  //           '$days:$hours:$minutes:$seconds',
+                  //           style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontSize: 12,
+                  //               fontWeight: FontWeight.w600),
+                  //         );
+                  //       }
+                  //     },
+                  //   ),
                 ],
               ),
             ),
@@ -439,7 +508,9 @@ class ScheduleModel {
       default:
         //this is regular :D
         return ScheduleModel(
-            firstColor: Colors.orange, secondColor: Colors.orange, iconUrl: '');
+            firstColor: Color(0xff172342),
+            secondColor: Color(0xff928dab),
+            iconUrl: 'assets/svg/my_schedule_gt.svg');
     }
   }
 }
@@ -587,9 +658,7 @@ class _RecommendedProgramScreenState extends State<RecommendedProgramScreen> {
       case 'is_addon':
         if (checkHasSubscription()) {
           NavigationService.pushName(Routes.exercisesScreen);
-        } else {
-
-        }
+        } else {}
         break;
       case 'is_pt':
         context.read<GymStore>().getActiveSubscriptions(context: context);
@@ -746,7 +815,7 @@ class _ScheduleTrainerSectionState extends State<ScheduleTrainerSection> {
                           bottom: 0,
                           child: InkWell(
                             onTap: () {
-                              showPTDetailsDialog();
+                              showTrainerBottomDialog(store.currentTrainer.data);
                             },
                             child: Column(
                               children: [
@@ -839,6 +908,80 @@ class _ScheduleTrainerSectionState extends State<ScheduleTrainerSection> {
     );
   }
 
-  void showPTDetailsDialog() {
+  void showTrainerBottomDialog(CurrentTrainerData item){
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(14),
+          child: Container(
+            decoration:BoxDecoration(
+              color:Colors.white,
+              borderRadius:BorderRadius.all(Radius.circular(12))
+            ),
+            constraints: BoxConstraints(
+              minHeight: 400
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(height:30),
+                  item.trainerProfile !=
+                      null &&
+                      item.trainerProfile
+                          .isNotEmpty
+                      ? CircleAvatar(
+                    radius: 54,
+                    child: ClipOval(
+                      child: Image.network(
+                        '${item.trainerProfile}',
+                      ),
+                    ),
+                  )
+                      : AssetImage(
+                      'assets/images/empty_trainer.png'),
+                  SizedBox(height:14),
+                  Text('${item.name}',style:TextStyle(color:Colors.black,fontSize: 24,fontWeight:FontWeight.bold)),
+                  SizedBox(height:6),
+                  Text('${item.isPt == 1 ? 'Personal Trainer' : "General Trainer"}',style:TextStyle(color:Colors.black,fontSize: 14,fontWeight:FontWeight.normal)),
+                  SizedBox(height:6),
+                  RatingBar(
+                      initialRating: double.parse(item.rating ?? '0'),
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      itemSize: 16,
+                      ignoreGestures:false,
+                      ratingWidget: RatingWidget(
+                        full: Icon(
+                          Icons.star,
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        half: Icon(
+                          Icons.star_half,
+                          color: AppConstants.boxBorderColor,
+                        ),
+                        empty: Icon(
+                          Icons.star_border,
+                          color: AppConstants.black,
+                        ),
+                      ),
+                      itemPadding:
+                      EdgeInsets.symmetric(horizontal: 0.0),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      }),
+                  SizedBox(height:6),
+                  Text('${item.description??''}',style:TextStyle(color:Colors.black,fontSize: 14,fontWeight:FontWeight.normal)),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

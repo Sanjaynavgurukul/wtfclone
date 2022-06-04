@@ -84,9 +84,10 @@ class DynamicLinkService {
         case NutritionScreen.routeName:
           NavigationService.pushName(Routes.nutritionScreen);
           break;
-        case DateWorkoutList.routeName:
-          NavigationService.pushName(Routes.dateWorkoutList);
-          break;
+      //TODO check new schedule Here
+        // case DateWorkoutList.routeName:
+        //   NavigationService.pushName(Routes.dateWorkoutList);
+        //   break;
         case HmsDynamicLinkScreen.routeName:
           NavigationService.pushName(Routes.hmsDynamicLinkScreen,argument: HmsDynamicArgument(data: param));
           break;

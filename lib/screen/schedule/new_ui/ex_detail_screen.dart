@@ -10,6 +10,7 @@ import 'package:wtf/helper/AppPrefs.dart';
 import 'package:wtf/helper/Helper.dart';
 import 'package:wtf/helper/app_constants.dart';
 import 'package:wtf/helper/colors.dart';
+import 'package:wtf/helper/flash_helper.dart';
 import 'package:wtf/helper/navigation.dart';
 import 'package:wtf/helper/routes.dart';
 import 'package:wtf/model/new_schedule_model.dart';
@@ -95,6 +96,11 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
     data = args.mainData;
     localData = args.localData;
     localUid = args.localUid;
+
+    if(localData.setcompleted != 0 && !localData.ispause){
+      startTimer(sec:localData.seconds,startTime:localData.starttime);
+      timerStream2.add(1);
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -220,10 +226,10 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                       builder: (BuildContext context,
                                           AsyncSnapshot<int> snapshot) {
                                         if (snapshot.data != 0) {
-                                          if (!localData.isPause)
+                                          if (!localData.ispause)
                                             startTimer(
                                                 sec: localData.seconds,
-                                                startTime: localData.startTime);
+                                                startTime: localData.starttime);
                                           else
                                             stopTimer();
                                           return getTimerWidget();
@@ -272,7 +278,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                             ]),
                                           ),
                                           child: Text(
-                                              'Sets ${localData.setCompleted}/${convertStringToIntList(reps: data.reps).length}',
+                                              'Sets ${localData.setcompleted}/${convertStringToIntList(reps: data.reps).length}',
                                               style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight:
@@ -306,7 +312,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
                                                 child: Column(
                                                   children: [
                                                     Text(
-                                                        '${convertStringToIntList(reps: data.reps)[localData.setCompleted == 0 ? localData.setCompleted : localData.setCompleted - 1]}',
+                                                        '${convertStringToIntList(reps: data.reps)[localData.setcompleted == 0 ? localData.setcompleted : localData.setcompleted - 1]}',
                                                         style: TextStyle(
                                                             fontSize: 20)),
                                                     SizedBox(
@@ -424,40 +430,43 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   void onPressFirstTime() {
     String label = getLabel();
     if (label == 'START') {
-      localData.startTime = DateTime.now().millisecondsSinceEpoch;
-      localData.isPause = false;
-      localData.itemUid = data.uid;
-      localData.setCompleted += 1;
+      localData.starttime = DateTime.now().millisecondsSinceEpoch;
+      localData.ispause = false;
+      localData.itemuid = data.uid;
+      localData.setcompleted += 1;
       timerStream2.add(1);
       upChangeStream.add(true);
       Map<String, dynamic> map = ScheduleLocalModelData().toJson(localData);
       updateLogs(map);
     }
     if (label == 'STOP') {
-      print('check length  ${localData.setCompleted}  ${convertStringToIntList(reps:data.reps).length}');
-      if(localData.setCompleted == convertStringToIntList(reps:data.reps).length){
+      print('check length  ${localData.setcompleted}  ${convertStringToIntList(reps:data.reps).length}');
+      if(localData.setcompleted == convertStringToIntList(reps:data.reps).length){
         print('check length hit');
-        localData.isCompleted = true;
+        localData.iscompleted = true;
       }
 
       localData.seconds +=
-          exTimerHelper.getTimeDiff(time: localData.startTime, wantInSec: true);
-      localData.isPause = true;
-      localData.startTime = 0;
+          exTimerHelper.getTimeDiff(time: localData.starttime, wantInSec: true);
+      localData.ispause = true;
+      localData.starttime = 0;
       timerStream2.add(1);
       upChangeStream.add(true);
       Map<String, dynamic> map = ScheduleLocalModelData().toJson(localData);
       updateLogs(map);
-      if(localData.isCompleted){
-        Navigator.pop(context);
+      if(localData.iscompleted){
+        print('check time hereeee --- ${localData.seconds}');
+        showLoadingDialog(context);
+       endEx(data.uid,localData.seconds);
       }else{
         navToRestPage();
       }
+
     } else if (label == 'CONTINUE') {
       print('checking seconds ---- ${localData.seconds}');
-      localData.startTime = DateTime.now().subtract(Duration(seconds: localData.seconds)).millisecondsSinceEpoch;
-      localData.isPause = false;
-      localData.setCompleted += 1;
+      localData.starttime = DateTime.now().subtract(Duration(seconds: localData.seconds)).millisecondsSinceEpoch;
+      localData.ispause = false;
+      localData.setcompleted += 1;
       timerStream2.add(1);
       upChangeStream.add(true);
       Map<String, dynamic> map = ScheduleLocalModelData().toJson(localData);
@@ -475,6 +484,7 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
       "exercise":data
     };
     user.getMyScheduleLogs(callKey: 'is_update', body: map);
+    user.getNewScheduleData(wantLog: true);
   }
 
   void navToRestPage() {
@@ -503,14 +513,14 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   }
 
   String getLabel() {
-    if (localData.isCompleted) {
+    if (localData.iscompleted) {
       return 'COMPLETED';
     }else{
-      if (localData.setCompleted == 0 && localData.isPause) {
+      if (localData.setcompleted == 0 && localData.ispause) {
         return 'START';
-      } else if (localData.setCompleted != 0 && !localData.isPause) {
+      } else if (localData.setcompleted != 0 && !localData.ispause) {
         return 'STOP';
-      } else if (localData.setCompleted != 0 && localData.isPause) {
+      } else if (localData.setcompleted != 0 && localData.ispause) {
         return 'CONTINUE';
       } else {
         return 'START';
@@ -521,10 +531,8 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   void startTimer({int sec, int startTime}) {
     int milSec = 0;
     int getDifInMilSec = exTimerHelper.getTimeDiff(time: startTime);
-    print('checking data time dif ---- ${getDifInMilSec} $startTime');
     int finalSec = getDifInMilSec + sec;
     milSec = finalSec;
-    print('checking data time ---- ${milSec}');
     _stopWatchTimer = StopWatchTimer(
       presetMillisecond: milSec,
       mode: StopWatchMode.countUp,
@@ -536,4 +544,45 @@ class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   void stopTimer() {
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
   }
+
+  static Future<void> showLoadingDialog(
+      BuildContext context) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  backgroundColor: Colors.black45,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        Loading(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Please Wait....",
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ]),
+                    )
+                  ]));
+        });
+  }
+
+  void endEx(String itemUid,int timeTakenInSec)async{
+    bool saved = await user.updateScheduleExercise(itemUid: itemUid,exTime: exTimerHelper.getPreviousTimerFromLocal(true).toString());
+    if(saved){
+      await user.getScheduledWorkouts(date: user.workoutDate,addonId: user.workoutAddonId,subscriptionId: user.workoutSubscriptionId);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }else{
+      Navigator.pop(context);
+      FlashHelper.informationBar(context,
+          message: 'Something Went Wrong!!');
+    }
+  }
 }
+

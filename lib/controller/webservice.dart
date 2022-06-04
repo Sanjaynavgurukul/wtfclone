@@ -1845,6 +1845,7 @@ class RestDatasource {
     mapHeader["Content-Type"] = "application/json";
 
     String finalUrl = Api.getNewScheduleApi(user_id: memberId,date: date);
+    print("response get new schedule api : " + finalUrl);
     return _netUtil
         .get(BASE_URL + finalUrl, headers: mapHeader)
         .then((dynamic res) {
@@ -1909,5 +1910,33 @@ class RestDatasource {
     });
   }
 
+  //getWorkoutCompletionStatusCheck
+
+  Future<bool> getWorkoutCompletionStatus({String date,String type}){
+    //Authentication data :D
+    String token = locator<AppPrefs>().token.getValue();
+    Map<String, String> mapHeader = Map();
+    mapHeader["Authorization"] = "Bearer " + token;
+    mapHeader["Content-Type"] = "application/json";
+    String memberId = locator<AppPrefs>().memberId.getValue();
+
+    //Api Key :D
+    String finalUrl = Api.getWorkoutCompletionStatusCheck(userId:memberId,date:date,type:type);
+    print('getWorkoutCompletionStatus api key --- $finalUrl');
+
+    //Calling API
+    return _netUtil
+        .get(BASE_URL + finalUrl, headers: mapHeader)
+        .then((dynamic res) {
+      print("response from my getWorkoutCompletionStatus data --- " + res.toString());
+
+      if(res != null && res['status']){
+        return res['workout_status'] == null ?false:res['workout_status'];
+      }else{
+        print('data chck on response ---  false');
+        return false;
+      }
+    });
+  }
 
 }

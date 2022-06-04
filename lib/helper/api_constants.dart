@@ -192,4 +192,5 @@ class Api {
   static String getNewScheduleApi({String user_id,String date})=>'workoutmapping/member/new?user_id=4q60Mk7GJhyx9&date=$date';
   static String getMyScheduleLogs(String callTag)=>'workoutmapping/logs?$callTag=1';
   static String getRecommendedProgram()=>'plan/recomended/programs';
+  static String getWorkoutCompletionStatusCheck({String date,String type,String userId})=>'workoutmapping/verifyworkout?date=$date&user_id=$userId&type=$type';
 }
